@@ -325,3 +325,4 @@ a.card.news{text-decoration:none;color:inherit}
 .fx-go{margin-left:8px;border:none;background:#ffd43b;color:#343a40;font-weight:900;font-size:15px;border-radius:12px;padding:8px 12px;cursor:pointer;box-shadow:0 3px 0 #b8960a;vertical-align:middle}
 
 .fx-tm.cur{border-bottom:none!important;color:#ffd43b}
+.fx-tk{cursor:pointer;padding:2px 3px;border-radius:8px}.fx-tk.cur{color:#ffd43b}.fx-x{opacity:.8;cursor:pointer;font-size:.8em}.fx-tw{margin:0 6px;display:inline-block}
