@@ -110,6 +110,12 @@ begin
   return json_build_object('ok',true,'n',n);
 end $$;
 
+create or replace function pz_name_free(p_name text) returns json
+language plpgsql security definer set search_path=public,extensions as $$
+begin
+  return json_build_object('ok',true,'free',not exists(select 1 from pz_players where name_lower=lower(btrim(regexp_replace(coalesce(p_name,''),'\s+',' ','g')))));
+end $$;
+
 -- teacher views (need the teacher key)
 create or replace function pz_admin(p_key text) returns json
 language plpgsql security definer set search_path=public,extensions as $$
@@ -133,7 +139,7 @@ begin
 end $$;
 
 grant execute on function pz_register(text,text,jsonb), pz_login(text,text), pz_save(text,text,jsonb), pz_log(text,text,jsonb),
-  pz_admin(text), pz_admin_events(text,text,int) to anon, authenticated;
+  pz_name_free(text), pz_admin(text), pz_admin_events(text,text,int) to anon, authenticated;
 revoke execute on function pz_auth(text,text) from anon, authenticated, public;
 
 -- >>> CHANGE THE TEACHER KEY BELOW (keep the quotes) <<<

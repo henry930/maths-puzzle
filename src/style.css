@@ -288,3 +288,4 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .tt-mini i.col{background:#d0ebff;color:#1864ab}.tt-mini i.col.pulse{animation:ttpulse .7s 3}@keyframes ttpulse{50%{background:#74c0fc;transform:scale(1.25)}}.tt-mini i.a{background:#339af0!important;color:#fff!important}.tt-mini i.b{background:#ffd43b!important;color:#5c4400}
 .seg{display:flex;background:#ece8ff;border-radius:12px;padding:3px;margin:8px 0}.seg button{flex:1;border:0;background:transparent;padding:10px;border-radius:10px;font-weight:800;font-size:16px;color:#6741d9;cursor:pointer}.seg button.on{background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.12)}
 #un{text-transform:uppercase}
+.avail{font-size:14px;font-weight:700;min-height:20px;margin:-2px 0 6px;color:#888}.avail.ok{color:#2b8a3e}.avail.bad{color:#e03131}

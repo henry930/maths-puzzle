@@ -63,6 +63,11 @@ function adoptUser(name,remoteData,h,legacyMerge){
   setSess({name,h});LS.set('pz-last',name);persist();
 }
 
+async function nameFree(nameRaw){
+  const name=cleanName(nameRaw);if(!validName(name))return{ok:false,state:'bad'};
+  if(CLOUD){const r=await rpc('pz_name_free',{p_name:name});if(r&&r.ok)return{ok:true,state:r.free?'free':'taken'};return{ok:false,state:'unknown'};}
+  return{ok:true,state:Object.keys(DB.users).some(k=>k.toLowerCase()===name.toLowerCase()&&k!=='Guest')?'taken':'free'};
+}
 async function doRegister(nameRaw,pin){
   const name=cleanName(nameRaw);
   if(!validName(name))return{ok:false,msg:'Name must be 2–16 letters or numbers.'};
@@ -110,6 +115,7 @@ function showLogin(first){
     box.innerHTML=`<div class="big-emo">👋</div><h2>${mode==='in'?'Welcome back!':'Create your player'}</h2>
      <div class="seg"><button class="${mode==='in'?'on':''}" data-m="in">Log in</button><button class="${mode==='new'?'on':''}" data-m="new">New player</button></div>
      <input id="un" class="tin" maxlength="16" placeholder="YOUR NAME (CAPITAL LETTERS)" autocomplete="username" autocapitalize="characters" value="${mode==='in'?esc(LS.get('pz-last','')):''}">
+     ${mode==='new'?'<div class="avail" id="avail">&nbsp;</div>':''}
      <input id="up" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="4-digit PIN" autocomplete="${mode==='in'?'current-password':'new-password'}">
      ${mode==='new'?'<input id="up2" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Type the PIN again" autocomplete="off"><p class="small">Names are always in CAPITAL LETTERS. Pick a name nobody else uses and a PIN you can remember. Your PIN keeps your progress safe.</p>':''}
      <div class="msg" id="lmsg">&nbsp;</div><div class="row"><button class="btn" id="go">${mode==='in'?'Log in ▶':'Register & play ▶'}</button></div>
@@ -126,6 +132,12 @@ function showLogin(first){
       if(CLOUD){flushEvents();}
     };
     const un=$('#un',box);un.oninput=()=>{const a=un.selectionStart,z=un.selectionEnd;un.value=un.value.toUpperCase();try{un.setSelectionRange(a,z)}catch(e){}};
+    if(mode==='new'){let tm=null,seq=0;const av=$('#avail',box);
+      const chk=()=>{clearTimeout(tm);const v=un.value.trim();if(!v){av.className='avail';av.innerHTML='&nbsp;';return;}av.className='avail';av.textContent='Checking…';
+        tm=setTimeout(async()=>{const my=++seq,r=await nameFree(v);if(my!==seq)return;
+          av.className='avail '+(r.state==='free'?'ok':'bad');
+          av.textContent=r.state==='free'?'✅ This name is free':r.state==='taken'?'❌ This name is already taken — try another':r.state==='bad'?'Use 2–16 letters or numbers':'Could not check the name right now';},450);};
+      un.addEventListener('input',chk);}
     $('#go',box).onclick=go;box.querySelectorAll('input').forEach(i=>i.onkeydown=e=>{if(e.key==='Enter')go();});
   }
   draw();
