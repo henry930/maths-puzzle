@@ -66,9 +66,9 @@ const reqOf=t=>{const o=facs(Math.abs(t.c)).filter(n=>n>1).map(String);for(const
 const divides=(b,t)=>Math.abs(t.c)%b.c===0&&Object.keys(b.p).every(k=>(t.p[k]||0)>=b.p[k]);
 const common=ts=>{const c=gcdAll(ts.map(t=>Math.abs(t.c))),p={};Object.keys(ts[0].p).forEach(k=>{const e=Math.min(...ts.map(t=>t.p[k]||0));if(e>0)p[k]=e;});return{c,p};};
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',
- desc:'Factorise expressions like 12x² + 18x. Tap a term, enter its factors on the number pad. As soon as one factor is found in every term, the expression factorises itself — keep going until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','dividing terms'],
+ desc:'Factorise expressions like 12x² + 18x. Tap a term, enter its factors on the number pad — they appear as small blocks on the term. As soon as one factor is found in every term, the expression factorises itself — keep going until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','dividing terms'],
  levels:LV.map(l=>l.n),
- how:'Tap a term and the number pad opens. Enter its factors (a number, or a letter with its power like x²) and press Add — each factor becomes a block under the term. Close the pad with ✕. As soon as the same factor is in EVERY term, the expression factorises and a new line appears. Keep going until nothing more can be taken out.',
+ how:'Tap a term in the expression and the number pad opens. Enter one of its factors (a number, or a letter with its power like x²) and press Add — it appears as a small block on the corner of the term. Close the pad with ✕. As soon as the same factor is on EVERY term, the expression factorises, the blocks clear and a new line begins. Keep going until nothing more can be taken out.',
  art:'<div class="minibal">6(2x+3)</div>',
  mount(root,lv,ctx){
   const spec=LV[lv-1];let terms,orig,L,CF,lists,sel,buf,steps,ended;
@@ -81,40 +81,34 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     const set=spec.L===1?[pick(SETS1)]:pick(SETS2),mp={x:set[0],y:set[1]||set[0]};
     terms=q.terms.map(t=>{const p={};for(const k in t.p){const nk=mp[k]||k;p[nk]=(p[nk]||0)+t.p[k];}return{c:t.c,p};});
     L=[...new Set(terms.flatMap(t=>Object.keys(t.p)))].sort();
-    orig=cp(terms);CF={c:1,p:{}};steps=[];ended=false;msg('');startRound();
+    orig=cp(terms);CF={c:1,p:{}};steps=[];ended=false;sel=-1;msg('');startRound();
   }
   function startRound(){lists=terms.map(()=>({found:[]}));sel=-1;buf='';render();closePad();}
   const shownBuf=()=>buf.replace(/\^2/g,'²').replace(/\^3/g,'³');
   const tmTxt=(t,i)=>fmtT(t,i===0,true).trim();
-  const pills=ts=>ts.map((t,i)=>`<span class="fx-tm${!ended&&i===sel?' cur':''}" data-i="${i}">${tmTxt(t,i)}</span>`).join(' ');
+  const pills=ts=>ts.map((t,i)=>`<span class="fx-tw" data-i="${i}"><span class="fx-sup">${lists[i].found.map(f=>`<i class="fx-sb">${f}</i>`).join('')}${i===sel&&buf?`<i class="fx-sb live">${shownBuf()}</i>`:''}</span><span class="fx-ln${i===sel&&!ended?' on':''}${lists[i].found.length?' has':''}"></span><span class="fx-tm${!ended&&i===sel?' cur':''}">${tmTxt(t,i)}</span></span>`).join(' ');
   function topHtml(){
     let h=`<div class="fx-expr">${steps.length?fmtExpr(orig):pills(terms)}</div>`;
     steps.forEach((s,k)=>{const last=k===steps.length-1;
-      h+=`<div class="fx-step${last?' last':''}">= <span class="fx-out">${fmtT(s.CF,true)}</span>(${last?pills(s.terms):fmtExpr(s.terms)})</div>`;});
+      h+=`<div class="fx-step${last?' last':''}">= <span class="fx-out">${fmtT(s.CF,true)}</span>(${last&&!ended?pills(s.terms):fmtExpr(s.terms)})</div>`;});
     return h;
   }
   function render(){
     $('#fxt').innerHTML=topHtml();
-    $('#fxt').querySelectorAll('.fx-tm').forEach(e=>e.onclick=()=>openPad(+e.dataset.i));
-    let h='';
-    if(!ended)terms.forEach((t,i)=>{h+=`<div class="fx-row${i===sel?' sel':''}" data-i="${i}"><span class="fx-lab">${fmtT(t,true)}</span><span class="fx-ch">${lists[i].found.map(f=>`<b class="fx-blk">${f}</b>`).join('')}</span></div>`;});
-    else h=`<div class="ex-res"><span class="ex-eq">Fully factorised! Nothing more can be taken out.</span></div>`;
-    $('#fxs').innerHTML=h;
-    $('#fxs').querySelectorAll('.fx-row').forEach(e=>e.onclick=()=>openPad(+e.dataset.i));
-    updPad();
+    $('#fxt').querySelectorAll('.fx-tw').forEach(e=>e.onclick=()=>openPad(+e.dataset.i));
+    $('#fxs').innerHTML=ended?`<div class="ex-res"><span class="ex-eq">Fully factorised! Nothing more can be taken out.</span></div>`:'';
   }
   function openPad(i){
     if(ended)return;sel=i;buf='';const pad=$('#fxpad');
     pad.style.display='';$('#fxr').classList.add('padopen');
-    pad.innerHTML=`<div class="fxp-h"><span class="fxp-t" id="fxpt"></span><span class="fxp-v" id="fxv"></span><button class="fxp-x" id="fxx">✕</button></div><div class="msg" id="fxpm">&nbsp;</div><div class="ex-pad" id="fxk"></div>`;
+    pad.innerHTML=`<div class="fxp-h"><span class="fxp-t" id="fxpt">Factors of <b>${fmtT(terms[i],true)}</b></span><button class="fxp-x" id="fxx">✕</button></div><div class="msg" id="fxpm">&nbsp;</div><div class="ex-pad" id="fxk"></div>`;
     $('#fxx').onclick=closePad;
     ['7','8','9','del','4','5','6','sq2','1','2','3','sq3','0',...L].forEach(k=>{const b=el('button','key'+(k==='del'?' del':'')+(L.includes(k)?' var':''),k==='del'?'⌫':k==='sq2'?'²':k==='sq3'?'³':k);b.onclick=()=>press(k);$('#fxk').appendChild(b);});
     const ok=el('button','key ok','Add ✓');ok.style.gridColumn='1 / -1';ok.onclick=()=>press('ok');$('#fxk').appendChild(ok);
     render();
-    setTimeout(()=>{const r=document.querySelector('.fx-row.sel');if(r){const d=r.getBoundingClientRect().top-210;window.scrollBy(0,d);const sc=document.scrollingElement;if(sc)sc.scrollTop+=0;}},30);
+    setTimeout(()=>{const t=document.getElementById('fxt');if(t)window.scrollBy(0,t.getBoundingClientRect().top-12);},30);
   }
-  function closePad(){const pad=$('#fxpad');if(!pad)return;pad.style.display='none';pad.innerHTML='';$('#fxr')&&$('#fxr').classList.remove('padopen');if(sel!==-1){sel=-1;buf='';if(terms)render();}}
-  function updPad(){const t=$('#fxpt');if(!t||sel<0||!terms[sel])return;t.innerHTML=`Factors of <b>${fmtT(terms[sel],true)}</b>`;$('#fxv').textContent=shownBuf();}
+  function closePad(){const pad=$('#fxpad');if(!pad)return;pad.style.display='none';pad.innerHTML='';const r=$('#fxr');if(r)r.classList.remove('padopen');if(sel!==-1){sel=-1;buf='';if(terms)render();}}
   function press(k){
     if(ended||sel<0||document.querySelector('.overlay'))return;
     if(k==='del')buf=/\^[23]$/.test(buf)?buf.slice(0,-2):buf.slice(0,-1);
@@ -122,34 +116,34 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     else if(L.includes(k)){if(buf==='')buf=k;}
     else if(k==='ok')return add();
     else if(/^\d{0,2}$/.test(buf)&&/^\d$/.test(k))buf+=k;
-    updPad();
+    render();
   }
   function add(){
     const t=terms[sel],ls=lists[sel],req=reqOf(t);let canon=null;
     if(/^\d{1,3}$/.test(buf))canon=String(+buf);
     else{const m=parseMono(buf,L);if(m&&m.c===1&&Object.keys(m.p).length===1){const k=Object.keys(m.p)[0];canon=k+sup(m.p[k]);}}
-    if(canon==null){msg('Type a number, or a letter with its power (x, x²).');return;}
-    if(canon==='1'){msg('1 divides everything, so you do not need to add it.');buf='';return updPad();}
-    if(ls.found.includes(canon)){msg('You already have '+canon+'.');buf='';return updPad();}
+    if(canon==null){msg('Enter a number, or a letter with its power (x, x²).');return;}
+    if(canon==='1'){msg('1 divides everything, so you do not need to add it.');buf='';return render();}
+    if(ls.found.includes(canon)){msg('You already have '+canon+'.');buf='';return render();}
     if(!req.includes(canon)){
       msg('❌ '+(/^\d+$/.test(canon)?`${canon} does not divide ${Math.abs(t.c)} exactly.`:`${canon} is not part of ${fmtT(t,true)}.`));
-      ctx.log('wrong',{stage:'list',term:fmtT(t,true),typed:canon,type:'not_a_factor'});buf='';return updPad();}
+      ctx.log('wrong',{stage:'list',term:fmtT(t,true),typed:canon,type:'not_a_factor'});buf='';return render();}
     ls.found.push(canon);
     ls.found.sort((a,b)=>(/^\d/.test(a)?0:1)-(/^\d/.test(b)?0:1)||(parseFloat(a)||0)-(parseFloat(b)||0)||a.localeCompare(b));
     buf='';
     if(lists.every(l=>l.found.includes(canon)))return factorise(canon);
-    const keep=sel;render();msg('✅ '+canon);
+    render();msg('✅ '+canon);
   }
   function factorise(canon){
     const blk=blkT(canon);CF=mulT(CF,blk);terms=terms.map(t=>divT(t,blk));
     steps.push({CF:{c:CF.c,p:Object.assign({},CF.p)},terms:cp(terms)});
     const cm=common(terms);
     if(cm.c===1&&!Object.keys(cm.p).length){ended=true;sel=-1;closePad();render();msg(`✅ ${canon} is in every term — factorised!`);return finish();}
-    startRound();msg(`✅ ${canon} is in every term — factorised! Is there more to take out?`);
+    startRound();msg(`✅ ${canon} is on every term — factorised! Is there more to take out?`);
   }
   function finish(){const res=`${fmtT(CF,true)}(${fmtExpr(terms)})`;
     ctx.timeout(()=>ctx.win('Factorised!',`${fmtExpr(orig)} = ${res}`,build,'New question'),1000);}
-  $('#fxh').onclick=()=>msg('💡 Tap a term to open the number pad, then add its factors (numbers like 2, 3, 6 — or letters like x, x²). When the SAME factor is in every term, the expression factorises itself.');
+  $('#fxh').onclick=()=>msg('💡 Tap a term to open the number pad, then add its factors (numbers like 2, 3, 6 — or letters like x, x²). When the SAME factor is on every term, the expression factorises itself.');
   $('#fxn').onclick=build;
   ctx.cleanups&&ctx.cleanups.push(()=>{const p=document.getElementById('fxpad');if(p)p.remove();});
   ctx.keys=e=>{const k=e.key.toLowerCase();if(k==='escape')return closePad();if(/^[0-9]$/.test(k))press(k);else if(L&&L.includes(k))press(k);else if(k==='^')press('sq2');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};

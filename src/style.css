@@ -313,3 +313,12 @@ a.card.news{text-decoration:none;color:inherit}
 .fxp .msg{min-height:20px;font-size:14px}
 
 .fxp .ex-pad{gap:6px}.fxp .key{height:44px;min-height:0;font-size:20px;padding:0}.fx.padopen{padding-bottom:300px}
+.fx-top{padding:10px 8px 12px}.fx-tw{display:inline-flex;flex-direction:column;align-items:flex-start;margin:0 3px;vertical-align:bottom;cursor:pointer}
+.fx-sup{display:flex;flex-wrap:wrap;gap:2px;max-width:150px;min-height:17px;margin:0 0 2px 4px}
+.fx-sb{font-style:normal;background:#fff;color:#5f3dc4;font-size:11px;font-weight:800;border-radius:6px;padding:0 5px;line-height:16px}.fx-sb.live{background:#ffd43b;color:#343a40;outline:1px dashed #343a40}
+.fx-step.last{font-size:26px}.fx.padopen{padding-bottom:300px}
+
+.fx-tm.cur{background:none!important;box-shadow:none!important;border-radius:0;border-bottom:4px solid #ffd43b}
+.fx-sb.live{background:#ffd43b;color:#343a40;outline:none}
+.fx-ln{display:block;width:2px;height:0;margin-left:14px;background:rgba(255,255,255,.75);transition:height .15s}
+.fx-ln.has,.fx-ln.on{height:9px}.fx-ln.on{background:#ffd43b;width:3px}
