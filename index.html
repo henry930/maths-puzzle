@@ -330,6 +330,8 @@ a.card.news{text-decoration:none;color:inherit}
 .fx-tk{cursor:pointer;padding:2px 3px;border-radius:8px}.fx-tk.cur{color:#ffd43b}.fx-x{opacity:.8;cursor:pointer;font-size:.8em}.fx-tw{margin:0 6px;display:inline-block}
 .fx,.fx *,.fxp,.fxp *{-webkit-user-select:none;user-select:none;caret-color:transparent;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 .fx *:focus,.fxp *:focus{outline:none}.fx-top,.fx-top *{cursor:default}.fx-top .fx-tk,.fx-top .fx-x,.fx-top .fx-go{cursor:pointer}
+
+.fx-tk.com{color:#69db7c;background:rgba(105,219,124,.18);box-shadow:0 0 0 2px #69db7c;border-radius:8px}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><h2 id="gtitle"></h2><div class="pills" id="glevels"></div></div>
@@ -2892,7 +2894,7 @@ const common=ts=>{const c=gcdAll(ts.map(t=>Math.abs(t.c))),p={};Object.keys(ts[0
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',
  desc:'Factorise expressions like 30x + 25. Tap a number or letter and break it into factors (30x → 5 × 6x → 5 × 2 × 3x…). When the same factor shows up in every term, press Factorise. Repeat until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','prime factors'],
  levels:LV.map(l=>l.n),
- how:'Tap a part of a term and enter one of its factors on the number pad — a number, a letter, or both together (for 9n² you can enter 9, n, n² or 9n). It splits into factor × something, e.g. 30x → 5 × 6x. Tap any part again to split it further (6x → 2 × 3x). Tap a × to join two parts back together. A split only lasts about 30 seconds. When the same factor appears in EVERY term, a Factorise button appears — press it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
+ how:'Tap a part of a term and enter one of its factors on the number pad — a number, a letter, or both together (for 9n² you can enter 9, n, n² or 9n). It splits into factor × something, e.g. 30x → 5 × 6x. Tap any part again to split it further (6x → 2 × 3x). Tap a × to join two parts back together. A split only lasts about 30 seconds. When the same factor appears in EVERY term, the common factor turns green — tap it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
  art:'<div class="minibal">6(2x+3)</div>',
  mount(root,lv,ctx){
   const spec=LV[lv-1];let terms,orig,L,CF,chains,tok,selI,selJ,buf,steps,ended;const timers=[];
@@ -2921,9 +2923,16 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     return any?D:null;
   }
   const commonBlk=()=>{const d=commonD();return d?fmtT(d,true):null;};
-  const pills=ts=>ts.map((t,i)=>`<span class="fx-tw">${leadOf(t,i)}${chains[i].map((tk,j)=>`<span class="fx-tk${!ended&&i===selI&&j===selJ?' cur':''}" data-i="${i}" data-j="${j}">${tkTxt(tk)}</span>`).join('<span class="fx-x"> × </span>')}</span>`).join(' ');
+  function comMap(){ // which tokens are the common factor
+    const d=ended?null:commonD();const res=chains.map(ch=>ch.map(()=>false));if(!d)return res;
+    const cnts=chains.map(ch=>{const m={};ch.forEach(tk=>{const k=tkTxt(tk);m[k]=(m[k]||0)+1;});return m;});
+    const need={};Object.keys(cnts[0]).forEach(k=>{const n=Math.min(...cnts.map(m=>m[k]||0));if(n>0)need[k]=n;});
+    chains.forEach((ch,i)=>{const left=Object.assign({},need);ch.forEach((tk,j)=>{const k=tkTxt(tk);if(left[k]>0){left[k]--;res[i][j]=true;}});});
+    return res;
+  }
+  const pills=ts=>{const cm=comMap();return ts.map((t,i)=>`<span class="fx-tw">${leadOf(t,i)}${chains[i].map((tk,j)=>`<span class="fx-tk${!ended&&i===selI&&j===selJ?' cur':''}${cm[i][j]?' com':''}" data-i="${i}" data-j="${j}">${tkTxt(tk)}</span>`).join('<span class="fx-x"> × </span>')}</span>`).join(' ');};
   function topHtml(){
-    const btn=!ended&&commonD()?`<button class="fx-go" id="fxgo">Factorise by ${fmtT(commonD(),true)} ✓</button>`:'';
+    const btn='';
     let h=`<div class="fx-expr">${steps.length?fmtExpr(orig):pills(terms)+btn}</div>`;
     steps.forEach((s,k)=>{const last=k===steps.length-1;
       h+=`<div class="fx-step${last?' last':''}">= <span class="fx-out">${fmtT(s.CF,true)}</span>(${last&&!ended?pills(s.terms):fmtExpr(s.terms)})${last&&!ended?btn:''}</div>`;});
@@ -2931,9 +2940,8 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
   }
   function render(){
     $('#fxt').innerHTML=topHtml();updV();
-    $('#fxt').querySelectorAll('.fx-tk').forEach(e=>e.onclick=()=>openPad(+e.dataset.i,+e.dataset.j));
+    $('#fxt').querySelectorAll('.fx-tk').forEach(e=>e.onclick=()=>{if(e.classList.contains('com'))doFactorise();else openPad(+e.dataset.i,+e.dataset.j);});
     $('#fxt').querySelectorAll('.fx-tw').forEach(w=>{const i=[...$('#fxt').querySelectorAll('.fx-tw')].indexOf(w);w.querySelectorAll('.fx-x').forEach((x,j)=>x.onclick=()=>merge(i,j));});
-    const g=$('#fxgo');if(g)g.onclick=doFactorise;
     $('#fxs').innerHTML=ended?`<div class="ex-res"><span class="ex-eq">Fully factorised! Nothing more can be taken out.</span></div>`:'';
   }
   function openPad(i,j){
@@ -2970,7 +2978,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     const rest=divT(tk,blk);
     if(rest.c===1&&!Object.keys(rest.p).length){msg(`${canon} is the whole thing — enter a smaller factor.`);buf='';return updV();}
     chains[i].splice(j,1,blk,rest);touch(i);buf='';selI=-1;selJ=-1;closePad();render();
-    const d=commonD();msg(d?`✅ ${fmtT(d,true)} is in every term — press Factorise!`:`✅ ${tkTxt(tk)} = ${canon} × ${fmtT(rest,true)}`);
+    const d=commonD();msg(d?`✅ ${fmtT(d,true)} is in every term — tap the green factor!`:`✅ ${tkTxt(tk)} = ${canon} × ${fmtT(rest,true)}`);
   }
   function merge(i,j){
     if(ended)return;const a=chains[i][j],b=chains[i][j+1];if(!a||!b)return;
@@ -2986,7 +2994,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
   }
   function finish(){const res=`${fmtT(CF,true)}(${fmtExpr(terms)})`;
     ctx.timeout(()=>ctx.win('Factorised!',`${fmtExpr(orig)} = ${res}`,build,'New question'),1000);}
-  $('#fxh').onclick=()=>msg('💡 Tap a part of a term and enter one of its factors (a number like 3, a letter like n, or both like 3n). Keep splitting until the SAME factor shows up in every term, then press Factorise.');
+  $('#fxh').onclick=()=>msg('💡 Tap a part of a term and enter one of its factors (a number like 3, a letter like n, or both like 3n). Keep splitting until the SAME factor shows up in every term, then tap the green factor.');
   $('#fxn').onclick=build;
   ctx.cleanups&&ctx.cleanups.push(()=>{clearTimers();const p=document.getElementById('fxpad');if(p)p.remove();});
   ctx.keys=e=>{const k=e.key.toLowerCase();if(k==='escape')return closePad();if(/^[0-9]$/.test(k))press(k);else if(L&&L.includes(k))press(k);else if(k==='^')press('sq2');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};
