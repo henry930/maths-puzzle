@@ -17,5 +17,3 @@ begin
   select data into d from pz_progress where name_lower=p.name_lower;
   return json_build_object('ok',true,'name',p.name,'data',coalesce(d,'{}'::jsonb));
 end $$;
-
-create 
