@@ -123,7 +123,7 @@ REG.push({id:'expand',name:'Arrow Expander',emoji:'🏹',color:'#e8590c',cat:'Al
     $('#excap').innerHTML=`Arrow ${act+1}: <b style="color:${COL[act]}">${tm(Q.m)}</b> × <b>${tm(Q.t[act])}</b> = ?`;
   }
   function press(k){
-    if(done.every(Boolean))return;
+    if(done.every(Boolean)||document.querySelector('.overlay')||Date.now()-lastClose<200)return;
     const hasL=/[a-z]/.test(buf);
     if(k==='del')buf=buf.endsWith('^2')?buf.slice(0,-2):buf.slice(0,-1);
     else if(k==='neg')buf=buf.startsWith('-')?buf.slice(1):'-'+buf;
@@ -133,11 +133,24 @@ REG.push({id:'expand',name:'Arrow Expander',emoji:'🏹',color:'#e8590c',cat:'Al
     else if(!hasL&&buf.replace('-','').length<4)buf+=k;
     draw();
   }
+  const lettersOf=t=>varStr(t.p)||'no letters (just a number)';
+  let lastClose=0;
+  function explain(a,p,t){
+    const m=Q.m,numOk=Math.abs(a.c)===Math.abs(p.c),sgnOk=(a.c<0)===(p.c<0),letOk=same({c:1,p:a.p},{c:1,p:p.p});
+    const mA=Math.abs(m.c),tA=Math.abs(t.c);
+    const row=(ok,title,good,bad)=>`<div class="ex-ck ${ok?'g':'b'}"><span>${ok?'✅':'❌'}</span><div><b>${title}</b><br>${ok?good:bad}</div></div>`;
+    const sameSign=(m.c<0)===(t.c<0);
+    let h=`<h2>❌ Not quite</h2><div class="ex-q">${tm(m)} × ${tm(t)}</div><div class="ex-you">You typed: <b>${shown()?buf.replace(/\^2/g,'²').replace(/-/g,'−'):'?'}</b></div>`;
+    h+=row(numOk,'The number part','The numbers are right.',`Multiply the numbers in front: <b>${mA} × ${tA}</b>. (A letter on its own, like x, has an invisible 1 in front.) Check your times table.`);
+    h+=row(sgnOk,'The sign',`The sign is right.`,`The two signs are <b>${m.c<0?'−':'+'}</b> and <b>${t.c<0?'−':'+'}</b>. ${sameSign?'Same signs give a <b>positive</b> answer.':'Different signs give a <b>negative</b> answer.'}`);
+    h+=row(letOk,'The letters','The letters are right.',`Outside the bracket: <b>${lettersOf(m)}</b>. Inside: <b>${lettersOf(t)}</b>. Keep every letter from both, and add the powers when a letter is repeated (x × x = x², x × y = xy).`);
+    h+=`<button class="btn go" id="exok">Try again</button>`;
+    return h;
+  }
   function why(a,p,t){
-    if(a.c===-p.c&&same({c:p.c,p:a.p},p))return 'Check the sign: '+(Q.m.c<0!==t.c<0?'different signs give a negative.':'same signs give a positive.');
-    if(a.c===p.c)return 'The number is right — check the letters and their powers (x × x = x²).';
-    if(same({c:p.c,p:a.p},p)===false&&Object.keys(a.p).sort().join()!==Object.keys(p.p).sort().join())return 'Look at the letters: every letter in both terms must appear in the answer.';
-    return 'Multiply the number parts carefully.';
+    const o=ov(explain(a,p,t),'big ex-dlg');
+    const close=()=>{o.remove();lastClose=Date.now();};
+    o.querySelector('#exok').onclick=close;o.onclick=e=>{if(e.target===o)close();};o.querySelector('#exok').focus();
   }
   function check(){
     const a=parse(buf,L);
@@ -146,7 +159,7 @@ REG.push({id:'expand',name:'Arrow Expander',emoji:'🏹',color:'#e8590c',cat:'Al
       done[act]=true;buf='';$('#exmsg').innerHTML='✅ Correct!';
       const nx=done.findIndex(d=>!d);if(nx>=0)act=nx;
       place();draw();if(nx<0)finish();
-    }else{shake(chips[act]);$('#exmsg').innerHTML='Not quite. '+why(a,Q.prod[act],Q.t[act]);buf='';draw();}
+    }else{shake(chips[act]);$('#exmsg').innerHTML='Not quite — read the box and try again.';why(a,Q.prod[act],Q.t[act]);buf='';draw();}
   }
   const exprStr=()=>`${fmt(Q.m,true)}(${Q.t.map((t,i)=>fmt(t,i===0,true)).join('')})`;
   function finish(){

@@ -273,3 +273,5 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .ex-pad .key{border:0;border-radius:14px;background:#fff;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #d8d3f5}.ex-pad .key.del{background:#ffe3e3;box-shadow:0 3px 0 #f2bcbc}.ex-pad .key.ok{background:#2eaa5e;color:#fff;box-shadow:0 3px 0 #1f7d42;font-size:20px}
 .ex-pad .key.var{background:#fff4e6;color:#d9480f;box-shadow:0 3px 0 #ffd8a8}
 .ex-p{font-size:1.15em!important}.ex-expr{display:inline-block}
+.ex-dlg{text-align:left}.ex-dlg h2{color:#e03131}.ex-q{font-size:30px;font-weight:900;text-align:center;margin:4px 0}.ex-you{text-align:center;font-size:18px;margin-bottom:10px}.ex-you b{background:#fff5f5;border-radius:8px;padding:2px 10px}
+.ex-ck{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:8px 10px;margin:6px 0;font-size:16px;line-height:1.35}.ex-ck.g{background:#ebfbee}.ex-ck.b{background:#fff5f5}.ex-ck span{font-size:20px}.ex-dlg .btn.go{display:block;margin:12px auto 0}
