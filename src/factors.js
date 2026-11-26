@@ -11,8 +11,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
  art:'<div class="minibal">🔵🔵🔵<br>🔵🔵🔵</div>',
  mount(root,lv,ctx){
   const N=NS[lv-1],F=facs(N),found=new Set([1,N]),pairs=[[1,N]];let r=1;
-  root.innerHTML=`<div class="fc"><div class="fc-tip">${TIPS[N]||'Find every number that divides '+N+' exactly. (1 and '+N+' are free!)'}</div>
-   <div class="fc-pairs" id="fcpr"></div>
+  root.innerHTML=`<div class="fc"><div class="fc-top"><div class="fc-ttl">✅ Factor pairs you found</div><div class="fc-pairs" id="fcpr"></div></div><div class="fc-tip">${TIPS[N]||'Find every number that divides '+N+' exactly. (1 and '+N+' are free!)'}</div>
    <div class="fc-n">🔵 <b>${N}</b> balls</div>
    <div class="fc-board" id="fcb"></div>
    <div class="fc-eq" id="fceq"></div>

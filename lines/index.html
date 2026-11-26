@@ -264,6 +264,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .fc-rowsl{font-size:18px}.fc-found{margin:10px 0 4px;font-size:18px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}.fc-found .fl{font-weight:800;color:#555}
 .fc-found b{background:#0b7285;color:#fff;border-radius:10px;padding:4px 10px}.fc-found u{text-decoration:none;background:#eee;color:#aaa;border-radius:10px;padding:4px 10px;font-weight:800}
 .fc-pairs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:4px 0 8px}.fc-pairs span{font-size:24px;font-weight:900;color:#0b7285;background:#fff;border:3px solid #99e9f2;border-radius:14px;padding:6px 14px}
+.fc-top{position:sticky;top:0;z-index:5;background:#0b7285;border-radius:16px;padding:8px 8px 6px;margin-bottom:10px;box-shadow:0 4px 12px rgba(11,114,133,.35)}.fc-ttl{color:#fff;font-weight:900;font-size:15px;margin-bottom:6px}.fc-top .fc-pairs{margin:0}.fc-top .fc-pairs span{font-size:22px;background:#fff;border-color:#fff;padding:5px 12px}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><h2 id="gtitle"></h2><div class="pills" id="glevels"></div></div>
@@ -2278,8 +2279,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
  art:'<div class="minibal">🔵🔵🔵<br>🔵🔵🔵</div>',
  mount(root,lv,ctx){
   const N=NS[lv-1],F=facs(N),found=new Set([1,N]),pairs=[[1,N]];let r=1;
-  root.innerHTML=`<div class="fc"><div class="fc-tip">${TIPS[N]||'Find every number that divides '+N+' exactly. (1 and '+N+' are free!)'}</div>
-   <div class="fc-pairs" id="fcpr"></div>
+  root.innerHTML=`<div class="fc"><div class="fc-top"><div class="fc-ttl">✅ Factor pairs you found</div><div class="fc-pairs" id="fcpr"></div></div><div class="fc-tip">${TIPS[N]||'Find every number that divides '+N+' exactly. (1 and '+N+' are free!)'}</div>
    <div class="fc-n">🔵 <b>${N}</b> balls</div>
    <div class="fc-board" id="fcb"></div>
    <div class="fc-eq" id="fceq"></div>
