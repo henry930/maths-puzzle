@@ -2497,7 +2497,7 @@ REG.push({id:'expand',name:'Arrow Expander',emoji:'🏹',color:'#e8590c',cat:'Al
   function explain(a,p,t){
     const m=Q.m,numOk=Math.abs(a.c)===Math.abs(p.c),sgnOk=(a.c<0)===(p.c<0),letOk=same({c:1,p:a.p},{c:1,p:p.p});
     const mA=Math.abs(m.c),tA=Math.abs(t.c);
-    const row=(ok,title,good,bad)=>`<div class="ex-ck ${ok?'g':'b'}"><span>${ok?'✅':'❌'}</span><div><b>${title}</b><br>${ok?good:bad}</div></div>`;
+    const row=(ok,title,good,bad)=>ok?'':`<div class="ex-ck ${ok?'g':'b'}"><span>❌</span><div><b>${title}</b><br>${bad}</div></div>`;
     const sameSign=(m.c<0)===(t.c<0);
     let h=`<h2>❌ Not quite</h2><div class="ex-q">${tm(m)} × ${tm(t)}</div><div class="ex-you">You typed: <b>${shown()?buf.replace(/\^2/g,'²').replace(/-/g,'−'):'?'}</b></div>`;
     h+=row(numOk,'The number part','The numbers are right.',`Multiply the numbers in front: <b>${mA} × ${tA}</b>. (A letter on its own, like x, has an invisible 1 in front.) Check your times table.`);
