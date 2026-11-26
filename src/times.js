@@ -6,12 +6,14 @@ const TIPS={
  4:'4 = 2 × 2, so the 4× table is <b>every 2nd number</b> of the 2× table.',
  5:'The units digit flips <b>5, 0, 5, 0…</b> Whenever the units hit 0, the <b>tens digit goes up by 1</b>.',
  6:'6 = 3 × 2, so the 6× table is <b>every 2nd number</b> of the 3× table.',
- 7:'Flip it! <b>7 × 2 = 2 × 7</b>. Most of the 7s are already in your table from the earlier rows.',
+ 7:'Flip it! <b>7 × 2 = 2 × 7</b>. Almost all of row 7 is already in your table from the other rows.',
  8:'8 = 4 × 2, so the 8× table is <b>every 2nd number</b> of the 4× table.',
  9:'The tens digit goes <b>UP 0, 1, 2, 3…</b> while the units digit goes <b>DOWN 9, 8, 7, 6…</b> (tens + units is always 9).'};
 const HINT={1:'1 × a number is just that number.',2:'Units go 2, 4, 6, 8, 0 and the tens +1 after each 0.',3:'Last number + 3 (the 6s are every 2nd box).',4:'Every 2nd number of the 2× table: 4, 8, 12, 16…',
  5:'Units go 5, 0, 5, 0 and the tens +1 after each 0.',6:'Every 2nd number of the 3× table: 6, 12, 18, 24…',7:'7 × c = c × 7. Look at the c-row of the table!',8:'Every 2nd number of the 4× table: 8, 16, 24, 32…',9:'Tens go up 0,1,2,3… units go down 9,8,7,6…'};
-const NAMES=['1× · itself','2× · units 0,2,4,6,8','3× · add 3 between the 6s','4× · every 2nd of the 2s','5× · units 5,0 and tens +1','6× · every 2nd of the 3s','7× · flip the table','8× · every 2nd of the 4s','9× · tens up, units down'];
+const ORDER=[1,2,4,6,8,5,3,9,7];
+const NM={1:'1× · itself',2:'2× · units 0,2,4,6,8',3:'3× · add 3 between the 6s',4:'4× · every 2nd of the 2s',5:'5× · units 5,0 and tens +1',6:'6× · every 2nd of the 3s',7:'7× · flip the table',8:'8× · every 2nd of the 4s',9:'9× · tens up, units down'};
+const NAMES=ORDER.map(k=>NM[k]);
 window.__tt={NAMES};
 REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',cat:'Arithmetic',
  desc:'Learn the clever patterns behind every times table with a short animation, then fill in the whole row yourself. Build the full 9 × 9 table one row at a time!',skills:['times tables','patterns','multiplication facts','mental maths'],
@@ -19,7 +21,7 @@ REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',ca
  how:'Watch the trick animation first, then type the 9 answers of the row. Tap a box to choose it, use the keypad, and the answer is checked automatically. Tap 🎬 any time to watch the trick again.',
  art:'<div class="minibal">✖️<br>9×9</div>',
  mount(root,lv,ctx){
-  const K=lv,val=c=>K*c;let token=0;
+  const K=ORDER[lv-1],val=c=>K*c;let token=0;
   root.innerHTML=`<div class="tt">
    <div class="tt-learn" id="ttl"><div class="tt-title">🎬 Trick for the ${K}× table</div><div class="tt-tip">${TIPS[K]}</div>
     <div class="tt-help" id="tth"></div><div class="tt-row" id="ttr"></div><div class="tt-cap" id="ttc">&nbsp;</div>
@@ -72,10 +74,8 @@ REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',ca
     }
     if(K===7){
       P(()=>cap('<b>7 × 2 = 2 × 7</b>: find it in the table, copy it across!'),1600);
-      for(let c=1;c<=6;c++)P(()=>{mini([[c,7]],[[7,c]]);setSlot(c,String(7*c));cap(`7 × ${c} = ${c} × 7 = <b>${7*c}</b> (row ${c}, column 7)`);},1000);
-      P(()=>{mini([],[[7,7]]);setSlot(7,'49');cap('7 × 7 = <b>49</b> — the middle of the table. Just remember it!');},1500);
-      P(()=>{mini([],[[7,8]]);setSlot(8,'56');cap('<b>5, 6, 7, 8</b> → 56 = 7 × 8. Easy to remember!');},1500);
-      P(()=>{mini([],[[7,9]]);setSlot(9,'63');cap('7 × 9 = <b>63</b> (tens 6 + units 3 = 9, just like the 9s trick)');},1500);
+      for(let c=1;c<=9;c++){if(c===7)P(()=>{mini([],[[7,7]]);setSlot(7,'49');cap('7 × 7 = <b>49</b> — the middle of the table. Just remember it! (5, 6, 7, 8 helps: 56 = 7 × 8)');},1800);
+        else P(()=>{mini([[c,7]],[[7,c]]);setSlot(c,String(7*c));cap(`7 × ${c} = ${c} × 7 = <b>${7*c}</b> (row ${c}, column 7)`);},1000);}
     }
     P(()=>cap(`🎉 That’s the ${K}× table! Now try it yourself.`),600);
     return S;
@@ -90,7 +90,7 @@ REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',ca
     for(let r=1;r<=9;r++){h+=`<tr class="${r===K?'cur':''}"><th>${r}</th>`;
       for(let c=1;c<=9;c++){let t='',cls='';
         if(r===K){if(done[c]){t=exp(c);cls='ok';}else if(c===sel){t=buf||'';cls='sel';}else cls='emp';}
-        else if(typeof isDone==='function'&&isDone('times',r)){t=String(r*c);cls='old';}
+        else if(typeof isDone==='function'&&isDone('times',ORDER.indexOf(r)+1)){t=String(r*c);cls='old';}
         h+=`<td class="${cls}" data-c="${r===K?c:''}">${t}</td>`;}
       h+='</tr>';}
     $('#tttbl').innerHTML=h+'</table>';
