@@ -1,7 +1,7 @@
 import re
 d='src/'
 css=open(d+'style.css').read()
-js=''.join(open(d+f).read()+'\n' for f in ['config.js','news.js','core.js','account.js','quiz.js','g24.js','grid.js','digits.js','kenken.js','sudoku.js','river.js','klotski.js','euler.js','nim.js','chance.js','derby.js','angles.js','transform.js','balance.js','lines.js','match.js','p2048.js','fraction.js','percent.js','factors.js','expand.js','times.js','factorise.js'])
+js=''.join(open(d+f).read()+'\n' for f in ['config.js','news.js','core.js','account.js','quiz.js','g24.js','grid.js','digits.js','sudoku.js','river.js','klotski.js','euler.js','nim.js','chance.js','derby.js','angles.js','transform.js','balance.js','lines.js','match.js','p2048.js','fraction.js','percent.js','factors.js','expand.js','times.js','factorise.js'])
 html=f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#6741d9"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <title>Maths Puzzle Arcade</title><style>{css}</style></head><body><div class="wrap">

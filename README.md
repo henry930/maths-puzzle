@@ -16,7 +16,7 @@ python3 build.py
 ```
 
 ## Game URLs
-Each game has its own address, e.g. `/balance/`, `/sudoku/`, `/g24/`, `/kenken/`, `/p2048/`. `build.py` generates these folders.
+Each game has its own address, e.g. `/balance/`, `/sudoku/`, `/g24/`, `/p2048/`. `build.py` generates these folders.
 
 ## Accounts & online database (Supabase, free)
 1. Create a free project at https://supabase.com (Project → New).
