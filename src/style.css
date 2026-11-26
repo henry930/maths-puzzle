@@ -271,3 +271,5 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .ex-cap{font-size:20px;font-weight:700;min-height:30px;margin:10px 0 4px}.ex-res{font-size:26px;font-weight:900;min-height:36px;color:#2b8a3e}.ex-res b{color:#e8590c}
 .ex-pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px auto;max-width:340px}.ex-pad .key{padding:14px 0;font-size:22px}
 .ex-pad .key{border:0;border-radius:14px;background:#fff;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #d8d3f5}.ex-pad .key.del{background:#ffe3e3;box-shadow:0 3px 0 #f2bcbc}.ex-pad .key.ok{background:#2eaa5e;color:#fff;box-shadow:0 3px 0 #1f7d42;font-size:20px}
+.ex-pad .key.var{background:#fff4e6;color:#d9480f;box-shadow:0 3px 0 #ffd8a8}
+.ex-p{font-size:1.15em!important}.ex-expr{display:inline-block}
