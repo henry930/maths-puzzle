@@ -36,7 +36,7 @@ const CATALOG={
  angles:['GCSE Maths',['Geometry']],transform:['GCSE Maths',['Geometry']],
  fraction:['GCSE Maths',['Number and Arithmetic']],percent:['GCSE Maths',['Number and Arithmetic']],factors:['GCSE Maths',['Number and Arithmetic']],
  chance:['GCSE Maths',['Probability / Statistics']],derby:['GCSE Maths',['Probability / Statistics']],
- factorise:['GCSE Maths',['Algebra','Number and Arithmetic']],times:['Basic Skills Practice',['Number and Arithmetic']],digits:['Basic Skills Practice',['Number and Arithmetic']],grid:['Basic Skills Practice',['Number and Arithmetic']],
+ factorise:['GCSE Maths',['Algebra','Number and Arithmetic']],quad:['GCSE Maths',['Algebra']],times:['Basic Skills Practice',['Number and Arithmetic']],digits:['Basic Skills Practice',['Number and Arithmetic']],grid:['Basic Skills Practice',['Number and Arithmetic']],
  g24:['General Puzzles',['Number and Arithmetic','Strategies and planning']],
  match:['General Puzzles',['Number and Arithmetic']],p2048:['General Puzzles',['Number and Arithmetic','Strategies and planning']],
  sudoku:['General Puzzles',['Strategies and planning']],river:['General Puzzles',['Strategies and planning']],nim:['General Puzzles',['Strategies and planning']],
