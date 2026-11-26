@@ -1,3 +1,2 @@
-/* Cloud database settings. Leave empty to keep everything on this device only.
-   After you create a free Supabase project, paste its Project URL and anon (public) key here. */
-window.PZ_CFG=window.PZ_CFG||{url:'',key:''};
+/* Cloud database settings (Supabase project). Leave url/key empty to keep everything on each device only. */
+window.PZ_CFG=window.PZ_CFG||{url:'https://usyrhqpymveqgvjrmfbv.supabase.co',key:'sb_publishable_aW4QYAtcc982G9FPdVlj8g_X52CbKbe'};

@@ -73,8 +73,8 @@ begin
   if not found then return json_build_object('ok',false,'error','no_user'); end if;
   if p.locked_until is not null and p.locked_until>now() then return json_build_object('ok',false,'error','locked'); end if;
   if extensions.crypt(coalesce(p_hash,''),p.pin_hash)<>p.pin_hash then
-    update pz_players set fails=fails+1,
-      locked_until=case when fails+1>=6 then now()+interval '5 minutes' else null end,
+    update pz_players set
+      locked_until=case when fails+1>=6 then now()+interval '5 minutes' else locked_until end,
       fails=case when fails+1>=6 then 0 else fails+1 end
     where name_lower=p.name_lower;
     return json_build_object('ok',false,'error','bad_pin');

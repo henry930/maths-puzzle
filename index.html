@@ -295,9 +295,8 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><h2 id="gtitle"></h2><div class="pills" id="glevels"></div></div>
 <div class="glv" id="glvname"></div><div class="howto" id="howto"></div><div id="groot"></div></section>
-</div><script>/* Cloud database settings. Leave empty to keep everything on this device only.
-   After you create a free Supabase project, paste its Project URL and anon (public) key here. */
-window.PZ_CFG=window.PZ_CFG||{url:'',key:''};
+</div><script>/* Cloud database settings (Supabase project). Leave url/key empty to keep everything on each device only. */
+window.PZ_CFG=window.PZ_CFG||{url:'https://usyrhqpymveqgvjrmfbv.supabase.co',key:'sb_publishable_aW4QYAtcc982G9FPdVlj8g_X52CbKbe'};
 
 const $=(s,r=document)=>r.querySelector(s);
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
