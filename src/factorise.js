@@ -84,11 +84,10 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     L=[...new Set(terms.flatMap(t=>Object.keys(t.p)))].sort();
     orig=cp(terms);CF={c:1,p:{}};steps=[];ended=false;sel=-1;msg('');startRound();
   }
-  function startRound(){clearTimers();cur=terms.map(()=>null);tok=terms.map(()=>0);sel=-1;buf='';render();closePad();}
+  function startRound(){clearTimers();cur=terms.map(()=>null);tok=terms.map(()=>0);sel=-1;buf='';render();updV();closePad();}
   const shownBuf=()=>buf.replace(/\^2/g,'²').replace(/\^3/g,'³');
   function tmTxt(t,i){
     const lead=t.c<0?(i===0?'−':'− '):(i===0?'':'+ ');
-    if(i===sel&&buf)return `${lead}${shownBuf()} ×`;
     if(!cur[i])return fmtT(t,i===0,true).trim();
     const q=divT(t,blkT(cur[i]));
     return `${lead}${cur[i]} × ${fmtT({c:Math.abs(q.c),p:q.p},true)}`;
@@ -110,7 +109,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     return h;
   }
   function render(){
-    $('#fxt').innerHTML=topHtml();
+    $('#fxt').innerHTML=topHtml();updV();
     $('#fxt').querySelectorAll('.fx-tw').forEach(e=>e.onclick=()=>openPad(+e.dataset.i));
     const g=$('#fxgo');if(g)g.onclick=doFactorise;
     $('#fxs').innerHTML=ended?`<div class="ex-res"><span class="ex-eq">Fully factorised! Nothing more can be taken out.</span></div>`:'';
@@ -118,7 +117,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
   function openPad(i){
     if(ended)return;sel=i;buf='';const pad=$('#fxpad');
     pad.style.display='';$('#fxr').classList.add('padopen');
-    pad.innerHTML=`<div class="fxp-h"><span class="fxp-t">Factors of <b>${fmtT(terms[i],true)}</b></span><button class="fxp-x" id="fxx">✕</button></div><div class="msg" id="fxpm">&nbsp;</div><div class="ex-pad" id="fxk"></div>`;
+    pad.innerHTML=`<div class="fxp-h"><span class="fxp-t">Factors of <b>${fmtT(terms[i],true)}</b></span><span class="fxp-v" id="fxv"></span><button class="fxp-x" id="fxx">✕</button></div><div class="msg" id="fxpm">&nbsp;</div><div class="ex-pad" id="fxk"></div>`;
     $('#fxx').onclick=closePad;
     ['7','8','9','del','4','5','6','sq2','1','2','3','sq3','0',...L].forEach(k=>{const b=el('button','key'+(k==='del'?' del':'')+(L.includes(k)?' var':''),k==='del'?'⌫':k==='sq2'?'²':k==='sq3'?'³':k);b.onclick=()=>press(k);$('#fxk').appendChild(b);});
     const ok=el('button','key ok','Add ✓');ok.style.gridColumn='1 / -1';ok.onclick=()=>press('ok');$('#fxk').appendChild(ok);
@@ -133,8 +132,9 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     else if(L.includes(k)){if(buf==='')buf=k;}
     else if(k==='ok')return add();
     else if(/^\d$/.test(k)&&/^\d{0,2}$/.test(buf))buf+=k;
-    render();
+    render();updV();
   }
+  function updV(){const v=document.getElementById('fxv');if(v)v.textContent=shownBuf();}
   function setCur(i,canon){cur[i]=canon;const my=++tok[i];timers.push(setTimeout(()=>{if(tok[i]===my&&cur[i]===canon){cur[i]=null;render();}},30000));}
   function add(){
     const i=sel,t=terms[i],req=reqOf(t);let canon=null;
@@ -145,7 +145,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     if(!req.includes(canon)){
       msg('❌ '+(/^\d+$/.test(canon)?`${canon} does not divide ${Math.abs(t.c)} exactly.`:`${canon} is not part of ${fmtT(t,true)}.`));
       ctx.log('wrong',{stage:'list',term:fmtT(t,true),typed:canon,type:'not_a_factor'});buf='';return render();}
-    setCur(i,canon);buf='';render();
+    setCur(i,canon);buf='';render();updV();
     const cb=commonBlk();msg(cb?`✅ You can take out ${cb} — press Factorise!`:`✅ ${canon} is a factor`);
   }
   function doFactorise(){
