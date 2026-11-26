@@ -261,4 +261,4 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .fc-ctl{display:flex;align-items:center;gap:10px;margin:8px 0}.fc-ctl{font-size:20px;font-weight:800;justify-content:center}.fc-ctl input{width:90px;height:48px;font-size:26px;font-weight:800;text-align:center;border:3px solid #e6e2fa;border-radius:12px}.fc-ctl input:focus{border-color:#0b7285;outline:0}.fc-ctl .btn.go{font-size:18px;padding:12px 18px;background:#0b7285}
 .fc-rowsl{font-size:18px}.fc-found{margin:10px 0 4px;font-size:18px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}.fc-found .fl{font-weight:800;color:#555}
 .fc-found b{background:#0b7285;color:#fff;border-radius:10px;padding:4px 10px}.fc-found u{text-decoration:none;background:#eee;color:#aaa;border-radius:10px;padding:4px 10px;font-weight:800}
-.fc-pairs{font-size:15px;color:#555;min-height:20px;margin-bottom:6px}
+.fc-pairs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:4px 0 8px}.fc-pairs span{font-size:24px;font-weight:900;color:#0b7285;background:#fff;border:3px solid #99e9f2;border-radius:14px;padding:6px 14px}

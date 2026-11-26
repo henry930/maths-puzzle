@@ -263,7 +263,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .fc-ctl{display:flex;align-items:center;gap:10px;margin:8px 0}.fc-ctl{font-size:20px;font-weight:800;justify-content:center}.fc-ctl input{width:90px;height:48px;font-size:26px;font-weight:800;text-align:center;border:3px solid #e6e2fa;border-radius:12px}.fc-ctl input:focus{border-color:#0b7285;outline:0}.fc-ctl .btn.go{font-size:18px;padding:12px 18px;background:#0b7285}
 .fc-rowsl{font-size:18px}.fc-found{margin:10px 0 4px;font-size:18px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}.fc-found .fl{font-weight:800;color:#555}
 .fc-found b{background:#0b7285;color:#fff;border-radius:10px;padding:4px 10px}.fc-found u{text-decoration:none;background:#eee;color:#aaa;border-radius:10px;padding:4px 10px;font-weight:800}
-.fc-pairs{font-size:15px;color:#555;min-height:20px;margin-bottom:6px}
+.fc-pairs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:4px 0 8px}.fc-pairs span{font-size:24px;font-weight:900;color:#0b7285;background:#fff;border:3px solid #99e9f2;border-radius:14px;padding:6px 14px}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><h2 id="gtitle"></h2><div class="pills" id="glevels"></div></div>
@@ -2279,11 +2279,12 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
  mount(root,lv,ctx){
   const N=NS[lv-1],F=facs(N),found=new Set([1,N]),pairs=[[1,N]];let r=1;
   root.innerHTML=`<div class="fc"><div class="fc-tip">${TIPS[N]||'Find every number that divides '+N+' exactly. (1 and '+N+' are free!)'}</div>
+   <div class="fc-pairs" id="fcpr"></div>
    <div class="fc-n">🔵 <b>${N}</b> balls</div>
    <div class="fc-board" id="fcb"></div>
    <div class="fc-eq" id="fceq"></div>
    <div class="fc-ctl">Rows: <input type="number" id="fcr" inputmode="numeric" min="1" max="${N}" placeholder="?" autocomplete="off"><button class="btn go" id="fcgo">Arrange ▶</button></div>
-   <div class="fc-found" id="fcf"></div><div class="fc-pairs" id="fcpr"></div>
+   <div class="fc-found" id="fcf"></div>
    <div class="toolrow"><button class="btn alt" id="fch">💡 Hint</button><button class="btn go" id="fcdone">I found them all ✓</button></div><div class="msg" id="fcmsg">&nbsp;</div></div>`;
   const board=$('#fcb'),balls=[];
   for(let i=0;i<N;i++){const b=el('i','fc-ball');board.appendChild(b);balls.push(b);}
@@ -2314,7 +2315,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
   function list(){
     const fs=[...found].sort((a,b)=>a-b);
     $('#fcf').innerHTML='<span class="fl">Factors found:</span> '+fs.map(x=>`<b>${x}</b>`).join('');
-    $('#fcpr').innerHTML=pairs.map(p=>`${p[0]} × ${p[1]} = ${N}`).join(' &nbsp;·&nbsp; ');
+    $('#fcpr').innerHTML=pairs.map(p=>`<span>${p[0]} × ${p[1]} = ${N}</span>`).join('');
   }
   function set(v,silent){
     if(!(v>=1&&v<=N&&Number.isInteger(v))){$('#fcmsg').innerHTML=`Type a whole number from 1 to ${N}.`;return;}

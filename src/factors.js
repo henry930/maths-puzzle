@@ -12,11 +12,12 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
  mount(root,lv,ctx){
   const N=NS[lv-1],F=facs(N),found=new Set([1,N]),pairs=[[1,N]];let r=1;
   root.innerHTML=`<div class="fc"><div class="fc-tip">${TIPS[N]||'Find every number that divides '+N+' exactly. (1 and '+N+' are free!)'}</div>
+   <div class="fc-pairs" id="fcpr"></div>
    <div class="fc-n">🔵 <b>${N}</b> balls</div>
    <div class="fc-board" id="fcb"></div>
    <div class="fc-eq" id="fceq"></div>
    <div class="fc-ctl">Rows: <input type="number" id="fcr" inputmode="numeric" min="1" max="${N}" placeholder="?" autocomplete="off"><button class="btn go" id="fcgo">Arrange ▶</button></div>
-   <div class="fc-found" id="fcf"></div><div class="fc-pairs" id="fcpr"></div>
+   <div class="fc-found" id="fcf"></div>
    <div class="toolrow"><button class="btn alt" id="fch">💡 Hint</button><button class="btn go" id="fcdone">I found them all ✓</button></div><div class="msg" id="fcmsg">&nbsp;</div></div>`;
   const board=$('#fcb'),balls=[];
   for(let i=0;i<N;i++){const b=el('i','fc-ball');board.appendChild(b);balls.push(b);}
@@ -47,7 +48,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
   function list(){
     const fs=[...found].sort((a,b)=>a-b);
     $('#fcf').innerHTML='<span class="fl">Factors found:</span> '+fs.map(x=>`<b>${x}</b>`).join('');
-    $('#fcpr').innerHTML=pairs.map(p=>`${p[0]} × ${p[1]} = ${N}`).join(' &nbsp;·&nbsp; ');
+    $('#fcpr').innerHTML=pairs.map(p=>`<span>${p[0]} × ${p[1]} = ${N}</span>`).join('');
   }
   function set(v,silent){
     if(!(v>=1&&v<=N&&Number.isInteger(v))){$('#fcmsg').innerHTML=`Type a whole number from 1 to ${N}.`;return;}
