@@ -6,22 +6,23 @@ const mul=(a,b)=>F(a[0]*b[0],a[1]*b[1]),dv=(a,b)=>F(a[0]*b[1],a[1]*b[0]);
 const z=a=>a[0]===0,isInt=a=>a[1]===1,eq1=a=>a[0]===1&&a[1]===1;
 const fh=(n,d)=>`<span class="fr"><i>${n}</i><i>${d}</i></span>`;
 const S=n=>String(n).replace('-','−');
+let SC=1;const RR=(a,c)=>R(a,Math.max(a,Math.round(c*SC)));
 function gen0(l){
-  const x=l===11?-R(1,8):R(1,10);
+  const x=l===11?-RR(1,8):RR(1,10);
   let a=1,b=0,c=0,d=0;
   const pos=n=>n; // helpers
-  if(l===1){b=R(1,9);d=x+b;}
-  else if(l===2){a=R(2,5);d=a*x;}
-  else if(l===3){a=2;b=R(1,9);d=a*x+b;}
-  else if(l===4){a=R(2,5);b=R(1,12);d=a*x+b;}
-  else if(l===5){b=-R(1,9);d=x+b;}
-  else if(l===6){a=R(2,5);b=-R(1,12);d=a*x+b;}
-  else if(l===7){a=R(2,4);c=1;b=R(1,10);d=(a-c)*x+b;}
-  else if(l===8){c=R(1,3);a=c+R(1,3);b=R(1,9);d=(a-c)*x+b;}
-  else if(l===9){c=R(1,3);a=c+R(1,3);b=-R(1,9);d=(a-c)*x+b;}
-  else if(l===10){c=R(2,4);a=c+R(1,3);b=R(1,15);d=(a-c)*x+b;}
-  else if(l===11){a=R(2,4);b=R(1,9);d=a*x+b;if(Math.random()<.5){c=1;d=(a-c)*x+b;}}
-  else{c=R(2,5);a=pick([1,2,3].filter(v=>v<c));b=R(3,16);d=(a-c)*x+b;}
+  if(l===1){b=RR(1,9);d=x+b;}
+  else if(l===2){a=RR(2,5);d=a*x;}
+  else if(l===3){a=2;b=RR(1,9);d=a*x+b;}
+  else if(l===4){a=RR(2,5);b=RR(1,12);d=a*x+b;}
+  else if(l===5){b=-RR(1,9);d=x+b;}
+  else if(l===6){a=RR(2,5);b=-RR(1,12);d=a*x+b;}
+  else if(l===7){a=RR(2,4);c=1;b=RR(1,10);d=(a-c)*x+b;}
+  else if(l===8){c=RR(1,3);a=c+RR(1,3);b=RR(1,9);d=(a-c)*x+b;}
+  else if(l===9){c=RR(1,3);a=c+RR(1,3);b=-RR(1,9);d=(a-c)*x+b;}
+  else if(l===10){c=RR(2,4);a=c+RR(1,3);b=RR(1,15);d=(a-c)*x+b;}
+  else if(l===11){a=RR(2,4);b=RR(1,9);d=a*x+b;if(Math.random()<.5){c=1;d=(a-c)*x+b;}}
+  else{c=RR(2,5);a=pick([1,2,3].filter(v=>v<c));b=RR(3,16);d=(a-c)*x+b;}
   // equation: a x + b = c x + d  where d may be negative etc; for l<7, c=0
   if(l<7){c=0;if(l===1||l===5)a=1;}
   if(l===12||l===11&&c===1){}
@@ -30,17 +31,18 @@ function gen0(l){
 
 function gen(l){
   if(l<=12)return gen0(l);
-  const t=R(1,6);let a,p,q,b,c,d,e,r;
+  const t=RR(1,6);let a,p,q,b,c,d,e,r;
   const mk=(lx,ln,rx,rn,x)=>({L:{x:lx,n:ln},Rr:{x:rx,n:rn},sol:x});
-  if(l===13){a=R(2,5);b=R(2,9);return mk(F(1,a),F(0),F(0),F(b),F(a*b));}
-  if(l===14){a=R(2,9);b=R(2,12);return mk(F(1,a),F(0),F(0),F(b),F(a*b));}
-  if(l===15){a=R(2,6);b=R(1,9);return mk(F(1,a),F(b),F(0),F(t+b),F(a*t));}
-  if(l===16){a=R(2,6);b=R(1,6);const tt=t+b;return mk(F(1,a),F(-b),F(0),F(tt-b),F(a*tt));}
+  if(l===13){a=RR(2,5);b=RR(2,9);return mk(F(1,a),F(0),F(0),F(b),F(a*b));}
+  if(l===14){a=RR(2,9);b=RR(2,12);return mk(F(1,a),F(0),F(0),F(b),F(a*b));}
+  if(l===15){a=RR(2,6);b=RR(1,9);return mk(F(1,a),F(b),F(0),F(t+b),F(a*t));}
+  if(l===16){a=RR(2,6);b=RR(1,6);const tt=t+b;return mk(F(1,a),F(-b),F(0),F(tt-b),F(a*tt));}
   if(l===17){q=pick([3,4,5]);p=pick([2,3,4].filter(v=>v<q&&G(v,q)===1));return mk(F(p,q),F(0),F(0),F(p*t),F(q*t));}
-  if(l===18){q=pick([3,4,5]);p=pick([2,3,4].filter(v=>v<q&&G(v,q)===1));b=R(1,9);return mk(F(p,q),F(b),F(0),F(p*t+b),F(q*t));}
-  if(l===19){a=pick([2,3,4]);b=R(1,9);return mk(F(1,a),F(b),F(1),F(t+b-a*t),F(a*t));}
-  q=pick([2,3,4,5]);r=R(1,q-1);b=R(1,9);return mk(F(r+1,q),F(b),F(r,q),F(b+t),F(q*t));
+  if(l===18){q=pick([3,4,5]);p=pick([2,3,4].filter(v=>v<q&&G(v,q)===1));b=RR(1,9);return mk(F(p,q),F(b),F(0),F(p*t+b),F(q*t));}
+  if(l===19){a=pick([2,3,4]);b=RR(1,9);return mk(F(1,a),F(b),F(1),F(t+b-a*t),F(a*t));}
+  q=pick([2,3,4,5]);r=RR(1,q-1);b=RR(1,9);return mk(F(r+1,q),F(b),F(r,q),F(b+t),F(q*t));
 }
+const genL=lv=>{const f=Math.ceil(lv/5),s=(lv-1)%5;SC=1+.5*s;try{let E;for(let i=0;i<60;i++){E=gen(f);if(Math.abs(E.sol[0]/E.sol[1])<=100)break;}return E;}finally{SC=1;}};
 function termsHTML(s){
   const out=[];
   if(!z(s.x)){const[p,q]=s.x,neg=p<0,ap=Math.abs(p);
@@ -64,7 +66,7 @@ function tilesOf(side){
 const GX={'+':'＋','-':'−'};
 REG.push({id:'balance',name:'Balance Scale',emoji:'⚖️',color:'#6741d9',cat:'Algebra',
  desc:'A real balance! Drag x and 1 weights on and off the pans (both sides always change together), and swing the pointer on the base right to multiply or left to divide. Keep it level to find x.',skills:['solving equations','inverse operations','balancing method','fractions in equations'],
- levels:['x + a = b','Multiples: 2x = b','Two-step: 2x + a = b','Two-step: ax + b = c','Negatives: x − a = b','Negatives: ax − b = c','x on both sides (easy)','x on both sides','x on both sides + negatives','x on both sides · bigger numbers','Negative answers','Boss equations','x/a = b','x/a = b · bigger','x/a + b = c','x/a − b = c','Fractions: (p/q)x = c','Fractions: (p/q)x + b = c','x/a + b = x + c','Fractions on both sides'],
+ levels:['x + a = b','Multiples: 2x = b','Two-step: 2x + a = b','Two-step: ax + b = c','Negatives: x − a = b','Negatives: ax − b = c','x on both sides (easy)','x on both sides','x on both sides + negatives','x on both sides · bigger numbers','Negative answers','Boss equations','x/a = b','x/a = b · bigger','x/a + b = c','x/a − b = c','Fractions: (p/q)x = c','Fractions: (p/q)x + b = c','x/a + b = x + c','Fractions on both sides'].flatMap(n=>['warm-up','easy','medium','hard','tough'].map(d=>n+' · '+d)),
  how:'Drop an x or 1 weight on a pan to add it to BOTH sides. Drag one off a pan (or tap the tile) to take one away from both sides. The tiles show the totals. On the base, swing the pointer right (×) or left (÷), flip +/− for negatives, then press Apply. Get x alone.',
  art:'<div class="minibal">⚖️</div>',
  mount(root,lv,ctx){
@@ -188,7 +190,7 @@ REG.push({id:'balance',name:'Balance Scale',emoji:'⚖️',color:'#6741d9',cat:'
     setTimeout(()=>{busy=false;commit(()=>{E=nE;},'pop',null,info);},380);
   }
   /* ---------- buttons ---------- */
-  function build(){E=gen(lv);E0=clone(E);snap=[];steps=[];solvedTxt=null;{const nb=$('#nw');if(nb){nb.textContent='New equation ⏭';nb.onclick=build;}}over=false;busy=false;ang=0;vel=0;setP(0);setSg(1);update();}
+  function build(){E=genL(lv);E0=clone(E);snap=[];steps=[];solvedTxt=null;{const nb=$('#nw');if(nb){nb.textContent='New equation ⏭';nb.onclick=build;}}over=false;busy=false;ang=0;vel=0;setP(0);setSg(1);update();}
   $('#un').onclick=()=>{if(busy||over||!snap.length)return;over=false;const sn=snap.pop();E=sn.E;steps=JSON.parse(sn.st);update();};
   $('#rs').onclick=()=>{if(busy||over)return;E=clone(E0);snap=[];steps=[];over=false;update();};
   $('#nw').onclick=build;

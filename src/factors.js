@@ -1,5 +1,9 @@
 (function(){
-const NS=[6,10,12,16,17,24,30,36,45,48,60,72,84];
+const NS=(()=>{const pr=n=>{for(let i=2;i*i<=n;i++)if(n%i===0)return false;return n>1;};
+ const a=[];for(let n=6;n<=130&&a.length<100;n++){if(pr(n)&&n>50&&![53,71,97,113].includes(n))continue;a.push(n);}
+ let s=7;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
+ for(let i=0;i<a.length;i+=4){const w=a.slice(i,i+4);for(let j=w.length-1;j>0;j--){const k=Math.floor(rnd()*(j+1));[w[j],w[k]]=[w[k],w[j]];}a.splice(i,w.length,...w);}
+ return a.slice(0,100);})();
 const TIPS={17:'This one is special… how many ways can you arrange 17 balls?',36:'36 is a square number — one arrangement gives you the same number twice!',
  12:'When 3 rows of 4 works, 4 rows of 3 works too. Both 3 and 4 are factors!'};
 const facs=n=>{const o=[];for(let i=1;i<=n;i++)if(n%i===0)o.push(i);return o;};

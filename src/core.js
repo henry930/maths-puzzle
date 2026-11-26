@@ -17,10 +17,11 @@ const isDone=(id,l)=>!!(done[id]&&done[id][l]);
 const doneCount=id=>Object.keys(done[id]||{}).length;
 const ptsOf=u=>{let s=0;for(const id in u.done)for(const l in u.done[id])s+=u.done[id][l].p||0;return s;};
 const lvOf=u=>{let s=0;for(const id in u.done)s+=Object.keys(u.done[id]).length;return s;};
+const lvPts=lv=>50+10*Math.min(lv,20);
 function markDone(id,lv){
   const secs=ctx&&ctx.t0?Math.round((Date.now()-ctx.t0)/1000):null;
   let r=(done[id]=done[id]||{})[lv],gain;
-  if(!r){r=done[id][lv]={n:1,t:secs,p:50+10*lv};gain=50+10*lv;}
+  if(!r){r=done[id][lv]={n:1,t:secs,p:lvPts(lv)};gain=lvPts(lv);}
   else{r.n++;gain=r.n<=11?5:0;r.p+=gain;if(secs!=null&&(r.t==null||secs<r.t))r.t=secs;}
   if(ctx)ctx.t0=Date.now();persist();return gain;
 }
@@ -52,15 +53,16 @@ function openGame(id,lv){
   $('#menu').hidden=true;$('#game').hidden=false;
   $('#gtitle').innerHTML=`<span class="gemo">${g.emoji}</span> ${g.name}`;
   document.documentElement.style.setProperty('--gc',g.color);$('#gbar').style.setProperty('--c',g.color);
-  const pills=$('#glevels');pills.innerHTML='';
+  const pills=$('#glevels');pills.innerHTML='';pills.classList.toggle('long',N>24);
   g.levels.forEach((n,i)=>{const b=el('button','pill'+(i+1===lv?' on':'')+(isDone(id,i+1)?' dn':''),String(i+1));b.title=n;b.onclick=()=>openGame(id,i+1);pills.appendChild(b);});
+  if(N>24){const cur=pills.children[lv-1];if(cur)setTimeout(()=>{try{pills.scrollLeft=cur.offsetLeft-pills.clientWidth/2+cur.offsetWidth/2}catch(e){}},0);}
   $('#glvname').innerHTML=`<b>Level ${lv}/${N}</b> · ${g.levels[lv-1]}`;
   $('#howto').textContent=g.how;
   const root=$('#groot');root.innerHTML='';
   ctx={id,lv,N,t0:Date.now(),cleanups:[],keys:null,
     interval(fn,ms){const h=setInterval(fn,ms);this.cleanups.push(()=>clearInterval(h));return h},
     timeout(fn,ms){const h=setTimeout(fn,ms);this.cleanups.push(()=>clearTimeout(h));return h},
-    win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===50+10*lv;const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,againLabel,first,opt&&opt.stay);}};
+    win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===lvPts(lv);const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,againLabel,first,opt&&opt.stay);}};
   window.scrollTo(0,0);
   pushUrl(ROOT+id+'/');document.title=g.name+' · Maths Puzzle Arcade';
   g.mount(root,lv,ctx);
