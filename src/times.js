@@ -5,14 +5,15 @@ const TIPS={
  3:'Squeeze the 3s between the 6s: the <b>6× table</b> (6, 12, 18, 24) goes in every 2nd box. Each empty box is <b>the number before it + 3</b>.',
  4:'4 = 2 × 2, so the 4× table is <b>every 2nd number</b> of the 2× table.',
  5:'The units digit flips <b>5, 0, 5, 0…</b> Whenever the units hit 0, the <b>tens digit goes up by 1</b>.',
- 6:'6 = 3 × 2, so the 6× table is <b>every 2nd number</b> of the 3× table.',
+ 6:'6 = 2 × 3, so the 6× table is <b>every 3rd number</b> of the 2× table: 2, 4, <b>6</b>, 8, 10, <b>12</b>…',
  7:'Flip it! <b>7 × 2 = 2 × 7</b>. Almost all of row 7 is already in your table from the other rows.',
  8:'8 = 4 × 2, so the 8× table is <b>every 2nd number</b> of the 4× table.',
  9:'The tens digit goes <b>UP 0, 1, 2, 3…</b> while the units digit goes <b>DOWN 9, 8, 7, 6…</b> (tens + units is always 9).'};
 const HINT={1:'1 × a number is just that number.',2:'Units go 2, 4, 6, 8, 0 and the tens +1 after each 0.',3:'Last number + 3 (the 6s are every 2nd box).',4:'Every 2nd number of the 2× table: 4, 8, 12, 16…',
- 5:'Units go 5, 0, 5, 0 and the tens +1 after each 0.',6:'Every 2nd number of the 3× table: 6, 12, 18, 24…',7:'7 × c = c × 7. Look at the c-row of the table!',8:'Every 2nd number of the 4× table: 8, 16, 24, 32…',9:'Tens go up 0,1,2,3… units go down 9,8,7,6…'};
+ 5:'Units go 5, 0, 5, 0 and the tens +1 after each 0.',6:'Every 3rd number of the 2× table: 6, 12, 18, 24…',7:'7 × c = c × 7. Look at the c-row of the table!',8:'Every 2nd number of the 4× table: 8, 16, 24, 32…',9:'Tens go up 0,1,2,3… units go down 9,8,7,6…'};
+const BS={4:[2,2],6:[2,3],8:[4,2]},ORD={2:'2nd',3:'3rd'};
 const ORDER=[1,2,4,6,8,5,3,9,7];
-const NM={1:'1× · itself',2:'2× · units 0,2,4,6,8',3:'3× · add 3 between the 6s',4:'4× · every 2nd of the 2s',5:'5× · units 5,0 and tens +1',6:'6× · every 2nd of the 3s',7:'7× · flip the table',8:'8× · every 2nd of the 4s',9:'9× · tens up, units down'};
+const NM={1:'1× · itself',2:'2× · units 0,2,4,6,8',3:'3× · add 3 between the 6s',4:'4× · every 2nd of the 2s',5:'5× · units 5,0 and tens +1',6:'6× · every 3rd of the 2s',7:'7× · flip the table',8:'8× · every 2nd of the 4s',9:'9× · tens up, units down'};
 const NAMES=ORDER.map(k=>NM[k]);
 window.__tt={NAMES};
 REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',cat:'Arithmetic',
@@ -41,7 +42,7 @@ REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',ca
     if(K===2)help.innerHTML='<div class="tt-lab">Units digit pattern</div><div class="tt-chips">'+chips([2,4,6,8,0],'ch')+'</div>';
     if(K===5)help.innerHTML='<div class="tt-lab">Units digit pattern</div><div class="tt-chips">'+chips([5,0],'ch')+'</div>';
     if(K===9)help.innerHTML='<div class="tt-lab">Tens digit ↑ &nbsp; Units digit ↓</div><div class="tt-chips">'+chips([0,1,2,3,4,5,6,7,8],'tc')+'</div><div class="tt-chips">'+chips([9,8,7,6,5,4,3,2,1],'uc')+'</div>';
-    if(K===4||K===6||K===8){const b=K/2;help.innerHTML=`<div class="tt-lab">The ${b}× table, going on past 9</div><div class="tt-chips g9" id="chg">`+chips(Array.from({length:18},(_,j)=>b*(j+1)),'ch')+'</div>';help.querySelector('#chg').style.visibility='hidden';}
+    if(K===4||K===6||K===8){const [b,st]=BS[K];help.innerHTML=`<div class="tt-lab">The ${b}× table, going on past 9</div><div class="tt-chips g9" id="chg">`+chips(Array.from({length:9*st},(_,j)=>b*(j+1)),'ch')+'</div>';help.querySelector('#chg').style.visibility='hidden';}
     if(K===7){let h='<div class="tt-mini">';for(let r=1;r<=9;r++){for(let c=1;c<=9;c++)h+=`<i id="m${r}_${c}" class="${c===7?'col':''}">${r===7?'':r*c}</i>`;}h+='</div>';help.innerHTML='<div class="tt-lab">The table so far</div>'+h;}
   }
   function mini(a,b){help.querySelectorAll('.tt-mini i').forEach(e=>e.classList.remove('a','b','pulse'));a.forEach(([r,c])=>{const e=$('#m'+r+'_'+c);if(e)e.classList.add('a');});b.forEach(([r,c])=>{const e=$('#m'+r+'_'+c);if(e){e.classList.add('b');if(r===7)e.textContent=r*c;}});}
@@ -61,10 +62,10 @@ REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',ca
       P(()=>cap('Check: tens + units is always <b>9</b> (0+9, 1+8, 2+7…).'),1600);
     }
     if(K===4||K===6||K===8){
-      const b=K/2;
-      P(()=>{help.querySelector('#chg').style.visibility='visible';cap(`${K} = ${b} × 2. Write the ${b}× table further: ${b}, ${2*b}, ${3*b}…`);},2200);
-      P(()=>cap('Now pick <b>every 2nd number</b>!'),1200);
-      for(let i=1;i<=9;i++)P(()=>{const j=2*i;hlChips(['ch'+(j-1)]);setSlot(i,String(b*j));cap(`The ${j}th number is ${b*j} → ${K} × ${i} = <b>${K*i}</b>`);},950);
+      const [b,st]=BS[K];
+      P(()=>{help.querySelector('#chg').style.visibility='visible';cap(`${K} = ${b} × ${st}. Write the ${b}× table further: ${b}, ${2*b}, ${3*b}…`);},2200);
+      P(()=>cap(`Now pick <b>every ${ORD[st]} number</b>!`),1200);
+      for(let i=1;i<=9;i++)P(()=>{const j=st*i;hlChips(['ch'+(j-1)]);setSlot(i,String(b*j));cap(`The ${j}th number is ${b*j} → ${K} × ${i} = <b>${K*i}</b>`);},950);
     }
     if(K===3){
       P(()=>cap('Make room: put the <b>6× table</b> (6, 12, 18, 24) in every 2nd box.'),1500);
