@@ -2887,7 +2887,7 @@ const common=ts=>{const c=gcdAll(ts.map(t=>Math.abs(t.c))),p={};Object.keys(ts[0
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',
  desc:'Factorise expressions like 30x + 25. Tap a term and enter one of its factors — the term turns into factor × something. When every term shows the same factor, press Factorise. Repeat until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','dividing terms'],
  levels:LV.map(l=>l.n),
- how:'Tap a term and enter one of its factors on the number pad (a number, or a letter with its power like x²). If it is a factor, the term turns into factor × something, e.g. 30x becomes 5 × 6x. It only stays that way for about 30 seconds, or until you enter another factor. When EVERY term shows the same factor, a Factorise button appears — press it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
+ how:'Tap a term and enter one of its factors on the number pad (a number, or a letter with its power like x²). If it is a factor, the term turns into factor × something, e.g. 30x becomes 5 × 6x. It only stays that way for about 30 seconds, or until you enter another factor. When every term has a factor and they all fit into every term (for example 2 and 3 for 6x + 6), a Factorise button appears — press it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
  art:'<div class="minibal">6(2x+3)</div>',
  mount(root,lv,ctx){
   const spec=LV[lv-1];let terms,orig,L,CF,cur,tok,sel,buf,steps,ended;const timers=[];
@@ -2906,12 +2906,21 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
   function startRound(){clearTimers();cur=terms.map(()=>null);tok=terms.map(()=>0);sel=-1;buf='';render();closePad();}
   const shownBuf=()=>buf.replace(/\^2/g,'²').replace(/\^3/g,'³');
   function tmTxt(t,i){
+    const lead=t.c<0?(i===0?'−':'− '):(i===0?'':'+ ');
+    if(i===sel&&buf)return `${lead}${shownBuf()} ×`;
     if(!cur[i])return fmtT(t,i===0,true).trim();
-    const q=divT(t,blkT(cur[i])),lead=t.c<0?(i===0?'−':'− '):(i===0?'':'+ ');
+    const q=divT(t,blkT(cur[i]));
     return `${lead}${cur[i]} × ${fmtT({c:Math.abs(q.c),p:q.p},true)}`;
   }
-  function commonBlk(){if(cur.some(x=>!x))return null;return cur.every(x=>x===cur[0])?cur[0]:null;}
-  const pills=ts=>ts.map((t,i)=>`<span class="fx-tw" data-i="${i}"><span class="fx-sup">${i===sel&&buf?`<i class="fx-sb live">${shownBuf()}</i>`:''}</span><span class="fx-ln${i===sel&&!ended?' on':''}${i===sel&&buf?' has':''}"></span><span class="fx-tm${!ended&&i===sel?' cur':''}">${tmTxt(t,i)}</span></span>`).join(' ');
+  function commonD(){
+    if(!cur||cur.some(x=>!x))return null;const bs=cur.map(blkT);
+    if(!bs.every(b=>terms.every(t=>divides(b,t))))return null;
+    const lcm=(a,b)=>a/gcd(a,b)*b;let c=1;const p={};
+    bs.forEach(b=>{c=lcm(c,b.c);for(const k in b.p)p[k]=Math.max(p[k]||0,b.p[k]);});
+    return{c,p};
+  }
+  const commonBlk=()=>{const d=commonD();return d?fmtT(d,true):null;};
+  const pills=ts=>ts.map((t,i)=>`<span class="fx-tw" data-i="${i}"><span class="fx-tm${!ended&&i===sel?' cur':''}">${tmTxt(t,i)}</span></span>`).join(' ');
   function topHtml(){
     const cb=commonBlk(),btn=cb&&!ended?`<button class="fx-go" id="fxgo">Factorise by ${cb} ✓</button>`:'';
     let h=`<div class="fx-expr">${steps.length?fmtExpr(orig):pills(terms)+btn}</div>`;
@@ -2956,11 +2965,11 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
       msg('❌ '+(/^\d+$/.test(canon)?`${canon} does not divide ${Math.abs(t.c)} exactly.`:`${canon} is not part of ${fmtT(t,true)}.`));
       ctx.log('wrong',{stage:'list',term:fmtT(t,true),typed:canon,type:'not_a_factor'});buf='';return render();}
     setCur(i,canon);buf='';render();
-    const cb=commonBlk();msg(cb?`✅ Every term has ${cb} — press Factorise!`:`✅ ${canon} is a factor`);
+    const cb=commonBlk();msg(cb?`✅ You can take out ${cb} — press Factorise!`:`✅ ${canon} is a factor`);
   }
   function doFactorise(){
-    const cb=commonBlk();if(!cb||ended)return;
-    const blk=blkT(cb);CF=mulT(CF,blk);terms=terms.map(t=>divT(t,blk));
+    const blk=commonD(),cb=blk?fmtT(blk,true):null;if(!blk||ended)return;
+    CF=mulT(CF,blk);terms=terms.map(t=>divT(t,blk));
     steps.push({CF:{c:CF.c,p:Object.assign({},CF.p)},terms:cp(terms)});clearTimers();
     const cm=common(terms);
     if(cm.c===1&&!Object.keys(cm.p).length){ended=true;sel=-1;closePad();render();msg(`✅ Factorised by ${cb} — nothing more to take out!`);return finish();}
@@ -2968,7 +2977,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
   }
   function finish(){const res=`${fmtT(CF,true)}(${fmtExpr(terms)})`;
     ctx.timeout(()=>ctx.win('Factorised!',`${fmtExpr(orig)} = ${res}`,build,'New question'),1000);}
-  $('#fxh').onclick=()=>msg('💡 Tap a term, then enter one of its factors (numbers like 2, 3, 6 — or letters like x, x²). When EVERY term shows the same factor, press Factorise.');
+  $('#fxh').onclick=()=>msg('💡 Tap a term, then enter one of its factors (numbers like 2, 3, 6 — or letters like x, x²). When every term shows a factor that fits all the terms, press Factorise.');
   $('#fxn').onclick=build;
   ctx.cleanups&&ctx.cleanups.push(()=>{clearTimers();const p=document.getElementById('fxpad');if(p)p.remove();});
   ctx.keys=e=>{const k=e.key.toLowerCase();if(k==='escape')return closePad();if(/^[0-9]$/.test(k))press(k);else if(L&&L.includes(k))press(k);else if(k==='^')press('sq2');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};
