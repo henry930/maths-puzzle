@@ -68,7 +68,7 @@ const common=ts=>{const c=gcdAll(ts.map(t=>Math.abs(t.c))),p={};Object.keys(ts[0
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',
  desc:'Factorise expressions like 30x + 25. Tap a number or letter and break it into factors (30x → 5 × 6x → 5 × 2 × 3x…). When the same factor shows up in every term, press Factorise. Repeat until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','prime factors'],
  levels:LV.map(l=>l.n),
- how:'Tap a part of a term and enter one of its factors on the number pad (a number, or a letter with its power like x²). It splits into factor × something, e.g. 30x → 5 × 6x. Tap any part again to split it further (6x → 2 × 3x). Tap a × to join two parts back together. A split only lasts about 30 seconds. When the same factor appears in EVERY term, a Factorise button appears — press it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
+ how:'Tap a part of a term and enter one of its factors on the number pad — a number, a letter, or both together (for 9n² you can enter 9, n, n² or 9n). It splits into factor × something, e.g. 30x → 5 × 6x. Tap any part again to split it further (6x → 2 × 3x). Tap a × to join two parts back together. A split only lasts about 30 seconds. When the same factor appears in EVERY term, a Factorise button appears — press it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
  art:'<div class="minibal">6(2x+3)</div>',
  mount(root,lv,ctx){
   const spec=LV[lv-1];let terms,orig,L,CF,chains,tok,selI,selJ,buf,steps,ended;const timers=[];
@@ -127,23 +127,23 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
   function press(k){
     if(ended||selI<0||document.querySelector('.overlay'))return;
     if(k==='del')buf=/\^[23]$/.test(buf)?buf.slice(0,-2):buf.slice(0,-1);
-    else if(k==='sq2'||k==='sq3'){if(/^[a-z]$/.test(buf))buf+='^'+k[2];}
-    else if(L.includes(k)){if(buf==='')buf=k;}
+    else if(k==='sq2'||k==='sq3'){if(/[a-z]$/.test(buf))buf+='^'+k[2];}
+    else if(L.includes(k)){if(!buf.includes(k))buf+=k;}
     else if(k==='ok')return add();
-    else if(/^\d$/.test(k)&&/^\d{0,2}$/.test(buf))buf+=k;
+    else if(/^\d$/.test(k)){if(!/[a-z]/.test(buf)&&buf.length<3)buf+=k;}
     updV();
   }
   function touch(i){const my=++tok[i];timers.push(setTimeout(()=>{if(tok[i]===my&&chains[i].length>1){chains[i]=[absT(terms[i])];render();}},30000));}
   function add(){
-    const i=selI,j=selJ,tk=chains[i][j],req=reqOf(tk);let canon=null;
-    if(/^\d{1,3}$/.test(buf))canon=String(+buf);
-    else{const m=parseMono(buf,L);if(m&&m.c===1&&Object.keys(m.p).length===1){const k=Object.keys(m.p)[0];canon=k+sup(m.p[k]);}}
-    if(canon==null){msg('Enter a number, or a letter with its power (x, x²).');return;}
-    if(canon==='1'){msg('1 divides everything, so it is no use here.');buf='';return updV();}
-    if(!req.includes(canon)){
-      msg('❌ '+(/^\d+$/.test(canon)?`${canon} does not divide ${tkTxt(tk)} exactly.`:`${canon} is not part of ${tkTxt(tk)}.`));
-      ctx.log('wrong',{stage:'split',term:fmtT(terms[i],true),part:tkTxt(tk),typed:canon,type:'not_a_factor'});buf='';return updV();}
-    const blk=blkT(canon),rest=divT(tk,blk);
+    const i=selI,j=selJ,tk=chains[i][j];
+    const m=buf?parseMono(buf,L):null;
+    if(!m||m.c<1){msg('Enter a number, letters, or both (like 9, n or 9n). Use ² for a square.');return;}
+    const blk={c:m.c,p:m.p},canon=fmtT(blk,true);
+    if(blk.c===1&&!Object.keys(blk.p).length){msg('1 divides everything, so it is no use here.');buf='';return updV();}
+    if(!divides(blk,tk)){
+      const bad=Math.abs(tk.c)%blk.c!==0?`${blk.c} does not divide ${tk.c} exactly.`:`${canon} is not part of ${tkTxt(tk)}.`;
+      msg('❌ '+bad);ctx.log('wrong',{stage:'split',term:fmtT(terms[i],true),part:tkTxt(tk),typed:canon,type:'not_a_factor'});buf='';return updV();}
+    const rest=divT(tk,blk);
     if(rest.c===1&&!Object.keys(rest.p).length){msg(`${canon} is the whole thing — enter a smaller factor.`);buf='';return updV();}
     chains[i].splice(j,1,blk,rest);touch(i);buf='';selI=-1;selJ=-1;closePad();render();
     const d=commonD();msg(d?`✅ ${fmtT(d,true)} is in every term — press Factorise!`:`✅ ${tkTxt(tk)} = ${canon} × ${fmtT(rest,true)}`);
@@ -162,7 +162,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
   }
   function finish(){const res=`${fmtT(CF,true)}(${fmtExpr(terms)})`;
     ctx.timeout(()=>ctx.win('Factorised!',`${fmtExpr(orig)} = ${res}`,build,'New question'),1000);}
-  $('#fxh').onclick=()=>msg('💡 Tap a part of a term and enter one of its factors (numbers like 2, 3, 5 — or letters like x). Keep splitting until the SAME factor shows up in every term, then press Factorise.');
+  $('#fxh').onclick=()=>msg('💡 Tap a part of a term and enter one of its factors (a number like 3, a letter like n, or both like 3n). Keep splitting until the SAME factor shows up in every term, then press Factorise.');
   $('#fxn').onclick=build;
   ctx.cleanups&&ctx.cleanups.push(()=>{clearTimers();const p=document.getElementById('fxpad');if(p)p.remove();});
   ctx.keys=e=>{const k=e.key.toLowerCase();if(k==='escape')return closePad();if(/^[0-9]$/.test(k))press(k);else if(L&&L.includes(k))press(k);else if(k==='^')press('sq2');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};
