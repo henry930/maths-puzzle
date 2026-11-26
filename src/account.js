@@ -22,7 +22,7 @@ async function sha256hex(str){
   try{if(window.crypto&&crypto.subtle){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('');}}catch(e){}
   return sha256js(str);}
 const pinHash=(name,pin)=>sha256hex('pz1:'+name.toLowerCase()+':'+pin);
-const cleanName=n=>n.trim().replace(/\s+/g,' ');
+const cleanName=n=>n.trim().replace(/\s+/g,' ').toUpperCase();
 const validName=n=>/^[\p{L}\p{N}_ ]{2,16}$/u.test(n);
 
 /* ---------- cloud calls ---------- */
@@ -109,9 +109,9 @@ function showLogin(first){
   function draw(){
     box.innerHTML=`<div class="big-emo">👋</div><h2>${mode==='in'?'Welcome back!':'Create your player'}</h2>
      <div class="seg"><button class="${mode==='in'?'on':''}" data-m="in">Log in</button><button class="${mode==='new'?'on':''}" data-m="new">New player</button></div>
-     <input id="un" class="tin" maxlength="16" placeholder="Your name" autocomplete="username" value="${mode==='in'?esc(LS.get('pz-last','')):''}">
+     <input id="un" class="tin" maxlength="16" placeholder="YOUR NAME (CAPITAL LETTERS)" autocomplete="username" autocapitalize="characters" value="${mode==='in'?esc(LS.get('pz-last','')):''}">
      <input id="up" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="4-digit PIN" autocomplete="${mode==='in'?'current-password':'new-password'}">
-     ${mode==='new'?'<input id="up2" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Type the PIN again" autocomplete="off"><p class="small">Pick a name nobody else uses and a PIN you can remember. Your PIN keeps your progress safe.</p>':''}
+     ${mode==='new'?'<input id="up2" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Type the PIN again" autocomplete="off"><p class="small">Names are always in CAPITAL LETTERS. Pick a name nobody else uses and a PIN you can remember. Your PIN keeps your progress safe.</p>':''}
      <div class="msg" id="lmsg">&nbsp;</div><div class="row"><button class="btn" id="go">${mode==='in'?'Log in ▶':'Register & play ▶'}</button></div>
      <p class="small">${CLOUD?'☁ Your progress is saved online.':'📱 Your progress is saved on this device only.'}</p>`;
     box.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;draw();});
@@ -125,6 +125,7 @@ function showLogin(first){
       o.remove();renderMenu();toast('Hi '+r.name+'! 👋');
       if(CLOUD){flushEvents();}
     };
+    const un=$('#un',box);un.oninput=()=>{const a=un.selectionStart,z=un.selectionEnd;un.value=un.value.toUpperCase();try{un.setSelectionRange(a,z)}catch(e){}};
     $('#go',box).onclick=go;box.querySelectorAll('input').forEach(i=>i.onkeydown=e=>{if(e.key==='Enter')go();});
   }
   draw();
