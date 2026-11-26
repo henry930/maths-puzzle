@@ -34,6 +34,12 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
     });
     board.classList.toggle('ok',rem===0);
   }
+  function scatter(){
+    const d=Math.min(48,Math.max(14,Math.sqrt(W*H*.45/N)*.95)),pts=[];
+    balls.forEach(b=>{let x,y,t=0;do{x=8+Math.random()*(W-16-d);y=8+Math.random()*(H-16-d);t++;}while(t<200&&pts.some(p=>Math.hypot(p[0]-x,p[1]-y)<d*.95));
+      pts.push([x,y]);b.style.left=x/W*100+'%';b.style.top=y/H*100+'%';b.style.width=d/W*100+'%';b.classList.remove('lo');});
+    board.classList.remove('ok');
+  }
   function eq(){
     const c=Math.floor(N/r),rem=N%r;
     $('#fceq').innerHTML=rem?`${r} rows × ${c} columns = ${r*c}, <span class="bad">${rem} left over ✗</span>`:`<span class="good">${r} rows × ${c} columns = ${N} ✓</span>`;
@@ -59,6 +65,6 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
   const inp=$('#fcr'),go=()=>{const t=inp.value.trim();set(t===''?NaN:+t);inp.select();};
   $('#fcgo').onclick=go;inp.onkeydown=e=>{if(e.key==='Enter')go();};
   $('#fch').onclick=()=>{const m=F.find(f=>!found.has(f));$('#fcmsg').innerHTML=m?`💡 Try ${m} rows.`:'Nothing more to suggest — press “I found them all”!';};
-  window.__fcset=set;list();layout();eq();$('#fceq').innerHTML='Type a number of rows 👇';
+  window.__fcset=set;list();scatter();$('#fceq').innerHTML='Type a number of rows 👇';
  }});
 })();
