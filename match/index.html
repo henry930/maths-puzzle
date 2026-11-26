@@ -2898,10 +2898,10 @@ const common=ts=>{const c=gcdAll(ts.map(t=>Math.abs(t.c))),p={};Object.keys(ts[0
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',
  desc:'Factorise expressions like 30x + 25. Tap a number or letter and break it into factors (30x → 5 × 6x → 5 × 2 × 3x…). When the same factor shows up in every term, press Factorise. Repeat until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','prime factors'],
  levels:LV.map(l=>l.n),
- how:'Tap a part of a term and enter one of its factors on the number pad — a number, a letter, or both together (for 9n² you can enter 9, n, n² or 9n). It splits into factor × something, e.g. 30x → 5 × 6x. Tap any part again to split it further (6x → 2 × 3x). Tap a × to join two parts back together. A split only lasts about 30 seconds. When the same factor appears in EVERY term, the common factor turns green — tap it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
+ how:'Tap a part of a term and enter one of its factors on the number pad — a number, a letter, or both together (for 9n² you can enter 9, n, n² or 9n). It splits into factor × something, e.g. 30x → 5 × 6x. If the next term you tap has that same factor, it splits automatically; otherwise you enter its factor yourself. Tap any part again to split it further (6x → 2 × 3x). Tap a × to join two parts back together. A split only lasts about 30 seconds. When the same factor appears in EVERY term, the common factor turns green — tap it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
  art:'<div class="minibal">6(2x+3)</div>',
  mount(root,lv,ctx){
-  const spec=LV[lv-1];let terms,orig,L,CF,chains,tok,selI,selJ,buf,steps,ended;const timers=[];
+  const spec=LV[lv-1];let terms,orig,L,CF,chains,tok,selI,selJ,buf,steps,ended,lastBlk,lastI;const timers=[];
   root.innerHTML=`<div class="fx" id="fxr"><div class="fx-top" id="fxt"></div><div class="fx-stage" id="fxs"></div><div class="msg" id="fxm">&nbsp;</div>
    <div class="toolrow"><button class="btn alt" id="fxh">💡 Hint</button><button class="btn alt" id="fxn">New question ⏭</button></div></div><div class="fxp" id="fxpad" style="display:none"></div>`;
   const msg=h=>{const a=$('#fxm'),b=$('#fxpm');if(a)a.innerHTML=h||'&nbsp;';if(b)b.innerHTML=h||'&nbsp;';};
@@ -2915,7 +2915,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     L=[...new Set(terms.flatMap(t=>Object.keys(t.p)))].sort();
     orig=cp(terms);CF={c:1,p:{}};steps=[];ended=false;selI=-1;selJ=-1;msg('');startRound();
   }
-  function startRound(){clearTimers();chains=terms.map(t=>[absT(t)]);tok=terms.map(()=>0);selI=-1;selJ=-1;buf='';render();closePad();}
+  function startRound(){lastBlk=null;lastI=-1;clearTimers();chains=terms.map(t=>[absT(t)]);tok=terms.map(()=>0);selI=-1;selJ=-1;buf='';render();closePad();}
   const shownBuf=()=>buf.replace(/\^2/g,'²').replace(/\^3/g,'³');
   const tkTxt=tk=>fmtT(tk,true);
   const leadOf=(t,i)=>t.c<0?(i===0?'−':'− '):(i===0?'':'+ ');
@@ -2944,9 +2944,19 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
   }
   function render(){
     $('#fxt').innerHTML=topHtml();updV();
-    $('#fxt').querySelectorAll('.fx-tk').forEach(e=>e.onclick=()=>{if(e.classList.contains('com'))doFactorise();else openPad(+e.dataset.i,+e.dataset.j);});
+    $('#fxt').querySelectorAll('.fx-tk').forEach(e=>e.onclick=()=>{if(e.classList.contains('com'))doFactorise();else tapToken(+e.dataset.i,+e.dataset.j);});
     $('#fxt').querySelectorAll('.fx-tw').forEach(w=>{const i=[...$('#fxt').querySelectorAll('.fx-tw')].indexOf(w);w.querySelectorAll('.fx-x').forEach((x,j)=>x.onclick=()=>merge(i,j));});
     $('#fxs').innerHTML=ended?`<div class="ex-res"><span class="ex-eq">Fully factorised! Nothing more can be taken out.</span></div>`:'';
+  }
+  function tapToken(i,j){
+    if(ended)return;
+    if(lastBlk&&i!==lastI){
+      const tk=chains[i][j],key=fmtT(lastBlk,true),rest=divT(tk,lastBlk);
+      if(!chains[i].some(x=>tkTxt(x)===key)&&divides(lastBlk,tk)&&!(rest.c===1&&!Object.keys(rest.p).length)){
+        chains[i].splice(j,1,lastBlk,rest);touch(i);selI=-1;selJ=-1;buf='';closePad();render();
+        const d=commonD();msg(d?`✅ ${fmtT(d,true)} is in every term — tap the green factor!`:`✅ ${key} is a factor of this term too: ${tkTxt(tk)} = ${key} × ${fmtT(rest,true)}`);return;}
+    }
+    openPad(i,j);
   }
   function openPad(i,j){
     if(ended)return;selI=i;selJ=j;buf='';const pad=$('#fxpad');
@@ -2981,7 +2991,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
       msg('❌ '+bad);ctx.log('wrong',{stage:'split',term:fmtT(terms[i],true),part:tkTxt(tk),typed:canon,type:'not_a_factor'});buf='';return updV();}
     const rest=divT(tk,blk);
     if(rest.c===1&&!Object.keys(rest.p).length){msg(`${canon} is the whole thing — enter a smaller factor.`);buf='';return updV();}
-    chains[i].splice(j,1,blk,rest);touch(i);buf='';selI=-1;selJ=-1;closePad();render();
+    chains[i].splice(j,1,blk,rest);lastBlk=blk;lastI=i;touch(i);buf='';selI=-1;selJ=-1;closePad();render();
     const d=commonD();msg(d?`✅ ${fmtT(d,true)} is in every term — tap the green factor!`:`✅ ${tkTxt(tk)} = ${canon} × ${fmtT(rest,true)}`);
   }
   function merge(i,j){
@@ -3002,7 +3012,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
   $('#fxn').onclick=build;
   ctx.cleanups&&ctx.cleanups.push(()=>{clearTimers();const p=document.getElementById('fxpad');if(p)p.remove();});
   ctx.keys=e=>{const k=e.key.toLowerCase();if(k==='escape')return closePad();if(/^[0-9]$/.test(k))press(k);else if(L&&L.includes(k))press(k);else if(k==='^')press('sq2');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};
-  window.__fxq=()=>({get terms(){return terms},get chains(){return chains},get ended(){return ended},get steps(){return steps},get CF(){return CF},press,select:openPad,close:closePad,common,commonBlk,factorise:doFactorise,merge,reqTok:(i,j)=>reqOf(chains[i][j]),expire:i=>{chains[i]=[absT(terms[i])];render();}});
+  window.__fxq=()=>({get terms(){return terms},get chains(){return chains},get ended(){return ended},get steps(){return steps},get CF(){return CF},press,select:openPad,tap:tapToken,close:closePad,common,commonBlk,factorise:doFactorise,merge,reqTok:(i,j)=>reqOf(chains[i][j]),expire:i=>{chains[i]=[absT(terms[i])];render();}});
   build();
  }});
 })();
