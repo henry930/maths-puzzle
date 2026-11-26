@@ -302,3 +302,6 @@ a.card.news{text-decoration:none;color:inherit}
 .fx-tm{padding:1px 6px;border-radius:9px}.fx-tm.cur{background:#ffd43b;color:#343a40;box-shadow:0 0 0 3px #fff}.fx-out{margin-right:2px}
 .fx-in{min-height:46px;margin:8px auto;max-width:200px;background:#fff;border:3px solid #7048e8;border-radius:12px;font-size:26px;font-weight:900;color:#7048e8;line-height:46px}
 .fx-blk{background:#7048e8;color:#fff;border-radius:10px;padding:4px 12px;font-size:20px;font-weight:900}.fx-blk.tap{cursor:pointer;background:#f08c00;box-shadow:0 3px 0 #b36b00}
+
+.fx-in{display:none}.fx-cur{text-decoration:none;display:inline-block;min-width:22px;min-height:26px;border-bottom:3px solid #7048e8;font-size:20px;font-weight:900;color:#7048e8;padding:0 4px}.fx-cur::after{content:'';display:inline-block;width:2px;height:20px;background:#7048e8;vertical-align:middle;animation:fxb 1s steps(1) infinite}@keyframes fxb{50%{opacity:0}}
+.fx-step{font-size:20px;font-weight:800;margin-top:4px;opacity:.85}.fx-step.last{opacity:1;font-size:24px}.fx-tm{cursor:pointer}
