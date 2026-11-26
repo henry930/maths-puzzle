@@ -287,6 +287,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .tt-tbl table{border-collapse:separate;border-spacing:2px;margin:0 auto}.tt-tbl th,.tt-tbl td{width:34px;height:34px;font-size:15px;font-weight:800;text-align:center;border-radius:6px}.tt-tbl th{background:#fff0f6;color:#d6336c}
 .tt-tbl td{background:#fff;color:#adb5bd}.tt-tbl td.old{background:#f8f9fa;color:#868e96}.tt-tbl td.emp{background:#fff;border:2px dashed #f783ac}.tt-tbl td.sel{background:#fff;border:3px solid #d6336c;color:#d6336c}.tt-tbl td.ok{background:#d3f9d8;color:#2b8a3e}.tt-tbl tr.cur th{background:#d6336c;color:#fff}
 .tt-q{font-size:30px;font-weight:900;margin:10px 0}.tt-in{display:inline-block;min-width:56px;border-bottom:4px solid #d6336c;color:#d6336c}
+.tt-mini i.col{background:#d0ebff;color:#1864ab}.tt-mini i.col.pulse{animation:ttpulse .7s 3}@keyframes ttpulse{50%{background:#74c0fc;transform:scale(1.25)}}.tt-mini i.a{background:#339af0!important;color:#fff!important}.tt-mini i.b{background:#ffd43b!important;color:#5c4400}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><h2 id="gtitle"></h2><div class="pills" id="glevels"></div></div>
@@ -2590,9 +2591,9 @@ REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',ca
     if(K===5)help.innerHTML='<div class="tt-lab">Units digit pattern</div><div class="tt-chips">'+chips([5,0],'ch')+'</div>';
     if(K===9)help.innerHTML='<div class="tt-lab">Tens digit ↑ &nbsp; Units digit ↓</div><div class="tt-chips">'+chips([0,1,2,3,4,5,6,7,8],'tc')+'</div><div class="tt-chips">'+chips([9,8,7,6,5,4,3,2,1],'uc')+'</div>';
     if(K===4||K===6||K===8){const b=K/2;help.innerHTML=`<div class="tt-lab">The ${b}× table, going on past 9</div><div class="tt-chips g9" id="chg">`+chips(Array.from({length:18},(_,j)=>b*(j+1)),'ch')+'</div>';help.querySelector('#chg').style.visibility='hidden';}
-    if(K===7){let h='<div class="tt-mini">';for(let r=1;r<=9;r++){for(let c=1;c<=9;c++)h+=`<i id="m${r}_${c}">${r*c}</i>`;}h+='</div>';help.innerHTML='<div class="tt-lab">The table so far</div>'+h;}
+    if(K===7){let h='<div class="tt-mini">';for(let r=1;r<=9;r++){for(let c=1;c<=9;c++)h+=`<i id="m${r}_${c}" class="${c===7?'col':''}">${r===7?'':r*c}</i>`;}h+='</div>';help.innerHTML='<div class="tt-lab">The table so far</div>'+h;}
   }
-  function mini(a,b){help.querySelectorAll('.tt-mini i').forEach(e=>e.className='');a.forEach(([r,c])=>{const e=$('#m'+r+'_'+c);if(e)e.className='a';});b.forEach(([r,c])=>{const e=$('#m'+r+'_'+c);if(e)e.className='b';});}
+  function mini(a,b){help.querySelectorAll('.tt-mini i').forEach(e=>e.classList.remove('a','b','pulse'));a.forEach(([r,c])=>{const e=$('#m'+r+'_'+c);if(e)e.classList.add('a');});b.forEach(([r,c])=>{const e=$('#m'+r+'_'+c);if(e){e.classList.add('b');if(r===7)e.textContent=r*c;}});}
   function steps(){
     const S=[];const P=(f,d)=>S.push({f,d:d||1100});
     if(K===1){P(()=>cap('1 × any number is just that number!'),1300);for(let i=1;i<=9;i++)P(()=>{setSlot(i,String(i));cap(`1 × ${i} = <b>${i}</b>`);},520);}
@@ -2621,7 +2622,8 @@ REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',ca
       for(let i=1;i<=9;i+=2)P(()=>{setSlot(i,String(3*i));cap(i===1?'Start from 0: 0 + 3 = <b>3</b>':`${3*(i-1)} + 3 = <b>${3*i}</b>`);},1000);
     }
     if(K===7){
-      P(()=>cap('<b>7 × 2 = 2 × 7</b>: find it in the table, copy it across!'),1600);
+      P(()=>{help.querySelectorAll('.tt-mini i.col').forEach(e=>e.classList.add('pulse'));cap('Look at <b>column 7</b> (highlighted): it is already almost full! 1×7, 2×7, 3×7…');},2600);
+      P(()=>cap('<b>7 × 2 = 2 × 7</b>: read down column 7, then copy it into row 7!'),1800);
       for(let c=1;c<=9;c++){if(c===7)P(()=>{mini([],[[7,7]]);setSlot(7,'49');cap('7 × 7 = <b>49</b> — the middle of the table. Just remember it! (5, 6, 7, 8 helps: 56 = 7 × 8)');},1800);
         else P(()=>{mini([[c,7]],[[7,c]]);setSlot(c,String(7*c));cap(`7 × ${c} = ${c} × 7 = <b>${7*c}</b> (row ${c}, column 7)`);},1000);}
     }
