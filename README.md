@@ -14,3 +14,6 @@ Progress is stored in each browser (localStorage). Students can tap *Share my pr
 ```
 python3 build.py
 ```
+
+## Game URLs
+Each game has its own address, e.g. `/balance/`, `/sudoku/`, `/g24/`, `/kenken/`, `/p2048/`. `build.py` generates these folders.

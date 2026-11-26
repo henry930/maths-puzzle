@@ -9,6 +9,13 @@ html=f'''<!DOCTYPE html>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><h2 id="gtitle"></h2><div class="pills" id="glevels"></div></div>
 <div class="glv" id="glvname"></div><div class="howto" id="howto"></div><div id="groot"></div></section>
 </div><script>{js}
-if(me())loadUser();renderMenu();if(!me())showLogin(true);</script></body></html>'''
+if(me())loadUser();renderMenu();if(!me())showLogin(true);if(window.__GAME_PAGE)routeNow();</script></body></html>'''
 open('index.html','w').write(html)
+import os
+ids=re.findall(r"id:'([a-z0-9_]+)',name:",js)
+for i in ids:
+    os.makedirs(i,exist_ok=True)
+    open(i+'/index.html','w').write(html.replace('<script>'+js[:0],'<script>window.__GAME_PAGE=1;',1).replace('<title>Maths Puzzle Arcade</title>','<title>Maths Puzzle Arcade</title><base href="../">') if False else html.replace('<script>','<script>window.__GAME_PAGE=1;',1))
+open('404.html','w').write(html.replace('<script>','<script>window.__GAME_PAGE=1;',1))
+print(ids)
 print(len(html))
