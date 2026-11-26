@@ -27,7 +27,22 @@ function markDone(id,lv){
 }
 const REG=[];
 let ctx=null;
-const CATS=['All','Arithmetic','Logic','Probability','Geometry','Algebra','Strategy'];let curCat='All';
+const CATS=['All','GCSE Maths','General Puzzles','Basic Skills Practice','News and Video'];let curCat='All',curTag='All';
+const TAGS=['Algebra','Geometry','Number and Arithmetic','Probability / Statistics','Strategies and planning','Calculus'];
+const CAT_EMO={'GCSE Maths':'🎓','General Puzzles':'🧩','Basic Skills Practice':'✏️','News and Video':'📰'};
+/* every game belongs to ONE category and can carry several tags */
+const CATALOG={
+ balance:['GCSE Maths',['Algebra']],expand:['GCSE Maths',['Algebra']],lines:['GCSE Maths',['Algebra','Geometry']],
+ angles:['GCSE Maths',['Geometry']],transform:['GCSE Maths',['Geometry']],
+ fraction:['GCSE Maths',['Number and Arithmetic']],percent:['GCSE Maths',['Number and Arithmetic']],factors:['GCSE Maths',['Number and Arithmetic']],
+ chance:['GCSE Maths',['Probability / Statistics']],derby:['GCSE Maths',['Probability / Statistics']],
+ times:['Basic Skills Practice',['Number and Arithmetic']],digits:['Basic Skills Practice',['Number and Arithmetic']],grid:['Basic Skills Practice',['Number and Arithmetic']],
+ g24:['General Puzzles',['Number and Arithmetic','Strategies and planning']],kenken:['General Puzzles',['Number and Arithmetic','Strategies and planning']],
+ match:['General Puzzles',['Number and Arithmetic']],p2048:['General Puzzles',['Number and Arithmetic','Strategies and planning']],
+ sudoku:['General Puzzles',['Strategies and planning']],river:['General Puzzles',['Strategies and planning']],nim:['General Puzzles',['Strategies and planning']],
+ klotski:['General Puzzles',['Strategies and planning','Geometry']],euler:['General Puzzles',['Strategies and planning','Geometry']]};
+const catOf=G=>(CATALOG[G.id]||['General Puzzles',[]])[0];
+const tagsOf=G=>(CATALOG[G.id]||['General Puzzles',[]])[1];
 
 function confetti(){
   const c=el('canvas','confetti');document.body.appendChild(c);c.width=innerWidth;c.height=innerHeight;
@@ -97,16 +112,29 @@ function numpad(onKey,opts={}){
 
 function renderMenu(){
   const bar=$('#cats');bar.innerHTML='';
-  CATS.forEach(c=>{const b=el('button','cat'+(c===curCat?' on':''),c);b.onclick=()=>{curCat=c;renderMenu()};bar.appendChild(b);});
+  CATS.forEach(c=>{const b=el('button','cat'+(c===curCat?' on':''),(CAT_EMO[c]?CAT_EMO[c]+' ':'')+c);b.onclick=()=>{curCat=c;curTag='All';renderMenu()};bar.appendChild(b);});
   const g=$('#cards');g.innerHTML='';
   const total=REG.reduce((a,G)=>a+doneCount(G.id),0),all=REG.reduce((a,G)=>a+G.levels.length,0);
   const u=me()||{done:{}};$('#overall').innerHTML=`<button class="who" id="who">👤 ${esc(DB.cur||'Player')} ▾</button><span class="pts">⭐ ${ptsOf(u)} pts</span><span>${total} / ${all} levels</span>`;$('#who').onclick=()=>me()?showProfile():showLogin(true);
-  REG.filter(G=>curCat==='All'||G.cat===curCat).forEach(G=>{
+  const tb=$('#tagbar');tb.innerHTML='';
+  if(curCat==='News and Video'){tb.hidden=true;renderNews(g);return;}
+  tb.hidden=false;
+  const inCat=REG.filter(G=>curCat==='All'||catOf(G)===curCat);
+  const mk=(t,n)=>{const b=el('button','tagc'+(t===curTag?' on':''),`${t==='All'?'All topics':t} <small>${n}</small>`);b.onclick=()=>{curTag=t;renderMenu()};tb.appendChild(b);};
+  mk('All',inCat.length);TAGS.forEach(t=>mk(t,inCat.filter(G=>tagsOf(G).includes(t)).length));
+  const list=inCat.filter(G=>curTag==='All'||tagsOf(G).includes(curTag));
+  if(!list.length){g.innerHTML=`<div class="empty">🚧<b>No games here yet</b><span>${curTag==='Calculus'?'Calculus games are coming soon!':'Pick another topic.'}</span></div>`;return;}
+  list.forEach(G=>{
     const c=el('button','card');c.style.setProperty('--c',G.color);const d=doneCount(G.id);
-    c.innerHTML=`<div class="art">${G.art}<span class="tag">${G.cat}</span></div><h3>${G.name}</h3><p>${G.desc}</p><div class="skills">${G.skills.map(s=>`<span>${s}</span>`).join('')}</div>
+    c.innerHTML=`<div class="art">${G.art}<span class="tag">${CAT_EMO[catOf(G)]||''} ${catOf(G)}</span></div><h3>${G.name}</h3><p>${G.desc}</p><div class="tagrow">${tagsOf(G).map(t=>`<span>${t}</span>`).join('')}</div><div class="skills">${G.skills.map(s=>`<span>${s}</span>`).join('')}</div>
     <div class="solved"><div class="pbar"><i style="width:${d/G.levels.length*100}%"></i></div>${d}/${G.levels.length} levels</div>`;
     c.onclick=()=>openGame(G.id,Math.min(G.levels.length,d+1));g.appendChild(c);
   });
+}
+function renderNews(g){
+  if(!NEWS.length){g.innerHTML='<div class="empty">📰<b>News and Video — coming soon</b><span>Maths news, short explainer videos and study tips will appear here.</span></div>';return;}
+  NEWS.forEach(n=>{const a=el('a','card news');a.href=n.url;a.target='_blank';a.rel='noopener noreferrer';a.style.setProperty('--c',n.type==='video'?'#e03131':'#1c7ed6');
+    a.innerHTML=`<div class="art">${n.type==='video'?'▶️':'📰'}<span class="tag">${n.type==='video'?'Video':'News'}</span></div><h3>${esc(n.title)}</h3><p>${esc(n.desc||'')}</p><div class="skills"><span>${esc(n.date||'')}</span></div>`;g.appendChild(a);});
 }
 
 /* ---------- user system ---------- */

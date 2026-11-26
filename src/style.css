@@ -289,3 +289,8 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .seg{display:flex;background:#ece8ff;border-radius:12px;padding:3px;margin:8px 0}.seg button{flex:1;border:0;background:transparent;padding:10px;border-radius:10px;font-weight:800;font-size:16px;color:#6741d9;cursor:pointer}.seg button.on{background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.12)}
 #un{text-transform:uppercase}
 .avail{font-size:14px;font-weight:700;min-height:20px;margin:-2px 0 6px;color:#888}.avail.ok{color:#2b8a3e}.avail.bad{color:#e03131}
+.tagbar{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;margin:-4px 0 10px;scrollbar-width:thin}.tagc{flex:0 0 auto;border:2px solid #e6e2fa;background:#faf9ff;border-radius:99px;padding:5px 12px;font-weight:700;font-size:13.5px;color:#5c5470;cursor:pointer}.tagc small{opacity:.6;font-weight:800;margin-left:2px}.tagc.on{background:#6741d9;border-color:#6741d9;color:#fff}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;margin:0 16px}.tagrow span{background:#ede8ff;color:#5f3dc4;border-radius:8px;padding:2px 8px;font-size:12px;font-weight:800}
+.empty{grid-column:1/-1;text-align:center;background:#fff;border-radius:22px;padding:34px 20px;box-shadow:0 5px 16px rgba(40,30,100,.08);display:flex;flex-direction:column;gap:8px;font-size:40px}.empty b{font-size:20px}.empty span{font-size:15px;color:var(--mut)}
+a.card.news{text-decoration:none;color:inherit}
+.cats{flex-wrap:nowrap!important;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}.cats .cat{flex:0 0 auto;white-space:nowrap}
