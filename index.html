@@ -2093,7 +2093,7 @@ const GX={'+':'＋','-':'−'};
 REG.push({id:'balance',name:'Balance Scale',emoji:'⚖️',color:'#6741d9',cat:'Algebra',
  desc:'A real balance! Drag x and 1 weights on and off the pans (both sides always change together), and swing the pointer on the base right to multiply or left to divide. Keep it level to find x.',skills:['solving equations','inverse operations','balancing method','fractions in equations'],
  levels:['x + a = b','Multiples: 2x = b','Two-step: 2x + a = b','Two-step: ax + b = c','Negatives: x − a = b','Negatives: ax − b = c','x on both sides (easy)','x on both sides','x on both sides + negatives','x on both sides · bigger numbers','Negative answers','Boss equations','x/a = b','x/a = b · bigger','x/a + b = c','x/a − b = c','Fractions: (p/q)x = c','Fractions: (p/q)x + b = c','x/a + b = x + c','Fractions on both sides'].flatMap(n=>['warm-up','easy','medium','hard','tough'].map(d=>n+' · '+d)),
- how:'Drop an x or 1 weight on a pan to add it to BOTH sides. Drag one off a pan (or tap the tile) to take one away from both sides. The tiles show the totals. On the base, swing the pointer right (×) or left (÷), flip +/− for negatives, then press Apply. Get x alone.',
+ how:'Drop an x or 1 weight on a pan to add it to BOTH sides. Drag a tile off a pan to take ALL of it away from both sides (tap a tile to take away just one). The tiles show the totals. On the base, swing the pointer right (×) or left (÷), flip +/− for negatives, then press Apply. Get x alone.',
  art:'<div class="minibal">⚖️</div>',
  mount(root,lv,ctx){
   let E,E0,snap=[],over=false,busy=false,ang=0,vel=0,tgt=0,raf=0,drag=null,kick=0,steps=[],solvedTxt=null;
@@ -2176,7 +2176,8 @@ REG.push({id:'balance',name:'Balance Scale',emoji:'⚖️',color:'#6741d9',cat:'
     Object.values(pans).forEach(x=>x.classList.remove('hot'));if(d.spec.el)d.spec.el.classList.remove('lifted');
     const pe=h&&h.closest&&h.closest('.sc-pan'),to=pe?pe.dataset.p:null,{kind,v,from}=d.spec;
     if(!from){ if(to){kick=to==='L'?3:-3;commit(()=>addBoth(kind,v),null,null,{t:'w',kind,amt:v});} else if(d.moved)$('#msg').innerHTML='Drop the weight onto a pan.'; else toast('Drag me onto a pan'); return;}
-    if(!d.moved||!to){kick=from==='L'?-3:3;const sgn=v[0]<0?-1:1,one=Math.abs(v[0])>=v[1]?F(1):[Math.abs(v[0]),v[1]],nv=F(-sgn*one[0],one[1]);commit(()=>addBoth(kind,nv),null,null,{t:'w',kind,amt:nv});return;}
+    if(!d.moved){kick=from==='L'?-3:3;const sgn=v[0]<0?-1:1,one=Math.abs(v[0])>=v[1]?F(1):[Math.abs(v[0]),v[1]],nv=F(-sgn*one[0],one[1]);commit(()=>addBoth(kind,nv),null,null,{t:'w',kind,amt:nv});return;} // tap = take away just one
+    if(!to){kick=from==='L'?-3:3;const nv=F(-v[0],v[1]);commit(()=>addBoth(kind,nv),null,null,{t:'w',kind,amt:nv});return;} // drag off = take away the WHOLE tile
     update();
   }
     const boxV=()=>F(1);
