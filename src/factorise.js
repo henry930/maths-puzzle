@@ -60,140 +60,94 @@ function gen(spec){
   return null;
 }
 window.__fx={LV,gen,fmtExpr,parseMono};
+const mulT=(a,b)=>{const p=Object.assign({},a.p);for(const k in b.p)p[k]=(p[k]||0)+b.p[k];return{c:a.c*b.c,p};};
+const blkT=s=>{if(/^\d+$/.test(s))return{c:+s,p:{}};const m=s.match(/^([a-z])([²³]?)$/);return{c:1,p:{[m[1]]:m[2]==='²'?2:m[2]==='³'?3:1}}};
+const reqOf=t=>{const o=facs(Math.abs(t.c)).filter(n=>n>1).map(String);for(const k of Object.keys(t.p).sort())for(let e=1;e<=t.p[k];e++)o.push(k+sup(e));return o;};
+const divides=(b,t)=>Math.abs(t.c)%b.c===0&&Object.keys(b.p).every(k=>(t.p[k]||0)>=b.p[k]);
+const common=ts=>{const c=gcdAll(ts.map(t=>Math.abs(t.c))),p={};Object.keys(ts[0].p).forEach(k=>{const e=Math.min(...ts.map(t=>t.p[k]||0));if(e>0)p[k]=e;});return{c,p};};
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',
- desc:'Factorise expressions like 12x² + 18x. List every factor of each number, pick the highest common factor, do the same for each letter — then divide to write the answer with brackets.',skills:['factorising','highest common factor','algebra','dividing terms'],
+ desc:'Factorise expressions like 12x² + 18x. One term at a time, list all its factors as blocks, then tap a factor every term shares — the expression factorises itself. Keep going until nothing is left to take out.',skills:['factorising','highest common factor','algebra','dividing terms'],
  levels:LV.map(l=>l.n),
- how:'Step by step: (1) type ALL the factors of each number, (2) pick the highest common factor of the numbers, (3) do the same for each letter (x² has factors 1, x and x²), then (4) divide every term by the common factor to fill the brackets.',
+ how:'The highlighted term is the one you are working on. Type each of its factors (a number, or a letter with its power like x²) and press Add — each one becomes a block. Press “That’s all” when the term is done. When every term has its blocks, tap a block that EVERY term has: the expression factorises by it. Repeat until no common factor is left.',
  art:'<div class="minibal">6(2x+3)</div>',
  mount(root,lv,ctx){
-  const spec=LV[lv-1];let Q,L,CF,stages,si,buf,sel,locked;
+  const spec=LV[lv-1];let terms,L,CF,lists,ti,phase,buf,round;
   root.innerHTML=`<div class="fx"><div class="fx-top" id="fxt"></div><div class="fx-stage" id="fxs"></div><div class="msg" id="fxm">&nbsp;</div><div class="ex-pad" id="fxpad"></div>
    <div class="toolrow"><button class="btn alt" id="fxh">💡 Hint</button><button class="btn go" id="fxd">That’s all ✓</button><button class="btn alt" id="fxn">New question ⏭</button></div></div>`;
-  const msg=h=>{$('#fxm').innerHTML=h;};
+  const msg=h=>{$('#fxm').innerHTML=h||'&nbsp;';};
   function build(){
     let q;do{q=gen(spec);}while(!q);
     const set=spec.L===1?[pick(SETS1)]:pick(SETS2),mp={x:set[0],y:set[1]||set[0]};
-    const mt=t=>{const p={};for(const k in t.p){const nk=mp[k]||k;p[nk]=(p[nk]||0)+t.p[k];}return p;};
-    const terms=q.terms.map(t=>({c:t.c,p:mt(t)}));
+    terms=q.terms.map(t=>{const p={};for(const k in t.p){const nk=mp[k]||k;p[nk]=(p[nk]||0)+t.p[k];}return{c:t.c,p};});
     L=[...new Set(terms.flatMap(t=>Object.keys(t.p)))].sort();
-    const cvp={};for(const k in q.cv)cvp[mp[k]]=(cvp[mp[k]]||0)+q.cv[k];
-    Q={terms,H:q.H,cv:cvp};CF={c:q.H,p:Object.assign({},cvp)};
-    Q.quot=terms.map(t=>divT(t,CF));
-    stages=[{k:'list',kind:'num',title:'Write ALL the factors of each number',rows:terms.map(t=>({lab:String(Math.abs(t.c)),req:facs(Math.abs(t.c)).map(String),found:[]}))},
-      {k:'pick',kind:'num',title:'Pick the HIGHEST common factor of the numbers'}];
-    L.forEach(v=>{
-      stages.push({k:'list',kind:'var',v,title:`Write ALL the factors of the ${v} part of each term`,rows:terms.map(t=>t.p[v]?{lab:v+sup(t.p[v]),req:['1'].concat(Array.from({length:t.p[v]},(_,i)=>v+sup(i+1))),found:[]}:{lab:`no ${v}`,req:[],found:[],none:true})});
-      stages.push({k:'pick',kind:'var',v,title:`Pick the HIGHEST common factor of the ${v} part`});});
-    stages.push({k:'div',title:`Divide every term by the common factor ${fmtT(CF,true)}`,rows:Q.quot.map(()=>({ok:false}))});
-    si=0;buf='';sel=0;render();
+    CF={c:1,p:{}};round=1;startRound();
   }
-  const stg=()=>stages[si];
-  const numHcf=()=>si>1?String(Q.H):null;
-  function topHtml(){
-    const parts=[];
-    if(si>1)parts.push(`<b>${Q.H}</b>`);
-    L.forEach((v,i)=>{const idx=2+i*2+2;if(si>=idx)parts.push(`<b>${Q.cv[v]?v+sup(Q.cv[v]):'—'}</b>`);});
-    return `<div class="fx-expr">${fmtExpr(Q.terms)}</div><div class="fx-prog">Step ${Math.min(si+1,stages.length)} of ${stages.length}${parts.length?` · common factor so far: ${parts.join(' · ')}`:''}</div>`;
-  }
+  function startRound(){lists=terms.map(t=>({req:reqOf(t),found:[]}));ti=0;phase='list';buf='';skipEmpty();render();}
+  function skipEmpty(){while(phase==='list'&&ti<terms.length&&lists[ti].req.length===0)ti++;if(ti>=terms.length){phase='pick';ti=-1;}}
+  const shownBuf=()=>buf.replace(/\^2/g,'²').replace(/\^3/g,'³');
+  const exprHtml=()=>{const inner=terms.map((t,i)=>`<span class="fx-tm${phase==='list'&&i===ti?' cur':''}">${fmtT(t,i===0,true).replace(/^ \+ /,'+ ').trim()}</span>`).join(' ');
+    const out=(CF.c!==1||Object.keys(CF.p).length)?`<span class="fx-out">${fmtT(CF,true)}</span>(${inner})`:inner;return out;};
   function render(){
-    $('#fxt').innerHTML=topHtml();const s=stg(),st=$('#fxs');let h=`<div class="fx-title">${s.title}</div>`;
-    if(s.k==='list'){
-      sel=Math.max(0,s.rows.findIndex((x,i)=>!x.none&&x.found.length<x.req.length&&i>=sel))>=0?sel:0;
-      h+=s.rows.map((row,i)=>`<div class="fx-row${i===sel&&!row.none?' sel':''}${row.none?' dis':''}" data-i="${i}"><span class="fx-lab">${row.lab}</span><span class="fx-ch">${row.found.map(f=>`<b>${f}</b>`).join('')}${i===sel&&!row.none?`<u>${esc(shownBuf())||'…'}</u>`:''}</span></div>`).join('');
-    }else if(s.k==='pick'){
-      const ch=pickChips(s);
-      h+=stagesRowsRead()+`<div class="fx-chips">${ch.map(c=>`<button class="fx-pick" data-v="${c.v}">${c.l}</button>`).join('')}</div>`;
-    }else{
-      h+=Q.terms.map((t,i)=>`<div class="fx-row${i===sel?' sel':''}${s.rows[i].ok?' okr':''}" data-i="${i}"><span class="fx-lab">${fmtT(t,true)} ÷ ${fmtT(CF,true)} =</span><span class="fx-ch">${s.rows[i].ok?`<b>${fmtT(Q.quot[i],true)}</b>`:`<u>${i===sel?(esc(shownBuf())||'…'):'?'}</u>`}</span></div>`).join('');
-    }
-    st.innerHTML=h;
-    st.querySelectorAll('.fx-row').forEach(el2=>el2.onclick=()=>{const i=+el2.dataset.i;if(s.k==='list'&&s.rows[i].none)return;if(s.k==='div'&&s.rows[i].ok)return;sel=i;buf='';render();});
-    st.querySelectorAll('.fx-pick').forEach(b=>b.onclick=()=>choose(b.dataset.v));
-    $('#fxpad').style.display=s.k==='pick'?'none':'';$('#fxd').style.display=s.k==='list'?'':'none';
-    buildPad();
+    $('#fxt').innerHTML=`<div class="fx-expr">${exprHtml()}</div><div class="fx-prog">Round ${round} · ${phase==='list'?`term ${ti+1} of ${terms.length}: list its factors`:'tap a factor that EVERY term has'}</div>`;
+    let h='';
+    terms.forEach((t,i)=>{const ls=lists[i],act=phase==='list'&&i===ti,show=phase==='pick'||i<=ti;
+      h+=`<div class="fx-row${act?' sel':''}${show?'':' dis'}"><span class="fx-lab">${fmtT(t,true)}</span><span class="fx-ch">${ls.found.map(f=>`<b class="fx-blk${phase==='pick'?' tap':''}" data-b="${f}">${f}</b>`).join('')}</span></div>`;});
+    if(phase==='list')h+=`<div class="fx-in">${shownBuf()}</div>`;
+    $('#fxs').innerHTML=h;
+    $('#fxs').querySelectorAll('.fx-blk.tap').forEach(b=>b.onclick=()=>choose(b.dataset.b));
+    $('#fxpad').style.display=phase==='list'?'':'none';$('#fxd').style.display=phase==='list'?'':'none';
+    if(phase==='list')buildPad();
   }
-  const shownBuf=()=>buf.replace(/\^2/g,'²').replace(/\^3/g,'³').replace(/-/g,'−');
-  function stagesRowsRead(){ // read-only recap of the lists above the choices
-    const s=stg(),prev=stages[si-1];if(!prev||prev.k!=='list')return '';
-    return prev.rows.map(row=>`<div class="fx-row ro"><span class="fx-lab">${row.lab}</span><span class="fx-ch">${row.found.map(f=>`<b>${f}</b>`).join('')||'<i>—</i>'}</span></div>`).join('');
-  }
-  function pickChips(s){
-    if(s.kind==='num'){const set=new Set();stages[0].rows.forEach(rw=>rw.req.forEach(f=>set.add(+f)));return [...set].sort((a,b)=>a-b).map(n=>({v:n,l:String(n)}));}
-    const v=s.v,mx=Math.max(...Q.terms.map(t=>t.p[v]||0));
-    return [{v:0,l:'none'}].concat(Array.from({length:mx},(_,i)=>({v:i+1,l:v+sup(i+1)})));
-  }
-  function buildPad(){
-    const s=stg();if(s.k==='pick')return;const pad=$('#fxpad');pad.innerHTML='';
-    const ks=['7','8','9','del','4','5','6','neg','1','2','3','sq2','0','sq3',...L];
-    ks.forEach(k=>{const b=el('button','key'+(k==='del'?' del':'')+(L.includes(k)?' var':''),k==='del'?'⌫':k==='neg'?'−':k==='sq2'?'²':k==='sq3'?'³':k);b.dataset.k=k;b.onclick=()=>press(k);pad.appendChild(b);});
-    const ok=el('button','key ok',s.k==='div'?'Check ✓':'Add ✓');ok.dataset.k='ok';ok.style.gridColumn='1 / -1';ok.onclick=()=>press('ok');pad.appendChild(ok);
-  }
+  function buildPad(){const pad=$('#fxpad');pad.innerHTML='';
+    ['7','8','9','del','4','5','6','sq2','1','2','3','sq3','0',...L].forEach(k=>{const b=el('button','key'+(k==='del'?' del':'')+(L.includes(k)?' var':''),k==='del'?'⌫':k==='sq2'?'²':k==='sq3'?'³':k);b.onclick=()=>press(k);pad.appendChild(b);});
+    const ok=el('button','key ok','Add ✓');ok.style.gridColumn='1 / -1';ok.onclick=()=>press('ok');pad.appendChild(ok);}
   function press(k){
-    const s=stg();if(!s||s.k==='pick'||document.querySelector('.overlay'))return;
-    if(k==='del')buf=buf.endsWith('^2')||buf.endsWith('^3')?buf.slice(0,-2):buf.slice(0,-1);
-    else if(k==='neg')buf=buf.startsWith('-')?buf.slice(1):'-'+buf;
-    else if(k==='sq2'||k==='sq3'){if(/[a-z]$/.test(buf))buf+='^'+k[2];}
-    else if(L.includes(k)){if(!buf.includes(k))buf+=k;}
-    else if(k==='ok')return submit();
-    else if(!/[a-z]/.test(buf)&&buf.replace('-','').length<4)buf+=k;
+    if(phase!=='list'||document.querySelector('.overlay'))return;
+    if(k==='del')buf=/\^[23]$/.test(buf)?buf.slice(0,-2):buf.slice(0,-1);
+    else if(k==='sq2'||k==='sq3'){if(/^[a-z]$/.test(buf))buf+='^'+k[2];}
+    else if(L.includes(k)){if(buf==='')buf=k;}
+    else if(k==='ok')return add();
+    else if(/^\d{0,2}$/.test(buf)&&/^\d$/.test(k))buf+=k;
     render();
   }
-  function submit(){
-    const s=stg();
-    if(s.k==='list'){const row=s.rows[sel];if(!row||row.none)return;
-      let canon=null;
-      if(s.kind==='num'){if(/^\d{1,3}$/.test(buf))canon=String(+buf);}
-      else{const m=parseMono(buf,[s.v]);if(m&&m.c===1)canon=Object.keys(m.p).length?s.v+sup(m.p[s.v]):'1';}
-      if(canon==null){msg('Type a factor (a number'+(s.kind==='var'?' or the letter with its power':'')+').');return shakeRow();}
-      if(row.found.includes(canon)){msg('You already have '+canon+'.');buf='';return render();}
-      if(!row.req.includes(canon)){
-        msg(s.kind==='num'?`❌ ${canon} does not divide ${row.lab} exactly.`:`❌ ${canon} is not a factor of ${row.lab}. (${row.lab} = ${s.v} × ${s.v}${+row.lab.length>1?' …':''})`);
-        ctx.log('wrong',{stage:s.kind,term:row.lab,typed:canon,type:'not_a_factor'});buf='';return render();}
-      row.found.push(canon);row.found.sort((a,b)=>(parseFloat(a)||0)-(parseFloat(b)||0)||a.length-b.length);buf='';msg('✅ '+canon+' is a factor');
-      const nx=s.rows.findIndex(x=>!x.none&&x.found.length<x.req.length);if(row.found.length===row.req.length&&nx>=0)sel=nx;
-      render();
-    }else if(s.k==='div'){
-      const row=s.rows[sel];if(!row)return;const a=parseMono(buf,L);
-      if(!a){msg('Type your answer first.');return shakeRow();}
-      const ex=Q.quot[sel];
-      if(sameT(a,ex)){row.ok=true;buf='';msg('✅ Correct!');const nx=s.rows.findIndex(x=>!x.ok);if(nx>=0)sel=nx;render();if(nx<0)finish();}
-      else{const err=[];if(Math.abs(a.c)!==Math.abs(ex.c))err.push('number');if((a.c<0)!==(ex.c<0))err.push('sign');if(!sameT({c:1,p:a.p},{c:1,p:ex.p}))err.push('letters');
-        ctx.log('wrong',{stage:'divide',term:fmtT(Q.terms[sel],true),cf:fmtT(CF,true),typed:buf,expect:fmtT(ex,true),err});
-        const t=Q.terms[sel];
-        msg('❌ '+[err.includes('number')?`Divide the numbers: ${Math.abs(t.c)} ÷ ${Math.abs(CF.c)}.`:'',err.includes('sign')?(t.c<0?'The term is negative, so the answer keeps the minus sign.':'The term is positive, so the answer is positive.'):'',err.includes('letters')?'Letters: subtract the powers (x² ÷ x = x; a letter divided by itself disappears).':''].filter(Boolean).join(' '));
-        buf='';render();shakeRow();}
-    }
+  function add(){
+    const t=terms[ti],ls=lists[ti];let canon=null;
+    if(/^\d{1,3}$/.test(buf))canon=String(+buf);
+    else{const m=parseMono(buf,L);if(m&&m.c===1&&Object.keys(m.p).length===1){const k=Object.keys(m.p)[0];canon=k+sup(m.p[k]);}}
+    if(canon==null){msg('Type a number, or a letter with its power (x, x²).');return;}
+    if(canon==='1'){msg('1 divides everything, so you do not need to add it.');buf='';return render();}
+    if(ls.found.includes(canon)){msg('You already have '+canon+'.');buf='';return render();}
+    if(!ls.req.includes(canon)){
+      const isNum=/^\d+$/.test(canon);
+      msg('❌ '+(isNum?`${canon} does not divide ${Math.abs(t.c)} exactly.`:`${canon} is not part of ${fmtT(t,true)}.`));
+      ctx.log('wrong',{stage:'list',term:fmtT(t,true),typed:canon,type:'not_a_factor'});buf='';return render();}
+    ls.found.push(canon);
+    ls.found.sort((a,b)=>(/^\d/.test(a)?0:1)-(/^\d/.test(b)?0:1)||(parseFloat(a)||0)-(parseFloat(b)||0)||a.localeCompare(b));
+    buf='';msg('✅ '+canon);render();
   }
-  function shakeRow(){const e=document.querySelector('.fx-row.sel');if(e)shake(e);}
-  function choose(val){
-    const s=stg(),v=+val;let correct,txt;
-    if(s.kind==='num'){correct=Q.H;
-      if(v===correct){msg(`✅ ${v} is the highest common factor.`);si++;buf='';sel=0;return render();}
-      const bad=Q.terms.find(t=>Math.abs(t.c)%v!==0);
-      txt=bad?`${v} is not in every list — it does not divide ${Math.abs(bad.c)}.`:`${v} is common to all of them, but there is a higher common factor. Look again!`;
-      ctx.log('wrong',{stage:'hcf_num',chosen:v,expect:correct,type:bad?'not_common':'not_highest'});
-    }else{const vv=s.v,mn=Math.min(...Q.terms.map(t=>t.p[vv]||0));correct=mn;
-      if(v===correct){msg(correct?`✅ ${vv+sup(correct)} is the highest common ${vv} factor.`:`✅ ${vv} is missing from at least one term, so nothing with ${vv} can be taken out.`);si++;buf='';sel=0;return render();}
-      const miss=Q.terms.find(t=>(t.p[vv]||0)<v);
-      txt=miss?`${vv+sup(v)} is not in every term — ${(miss.p[vv]||0)?'one term only has '+vv+sup(miss.p[vv]):'one term has no '+vv+' at all'}.`:`That is common to every term, but there is a higher one.`;
-      ctx.log('wrong',{stage:'hcf_var',letter:vv,chosen:v,expect:correct,type:miss?'not_common':'not_highest'});
-    }
-    msg('❌ '+txt);const b=[...document.querySelectorAll('.fx-pick')].find(x=>+x.dataset.v===v);if(b)shake(b);
+  function done(){
+    if(phase!=='list')return;const ls=lists[ti];
+    if(ls.found.length<ls.req.length){msg('Not yet — this term has more factors. Keep looking!');ctx.log('wrong',{stage:'list',term:fmtT(terms[ti],true),type:'said_done_early'});return;}
+    msg('');ti++;buf='';skipEmpty();render();
   }
-  $('#fxd').onclick=()=>{const s=stg();if(s.k!=='list')return;
-    const bad=s.rows.map((x,i)=>(!x.none&&x.found.length<x.req.length)?i:-1).filter(i=>i>=0);
-    if(bad.length){msg('Not yet — '+(bad.length===1?'one term still has':'some terms still have')+' factors missing. Keep looking!');ctx.log('wrong',{stage:s.kind,type:'said_done_early'});
-      document.querySelectorAll('.fx-row').forEach((e,i)=>{if(bad.includes(i))shake(e);});return;}
-    msg('✅ Great!');si++;buf='';sel=0;render();};
-  $('#fxh').onclick=()=>{const s=stg();
-    msg('💡 '+(s.k==='list'?(s.kind==='num'?'Factors come in pairs: 1 × the number, then try 2, 3, 4… (does it divide exactly?). Tap a row to choose a term.':'A power like x² means x × x, so its factors are 1, x and x². Type the letter, then the ² key.'):
-      s.k==='pick'?(s.kind==='num'?'Find the numbers that appear in EVERY list, then take the biggest one.':'Take the smallest power that EVERY term has. If one term has none, choose “none”.'):'Divide the number, then subtract the powers of each letter. Keep the signs.'));};
+  function choose(b){
+    if(phase!=='pick')return;const blk=blkT(b);
+    const bad=terms.findIndex(t=>!divides(blk,t));
+    if(bad>=0){msg(`❌ ${b} is not in every term — ${fmtT(terms[bad],true)} does not have it.`);ctx.log('wrong',{stage:'pick',chosen:b,type:'not_common',term:fmtT(terms[bad],true)});return;}
+    CF=mulT(CF,blk);terms=terms.map(t=>divT(t,blk));
+    const cm=common(terms);
+    if(cm.c===1&&!Object.keys(cm.p).length){phase='end';render();return finish();}
+    round++;msg(`✅ Factorised by ${b}. Look for more!`);startRound();
+  }
+  function finish(){
+    $('#fxs').innerHTML+=`<div class="ex-res"><span class="ex-eq">All done! No common factor is left.</span></div>`;$('#fxpad').style.display='none';$('#fxd').style.display='none';
+    const res=`${fmtT(CF,true)}(${fmtExpr(terms)})`;
+    ctx.timeout(()=>ctx.win('Factorised!',res,build,'New question'),900);}
+  $('#fxd').onclick=done;
+  $('#fxh').onclick=()=>msg('💡 '+(phase==='list'?'Factors come in pairs (1 × the number). A power like x² means x × x, so it gives x and x². Add each one, then press “That’s all”.':'Look for a block that appears in EVERY term’s row. Tap it and the expression factorises. You can take out several in turn.'));
   $('#fxn').onclick=build;
-  function finish(){const res=`${fmtT(CF,true)}(${fmtExpr(Q.quot)})`;
-    $('#fxs').innerHTML+=`<div class="ex-res"><span class="ex-eq">${fmtExpr(Q.terms)} = <b>${res}</b></span></div>`;
-    ctx.timeout(()=>ctx.win('Factorised!',`${fmtExpr(Q.terms)} = ${res}`,build,'New question'),800);}
-  ctx.keys=e=>{const k=e.key.toLowerCase();if(/^[0-9]$/.test(k))press(k);else if(k==='-')press('neg');else if(L&&L.includes(k))press(k);else if(k==='^')press('sq2');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};
-  window.__fxq=()=>({Q,stages,get si(){return si},L,CF,press,choose});
+  ctx.keys=e=>{const k=e.key.toLowerCase();if(/^[0-9]$/.test(k))press(k);else if(L&&L.includes(k))press(k);else if(k==='^')press('sq2');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};
+  window.__fxq=()=>({get terms(){return terms},get phase(){return phase},get ti(){return ti},get lists(){return lists},get CF(){return CF},press,choose,done,common});
   build();
  }});
 })();
