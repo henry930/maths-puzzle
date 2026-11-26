@@ -322,3 +322,4 @@ a.card.news{text-decoration:none;color:inherit}
 .fx-sb.live{background:#ffd43b;color:#343a40;outline:none}
 .fx-ln{display:block;width:2px;height:0;margin-left:14px;background:rgba(255,255,255,.75);transition:height .15s}
 .fx-ln.has,.fx-ln.on{height:9px}.fx-ln.on{background:#ffd43b;width:3px}
+.fx-go{margin-left:8px;border:none;background:#ffd43b;color:#343a40;font-weight:900;font-size:15px;border-radius:12px;padding:8px 12px;cursor:pointer;box-shadow:0 3px 0 #b8960a;vertical-align:middle}
