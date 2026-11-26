@@ -7,7 +7,7 @@ window.__fac={NS,facs};
 REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Arithmetic',
  desc:'Arrange a pile of balls into neat rows. If every row is full, the number of rows and columns are factors. Find them all!',skills:['factors','multiplication tables','division','prime numbers'],
  levels:NS.map(n=>'Factors of '+n),
- how:'Type how many rows to use, then press Arrange. If the balls fill every row perfectly, you have found two factors (rows and columns)! Orange balls are left over — then that row count is NOT a factor. 1 and the number itself are given. Find ALL the other factors, then press “I found them all”.',
+ how:'Type how many rows to use, then press Arrange. If the balls fill every row perfectly, you have found two factors (rows and columns)! Orange balls are left over — then that row count is NOT a factor. 1 and the number itself are given. Find ALL the other factors, then press “That’s all”.',
  art:'<div class="minibal">🔵🔵🔵<br>🔵🔵🔵</div>',
  mount(root,lv,ctx){
   const N=NS[lv-1],F=facs(N),found=new Set([1,N]),pairs=[[1,N]];let r=1;
@@ -17,7 +17,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
    <div class="fc-eq" id="fceq"></div>
    <div class="fc-ctl">Rows: <input type="number" id="fcr" inputmode="numeric" min="1" max="${N}" placeholder="?" autocomplete="off"><button class="btn go" id="fcgo">Arrange ▶</button></div>
    <div class="fc-found" id="fcf"></div>
-   <div class="toolrow"><button class="btn alt" id="fch">💡 Hint</button><button class="btn go" id="fcdone">I found them all ✓</button></div><div class="msg" id="fcmsg">&nbsp;</div></div>`;
+   <div class="toolrow"><button class="btn alt" id="fch">💡 Hint</button><button class="btn go" id="fcdone">That’s all ✓</button></div><div class="msg" id="fcmsg">&nbsp;</div></div>`;
   const board=$('#fcb'),balls=[];
   for(let i=0;i<N;i++){const b=el('i','fc-ball');board.appendChild(b);balls.push(b);}
   const W=340,H=260;
@@ -64,7 +64,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
     else{$('#fcmsg').innerHTML='Not yet — there are still factors hiding. Keep trying!';shake($('#fcf'));}};
   const inp=$('#fcr'),go=()=>{const t=inp.value.trim();set(t===''?NaN:+t);inp.select();};
   $('#fcgo').onclick=go;inp.onkeydown=e=>{if(e.key==='Enter')go();};
-  $('#fch').onclick=()=>{const m=F.find(f=>!found.has(f));$('#fcmsg').innerHTML=m?`💡 Try ${m} rows.`:'Nothing more to suggest — press “I found them all”!';};
+  $('#fch').onclick=()=>{const m=F.find(f=>!found.has(f));$('#fcmsg').innerHTML=m?`💡 Try ${m} rows.`:'Nothing more to suggest — press “That’s all”!';};
   window.__fcset=set;list();scatter();$('#fceq').innerHTML='Type a number of rows 👇';
  }});
 })();
