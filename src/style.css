@@ -326,3 +326,5 @@ a.card.news{text-decoration:none;color:inherit}
 
 .fx-tm.cur{border-bottom:none!important;color:#ffd43b}
 .fx-tk{cursor:pointer;padding:2px 3px;border-radius:8px}.fx-tk.cur{color:#ffd43b}.fx-x{opacity:.8;cursor:pointer;font-size:.8em}.fx-tw{margin:0 6px;display:inline-block}
+.fx,.fx *,.fxp,.fxp *{-webkit-user-select:none;user-select:none;caret-color:transparent;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+.fx *:focus,.fxp *:focus{outline:none}.fx-top,.fx-top *{cursor:default}.fx-top .fx-tk,.fx-top .fx-x,.fx-top .fx-go{cursor:pointer}
