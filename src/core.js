@@ -7,12 +7,11 @@ const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let DB={users:{},cur:null},CLASS={};
 try{DB=JSON.parse(localStorage.getItem('pz-v3')||'null')||DB;CLASS=JSON.parse(localStorage.getItem('pz-class')||'{}')}catch(e){}
-try{const od=JSON.parse(localStorage.getItem('pz-done')||'null');if(od&&!Object.keys(DB.users).length&&Object.keys(od).length){const rec={};for(const id in od)for(const l in od[id])(rec[id]=rec[id]||{})[l]={n:1,t:null,p:50+10*l};DB.users.Guest={pin:'',created:Date.now(),done:rec};DB.cur='Guest';}}catch(e){}
 let done={};
-const persist=()=>{try{localStorage.setItem('pz-v3',JSON.stringify(DB));localStorage.setItem('pz-class',JSON.stringify(CLASS))}catch(e){}};
+const persist=()=>{try{localStorage.setItem('pz-v3',JSON.stringify(DB));localStorage.setItem('pz-class',JSON.stringify(CLASS))}catch(e){}if(typeof syncSoon==='function')syncSoon();};
 const save=persist;
 const me=()=>DB.cur&&DB.users[DB.cur];
-function loadUser(){if(!me()){DB.users.Guest=DB.users.Guest||{pin:'',created:Date.now(),done:{}};DB.cur='Guest';}done=me().done;}
+function loadUser(){if(me())done=me().done;}
 const isDone=(id,l)=>!!(done[id]&&done[id][l]);
 const doneCount=id=>Object.keys(done[id]||{}).length;
 const ptsOf=u=>{let s=0;for(const id in u.done)for(const l in u.done[id])s+=u.done[id][l].p||0;return s;};
@@ -23,6 +22,7 @@ function markDone(id,lv){
   let r=(done[id]=done[id]||{})[lv],gain;
   if(!r){r=done[id][lv]={n:1,t:secs,p:lvPts(lv)};gain=lvPts(lv);}
   else{r.n++;gain=r.n<=11?5:0;r.p+=gain;if(secs!=null&&(r.t==null||secs<r.t))r.t=secs;}
+  logEvent(id,lv,'complete',{secs,n:r.n,gain});
   if(ctx)ctx.t0=Date.now();persist();return gain;
 }
 const REG=[];
@@ -60,6 +60,7 @@ function openGame(id,lv){
   $('#howto').textContent=g.how;
   const root=$('#groot');root.innerHTML='';
   ctx={id,lv,N,t0:Date.now(),cleanups:[],keys:null,
+    log(kind,detail){logEvent(id,lv,kind,detail);},
     interval(fn,ms){const h=setInterval(fn,ms);this.cleanups.push(()=>clearInterval(h));return h},
     timeout(fn,ms){const h=setTimeout(fn,ms);this.cleanups.push(()=>clearTimeout(h));return h},
     win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===lvPts(lv);const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,againLabel,first,opt&&opt.stay);}};
@@ -110,24 +111,6 @@ function renderMenu(){
 
 /* ---------- user system ---------- */
 function ov(html,cls){const o=el('div','overlay');o.innerHTML=`<div class="modal ${cls||''}">${html}</div>`;document.body.appendChild(o);return o;}
-function showLogin(first){
-  const names=Object.keys(DB.users);
-  const o=ov(`<div class="big-emo">👋</div><h2>${first?'Welcome! Who is playing?':'Switch player'}</h2>
-   ${names.length?`<div class="ulist">${names.map(n=>`<button class="btn alt ubtn" data-n="${esc(n)}">${esc(n)}${DB.users[n].pin?' 🔒':''} <small>⭐${ptsOf(DB.users[n])}</small></button>`).join('')}</div><p class="small">— or make a new player —</p>`:''}
-   <input id="un" class="tin" maxlength="16" placeholder="Your name or nickname" autocomplete="off">
-   <input id="up" class="tin" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Optional 4-digit PIN" autocomplete="off">
-   <div class="msg" id="lmsg">&nbsp;</div><div class="row"><button class="btn" id="go">Start playing ▶</button>${first?'<button class="btn alt" id="gst">Play as Guest</button>':''}</div>`,'login');
-  const enter=n=>{DB.cur=n;loadUser();persist();o.remove();renderMenu();toast('Hi '+n+'! 👋');};
-  o.querySelectorAll('.ubtn').forEach(b=>b.onclick=()=>{const n=b.dataset.n,u=DB.users[n];
-    if(u.pin){const p=prompt('PIN for '+n+'?');if(p!==u.pin){toast('Wrong PIN');return;}}enter(n);});
-  $('#go',o).onclick=()=>{const n=$('#un',o).value.trim().replace(/\s+/g,' '),p=$('#up',o).value.trim();
-    if(!n){$('#lmsg',o).textContent='Please type a name.';return;}
-    if(p&&!/^\d{4}$/.test(p)){$('#lmsg',o).textContent='PIN must be 4 digits.';return;}
-    const key=Object.keys(DB.users).find(k=>k.toLowerCase()===n.toLowerCase());
-    if(key){const u=DB.users[key];if(u.pin&&u.pin!==p){$('#lmsg',o).textContent='That name is taken — enter its PIN.';return;}enter(key);return;}
-    DB.users[n]={pin:p,created:Date.now(),done:{}};enter(n);};
-  const g=$('#gst',o);if(g)g.onclick=()=>{DB.users.Guest=DB.users.Guest||{pin:'',created:Date.now(),done:{}};enter('Guest');};
-}
 function progressCode(){
   const u=me(),g={};for(const id in u.done)g[id]=Object.keys(u.done[id]).length;
   const o={n:DB.cur,p:ptsOf(u),l:lvOf(u),g,at:Date.now()};
@@ -137,20 +120,7 @@ function parseCode(c){try{c=c.trim();if(!c.startsWith('PZ1:'))return null;const 
 function copyText(t,msg){const done=()=>toast(msg||'Copied!');
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,()=>fb());else fb();
   function fb(){const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy');done();}catch(e){prompt('Copy this:',t);}a.remove();}}
-function showProfile(){
-  const u=me();
-  const rows=REG.map(G=>{const d=done[G.id]||{};let p=0,best=null;for(const l in d){p+=d[l].p||0;if(d[l].t!=null&&(best==null||d[l].t<best))best=d[l].t;}
-    return `<div class="prow"><span class="pe">${G.emoji}</span><span class="pn">${esc(G.name)}</span><span class="pb"><i style="width:${Object.keys(d).length/G.levels.length*100}%;background:${G.color}"></i></span><span class="pv">${Object.keys(d).length}/${G.levels.length}</span><span class="pp">⭐${p}</span></div>`;}).join('');
-  const o=ov(`<h2>👤 ${esc(DB.cur)}</h2><p class="pbig">⭐ <b>${ptsOf(u)}</b> points · <b>${lvOf(u)}</b> levels cleared</p><div class="plist">${rows}</div>
-   <p class="small">Points: first clear of a level = 50 + 10 × level. Replaying a level gives +5.</p>
-   <div class="row"><button class="btn" id="psw">Switch player</button><button class="btn alt" id="pcl">🏫 Class board</button><button class="btn alt" id="psh">📤 Share my progress</button><button class="btn alt" id="prs">Reset my progress</button><button class="btn alt" id="pcx">Close</button></div>`,'big');
-  $('#pcx',o).onclick=()=>o.remove();
-  $('#psw',o).onclick=()=>{o.remove();showLogin(false);};
-  $('#psh',o).onclick=()=>{const c=progressCode();copyText(c,'Progress code copied — send it to your teacher');};
-  $('#pcl',o).onclick=()=>{o.remove();showClass();};
-  let armed=false;$('#prs',o).onclick=function(){if(!armed){armed=true;this.textContent='Tap again to erase';return;}u.done={};u.rv={};done=u.done;persist();o.remove();renderMenu();toast('Progress reset');};
-}
-function showClass(){
+function showClassLocal(){
   // merge device players + imported codes
   const rows={};
   Object.keys(CLASS).forEach(n=>rows[n]=Object.assign({src:'code'},CLASS[n]));
@@ -162,7 +132,7 @@ function showClass(){
    <div class="msg" id="cmsg">&nbsp;</div>
    <div class="row"><button class="btn" id="cim">Import codes</button><button class="btn alt" id="ccs">Copy as table (CSV)</button><button class="btn alt" id="cclr">Clear imported</button><button class="btn alt" id="cx">Close</button></div>`,'big');
   $('#cx',o).onclick=()=>o.remove();
-  $('#cim',o).onclick=()=>{let n=0;$('#cin',o).value.split(/\s+/).forEach(c=>{const p=parseCode(c);if(p){if(!DB.users[p.n]){CLASS[p.n]=p;}n++;}});persist();o.remove();if(n)showClass();else toast('No valid codes found');};
+  $('#cim',o).onclick=()=>{let n=0;$('#cin',o).value.split(/\s+/).forEach(c=>{const p=parseCode(c);if(p){if(!DB.users[p.n]){CLASS[p.n]=p;}n++;}});persist();o.remove();if(n)showClassLocal();else toast('No valid codes found');};
   $('#ccs',o).onclick=()=>{const head=['Name','Points','Levels',...REG.map(G=>G.name)];const csv=[head.join(',')].concat(list.map(r=>[r.n.replace(/,/g,' '),r.p,r.l,...REG.map(G=>(r.g||{})[G.id]||0)].join(','))).join('\n');copyText(csv,'Table copied — paste into Excel / Sheets');};
-  $('#cclr',o).onclick=()=>{CLASS={};persist();o.remove();showClass();};
+  $('#cclr',o).onclick=()=>{CLASS={};persist();o.remove();showClassLocal();};
 }

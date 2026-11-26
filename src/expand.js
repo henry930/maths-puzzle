@@ -159,7 +159,10 @@ REG.push({id:'expand',name:'Arrow Expander',emoji:'🏹',color:'#e8590c',cat:'Al
       done[act]=true;buf='';$('#exmsg').innerHTML='✅ Correct!';
       const nx=done.findIndex(d=>!d);if(nx>=0)act=nx;
       place();draw();if(nx<0)finish();
-    }else{shake(chips[act]);$('#exmsg').innerHTML='Not quite — read the box and try again.';why(a,Q.prod[act],Q.t[act]);buf='';draw();}
+    }else{shake(chips[act]);$('#exmsg').innerHTML='Not quite — read the box and try again.';
+      const p=Q.prod[act],err=[];if(Math.abs(a.c)!==Math.abs(p.c))err.push('number');if((a.c<0)!==(p.c<0))err.push('sign');if(!same({c:1,p:a.p},{c:1,p:p.p}))err.push('letters');
+      ctx.log('wrong',{q:exprStr(),arrow:act+1,m:fmt(Q.m,true),t:fmt(Q.t[act],true),typed:buf,expect:fmt(p,true),err});
+      why(a,Q.prod[act],Q.t[act]);buf='';draw();}
   }
   const exprStr=()=>`${fmt(Q.m,true)}(${Q.t.map((t,i)=>fmt(t,i===0,true)).join('')})`;
   function finish(){

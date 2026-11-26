@@ -113,6 +113,7 @@ REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',ca
       if(!nx){draw();ctx.timeout(()=>ctx.win('Row complete!',`${K}× table: ${Array.from({length:9},(_,i)=>K*(i+1)).join(', ')}`),500);return;}
       sel=nx;draw();
     }else{
+      ctx.log('wrong',{row:K,col:sel,typed:buf,expect:exp(sel)});
       const td=$('#tttbl td.sel');shake(td);$('#ttm').innerHTML=`❌ ${K} × ${sel} isn’t ${buf}. 💡 ${HINT[K]}`;buf='';
       ctx.timeout(draw,350);
     }

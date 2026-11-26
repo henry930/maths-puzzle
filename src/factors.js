@@ -62,10 +62,10 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
         const key=Math.min(r,c);if(!pairs.some(p=>p[0]===key))pairs.push([key,N/key]);pairs.sort((a,b)=>a[0]-b[0]);
         list();$('#fcmsg').innerHTML=r===c?`🎉 ${r} is a factor!`:`🎉 ${r} and ${c} are both factors!`;
       }else $('#fcmsg').innerHTML=(r===1||r===N?'1 and '+N+' are already given — look for others!':'Already found — try a different number of rows.');
-    }else $('#fcmsg').innerHTML=silent?'&nbsp;':`${r} doesn’t divide ${N} exactly — try again.`;
+    }else{$('#fcmsg').innerHTML=silent?'&nbsp;':`${r} doesn’t divide ${N} exactly — try again.`;if(!silent)ctx.log('wrong',{n:N,rows:r,rem:N%r,type:'not_a_factor'});}
   }
   $('#fcdone').onclick=()=>{if(found.size===F.length)ctx.win(F.length===2?'Prime number!':'All factors found!',F.length===2?`${N} only has 2 factors: 1 and ${N}.`:`Factors of ${N}: ${F.join(', ')}`);
-    else{$('#fcmsg').innerHTML='Not yet — there are still factors hiding. Keep trying!';shake($('#fcf'));}};
+    else{ctx.log('wrong',{n:N,type:'said_done_early',found:[...found].sort((a,b)=>a-b)});$('#fcmsg').innerHTML='Not yet — there are still factors hiding. Keep trying!';shake($('#fcf'));}};
   const inp=$('#fcr'),go=()=>{const t=inp.value.trim();set(t===''?NaN:+t);inp.select();};
   $('#fcgo').onclick=go;inp.onkeydown=e=>{if(e.key==='Enter')go();};
   $('#fch').onclick=()=>{const m=F.find(f=>!found.has(f));$('#fcmsg').innerHTML=m?`💡 Try ${m} rows.`:'Nothing more to suggest — press “That’s all”!';};

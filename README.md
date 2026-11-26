@@ -17,3 +17,12 @@ python3 build.py
 
 ## Game URLs
 Each game has its own address, e.g. `/balance/`, `/sudoku/`, `/g24/`, `/kenken/`, `/p2048/`. `build.py` generates these folders.
+
+## Accounts & online database (Supabase, free)
+1. Create a free project at https://supabase.com (Project → New).
+2. Open `supabase.sql`, change `CHANGE_ME_teacher_key` to your own teacher key, then run the whole file in **SQL Editor**.
+3. In **Project Settings → API** copy the **Project URL** and the **anon public** key.
+4. Paste them into `src/config.js` (`window.PZ_CFG={url:'…',key:'…'}`), run `python3 build.py`, commit and push.
+
+Without these settings the arcade still works, but accounts are stored only in each device's browser.
+Stored online: players (name + hashed PIN), progress, and an event log (`pz_events`) of every wrong answer with the question, typed answer, expected answer and error type, for later strength/weakness analysis.
