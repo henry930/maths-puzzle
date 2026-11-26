@@ -468,7 +468,7 @@ const validName=n=>/^[\p{L}\p{N}_ ]{2,16}$/u.test(n);
 /* ---------- cloud calls ---------- */
 async function rpc(fn,args){
   try{
-    const r=await fetch(PZC.url.replace(/\/$/,'')+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:PZC.key,Authorization:'Bearer '+PZC.key},body:JSON.stringify(args)});
+    const r=await fetch(PZC.url.replace(/\/$/,'')+'/rest/v1/rpc/'+fn,{method:'POST',headers:Object.assign({'Content-Type':'application/json',apikey:PZC.key},PZC.key.startsWith('sb_')?{}:{Authorization:'Bearer '+PZC.key}),body:JSON.stringify(args)});
     if(!r.ok)return{ok:false,error:'server'};
     return await r.json();
   }catch(e){return{ok:false,error:'network'};}
