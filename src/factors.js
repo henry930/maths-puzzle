@@ -7,7 +7,7 @@ window.__fac={NS,facs};
 REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Arithmetic',
  desc:'Arrange a pile of balls into neat rows. If every row is full, the number of rows and columns are factors. Find them all!',skills:['factors','multiplication tables','division','prime numbers'],
  levels:NS.map(n=>'Factors of '+n),
- how:'Choose how many rows to use. If the balls fill every row perfectly, you have found two factors (rows and columns)! Orange balls are left over — then that row count is NOT a factor. Find ALL the factors to pass.',
+ how:'Type how many rows to use, then press Arrange. If the balls fill every row perfectly, you have found two factors (rows and columns)! Orange balls are left over — then that row count is NOT a factor. Find ALL the factors to pass.',
  art:'<div class="minibal">🔵🔵🔵<br>🔵🔵🔵</div>',
  mount(root,lv,ctx){
   const N=NS[lv-1],F=facs(N),found=new Set(),pairs=[];let r=1;
@@ -15,8 +15,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
    <div class="fc-n">🔵 <b>${N}</b> balls</div>
    <div class="fc-board" id="fcb"></div>
    <div class="fc-eq" id="fceq"></div>
-   <div class="fc-ctl"><button class="btn alt" id="fcm">−</button><input type="range" id="fcr" min="1" max="${N}" value="1"><button class="btn alt" id="fcp">+</button></div>
-   <div class="fc-rowsl">Rows: <b id="fcrv">1</b></div>
+   <div class="fc-ctl">Rows: <input type="number" id="fcr" inputmode="numeric" min="1" max="${N}" placeholder="?" autocomplete="off"><button class="btn go" id="fcgo">Arrange ▶</button></div>
    <div class="fc-found" id="fcf"></div><div class="fc-pairs" id="fcpr"></div>
    <div class="toolrow"><button class="btn alt" id="fch">💡 Hint</button></div><div class="msg" id="fcmsg">&nbsp;</div></div>`;
   const board=$('#fcb'),balls=[];
@@ -38,7 +37,6 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
   function eq(){
     const c=Math.floor(N/r),rem=N%r;
     $('#fceq').innerHTML=rem?`${r} rows × ${c} columns = ${r*c}, <span class="bad">${rem} left over ✗</span>`:`<span class="good">${r} rows × ${c} columns = ${N} ✓</span>`;
-    $('#fcrv').textContent=r;
   }
   function list(){
     const fs=[...found].sort((a,b)=>a-b);
@@ -46,7 +44,8 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
     $('#fcpr').innerHTML=pairs.map(p=>`${p[0]} × ${p[1]} = ${N}`).join(' &nbsp;·&nbsp; ');
   }
   function set(v,silent){
-    r=Math.max(1,Math.min(N,v));$('#fcr').value=r;layout();eq();
+    if(!(v>=1&&v<=N&&Number.isInteger(v))){$('#fcmsg').innerHTML=`Type a whole number from 1 to ${N}.`;return;}
+    r=v;layout();eq();
     if(N%r===0){
       const c=N/r,new1=!found.has(r)||!found.has(c);
       if(new1){found.add(r);found.add(c);
@@ -57,10 +56,9 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
       }else $('#fcmsg').innerHTML='Already found — try a different number of rows.';
     }else $('#fcmsg').innerHTML=silent?'&nbsp;':`${r} doesn’t divide ${N} exactly — try again.`;
   }
-  $('#fcr').oninput=e=>set(+e.target.value);
-  $('#fcm').onclick=()=>set(r-1);$('#fcp').onclick=()=>set(r+1);
+  const inp=$('#fcr'),go=()=>{const t=inp.value.trim();set(t===''?NaN:+t);inp.select();};
+  $('#fcgo').onclick=go;inp.onkeydown=e=>{if(e.key==='Enter')go();};
   $('#fch').onclick=()=>{const m=F.find(f=>!found.has(f));$('#fcmsg').innerHTML=m?`💡 Try ${m} rows.`:'You have them all!';};
-  ctx.keys=e=>{if(e.key==='ArrowLeft'||e.key==='ArrowDown')set(r-1);else if(e.key==='ArrowRight'||e.key==='ArrowUp')set(r+1);};
-  window.__fcset=set;list();set(1,true);
+  window.__fcset=set;list();layout();eq();$('#fceq').innerHTML='Type a number of rows 👇';
  }});
 })();
