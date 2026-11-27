@@ -63,7 +63,7 @@ const ROOT=(()=>{let p=location.pathname.replace(/index\.html$/,'');const sg=p.s
 function pushUrl(path,rep){try{if(location.pathname!==path){history[rep?'replaceState':'pushState'](null,'',path+location.search.replace(/[?&]l=\d+/,''));}}catch(e){}}
 function goMenu(nopush){cleanup();if(nopush!==true)pushUrl(ROOT);$('#game').hidden=true;$('#menu').hidden=false;renderMenu();window.scrollTo(0,0);}
 const curLv={};
-function openGame(id,lv){
+function openGame(id,lv,fromRoute){
   cleanup();const g=REG.find(x=>x.id===id);lv=lv||curLv[id]||1;curLv[id]=lv;const N=g.levels.length;
   $('#menu').hidden=true;$('#game').hidden=false;
   $('#gtitle').innerHTML=`<span class="gemo">${g.emoji}</span> ${g.name}`;
@@ -80,7 +80,8 @@ function openGame(id,lv){
     timeout(fn,ms){const h=setTimeout(fn,ms);this.cleanups.push(()=>clearTimeout(h));return h},
     win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===lvPts(lv);const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,againLabel,first,opt&&opt.stay);}};
   window.scrollTo(0,0);
-  pushUrl(ROOT+id+'/');document.title=g.name+' · Maths Puzzle Arcade';
+  try{const base=ROOT+id+'/',hs='#'+lv;if(location.pathname!==base||location.hash!==hs){const u=base+location.search.replace(/[?&]l=\d+/,'')+hs;history[fromRoute?'replaceState':'pushState'](null,'',u);}}catch(e){}
+  document.title=g.name+' · Level '+lv+' · Maths Puzzle Arcade';
   g.mount(root,lv,ctx);
 }
 function showWin(title,text,again,againLabel,first,stay){
@@ -98,7 +99,7 @@ function showWin(title,text,again,againLabel,first,stay){
 }
 document.addEventListener('keydown',e=>{if(ctx&&ctx.keys&&!e.target.matches('input,textarea'))ctx.keys(e)});
 $('#back').onclick=()=>{goMenu();document.title='Maths Puzzle Arcade';};
-function routeNow(){const sg=location.pathname.split('/').filter(Boolean);const gid=sg[sg.length-1];if(REG.some(x=>x.id===gid))openGame(gid);else goMenu(true);}
+function routeNow(){const sg=location.pathname.split('/').filter(Boolean);const gid=sg[sg.length-1];if(REG.some(x=>x.id===gid)){const m=/^#(\d+)$/.exec(location.hash);const g=REG.find(x=>x.id===gid);const n=m?+m[1]:0;openGame(gid,n>=1&&n<=g.levels.length?n:undefined,true);}else goMenu(true);}
 window.addEventListener('popstate',routeNow);
 
 /* reusable number pad: returns element; onKey gets '0'-'9','-','.','del','ok' */
