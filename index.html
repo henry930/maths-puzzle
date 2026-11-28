@@ -512,6 +512,7 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .mth .dz{display:inline-flex;flex-wrap:wrap;gap:5px;align-items:center}.mth .dg{display:inline-flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:180px}.mth .dz.dfr{flex-direction:column;gap:3px}.mth .dz.dfr .dg:first-child{border-bottom:3px solid #5f3dc4;padding-bottom:3px}.mth .dg.gg{padding:2px;border:1.5px dashed #868e96;border-radius:7px}.mth .dg.gx{opacity:.5}.mth .dg.gg:not(.gx){border:2px solid #5f3dc4;background:#f3f0ff}
 .mth .mbtn{align-self:stretch;margin:0}.mth .gp{display:inline-flex;align-items:center}.mth .tmul{margin:0 2px;color:#868e96}
 .mth{text-align:left}.mth .mh{display:block}.mth .mh .mn{display:block;margin-top:2px}.mth .ms>div{flex:1;min-width:0}.mth .mbtn{background:#12b886;color:#fff;box-shadow:0 3px 0 #0b8a64}.mth .mh .xf,.mth .mh .fr{vertical-align:middle}.mth .mh sup .xf{font-size:.9em}
+.px .t.dsv::after{content:attr(data-st)!important;background:#7c5cff;color:#fff;border-radius:9px;font-size:10px;font-weight:800;padding:0 5px;height:16px;line-height:16px;right:-8px;top:-9px}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><button class="back" id="lvbtn">Levels ▾</button><button class="back" id="pbtn">👤</button><div class="pills" id="glevels"></div></div>
@@ -4808,11 +4809,11 @@ function Q(o){
     const tl=v==null?0:f.tl(v),level=v!=null&&Math.abs(tl)<1e-7;
     const ang=v==null?0:Math.max(-16,Math.min(16,tl*7));   /* same sign as Balance Scale: positive = left pan lower */
     const prev=q._a==null?0:q._a;q._a=ang;
-    const dl=o.build?[]:[].concat(f.dis||[]),dz=dl.length&&q.dis&&!answered;const Lt=String(f.L(T,v)),Rt=o.build?stH(bs,q.st,true):String(f.R(T,v)),sp=sd=>dl.find(x=>(x.side||'L')===sd),Lh=dz&&sp('L')?dsH(sp('L')):Lt,Rh=dz&&sp('R')?dsH(sp('R')):Rt;
+    const dl=o.build?[]:[].concat(f.dis||[]),dz=dl.length&&q.dis&&!answered;const Lt=String(f.L(T,v)),Rt=o.build?stH(bs,q.st,true):String(f.R(T,v)),sp=sd=>dl.find(x=>(x.side||'L')===sd),nst=Math.max(0,...dl.map(x=>dsS(x).length)),stg=x=>{const a=dsS(x);return a[Math.min(q.dis|0,a.length)-1];},Lh=dz&&sp('L')?stg(sp('L')):Lt,Rh=dz&&sp('R')?stg(sp('R')):Rt;q._nst=nst;
     const gl=v==null&&Lh.includes('?'),gr=v==null&&Rh.includes('?');   /* dashed outline on the pan that still holds the “?” */
     const chip=(x,g,c)=>`<div class="t chip ${g?'q':c||'tn'} big">${`<span>${x}</span>`}</div>`;
     const dmk=sd=>{if(o.build)return '';const base=sd==='L'?Lt:Rt;if(f.conv===sd&&q.forms.length>1&&!answered)return ' cvb';return sp(sd)&&!base.includes('?')&&!answered?(dz?' dsv':' dsb'):'';};   /* cvb: tap converts log ↔ index form; dsb/dsv: tap dissolves into blocks / folds back */
-    const left=chip(Lh,gl,o.build?bcls(bs):'tn').replace('t chip',`t chip${dmk('L')}`),right=o.build?Rh:chip(Rh,gr,'tn').replace('t chip',`t chip${dmk('R')}`);
+    const tg=h=>h.replace('<div class="t chip',`<div data-st="${q.dis|0}/${nst}" class="t chip`);const left=tg(chip(Lh,gl,o.build?bcls(bs):'tn')).replace('t chip',`t chip${dmk('L')}`),right=o.build?Rh:tg(chip(Rh,gr,'tn')).replace('t chip',`t chip${dmk('R')}`);
     const ev=o.build?evalSt(q.st):null;
     let top;
     if(o.build){
@@ -4820,7 +4821,7 @@ function Q(o){
       top=`<div class="sc-top"><div class="sc-box"><div class="sc-lab">Blocks</div><div class="sc-wts"><div class="wt ${bcls(bs)==='tx'?'xw':'uw'} src" data-d="1">${bs}</div>${o.neg?`<div class="wt ng src" data-d="-1">÷${bs}</div>`:''}</div></div>
         <div class="sc-eq" id="bklog"><div class="el orig">${Lh} <b class="eqn">≠</b> ${eh(q.start)}</div>${lines}${level?`<div class="el fin">✅ ${Lh} = ${eh(v)}</div>`:''}</div></div>`;
     }else top=`<div class="sc-top"><div class="sc-eq one"><div class="el orig">${Lt} <b class="${level?'eqb':'eqn'}">=</b> ${Rt}</div>${level?'<div class="el fin">✅ level</div>':''}</div></div>`;
-    const PL=q.proc&&!o.build?q.proc.length:0;const mh=PL?`<div class="mth">${q.proc.slice(0,q.ms).map((x,i)=>`<div class="ms"><span class="mn1">${i+1}</span><div><b>${x[0]}</b>${x[1]}</div></div>`).join('')}<button class="lv go mbtn" id="mbtn">${q.ms===0?'🧭 Show the method':q.ms<PL?`Next: ${q.proc[q.ms][0]} ▶`:'✕ Hide the method'}</button></div>`:'';
+    const PL=0;const mh=PL?`<div class="mth">${q.proc.slice(0,q.ms).map((x,i)=>`<div class="ms"><span class="mn1">${i+1}</span><div><b>${x[0]}</b>${x[1]}</div></div>`).join('')}<button class="lv go mbtn" id="mbtn">${q.ms===0?'🧭 Show the method':q.ms<PL?`Next: ${q.proc[q.ms][0]} ▶`:'✕ Hide the method'}</button></div>`:'';
     let ctl;
     if(o.build)ctl=answered?'':`<div class="opr">${(o.ops||[]).map(k=>`<button class="lv go op" data-op="${k}">${OPS[k][2]}</button>`).join('')}</div><div class="opr"><button class="lv go ml" id="bkmul">×${bs}</button>${o.neg?`<button class="lv go dv" id="bkdiv">÷${bs}</button>`:''}<button class="lv go" id="bkun" style="background:#868e96">↶</button><button class="lv go" id="chk" style="background:#2f9e44">Check ✓</button></div>`;
     else ctl=q.forms.length>1?`<button class="lv go dv" id="ftg">↔ ${f.btn}</button>`:'';
@@ -4842,7 +4843,7 @@ function Q(o){
     place();q._raf=requestAnimationFrame(step);
     {const mb=root.querySelector('#mbtn');if(mb&&api)mb.onclick=()=>{q.ms=q.ms>=q.proc.length?0:q.ms+1;(api.redraw||api.set)(api.buf());};}
     if(q.build&&api)bindBuild(root,api,pans[1]);
-    else if(api&&api.open){root.querySelectorAll('.t.dsb,.t.dsv').forEach(t=>{t.style.cursor='pointer';t.onclick=()=>{q.dis=!q.dis;api.set(api.buf());};});root.querySelectorAll('.t.cvb').forEach(t=>{t.style.cursor='pointer';t.onclick=()=>{q.form=1-(q.form||0);q.dis=false;api.set(api.buf());};});root.querySelectorAll('.t.q').forEach(t=>{t.style.cursor='pointer';t.onclick=api.open;});}};
+    else if(api&&api.open){root.querySelectorAll('.t.dsb,.t.dsv').forEach(t=>{t.style.cursor='pointer';t.onclick=()=>{q.dis=((q.dis|0)+1)%((q._nst||1)+1);api.set(api.buf());};});root.querySelectorAll('.t.cvb').forEach(t=>{t.style.cursor='pointer';t.onclick=()=>{q.form=1-(q.form||0);q.dis=0;api.set(api.buf());};});root.querySelectorAll('.t.q').forEach(t=>{t.style.cursor='pointer';t.onclick=api.open;});}};
   /* build mode: every operation (×a, ÷a, raise the whole pan to a power, take a root) acts on the right pan and adds a line to the working */
   function bindBuild(root,api,pan){
     const lg=root.querySelector('#bklog');if(lg)lg.scrollTop=1e5;
@@ -4932,6 +4933,33 @@ const dsH=d=>{const{op,b,m,n,k}=d;
   if(op==='neg2')return `<span class="dz">${dFr(ONEB,dbk(b,m,1)+dbk(b,n,2))}</span>`;
   if(op==='neg3')return `<span class="dz">${dFr(ONEB,dGp(b,m,n))}</span>`;
   return '';};
+/* tap-by-tap stages: each tap on the pan changes it a little — same base → blocks → group / cancel / regroup → result */
+const rep=(c,n)=>Array(n).fill(c);
+const mg=(b,cols,gone)=>`<span class="dz"><span class="dg gg">${cols.map((c,i)=>`<i class="db c${c}${gone&&i>=cols.length-gone?' cx':''}">${bv(b)}</i>`).join('')}</span></span>`;
+const grpCols=(sz,cnt)=>Array.from({length:sz*cnt},(_,i)=>Math.floor(i/sz)%2?2:1);
+const dsS=d=>{const{op,b,m,n,k}=d,P=e=>`<span class="dz">${pw(b,e)}</span>`;
+  switch(op){
+  case 'mul':return [dsH(d),mg(b,[...rep(1,m),...rep(2,n)]),P(m+n)];
+  case 'div':return [`<span class="dz">${dFr(dbk(b,m-n,1)+dbk(b,n,2),dbk(b,n,2))}</span>`,dsH(d),mg(b,rep(1,m-n)),P(m-n)];
+  case 'pow':return [dsH(d),mg(b,grpCols(m,n)),P(m*n)];
+  case 'mix1':return [dsH(d),mg(b,[...grpCols(m,n),...rep(3,k)]),P(m*n+k)];
+  case 'mix2':{const cs=[...rep(1,m),...rep(2,n)],h=a=>a.map(c=>`<i class="db c${c}">${bv(b)}</i>`).join('');
+    return [`<span class="dz">${dFr(h(cs),h(cs.slice(m+n-k)))}</span>`,dsH(d),mg(b,cs.slice(0,m+n-k)),P(m+n-k)];}
+  case 'mix3':{const pf=i=>{const c=i%2?2:1,c2=c===1?2:1;return dFr(dbk(b,m-n,c)+dbk(b,n,c2),dbk(b,n,c2));};
+    return [`<span class="dz">${Array.from({length:k},(_,i)=>pf(i)).join('<span class="tmul">×</span>')}</span>`,dsH(d),`<span class="dz">${dGp(b,m-n,k)}</span>`,mg(b,grpCols(m-n,k)),P((m-n)*k)];}
+  case 'neg2':return [dsH(d),P('−'+(m+n))];
+  case 'neg3':return [dsH(d),`<span class="dz">${dFr(ONEB,mg(b,grpCols(m,n)))}</span>`,P('−'+m*n)];
+  case 'blk':return [P(n<0?'−'+(-n):n),dsH(d)];
+  case 'cbl':return [`<span class="dz"><span class="pwr">(${pw(b,d.u)})<sup>?</sup></span></span>`,dsH(d)];
+  case 'lgs':{const cnt=d.add.reduce((a,x)=>a+x,0)-(d.sub||0);return [dsH(d),mg(b,rep(1,cnt)),P(cnt)];}
+  case 'fcan':{const num=`<i class="db c3">${d.c}</i>`;return [`<span class="dz">${dFr(num+dbk(b,d.k,1),num)}</span>`,dsH(d),mg(b,rep(1,d.k)),P(d.k)];}
+  case 'root':{const{r,q,p,neg}=d,nb=c=>`<i class="db c${c}">${r}</i>`,gp=(i,solid,cnt)=>`<span class="dg gg${solid?'':' gx'}">${Array.from({length:cnt},()=>nb(i%3+1)).join('')}</span>`;
+    const st=[`<span class="dz"><span class="pwr">(${pw(r,q)})<sup class="sf">${xfr(frH((neg?'−':'')+p+'/'+q))}</sup></span></span>`,
+      `<span class="dz">${Array.from({length:p},(_,i)=>`<span class="dg gg">${Array.from({length:q},()=>nb(i%3+1)).join('')}</span>`).join('<span class="tmul">×</span>')}</span>`,
+      `<span class="dz">${Array.from({length:q},(_,i)=>gp(i,1,p)).join('')}</span>`,
+      dsH({op:'root',r,q,p,neg:0})];
+    if(neg)st.push(dsH(d));return st;}
+  default:return [dsH(d)];}};
 const stH=(b,st,top)=>{
   const items=(its,side)=>its.map((it,i)=>it==='a'?blockH(b,top,side,i):grpH(b,it)).join('');
   const n=items(st.num,'n'),d=items(st.den,'d');
