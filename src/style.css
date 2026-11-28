@@ -409,3 +409,6 @@ a.card.news{text-decoration:none;color:inherit}
 .card.game .art .miniriver{font-size:46px}
 .card.game .art .mininim{transform:scale(1.3)}
 .ch-list{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:320px}.ch-list span{background:#f2efff;border-radius:8px;padding:4px 8px;font-weight:800;font-size:14px;letter-spacing:1px}.ch-list span.hl{background:#ffd23f}.ch-tw td,.ch-tw th{width:auto;padding:4px 10px}
+
+.tf-lb{font-size:.55px;font-weight:800;fill:#1971c2}.tf-lb.im{fill:#e8590c}.tf-mid{fill:none;stroke:#7048e8;stroke-width:.1;stroke-dasharray:.25 .2}
+.tf-opts{display:grid;gap:8px;margin:8px 0}.tf-opt{text-align:left;font-size:15px;line-height:1.3;padding:10px 12px}.tf-opt.bad{background:#ffe3e3;color:#c92a2a;text-decoration:line-through}

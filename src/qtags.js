@@ -191,6 +191,14 @@ tf-sf-2|scale factor 2|比例 2
 tf-sf-3|scale factor 3|比例 3
 tf-shape-3|triangle|三角形
 tf-shape-4|quadrilateral|四邊形
+tf-rot-270|270°|270°
+tf-rot-centre|about a point (not the origin)|繞某點旋轉
+tf-enl-centre|centre not the origin|放大中心唔係原點
+tf-sf-half|scale factor ½|比例 ½
+tf-sf-neg|negative scale factor|負比例
+tf-combined|two-step transformation|兩步變換
+tf-describe|describe the transformation|描述變換
+tf-inverse|undo a transformation|還原變換
 dd-1-die|one die|1 粒骰
 dd-2-dice|two dice|2 粒骰
 dd-3-dice|three dice|3 粒骰
@@ -257,14 +265,17 @@ function tagFactors(N){
 }
 /* ---------- Transform Quest: task = {t:instruction}, shape n ---------- */
 function tagTransform(task,n){
-  const t=task.t,tags=[];
+  const t=task.t,tags=task.tags?[...task.tags]:[];
+  if(!task.tags){
   if(/^Translate/.test(t)){tags.push('tf-translation');const v=/\((-?\d+), (-?\d+)\)/.exec(t);if(v&&(+v[1]<0||+v[2]<0))tags.push('tf-neg-vector');}
   else if(/^Reflect/.test(t)){tags.push('tf-reflection');tags.push(/line y = (−)?x/.test(t)?'tf-reflect-diagonal':/line [xy] = /.test(t)?'tf-reflect-line':'tf-reflect-axis');}
   else if(/^Rotate/.test(t)){tags.push('tf-rotation',/180/.test(t)?'tf-rot-180':'tf-rot-90');if(/anticlockwise/.test(t))tags.push('tf-anticlockwise');else if(/clockwise/.test(t))tags.push('tf-clockwise');}
-  else if(/^Enlarge/.test(t)){tags.push('tf-enlargement');const k=/factor (\d+)/.exec(t);if(k)tags.push('tf-sf-'+k[1]);}
+  else if(/^Enlarge/.test(t)){tags.push('tf-enlargement');const k=/factor (\d+)/.exec(t);if(k)tags.push('tf-sf-'+k[1]);}}
   tags.push(n===3?'tf-shape-3':'tf-shape-4');
-  const has=x=>tags.includes(x);
-  const d=(has('tf-translation')?(has('tf-neg-vector')?2.5:1.5):has('tf-reflect-axis')?3:has('tf-reflect-line')?4.5:has('tf-reflect-diagonal')?5.5:has('tf-rotation')?(has('tf-rot-180')?4:5):has('tf-sf-3')?5:4)+(n===4?.5:0);
+  const has=x=>tags.includes(x),dk=[];
+  if(has('tf-translation'))dk.push(has('tf-neg-vector')?2.5:1.5);if(has('tf-reflect-axis'))dk.push(3);if(has('tf-reflect-line'))dk.push(4.5);if(has('tf-reflect-diagonal'))dk.push(5.5);
+  if(has('tf-rotation'))dk.push(has('tf-rot-180')?4:5);if(has('tf-enlargement'))dk.push(has('tf-sf-3')?5:4);
+  const d=Math.max(1,...dk)+(has('tf-rot-centre')?1.5:0)+(has('tf-enl-centre')?1.5:0)+(has('tf-sf-half')?1:0)+(has('tf-sf-neg')?1.5:0)+(has('tf-rot-270')?.5:0)+(has('tf-combined')?2:0)+(has('tf-describe')?1:0)+(has('tf-inverse')?1.5:0)+(n===4?.5:0);
   return fin(tags,d,{eq:t});
 }
 /* ---------- quiz-style games: one table row per question type ---------- */
