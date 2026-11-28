@@ -4800,17 +4800,17 @@ function Q(o){
     const tl=v==null?0:f.tl(v),level=v!=null&&Math.abs(tl)<1e-7;
     const ang=v==null?0:Math.max(-16,Math.min(16,tl*7));   /* same sign as Balance Scale: positive = left pan lower */
     const prev=q._a==null?0:q._a;q._a=ang;
-    const dz=f.dis&&q.dis&&!o.build;const Lt=String(f.L(T,v)),Lh=dz?dsH(f.dis):Lt,Rh=o.build?stH(bs,q.st,true):String(f.R(T,v));
+    const ds=f.dis&&!o.build,sd=ds?(f.dis.side||'L'):'',dz=ds&&q.dis;const Lt=String(f.L(T,v)),Rt=o.build?stH(bs,q.st,true):String(f.R(T,v)),Lh=dz&&sd==='L'?dsH(f.dis):Lt,Rh=dz&&sd==='R'?dsH(f.dis):Rt;
     const gl=v==null&&Lh.includes('?'),gr=v==null&&Rh.includes('?');   /* dashed outline on the pan that still holds the “?” */
     const chip=(x,g,c)=>`<div class="t chip ${g?'q':c||'tn'} big">${`<span>${x}</span>`}</div>`;
-    const left=chip(Lh,gl,o.build?bcls(bs):'tn').replace('t chip',`t chip${f.dis&&!o.build?(dz?' dsv':' dsb'):''}`),right=o.build?Rh:chip(Rh,gr,'tn');
+    const dcl=sd?(dz?' dsv':' dsb'):'';const left=chip(Lh,gl,o.build?bcls(bs):'tn').replace('t chip',`t chip${sd==='L'?dcl:''}`),right=o.build?Rh:chip(Rh,gr,'tn').replace('t chip',`t chip${sd==='R'?dcl:''}`);
     const ev=o.build?evalSt(q.st):null;
     let top;
     if(o.build){
       const lines=q.hist.map((x,i)=>{const h=hline(x);return `<div class="el ${i===q.hist.length-1&&!level?'last':'old'}"><span class="otg ${h.cls}">${h.tag}</span>${h.t}</div>`;}).join('');
       top=`<div class="sc-top"><div class="sc-box"><div class="sc-lab">Blocks</div><div class="sc-wts"><div class="wt ${bcls(bs)==='tx'?'xw':'uw'} src" data-d="1">${bs}</div>${o.neg?`<div class="wt ng src" data-d="-1">÷${bs}</div>`:''}</div></div>
         <div class="sc-eq" id="bklog"><div class="el orig">${Lh} <b class="eqn">≠</b> ${eh(q.start)}</div>${lines}${level?`<div class="el fin">✅ ${Lh} = ${eh(v)}</div>`:''}</div></div>`;
-    }else top=`<div class="sc-top"><div class="sc-eq one"><div class="el orig">${Lt} <b class="${level?'eqb':'eqn'}">=</b> ${Rh}</div>${level?'<div class="el fin">✅ level</div>':''}</div></div>`;
+    }else top=`<div class="sc-top"><div class="sc-eq one"><div class="el orig">${Lt} <b class="${level?'eqb':'eqn'}">=</b> ${Rt}</div>${level?'<div class="el fin">✅ level</div>':''}</div></div>`;
     let ctl;
     if(o.build)ctl=answered?'':`<div class="opr">${(o.ops||[]).map(k=>`<button class="lv go op" data-op="${k}">${OPS[k][2]}</button>`).join('')}</div><div class="opr"><button class="lv go ml" id="bkmul">×${bs}</button>${o.neg?`<button class="lv go dv" id="bkdiv">÷${bs}</button>`:''}<button class="lv go" id="bkun" style="background:#868e96">↶</button><button class="lv go" id="chk" style="background:#2f9e44">Check ✓</button></div>`;
     else ctl=q.forms.length>1?`<button class="lv go dv" id="ftg">↔ ${f.btn}</button>`:'';
@@ -4859,8 +4859,9 @@ function Q(o){
 }
 /* an index equation  b^x = N  and its log form  x = log_b N  (answer x = e) */
 function idx(b,e,Nh,first,o){
-  const iF={L:T=>pw(b,T),R:()=>Nh,tl:v=>v-e,btn:'Show as a log equation'};
-  const lF={L:T=>T,R:()=>lg(b,Nh),tl:v=>v-e,btn:'Show as an index equation'};
+  const D=Number.isInteger(e)&&Math.abs(e)<=8?{side:'R',op:'blk',b,n:e}:null;   /* N breaks into e blocks of the base */
+  const iF={dis:D,L:T=>pw(b,T),R:()=>Nh,tl:v=>v-e,btn:'Show as a log equation'};
+  const lF={dis:D,L:T=>T,R:()=>lg(b,Nh),tl:v=>v-e,btn:'Show as an index equation'};
   return Q(Object.assign({forms:first==='log'?[lF,iF]:[iF,lF]},o));
 }
 const valQ=(X,Lh,o,dis)=>Q(Object.assign({forms:[{dis,L:()=>Lh,R:T=>T,tl:v=>v>0?log2(X/v):8}]},o));
@@ -4894,6 +4895,14 @@ const dsH=d=>{const{op,b,m,n,k}=d;
     const h=a=>a.map(c=>`<i class="db c${c}">${bv(b)}</i>`).join(''),x=a=>a.map(c=>`<i class="db c${c} cx">${bv(b)}</i>`).join('');
     return `<span class="dz">${dFr(h(keep)+x(gone),x(gone))}</span>`;}
   if(op==='mix3')return `<span class="dz">${Array.from({length:k},(_,i)=>dDiv(b,m,n,i%2?2:1)).join('<span class="tmul">×</span>')}</span>`;
+  if(op==='blk')return `<span class="dz">${n<0?dFr(ONEB,dbk(b,-n,1)):n===0?ONEB:`<span class="dg">${dbk(b,n,1)}</span>`}</span>`;
+  if(op==='root'){const nb=(r,c)=>`<i class="db c${c}">${r}</i>`,row=(cnt)=>Array.from({length:cnt},(_,i)=>nb(d.r,i%3+1)).join('<span class="tmul">×</span>');
+    const a=`<span class="dz">${row(d.q)}</span>`;if(d.p===1&&!d.neg)return a;
+    const bb=`<span class="dz">${row(d.p)}</span>`;return `<span class="dz">${a}<span class="tmul">→</span>${d.neg?dFr(ONEB,bb):bb}</span>`;}
+  if(op==='fcan')return `<span class="dz">${dFr(`<i class="db c3 cx">${d.c}</i>`+dbk(b,d.k,1),`<i class="db c3 cx">${d.c}</i>`)}</span>`;
+  if(op==='lgs'){const seq=[],bounds=[];d.add.forEach((c,gi)=>{for(let i=0;i<c;i++)seq.push([gi%3+1,gi]);});const tot=seq.length,gone=d.sub||0;let html='',last=-1;
+    seq.forEach((x,i)=>{if(x[1]!==last){if(last>=0)html+='<span class="tmul">+</span>';html+=last>=0?'':'';last=x[1];}html+=`<i class="db c${x[0]}${i>=tot-gone?' cx':''}">${bv(b)}</i>`;});
+    return `<span class="dz">${html}</span>`;}
   if(op==='neg2')return `<span class="dz">${dFr(ONEB,dbk(b,m,1)+dbk(b,n,2))}</span>`;
   if(op==='neg3')return `<span class="dz">${dFr(ONEB,dGp(b,m,n))}</span>`;
   return '';};
@@ -4946,18 +4955,18 @@ B10(){const b=BK(),k=pick([2,3]),p=pick([1,2,3].filter(x=>x!==k));return bq('B10
   return valQ(X,`${par(frH(a+'/'+c))}<sup>−${n}</sup>`,{k:'N5',q:`Write ${par(frH(a+'/'+c))}<sup>−${n}</sup> as a fraction.`,ans:X,ex:`A negative index flips the fraction: ${par(a+'/'+c)}<sup>−${n}</sup> = ${a===1?c:par(c+'/'+a)}<sup>${n}</sup> = ${fmtV(X)}.`});},
 /* ---- fractional index ---- */
  F1(){const r=R(2,13),N=r*r;return Q({k:'F1',q:`What is ${pw(N,frH('1/2'))}? (It is the number that multiplies by itself to make ${N}.)`,ans:r,forms:[
-   {L:()=>pw(N,frH('1/2')),R:T=>T,tl:v=>v>0?log2(r/v):8,btn:'Show what it means: ? × ?'},
+   {dis:{op:'root',r,q:2,p:1},L:()=>pw(N,frH('1/2')),R:T=>T,tl:v=>v>0?log2(r/v):8,btn:'Show what it means: ? × ?'},
    {L:T=>`${T}<span class="tmul">×</span>${T}`,R:()=>N,tl:v=>v>0?2*log2(v/r):-8,btn:'Show as a power'}],ex:`${r} × ${r} = ${N}, so ${pw(N,frH('1/2'))} = √${N} = ${r}.`});},
  F2(){const r=R(2,10),N=r*r*r;return Q({k:'F2',q:`What is ${pw(N,frH('1/3'))}? (The number that multiplies three times to make ${N}.)`,ans:r,forms:[
-   {L:()=>pw(N,frH('1/3')),R:T=>T,tl:v=>v>0?log2(r/v):8,btn:'Show what it means: ? × ? × ?'},
+   {dis:{op:'root',r,q:3,p:1},L:()=>pw(N,frH('1/3')),R:T=>T,tl:v=>v>0?log2(r/v):8,btn:'Show what it means: ? × ? × ?'},
    {L:T=>`${T}<span class="tmul">×</span>${T}<span class="tmul">×</span>${T}`,R:()=>N,tl:v=>v>0?3*log2(v/r):-8,btn:'Show as a power'}],ex:`${r} × ${r} × ${r} = ${N}, so ${pw(N,frH('1/3'))} = ∛${N} = ${r}.`});},
  F3(){const c=pick([[16,4,2],[81,4,3],[625,4,5],[32,5,2],[243,5,3],[10000,4,10]]),[N,k,r]=c;return Q({k:'F3',q:`What is ${pw(N,frH('1/'+k))}?`,ans:r,forms:[
-   {L:()=>pw(N,frH('1/'+k)),R:T=>T,tl:v=>v>0?log2(r/v):8,btn:`Show what it means`},
+   {dis:{op:'root',r,q:k,p:1},L:()=>pw(N,frH('1/'+k)),R:T=>T,tl:v=>v>0?log2(r/v):8,btn:`Show what it means`},
    {L:T=>Array(k).fill(T).join('<span class="tmul">×</span>'),R:()=>N,tl:v=>v>0?k*log2(v/r):-8,btn:'Show as a power'}],ex:`${Array(k).fill(r).join(' × ')} = ${N}, so ${pw(N,frH('1/'+k))} = ${r}.`});},
  F4(){const c=pick([[4,3,2,2],[9,3,2,3],[25,3,2,5],[16,3,4,2],[8,2,3,2],[27,2,3,3],[16,3,4,2],[4,5,2,2],[64,2,3,4],[125,2,3,5],[32,3,5,2],[81,3,4,3]]),[N,p,q,r]=c,X=Math.pow(r,p);
-  return valQ(X,pw(N,frH(p+'/'+q)),{k:'F4',q:`What is ${pw(N,frH(p+'/'+q))}?`,ans:X,ex:`Root first, then power: the ${q===2?'square':q===3?'cube':q+'th'} root of ${N} is ${r}, and ${r}<sup>${p}</sup> = ${X}.`});},
+  return valQ(X,pw(N,frH(p+'/'+q)),{k:'F4',q:`What is ${pw(N,frH(p+'/'+q))}?`,ans:X,ex:`Root first, then power: the ${q===2?'square':q===3?'cube':q+'th'} root of ${N} is ${r}, and ${r}<sup>${p}</sup> = ${X}.`},{op:'root',r,q,p});},
  F5(){const c=pick([[4,1,2,2],[9,1,2,3],[25,1,2,5],[8,1,3,2],[27,1,3,3],[27,2,3,3],[16,3,4,2],[4,3,2,2],[8,2,3,2],[9,3,2,3]]),[N,p,q,r]=c,X=1/Math.pow(r,p);
-  return valQ(X,pw(N,'−'+frH(p+'/'+q)),{k:'F5',q:`Write ${pw(N,'−'+frH(p+'/'+q))} as a fraction.`,ans:X,ex:`Negative → flip: 1 ÷ ${pw(N,frH(p+'/'+q))}. The ${q===2?'square':q===3?'cube':q+'th'} root of ${N} is ${r}, and ${r}<sup>${p}</sup> = ${Math.pow(r,p)}. So the answer is 1/${Math.pow(r,p)}.`});},
+  return valQ(X,pw(N,'−'+frH(p+'/'+q)),{k:'F5',q:`Write ${pw(N,'−'+frH(p+'/'+q))} as a fraction.`,ans:X,ex:`Negative → flip: 1 ÷ ${pw(N,frH(p+'/'+q))}. The ${q===2?'square':q===3?'cube':q+'th'} root of ${N} is ${r}, and ${r}<sup>${p}</sup> = ${Math.pow(r,p)}. So the answer is 1/${Math.pow(r,p)}.`},{op:'root',r,q,p,neg:1});},
  F6(){const c=pick([[9,3,1/2],[8,2,1/3],[16,2,1/4],[125,5,1/3],[4,8,3/2],[9,27,3/2],[8,4,2/3],[4,0.5,-1/2],[25,5,1/2],[27,9,2/3],[16,8,3/4]]),[b,N,e]=c;
   return idx(b,e,N===0.5?frH('1/2'):String(N),'idx',{k:'F6',q:`${pw(b,'x')} = ${fmtV(N)}. Find x (a fraction).`,ans:e,ex:`${b}<sup>${fmtV(e)}</sup> = ${fmtV(N)}, so x = ${fmtV(e)}.`});},
 /* ---- index laws (numbers) ---- */
@@ -5000,20 +5009,20 @@ B10(){const b=BK(),k=pick([2,3]),p=pick([1,2,3].filter(x=>x!==k));return bq('B10
  C8(){const c=pick([[5,3,125],[2,-4,'1/16'],[4,0.5,2],[9,-0.5,'1/3'],[8,2/3,4],[3,-3,'1/27'],[2,10,1024],[10,-1,'1/10'],[4,-1.5,'1/8'],[25,1.5,125]]),[b,e,N]=c;
   return idx(b,e,frH(String(N)),'idx',{k:'C8',q:`${pw(b,'x')} = ${typeof N==='string'?frH(N):N}. Find x.`,ans:e,ex:`Use logs: x = log<sub>${b}</sub> ${N} = ${fmtV(e)}.`});},
 /* ---- log laws ---- */
- G1(){const b=pick([2,3,5,10]),a=R(2,9),c=R(2,9);return logLaw('G1',b,`${lg(b,a)} + ${lg(b,c)}`,a*c,`${a} × ${c}`,`log<sub>${b}</sub> ? : add the logs → multiply inside. ${a} × ${c} = ${a*c}.`,x=>Math.log(a*c)/Math.log(b));},
- G2(){const b=pick([2,3,5,10]),c=R(2,8),k=R(2,8),a=c*k;return logLaw('G2',b,`${lg(b,a)} − ${lg(b,c)}`,k,`${a} ÷ ${c}`,`Subtract the logs → divide inside: ${a} ÷ ${c} = ${k}.`);},
- G3(){const b=pick([2,3,5,10]),n=pick([2,3]),a=R(2,6);return logLaw('G3',b,`${n} × ${lg(b,a)}`,Math.pow(a,n),`${a}<sup>${n}</sup>`,`A number in front becomes a power: ${n} × log<sub>${b}</sub> ${a} = log<sub>${b}</sub> ${a}<sup>${n}</sup> = log<sub>${b}</sub> ${Math.pow(a,n)}.`);},
- G4(){const b=pick([2,3,5,10]),d=pick([2,3,4,6]);let A,C,g=0;do{A=R(2,9);C=R(2,9);g++;}while(((A*C)%d||A===d||C===d)&&g<500);const X=A*C/d;return logLaw('G4',b,`${lg(b,A)} + ${lg(b,C)} − ${lg(b,d)}`,X,`${A} × ${C} ÷ ${d}`,`Add → multiply, subtract → divide: ${A} × ${C} ÷ ${d} = ${X}.`);},
+ G1(){const b=pick([2,3,5,10]);let a,c,D=null;if(R(0,1)){const s1=R(1,3),t=R(1,3);a=exp(b,s1);c=exp(b,t);D={op:'lgs',b,add:[s1,t],sub:0};}else{a=R(2,9);c=R(2,9);}return logLaw('G1',b,`${lg(b,a)} + ${lg(b,c)}`,a*c,`${a} × ${c}`,`log<sub>${b}</sub> ? : add the logs → multiply inside. ${a} × ${c} = ${a*c}.`,D);},
+ G2(){const b=pick([2,3,5,10]);let a,c,k,D=null;if(R(0,1)){const s1=R(2,4),t=R(1,s1-1);a=exp(b,s1);c=exp(b,t);k=a/c;D={op:'lgs',b,add:[s1],sub:t};}else{c=R(2,8);k=R(2,8);a=c*k;}return logLaw('G2',b,`${lg(b,a)} − ${lg(b,c)}`,k,`${a} ÷ ${c}`,`Subtract the logs → divide inside: ${a} ÷ ${c} = ${k}.`,D);},
+ G3(){const b=pick([2,3,5,10]),n=pick([2,3]);let a,D=null;if(R(0,1)){const kk=R(1,2);a=exp(b,kk);D={op:'lgs',b,add:Array(n).fill(kk),sub:0};}else a=R(2,6);return logLaw('G3',b,`${n} × ${lg(b,a)}`,Math.pow(a,n),`${a}<sup>${n}</sup>`,`A number in front becomes a power: ${n} × log<sub>${b}</sub> ${a} = log<sub>${b}</sub> ${a}<sup>${n}</sup> = log<sub>${b}</sub> ${Math.pow(a,n)}.`,D);},
+ G4(){const b=pick([2,3,5,10]);let A,C,d,X,D=null;if(R(0,1)){const s1=R(1,3),t=R(1,3),u=R(1,s1+t-1);A=exp(b,s1);C=exp(b,t);d=exp(b,u);X=exp(b,s1+t-u);D={op:'lgs',b,add:[s1,t],sub:u};}else{d=pick([2,3,4,6]);let g=0;do{A=R(2,9);C=R(2,9);g++;}while(((A*C)%d||A===d||C===d)&&g<500);X=A*C/d;}return logLaw('G4',b,`${lg(b,A)} + ${lg(b,C)} − ${lg(b,d)}`,X,`${A} × ${C} ÷ ${d}`,`Add → multiply, subtract → divide: ${A} × ${C} ÷ ${d} = ${X}.`,D);},
  G5(){const b=pick([2,3,5]),k=R(1,3),c=R(2,6),a=c*exp(b,k);return Q({k:'G5',q:`Work out ${lg(b,a)} − ${lg(b,c)}.`,ans:k,forms:[
-   {L:()=>`${lg(b,a)} − ${lg(b,c)}`,R:T=>T,tl:v=>k-v,btn:'Show in index form'},
-   {L:()=>`${a} ÷ ${c}`,R:T=>pw(b,T),tl:v=>(k-v)*log2(b),btn:'Show in log form'}],ex:`Subtract logs → divide: ${a} ÷ ${c} = ${exp(b,k)} = ${pw(b,k)}, so the answer is ${k}.`});},
+   {dis:{op:'fcan',b,c,k},L:()=>`${lg(b,a)} − ${lg(b,c)}`,R:T=>T,tl:v=>k-v,btn:'Show in index form'},
+   {dis:{op:'fcan',b,c,k},L:()=>`${a} ÷ ${c}`,R:T=>pw(b,T),tl:v=>(k-v)*log2(b),btn:'Show in log form'}],ex:`Subtract logs → divide: ${a} ÷ ${c} = ${exp(b,k)} = ${pw(b,k)}, so the answer is ${k}.`});},
  G6(){const c=pick([[2,5,1],[4,25,2],[5,20,2],[2,50,2],[25,40,3],[8,125,3],[5,200,3],[20,50,3],[4,250,3]]),[a,d,k]=c;return Q({k:'G6',q:`Work out log ${a} + log ${d}. (log means log<sub>10</sub>)`,ans:k,forms:[
    {L:()=>`log ${a} + log ${d}`,R:T=>T,tl:v=>k-v,btn:'Show in index form'},
    {L:()=>`${a} × ${d}`,R:T=>pw(10,T),tl:v=>(k-v)*log2(10),btn:'Show in log form'}],ex:`Add logs → multiply: ${a} × ${d} = ${a*d} = ${pw(10,k)}, so the answer is ${k}.`});},
- G7(){const b=pick([2,3,5,10]),c=R(2,4),m=R(2,5),a=c*c*m,X=m;return logLaw('G7',b,`${lg(b,a)} − 2 × ${lg(b,c)}`,X,`${a} ÷ ${c}<sup>2</sup>`,`2 × log<sub>${b}</sub> ${c} = log<sub>${b}</sub> ${c*c}. Then subtract → divide: ${a} ÷ ${c*c} = ${X}.`);},
+ G7(){const b=pick([2,3,5,10]);let c,m,D=null;if(R(0,1)){const t=R(1,2),u=R(1,2);c=exp(b,t);m=exp(b,u);D={op:'lgs',b,add:[2*t+u],sub:2*t};}else{c=R(2,4);m=R(2,5);}const a=c*c*m,X=m;return logLaw('G7',b,`${lg(b,a)} − 2 × ${lg(b,c)}`,X,`${a} ÷ ${c}<sup>2</sup>`,`2 × log<sub>${b}</sub> ${c} = log<sub>${b}</sub> ${c*c}. Then subtract → divide: ${a} ÷ ${c*c} = ${X}.`,D);},
  G8(){const b=pick([2,3,5]),k=R(1,3),n=R(2,4),a=exp(b,k);return Q({k:'G8',q:`Work out ${lg(b,a+'<sup>'+n+'</sup>')}.`,ans:k*n,forms:[
-   {L:()=>lg(b,a+'<sup>'+n+'</sup>'),R:T=>T,tl:v=>k*n-v,btn:'Show in index form'},
-   {L:T=>pw(b,T),R:()=>`${a}<sup>${n}</sup>`,tl:v=>(v-k*n)*log2(b),btn:'Show in log form'}],ex:`${n} × log<sub>${b}</sub> ${a} = ${n} × ${k} = ${k*n}.`});}
+   {dis:{op:'pow',b,m:k,n},L:()=>lg(b,a+'<sup>'+n+'</sup>'),R:T=>T,tl:v=>k*n-v,btn:'Show in index form'},
+   {dis:{side:'R',op:'pow',b,m:k,n},L:T=>pw(b,T),R:()=>`${a}<sup>${n}</sup>`,tl:v=>(v-k*n)*log2(b),btn:'Show in log form'}],ex:`${n} × log<sub>${b}</sub> ${a} = ${n} × ${k} = ${k*n}.`});}
 };
 /* an index-law question: balance of the numbers form, log version one tap away */
 function lawQ(k,b,L,s,logL,logW,ex,dis){
@@ -5022,10 +5031,10 @@ function lawQ(k,b,L,s,logL,logW,ex,dis){
   return Q({k,q:`${L} = ${pw(b,'?')}. Find the missing index.`,ans:s,forms,ex});
 }
 /* a log-law question: log version, with an index version (raise the base to both sides) one tap away */
-function logLaw(k,b,Lh,X,indexH,ex){
+function logLaw(k,b,Lh,X,indexH,ex,dis){
   return Q({k,q:`${Lh} = ${lg(b,'?')}. What goes in the box?`,ans:X,forms:[
-   {L:()=>Lh,R:T=>lg(b,T),tl:v=>v>0?log2(X/v):8,btn:'Show in index form'},
-   {L:()=>indexH,R:T=>T,tl:v=>v>0?log2(X/v):8,btn:'Show in log form'}],ex});
+   {dis,L:()=>Lh,R:T=>lg(b,T),tl:v=>v>0?log2(X/v):8,btn:'Show in index form'},
+   {dis,L:()=>indexH,R:T=>T,tl:v=>v>0?log2(X/v):8,btn:'Show in log form'}],ex});
 }
 
 /* ---- levels: name, question types, and difficulty / tags per question type ---- */
