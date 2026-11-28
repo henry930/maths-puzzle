@@ -494,3 +494,10 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .gr .rad{font-size:26px;color:#5f3dc4;line-height:1;font-weight:700}.gr .rin{display:inline-flex;align-items:center;gap:2px;border-top:2.5px solid #5f3dc4;padding:2px 3px 0}.gr .rk{align-self:flex-start;font-size:.7em;font-weight:900;color:#5f3dc4}
 .px .t.pbi{min-width:22px;height:24px;font-size:13px;padding:0 3px}
 .ch sup.sf,.px sup.sf,.px .t sup.sf,.px .el sup.sf{font-size:.78em;top:-1.1em}
+/* tap-to-dissolve blocks (index laws) */
+.px .dz{display:inline-flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;max-width:100%}.px .dg{display:inline-flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:132px}
+.px .db{display:inline-block;min-width:17px;height:19px;line-height:19px;padding:0 3px;border-radius:5px;font-size:13px;font-style:normal;font-weight:800;color:#3b2a00;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.px .db var{font-size:1em}.px .db.c1{background:#ffd43b}.px .db.c2{background:#4dd0e1;color:#00363d}.px .db.cx{opacity:.45;text-decoration:line-through}
+.px .dz.dfr{flex-direction:column;gap:3px}.px .dz.dfr .dg:first-child{border-bottom:3px solid #5f3dc4;padding-bottom:3px}.px .dg.gg{padding:2px;border:1.5px dashed #868e96;border-radius:7px}
+.px .t.dsb,.px .t.dsv{position:relative}.px .t.dsb::after,.px .t.dsv::after{content:'✨';position:absolute;right:-5px;top:-8px;font-size:13px}.px .t.dsv::after{content:'↩'}
+.px .t.dsv{background:#fff;border:2px solid #b197fc;padding:4px 5px;box-shadow:0 2px 0 rgba(0,0,0,.12)}.px .t.dsv .db{min-width:15px;height:17px;line-height:17px;font-size:11px;padding:0 2px}.px .dg{max-width:128px}.px .db.cx{opacity:.5}

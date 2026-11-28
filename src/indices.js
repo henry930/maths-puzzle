@@ -56,17 +56,17 @@ function Q(o){
     const tl=v==null?0:f.tl(v),level=v!=null&&Math.abs(tl)<1e-7;
     const ang=v==null?0:Math.max(-16,Math.min(16,tl*7));   /* same sign as Balance Scale: positive = left pan lower */
     const prev=q._a==null?0:q._a;q._a=ang;
-    const Lh=String(f.L(T,v)),Rh=o.build?stH(bs,q.st,true):String(f.R(T,v));
+    const dz=f.dis&&q.dis&&!o.build;const Lt=String(f.L(T,v)),Lh=dz?dsH(f.dis):Lt,Rh=o.build?stH(bs,q.st,true):String(f.R(T,v));
     const gl=v==null&&Lh.includes('?'),gr=v==null&&Rh.includes('?');   /* dashed outline on the pan that still holds the “?” */
     const chip=(x,g,c)=>`<div class="t chip ${g?'q':c||'tn'} big">${`<span>${x}</span>`}</div>`;
-    const left=chip(Lh,gl,o.build?bcls(bs):'tn'),right=o.build?Rh:chip(Rh,gr,'tn');
+    const left=chip(Lh,gl,o.build?bcls(bs):'tn').replace('t chip',`t chip${f.dis&&!o.build?(dz?' dsv':' dsb'):''}`),right=o.build?Rh:chip(Rh,gr,'tn');
     const ev=o.build?evalSt(q.st):null;
     let top;
     if(o.build){
       const lines=q.hist.map((x,i)=>{const h=hline(x);return `<div class="el ${i===q.hist.length-1&&!level?'last':'old'}"><span class="otg ${h.cls}">${h.tag}</span>${h.t}</div>`;}).join('');
       top=`<div class="sc-top"><div class="sc-box"><div class="sc-lab">Blocks</div><div class="sc-wts"><div class="wt ${bcls(bs)==='tx'?'xw':'uw'} src" data-d="1">${bs}</div>${o.neg?`<div class="wt ng src" data-d="-1">÷${bs}</div>`:''}</div></div>
         <div class="sc-eq" id="bklog"><div class="el orig">${Lh} <b class="eqn">≠</b> ${eh(q.start)}</div>${lines}${level?`<div class="el fin">✅ ${Lh} = ${eh(v)}</div>`:''}</div></div>`;
-    }else top=`<div class="sc-top"><div class="sc-eq one"><div class="el orig">${Lh} <b class="${level?'eqb':'eqn'}">=</b> ${Rh}</div>${level?'<div class="el fin">✅ level</div>':''}</div></div>`;
+    }else top=`<div class="sc-top"><div class="sc-eq one"><div class="el orig">${Lt} <b class="${level?'eqb':'eqn'}">=</b> ${Rh}</div>${level?'<div class="el fin">✅ level</div>':''}</div></div>`;
     let ctl;
     if(o.build)ctl=answered?'':`<div class="opr">${(o.ops||[]).map(k=>`<button class="lv go op" data-op="${k}">${OPS[k][2]}</button>`).join('')}</div><div class="opr"><button class="lv go ml" id="bkmul">×${bs}</button>${o.neg?`<button class="lv go dv" id="bkdiv">÷${bs}</button>`:''}<button class="lv go" id="bkun" style="background:#868e96">↶</button><button class="lv go" id="chk" style="background:#2f9e44">Check ✓</button></div>`;
     else ctl=q.forms.length>1?`<button class="lv go dv" id="ftg">↔ ${f.btn}</button>`:'';
@@ -87,7 +87,7 @@ function Q(o){
     const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
     place();q._raf=requestAnimationFrame(step);
     if(q.build&&api)bindBuild(root,api,pans[1]);
-    else if(api&&api.open)root.querySelectorAll('.t.q').forEach(t=>{t.style.cursor='pointer';t.onclick=api.open;});};
+    else if(api&&api.open){root.querySelectorAll('.t.dsb,.t.dsv').forEach(t=>{t.style.cursor='pointer';t.onclick=()=>{q.dis=!q.dis;api.set(api.buf());};});root.querySelectorAll('.t.q').forEach(t=>{t.style.cursor='pointer';t.onclick=api.open;});}};
   /* build mode: every operation (×a, ÷a, raise the whole pan to a power, take a root) acts on the right pan and adds a line to the working */
   function bindBuild(root,api,pan){
     const lg=root.querySelector('#bklog');if(lg)lg.scrollTop=1e5;
@@ -119,7 +119,7 @@ function idx(b,e,Nh,first,o){
   const lF={L:T=>T,R:()=>lg(b,Nh),tl:v=>v-e,btn:'Show as an index equation'};
   return Q(Object.assign({forms:first==='log'?[lF,iF]:[iF,lF]},o));
 }
-const valQ=(X,Lh,o)=>Q(Object.assign({forms:[{L:()=>Lh,R:T=>T,tl:v=>v>0?log2(X/v):8}]},o));
+const valQ=(X,Lh,o,dis)=>Q(Object.assign({forms:[{dis,L:()=>Lh,R:T=>T,tl:v=>v>0?log2(X/v):8}]},o));
 const BASES=[2,3,4,5,10];
 const exp=(b,n)=>Math.pow(b,n);
 const ladder=(b,from,to,last)=>{const a=[];for(let e=from;e>=to;e--){const v=Math.pow(b,e);a.push(`<span class="lp">${pw(b,e<0?'−'+(-e):e)} = ${e===to&&last?'<b>?</b>':H(v)}</span>`);if(e>to)a.push(`<span class="lp d">÷${b}</span>`);}return a.join('');};
@@ -134,6 +134,12 @@ const evalSt=st=>st.num.reduce((t,i)=>t+evalIt(i),0)-st.den.reduce((t,i)=>t+eval
 const cloneSt=st=>JSON.parse(JSON.stringify(st));
 const blockH=(b,top,side,i)=>`<div class="t chip ${bcls(b)} ${top?'pb':'pbi'}" ${top?`data-side="${side}" data-i="${i}"`:''}>${b}</div>`;
 const ONE='<div class="t chip tn one">1</div>';
+/* tap-to-dissolve: an index-law expression becomes coloured blocks of the base (colour 1 / colour 2) */
+const dbk=(b,n,c,x)=>Array.from({length:n},()=>`<i class="db c${c}${x?' cx':''}">${bv(b)}</i>`).join('');
+const dsH=d=>{const{op,b,m,n}=d;
+  if(op==='mul')return `<span class="dz"><span class="dg">${dbk(b,m,1)}</span><span class="dg">${dbk(b,n,2)}</span></span>`;
+  if(op==='div')return `<span class="dz dfr"><span class="dg">${dbk(b,m-n,1)}${dbk(b,n,2,1)}</span><span class="dg">${dbk(b,n,2,1)}</span></span>`;
+  return Array.from({length:n},(_,i)=>`<span class="dg gg">${dbk(b,m,i%2?2:1)}</span>`).join('<span class="tmul">×</span>');};
 const stH=(b,st,top)=>{
   const items=(its,side)=>its.map((it,i)=>it==='a'?blockH(b,top,side,i):grpH(b,it)).join('');
   const n=items(st.num,'n'),d=items(st.den,'d');
@@ -198,9 +204,9 @@ B10(){const b=BK(),k=pick([2,3]),p=pick([1,2,3].filter(x=>x!==k));return bq('B10
  F6(){const c=pick([[9,3,1/2],[8,2,1/3],[16,2,1/4],[125,5,1/3],[4,8,3/2],[9,27,3/2],[8,4,2/3],[4,0.5,-1/2],[25,5,1/2],[27,9,2/3],[16,8,3/4]]),[b,N,e]=c;
   return idx(b,e,N===0.5?frH('1/2'):String(N),'idx',{k:'F6',q:`${pw(b,'x')} = ${fmtV(N)}. Find x (a fraction).`,ans:e,ex:`${b}<sup>${fmtV(e)}</sup> = ${fmtV(N)}, so x = ${fmtV(e)}.`});},
 /* ---- index laws (numbers) ---- */
- L1(){const b=pick([2,3,5,7,10]),m=R(2,6),n=R(2,6),s=m+n;return lawQ('L1',b,`${pw(b,m)} × ${pw(b,n)}`,s,`log<sub>${b}</sub> ${pw(b,m)} + log<sub>${b}</sub> ${pw(b,n)}`,`${m} + ${n}`,`When you multiply powers of the same base you add the indices: ${m} + ${n} = ${s}.`);},
- L2(){const b=pick([2,3,5,7,10]),n=R(2,5),m=n+R(1,5),s=m-n;return lawQ('L2',b,`${pw(b,m)} ÷ ${pw(b,n)}`,s,`log<sub>${b}</sub> ${pw(b,m)} − log<sub>${b}</sub> ${pw(b,n)}`,`${m} − ${n}`,`When you divide powers of the same base you subtract the indices: ${m} − ${n} = ${s}.`);},
- L3(){const b=pick([2,3,5,10]),m=R(2,5),n=R(2,4),s=m*n;return lawQ('L3',b,`${par(pw(b,m))}<sup>${n}</sup>`,s,`${n} × log<sub>${b}</sub> ${pw(b,m)}`,`${n} × ${m}`,`A power of a power: multiply the indices: ${m} × ${n} = ${s}.`);},
+ L1(){const b=pick([2,3,5,7,10]),m=R(2,6),n=R(2,6),s=m+n;return lawQ('L1',b,`${pw(b,m)} × ${pw(b,n)}`,s,`log<sub>${b}</sub> ${pw(b,m)} + log<sub>${b}</sub> ${pw(b,n)}`,`${m} + ${n}`,`When you multiply powers of the same base you add the indices: ${m} + ${n} = ${s}.`,{op:'mul',b,m,n});},
+ L2(){const b=pick([2,3,5,7,10]),n=R(2,5),m=n+R(1,5),s=m-n;return lawQ('L2',b,`${pw(b,m)} ÷ ${pw(b,n)}`,s,`log<sub>${b}</sub> ${pw(b,m)} − log<sub>${b}</sub> ${pw(b,n)}`,`${m} − ${n}`,`When you divide powers of the same base you subtract the indices: ${m} − ${n} = ${s}.`,{op:'div',b,m,n});},
+ L3(){const b=pick([2,3,5,10]),m=R(2,5),n=R(2,4),s=m*n;return lawQ('L3',b,`${par(pw(b,m))}<sup>${n}</sup>`,s,`${n} × log<sub>${b}</sub> ${pw(b,m)}`,`${n} × ${m}`,`A power of a power: multiply the indices: ${m} × ${n} = ${s}.`,{op:'pow',b,m,n});},
  L4(){const b=pick([2,3,5]),t=R(0,2);let L,s,w;
   if(t===0){const m=R(3,7),n=R(1,m-1)+0,k=n;L=`${pw(b,m)} × ${pw(b,'−'+k)}`;s=m-k;w=`${m} + (−${k}) = ${s}`;}
   else if(t===1){const m=R(1,4),n=R(2,6);L=`${pw(b,'−'+m)} ÷ ${pw(b,n)}`;s=-m-n;w=`−${m} − ${n} = ${s}`;}
@@ -221,7 +227,7 @@ B10(){const b=BK(),k=pick([2,3]),p=pick([1,2,3].filter(x=>x!==k));return bq('B10
   else if(t===1){const m=R(3,6),n=R(2,5),k=R(1,m+n-1);L=`${pw(b,m)} × ${pw(b,n)} ÷ ${pw(b,k)}`;s=m+n-k;w=`${m} + ${n} − ${k}`;}
   else{const m=R(4,9),n=R(1,3),k=R(2,3);L=`${par(pw(b,m)+' ÷ '+pw(b,n))}<sup>${k}</sup>`;s=(m-n)*k;w=`(${m} − ${n}) × ${k}`;}
   return lawQ('L7',b,L,s,null,null,`Use the laws one at a time: ${w} = ${s}.`);},
- L8(){const b=pick([2,3,5]),n=R(2,4),m=n+R(1,3),X=exp(b,m-n);return valQ(X,`${pw(b,m)} ÷ ${pw(b,n)}`,{k:'L8',q:`Work out ${pw(b,m)} ÷ ${pw(b,n)}.`,ans:X,ex:`Subtract the indices: ${pw(b,m-n)} = ${X}.`});},
+ L8(){const b=pick([2,3,5]),n=R(2,4),m=n+R(1,3),X=exp(b,m-n);return valQ(X,`${pw(b,m)} ÷ ${pw(b,n)}`,{k:'L8',q:`Work out ${pw(b,m)} ÷ ${pw(b,n)}.`,ans:X,ex:`Subtract the indices: ${pw(b,m-n)} = ${X}.`},{op:'div',b,m,n});},
 /* ---- index ↔ log ---- */
  C1(){const b=pick(BASES),n=R(2,b===10?5:b===2?6:4),N=exp(b,n);return idx(b,n,N,'idx',{k:'C1',q:`${pw(b,'x')} = ${N}. Find x. (Tap the button to see it as a log equation.)`,ans:n,ex:`${pw(b,n)} = ${N}, so x = ${n}. In log form: x = log<sub>${b}</sub> ${N}.`});},
  C2(){const b=pick(BASES),n=R(1,b===10?5:b===2?7:4),N=exp(b,n);return idx(b,n,N,'log',{k:'C2',q:`Work out log<sub>${b}</sub> ${N}.`,ans:n,ex:`log<sub>${b}</sub> ${N} asks “${b} to the power what gives ${N}?”. ${pw(b,n)} = ${N}, so the answer is ${n}.`});},
@@ -253,8 +259,8 @@ B10(){const b=BK(),k=pick([2,3]),p=pick([1,2,3].filter(x=>x!==k));return bq('B10
    {L:T=>pw(b,T),R:()=>`${a}<sup>${n}</sup>`,tl:v=>(v-k*n)*log2(b),btn:'Show in log form'}],ex:`${n} × log<sub>${b}</sub> ${a} = ${n} × ${k} = ${k*n}.`});}
 };
 /* an index-law question: balance of the numbers form, log version one tap away */
-function lawQ(k,b,L,s,logL,logW,ex){
-  const forms=[{L:()=>L,R:T=>pw(b,T),tl:v=>s-v,btn:logL?'Show the log version of this law':''}];
+function lawQ(k,b,L,s,logL,logW,ex,dis){
+  const forms=[{dis,L:()=>L,R:T=>pw(b,T),tl:v=>s-v,btn:logL?'Show the log version of this law':''}];
   if(logL)forms.push({L:()=>`${logL}`,R:T=>T,tl:v=>s-v,btn:'Show the index version'});
   return Q({k,q:`${L} = ${pw(b,'?')}. Find the missing index.`,ans:s,forms,ex});
 }
