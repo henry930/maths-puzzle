@@ -70,11 +70,11 @@ function showIntro(g){
 function cleanup(){closeIntro();if(!ctx)return;ctx.cleanups.forEach(f=>{try{f()}catch(e){}});ctx=null;document.querySelectorAll('.overlay').forEach(o=>o.remove());}
 const ROOT=(()=>{let p=location.pathname.replace(/index\.html$/,'');const sg=p.split('/').filter(Boolean);if(sg.length&&/^[a-z0-9_-]+$/.test(sg[sg.length-1])&&window.__GAME_PAGE){sg.pop();}return '/'+sg.join('/')+(sg.length?'/':'');})();
 function pushUrl(path,rep){try{if(location.pathname!==path){history[rep?'replaceState':'pushState'](null,'',path+location.search.replace(/[?&]l=\d+/,''));}}catch(e){}}
-function goMenu(nopush){cleanup();if(nopush!==true)pushUrl(ROOT);$('#game').hidden=true;$('#menu').hidden=false;renderMenu();window.scrollTo(0,0);}
+function goMenu(nopush){cleanup();if(nopush!==true)pushUrl(ROOT);$('#game').hidden=true;$('#teacher').hidden=true;$('#menu').hidden=false;renderMenu();window.scrollTo(0,0);}
 const curLv={};
 function openGame(id,lv,fromRoute){
   cleanup();const g=REG.find(x=>x.id===id);lv=lv||curLv[id]||1;curLv[id]=lv;const N=g.levels.length;
-  $('#menu').hidden=true;$('#game').hidden=false;
+  $('#menu').hidden=true;$('#teacher').hidden=true;$('#game').hidden=false;
   $('#gtitle').innerHTML=`<span class="gemo">${g.emoji}</span> ${g.name}`;
   document.documentElement.style.setProperty('--gc',g.color);$('#gbar').style.setProperty('--c',g.color);
   const pills=$('#glevels');pills.innerHTML='';pills.classList.toggle('long',N>24);pills.classList.remove('open');{const lb=$('#lvbtn');lb.textContent='Levels '+lv+'/'+N+' ▾';lb.onclick=()=>{pills.classList.toggle('open');if(N>24&&pills.classList.contains('open')){const c=pills.children[lv-1];if(c)pills.scrollLeft=c.offsetLeft-pills.clientWidth/2+c.offsetWidth/2;}};}
@@ -91,6 +91,7 @@ function openGame(id,lv,fromRoute){
   window.scrollTo(0,0);
   try{const base=ROOT+id+'/',hs='#'+lv;if(location.pathname!==base||location.hash!==hs){const u=base+location.search.replace(/[?&]l=\d+/,'')+hs;history[fromRoute?'replaceState':'pushState'](null,'',u);}}catch(e){}
   document.title=g.name+' · Level '+lv+' · Maths Puzzle Arcade';
+  teacherBar(id,lv);
   g.mount(root,lv,ctx);
   if(g.anim){let seen=false;try{seen=localStorage.getItem('pz-intro-'+id)==='1';}catch(e){}if(!seen){try{localStorage.setItem('pz-intro-'+id,'1');}catch(e){}setTimeout(()=>{if(ctx&&ctx.id===id)showIntro(g);},200);}}
 }
@@ -109,7 +110,7 @@ function showWin(title,text,again,againLabel,first,stay){
 }
 document.addEventListener('keydown',e=>{if(ctx&&ctx.keys&&!e.target.matches('input,textarea'))ctx.keys(e)});
 $('#back').onclick=()=>{goMenu();document.title='Maths Puzzle Arcade';};
-function routeNow(){const sg=location.pathname.split('/').filter(Boolean);const gid=sg[sg.length-1];if(REG.some(x=>x.id===gid)){const m=/^#(\d+)$/.exec(location.hash);const g=REG.find(x=>x.id===gid);const n=m?+m[1]:0;openGame(gid,n>=1&&n<=g.levels.length?n:undefined,true);}else goMenu(true);}
+function routeNow(){const sg=location.pathname.split('/').filter(Boolean);const gid=sg[sg.length-1];if(gid==='teacher'&&window.__GAME_PAGE){if(isTeacher())showTeacher(true);else{pushUrl(ROOT,true);goMenu(true);}return;}if(REG.some(x=>x.id===gid)){const m=/^#(\d+)$/.exec(location.hash);const g=REG.find(x=>x.id===gid);const n=m?+m[1]:0;openGame(gid,n>=1&&n<=g.levels.length?n:undefined,true);}else goMenu(true);}
 window.addEventListener('popstate',routeNow);
 
 /* reusable number pad: returns element; onKey gets '0'-'9','-','.','del','ok' */
@@ -126,7 +127,7 @@ function renderMenu(){
   CATS.forEach(c=>{const b=el('button','cat'+(c===curCat?' on':''),(CAT_EMO[c]?CAT_EMO[c]+' ':'')+c);b.onclick=()=>{curCat=c;curTag='All';renderMenu()};bar.appendChild(b);});
   const g=$('#cards');g.innerHTML='';g.classList.toggle('newsgrid',curCat==='News and Video');
   const total=REG.reduce((a,G)=>a+doneCount(G.id),0),all=REG.reduce((a,G)=>a+G.levels.length,0);
-  const u=me()||{done:{}};$('#overall').innerHTML=`<button class="who" id="who">👤 ${esc(DB.cur||'Player')} ▾</button><span class="pts">⭐ ${ptsOf(u)} pts</span><span>${total} / ${all} levels</span>`;$('#who').onclick=()=>me()?showProfile():showLogin(true);
+  const u=me()||{done:{}};$('#overall').innerHTML=`<button class="who" id="who">👤 ${esc(DB.cur||'Player')} ▾</button><span class="pts">⭐ ${ptsOf(u)} pts</span><span>${total} / ${all} levels</span>${isTeacher()?'<button class="who tbtn" id="tdash">🏫 Teacher</button>':''}`;$('#who').onclick=()=>me()?showProfile():showLogin(true);const td=$('#tdash');if(td)td.onclick=()=>showTeacher();
   const tb=$('#tagbar');tb.innerHTML='';
   if(curCat==='News and Video'){tb.hidden=true;renderNews(g);return;}
   tb.hidden=false;

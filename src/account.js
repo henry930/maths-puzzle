@@ -54,10 +54,10 @@ const dataOf=u=>({v:2,done:u.done,rv:u.rv||{}});
 const getSess=()=>LS.get('pz-sess',null);
 const setSess=s=>{if(s)LS.set('pz-sess',s);else try{localStorage.removeItem('pz-sess')}catch(e){}};
 
-function adoptUser(name,remoteData,h,legacyMerge){
+function adoptUser(name,remoteData,h,legacyMerge,teacher){
   let u=DB.users[name];
   if(!u)u=DB.users[name]={created:Date.now(),done:{},rv:{},ev:[]};
-  const m=mergeData(u,remoteData);u.done=m.done;u.rv=m.rv;u.h=CLOUD?undefined:h;if(!u.ev)u.ev=[];
+  const m=mergeData(u,remoteData);u.done=m.done;u.rv=m.rv;u.h=CLOUD?undefined:h;u.teacher=!!teacher;if(!u.ev)u.ev=[];
   if(legacyMerge){const g=DB.users.Guest;if(g){const m2=mergeData(u,g);u.done=m2.done;u.rv=m2.rv;delete DB.users.Guest;}}
   DB.cur=name;done=u.done;
   setSess({name,h});LS.set('pz-last',name);persist();
@@ -68,7 +68,7 @@ async function nameFree(nameRaw){
   if(CLOUD){const r=await rpc('pz_name_free',{p_name:name});if(r&&r.ok)return{ok:true,state:r.free?'free':'taken'};return{ok:false,state:'unknown'};}
   return{ok:true,state:Object.keys(DB.users).some(k=>k.toLowerCase()===name.toLowerCase()&&k!=='Guest')?'taken':'free'};
 }
-async function doRegister(nameRaw,pin){
+async function doRegister(nameRaw,pin,tkey){
   const name=cleanName(nameRaw);
   if(!validName(name))return{ok:false,msg:'Name must be 2–16 letters or numbers.'};
   if(!/^\d{4}$/.test(pin))return{ok:false,msg:'PIN must be exactly 4 digits.'};
@@ -76,9 +76,9 @@ async function doRegister(nameRaw,pin){
   let migrate=false;
   if(DB.users.Guest&&Object.keys(DB.users.Guest.done||{}).length)migrate=confirm('Move the progress saved under “Guest” on this device into your new account?');
   if(CLOUD){
-    const r=await rpc('pz_register',{p_name:name,p_hash:h,p_data:{v:2,done:{},rv:{}}});
-    if(!r.ok)return{ok:false,msg:r.error==='taken'?'That name is already taken. Please choose another one.':r.error==='network'?'Cannot reach the server. Check your internet and try again.':r.error==='bad_name'?'Name must be 2–16 letters or numbers.':'Could not register. Please try again.'};
-    adoptUser(r.name||name,null,h,migrate);
+    const r=tkey?await rpc('pz_register_teacher',{p_name:name,p_hash:h,p_key:tkey}):await rpc('pz_register',{p_name:name,p_hash:h,p_data:{v:2,done:{},rv:{}}});
+    if(!r.ok)return{ok:false,msg:r.error==='bad_key'?'Wrong teacher key.':r.error==='taken'?'That name is already taken. Please choose another one.':r.error==='network'?'Cannot reach the server. Check your internet and try again.':r.error==='bad_name'?'Name must be 2–16 letters or numbers.':'Could not register. Please try again.'};
+    adoptUser(r.name||name,null,h,migrate,!!tkey);
   }else{
     if(Object.keys(DB.users).some(k=>k.toLowerCase()===name.toLowerCase()&&k!=='Guest'))return{ok:false,msg:'That name is already taken on this device. Please choose another one.'};
     adoptUser(name,null,h,migrate);
@@ -93,7 +93,7 @@ async function doLogin(nameRaw,pin){
   if(CLOUD){
     const r=await rpc('pz_login',{p_name:name,p_hash:h});
     if(!r.ok)return{ok:false,msg:r.error==='no_user'?'No player with that name. Tap “New player” to register.':r.error==='bad_pin'?'Wrong PIN. Try again.':r.error==='locked'?'Too many wrong tries. Please wait 5 minutes.':r.error==='network'?'Cannot reach the server. Check your internet and try again.':'Could not log in. Please try again.'};
-    adoptUser(r.name||name,r.data,h,false);
+    adoptUser(r.name||name,r.data,h,false,r.teacher);
   }else{
     const key=Object.keys(DB.users).find(k=>k.toLowerCase()===name.toLowerCase()&&k!=='Guest');
     if(!key)return{ok:false,msg:'No player with that name on this device. Tap “New player” to register.'};
@@ -117,7 +117,7 @@ function showLogin(first){
      <input id="un" class="tin" maxlength="16" placeholder="YOUR NAME (CAPITAL LETTERS)" autocomplete="username" autocapitalize="characters" value="${mode==='in'?esc(LS.get('pz-last','')):''}">
      ${mode==='new'?'<div class="avail" id="avail">&nbsp;</div>':''}
      <input id="up" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="4-digit PIN" autocomplete="${mode==='in'?'current-password':'new-password'}">
-     ${mode==='new'?'<input id="up2" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Type the PIN again" autocomplete="off"><p class="small">Names are always in CAPITAL LETTERS. Pick a name nobody else uses and a PIN you can remember. Your PIN keeps your progress safe.</p>':''}
+     ${mode==='new'?'<input id="up2" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Type the PIN again" autocomplete="off"><p class="small">Names are always in CAPITAL LETTERS. Pick a name nobody else uses and a PIN you can remember. Your PIN keeps your progress safe.</p>'+(CLOUD?'<label class="tchk"><input type="checkbox" id="ist"> 🏫 I am a teacher</label><input id="utk" class="tin" type="password" placeholder="Teacher key" autocomplete="off" hidden>':''):''}
      <div class="msg" id="lmsg">&nbsp;</div><div class="row"><button class="btn" id="go">${mode==='in'?'Log in ▶':'Register & play ▶'}</button></div>
      <p class="small">${CLOUD?'☁ Your progress is saved online.':'📱 Your progress is saved on this device only.'}</p>`;
     box.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;draw();});
@@ -125,11 +125,14 @@ function showLogin(first){
       const n=$('#un',box).value,p=$('#up',box).value.trim(),msg=$('#lmsg',box),btn=$('#go',box);
       if(mode==='new'&&p!==$('#up2',box).value.trim()){msg.textContent='The two PINs are not the same.';return;}
       btn.disabled=true;msg.textContent='Please wait…';
-      const r=mode==='in'?await doLogin(n,p):await doRegister(n,p);
+      const ist=$('#ist',box),tk=ist&&ist.checked?$('#utk',box).value:'';
+      if(ist&&ist.checked&&!tk){btn.disabled=false;msg.textContent='Please type the teacher key.';return;}
+      const r=mode==='in'?await doLogin(n,p):await doRegister(n,p,tk);
       btn.disabled=false;
       if(!r.ok){msg.textContent=r.msg;return;}
       o.remove();renderMenu();toast('Hi '+r.name+'! 👋');
       if(CLOUD){flushEvents();}
+      if(isTeacher())showTeacher();
     };
     const un=$('#un',box);un.oninput=()=>{const a=un.selectionStart,z=un.selectionEnd;un.value=un.value.toUpperCase();try{un.setSelectionRange(a,z)}catch(e){}};
     if(mode==='new'){let tm=null,seq=0;const av=$('#avail',box);
@@ -138,6 +141,7 @@ function showLogin(first){
           av.className='avail '+(r.state==='free'?'ok':'bad');
           av.textContent=r.state==='free'?'✅ This name is free':r.state==='taken'?'❌ This name is already taken — try another':r.state==='bad'?'Use 2–16 letters or numbers':'Could not check the name right now';},450);};
       un.addEventListener('input',chk);}
+    const ist0=$('#ist',box);if(ist0)ist0.onchange=()=>{$('#utk',box).hidden=!ist0.checked;};
     $('#go',box).onclick=go;box.querySelectorAll('input').forEach(i=>i.onkeydown=e=>{if(e.key==='Enter')go();});
   }
   draw();
@@ -219,7 +223,24 @@ async function flushEvents(){
   evBusy=false;
   if(r&&r.ok){q=LS.get('pz-evq',[]).slice(batch.length);LS.set('pz-evq',q);if(q.length)evSoon();}
 }
-document.addEventListener('visibilitychange',()=>{if(document.hidden){flushEvents();pushNow();}});
+
+/* ---------- teacher flag (the server re-checks it on every teacher call) ---------- */
+function isTeacher(){const u=me();return !!(CLOUD&&u&&u.teacher);}
+
+/* ---------- play time: counts only while the game is open, the tab is visible and the student is touching the screen ---------- */
+const PT={g:null,lv:0,acc:0,act:Date.now()};
+function ptFlush(){
+  if(PT.g&&PT.acc>0&&me()&&!isTeacher()){logEvent(PT.g,PT.lv,'time',{secs:PT.acc});}
+  PT.acc=0;
+}
+['pointerdown','keydown','touchstart','scroll'].forEach(e=>window.addEventListener(e,()=>{PT.act=Date.now();},{passive:true,capture:true}));
+setInterval(()=>{
+  const g=typeof ctx!=='undefined'&&ctx?ctx.id:null,lv=g?ctx.lv:0;
+  if(g!==PT.g||lv!==PT.lv){ptFlush();PT.g=g;PT.lv=lv;}
+  if(g&&!document.hidden&&Date.now()-PT.act<60000){PT.acc+=5;if(PT.acc>=30)ptFlush();}
+},5000);
+document.addEventListener('visibilitychange',()=>{if(document.hidden){ptFlush();flushEvents();pushNow();}});
+window.addEventListener('pagehide',()=>{ptFlush();flushEvents();});
 
 /* ---------- start-up ---------- */
 async function bootAccount(){
@@ -227,11 +248,11 @@ async function bootAccount(){
   if(s&&DB.users[s.name]){DB.cur=s.name;loadUser();
     if(CLOUD){
       const r=await rpc('pz_login',{p_name:s.name,p_hash:s.h});
-      if(r&&r.ok){const u=me(),m=mergeData(u,r.data);u.done=m.done;u.rv=m.rv;done=u.done;LS.set('pz-v3',DB);dirty=true;pushNow();renderMenu();flushEvents();}
+      if(r&&r.ok){const u=me(),m=mergeData(u,r.data);u.done=m.done;u.rv=m.rv;u.teacher=!!r.teacher;done=u.done;LS.set('pz-v3',DB);dirty=true;pushNow();renderMenu();flushEvents();}
       else if(r&&(r.error==='bad_pin'||r.error==='no_user')){setSess(null);DB.cur=null;done={};showLogin(true);}
     }
   }else if(s&&CLOUD){ // session but no local cache: pull from the cloud
     const r=await rpc('pz_login',{p_name:s.name,p_hash:s.h});
-    if(r&&r.ok){adoptUser(r.name||s.name,r.data,s.h,false);renderMenu();}else{setSess(null);showLogin(true);}
+    if(r&&r.ok){adoptUser(r.name||s.name,r.data,s.h,false,r.teacher);renderMenu();}else{setSess(null);showLogin(true);}
   }else{DB.cur=null;done={};showLogin(true);}
 }

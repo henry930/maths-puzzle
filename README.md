@@ -26,3 +26,11 @@ Each game has its own address, e.g. `/balance/`, `/sudoku/`, `/g24/`, `/p2048/`.
 
 Without these settings the arcade still works, but accounts are stored only in each device's browser.
 Stored online: players (name + hashed PIN), progress, and an event log (`pz_events`) of every wrong answer with the question, typed answer, expected answer and error type, for later strength/weakness analysis.
+
+## Teacher accounts & dashboard
+1. Run `supabase-teacher.sql` once in the Supabase SQL Editor (after `supabase.sql`).
+2. In the app: **New player → tick “I am a teacher” → enter your teacher key** to create a teacher account. Later, log in normally.
+3. Teacher login opens the dashboard (`/teacher/`, also the 🏫 Teacher button on the menu):
+   - per game: levels passed, students who played, total play time; expand a game for each student's levels/time and how many students passed each level;
+   - on every level page: “N / total students passed” and a ❓ Mistakes button (mistake types grouped from the logged `wrong` events — framework, to be refined per game).
+Play time is counted only while a game is open, the tab is visible and the student has touched the screen in the last minute. Teacher accounts are excluded from all statistics.

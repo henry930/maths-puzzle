@@ -378,10 +378,29 @@ a.card.news{text-decoration:none;color:inherit}
 .card.game .art .minigrid{transform:scale(.7)}
 .card.game .art .miniriver{font-size:34px;letter-spacing:0;white-space:nowrap}
 .card.game .art .mini24{transform:scale(.85)}
+
+/* ---------- teacher area (mobile first) ---------- */
+.tbtn{background:#2b8a3e}.tchk{display:flex;gap:8px;align-items:center;font-weight:700;color:#6741d9;margin:8px 2px;text-align:left}.tchk input{width:20px;height:20px}
+#teacher{padding-bottom:40px}.tdh{background:#6741d9;color:#fff;border-radius:20px;padding:12px 14px;display:flex;gap:10px;align-items:center;margin-bottom:12px}.tdh h2{margin:0;font-size:22px;flex:1}
+.tload{padding:30px 10px;text-align:center;color:var(--mut);font-weight:700}
+.tsum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.tsum div{background:#fff;border-radius:16px;padding:10px 6px;text-align:center;box-shadow:0 2px 8px rgba(40,30,100,.07)}.tsum b{display:block;font-size:20px;color:#6741d9}.tsum span{font-size:12.5px;color:var(--mut);font-weight:700}
+.tcards{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.tcard{background:#fff;border-radius:16px;border-left:6px solid var(--c);box-shadow:0 2px 8px rgba(40,30,100,.07);overflow:hidden}.tcard.idle{opacity:.6}
+.tch{width:100%;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"e n v" "m m m";gap:2px 10px;align-items:center;border:0;background:transparent;padding:12px;text-align:left;font:inherit;cursor:pointer;color:var(--ink)}
+.te{grid-area:e;font-size:26px}.tgn{grid-area:n;font-weight:900;font-size:17px}.tcv{grid-area:v;color:var(--mut);transition:transform .2s}.tcard.open .tcv{transform:rotate(180deg)}
+.tm{grid-area:m;display:flex;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--mut);font-weight:700}.tm i{font-style:normal}
+.tcb{padding:0 12px 12px}.tcb h4{margin:12px 0 6px;font-size:14px;color:#6741d9}.tcb h4 small{color:var(--mut);font-weight:600}
+.ts{display:grid;grid-template-columns:minmax(0,1fr) 54px 44px 62px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #eee;font-size:14.5px}
+.tsn{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tsb{height:8px;background:#ece8ff;border-radius:6px;overflow:hidden}.tsb i{display:block;height:100%;background:var(--c)}.tsv{text-align:right;font-weight:800}.tst{text-align:right;color:var(--mut)}
+.tlv{max-height:260px;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px}.tlp{border:0;border-radius:10px;background:#f3f0ff;padding:6px 0;cursor:pointer;display:flex;flex-direction:column;align-items:center;font:inherit;color:var(--ink)}.tlp b{font-size:15px}.tlp small{color:#2b8a3e;font-weight:800}
+.tbar{background:#fff;border:2px solid #d8d3f5;border-radius:14px;padding:8px 12px;margin:4px 0 10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.tb-n{flex:1;min-width:150px;font-size:15px;font-weight:700}
+.tb-b{border:0;border-radius:999px;background:#e8478b;color:#fff;font-weight:800;padding:9px 14px;font-size:14.5px;cursor:pointer}
+.tb-m{flex-basis:100%;border-top:1px solid #eee;padding-top:6px}.tmr{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;padding:5px 0;font-size:14.5px;border-bottom:1px solid #f1f1f1}.tmt{font-weight:800;text-transform:capitalize}.tmc{font-weight:900;color:#e03131}.tms{color:var(--mut)}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><button class="back" id="lvbtn">Levels ▾</button><div class="pills" id="glevels"></div></div>
-<div class="glv" id="glvname"></div><div class="howto" id="howto"></div><div id="groot"></div></section>
+<div class="glv" id="glvname"></div><div class="tbar" id="tbar" hidden></div><div class="howto" id="howto"></div><div id="groot"></div></section>
+<section id="teacher" hidden></section>
 </div><script>window.__GAME_PAGE=1;/* Cloud database settings (Supabase project). Leave url/key empty to keep everything on each device only. */
 window.PZ_CFG=window.PZ_CFG||{url:'https://usyrhqpymveqgvjrmfbv.supabase.co',key:'sb_publishable_aW4QYAtcc982G9FPdVlj8g_X52CbKbe'};
 
@@ -462,11 +481,11 @@ function showIntro(g){
 function cleanup(){closeIntro();if(!ctx)return;ctx.cleanups.forEach(f=>{try{f()}catch(e){}});ctx=null;document.querySelectorAll('.overlay').forEach(o=>o.remove());}
 const ROOT=(()=>{let p=location.pathname.replace(/index\.html$/,'');const sg=p.split('/').filter(Boolean);if(sg.length&&/^[a-z0-9_-]+$/.test(sg[sg.length-1])&&window.__GAME_PAGE){sg.pop();}return '/'+sg.join('/')+(sg.length?'/':'');})();
 function pushUrl(path,rep){try{if(location.pathname!==path){history[rep?'replaceState':'pushState'](null,'',path+location.search.replace(/[?&]l=\d+/,''));}}catch(e){}}
-function goMenu(nopush){cleanup();if(nopush!==true)pushUrl(ROOT);$('#game').hidden=true;$('#menu').hidden=false;renderMenu();window.scrollTo(0,0);}
+function goMenu(nopush){cleanup();if(nopush!==true)pushUrl(ROOT);$('#game').hidden=true;$('#teacher').hidden=true;$('#menu').hidden=false;renderMenu();window.scrollTo(0,0);}
 const curLv={};
 function openGame(id,lv,fromRoute){
   cleanup();const g=REG.find(x=>x.id===id);lv=lv||curLv[id]||1;curLv[id]=lv;const N=g.levels.length;
-  $('#menu').hidden=true;$('#game').hidden=false;
+  $('#menu').hidden=true;$('#teacher').hidden=true;$('#game').hidden=false;
   $('#gtitle').innerHTML=`<span class="gemo">${g.emoji}</span> ${g.name}`;
   document.documentElement.style.setProperty('--gc',g.color);$('#gbar').style.setProperty('--c',g.color);
   const pills=$('#glevels');pills.innerHTML='';pills.classList.toggle('long',N>24);pills.classList.remove('open');{const lb=$('#lvbtn');lb.textContent='Levels '+lv+'/'+N+' ▾';lb.onclick=()=>{pills.classList.toggle('open');if(N>24&&pills.classList.contains('open')){const c=pills.children[lv-1];if(c)pills.scrollLeft=c.offsetLeft-pills.clientWidth/2+c.offsetWidth/2;}};}
@@ -483,6 +502,7 @@ function openGame(id,lv,fromRoute){
   window.scrollTo(0,0);
   try{const base=ROOT+id+'/',hs='#'+lv;if(location.pathname!==base||location.hash!==hs){const u=base+location.search.replace(/[?&]l=\d+/,'')+hs;history[fromRoute?'replaceState':'pushState'](null,'',u);}}catch(e){}
   document.title=g.name+' · Level '+lv+' · Maths Puzzle Arcade';
+  teacherBar(id,lv);
   g.mount(root,lv,ctx);
   if(g.anim){let seen=false;try{seen=localStorage.getItem('pz-intro-'+id)==='1';}catch(e){}if(!seen){try{localStorage.setItem('pz-intro-'+id,'1');}catch(e){}setTimeout(()=>{if(ctx&&ctx.id===id)showIntro(g);},200);}}
 }
@@ -501,7 +521,7 @@ function showWin(title,text,again,againLabel,first,stay){
 }
 document.addEventListener('keydown',e=>{if(ctx&&ctx.keys&&!e.target.matches('input,textarea'))ctx.keys(e)});
 $('#back').onclick=()=>{goMenu();document.title='Maths Puzzle Arcade';};
-function routeNow(){const sg=location.pathname.split('/').filter(Boolean);const gid=sg[sg.length-1];if(REG.some(x=>x.id===gid)){const m=/^#(\d+)$/.exec(location.hash);const g=REG.find(x=>x.id===gid);const n=m?+m[1]:0;openGame(gid,n>=1&&n<=g.levels.length?n:undefined,true);}else goMenu(true);}
+function routeNow(){const sg=location.pathname.split('/').filter(Boolean);const gid=sg[sg.length-1];if(gid==='teacher'&&window.__GAME_PAGE){if(isTeacher())showTeacher(true);else{pushUrl(ROOT,true);goMenu(true);}return;}if(REG.some(x=>x.id===gid)){const m=/^#(\d+)$/.exec(location.hash);const g=REG.find(x=>x.id===gid);const n=m?+m[1]:0;openGame(gid,n>=1&&n<=g.levels.length?n:undefined,true);}else goMenu(true);}
 window.addEventListener('popstate',routeNow);
 
 /* reusable number pad: returns element; onKey gets '0'-'9','-','.','del','ok' */
@@ -518,7 +538,7 @@ function renderMenu(){
   CATS.forEach(c=>{const b=el('button','cat'+(c===curCat?' on':''),(CAT_EMO[c]?CAT_EMO[c]+' ':'')+c);b.onclick=()=>{curCat=c;curTag='All';renderMenu()};bar.appendChild(b);});
   const g=$('#cards');g.innerHTML='';g.classList.toggle('newsgrid',curCat==='News and Video');
   const total=REG.reduce((a,G)=>a+doneCount(G.id),0),all=REG.reduce((a,G)=>a+G.levels.length,0);
-  const u=me()||{done:{}};$('#overall').innerHTML=`<button class="who" id="who">👤 ${esc(DB.cur||'Player')} ▾</button><span class="pts">⭐ ${ptsOf(u)} pts</span><span>${total} / ${all} levels</span>`;$('#who').onclick=()=>me()?showProfile():showLogin(true);
+  const u=me()||{done:{}};$('#overall').innerHTML=`<button class="who" id="who">👤 ${esc(DB.cur||'Player')} ▾</button><span class="pts">⭐ ${ptsOf(u)} pts</span><span>${total} / ${all} levels</span>${isTeacher()?'<button class="who tbtn" id="tdash">🏫 Teacher</button>':''}`;$('#who').onclick=()=>me()?showProfile():showLogin(true);const td=$('#tdash');if(td)td.onclick=()=>showTeacher();
   const tb=$('#tagbar');tb.innerHTML='';
   if(curCat==='News and Video'){tb.hidden=true;renderNews(g);return;}
   tb.hidden=false;
@@ -630,10 +650,10 @@ const dataOf=u=>({v:2,done:u.done,rv:u.rv||{}});
 const getSess=()=>LS.get('pz-sess',null);
 const setSess=s=>{if(s)LS.set('pz-sess',s);else try{localStorage.removeItem('pz-sess')}catch(e){}};
 
-function adoptUser(name,remoteData,h,legacyMerge){
+function adoptUser(name,remoteData,h,legacyMerge,teacher){
   let u=DB.users[name];
   if(!u)u=DB.users[name]={created:Date.now(),done:{},rv:{},ev:[]};
-  const m=mergeData(u,remoteData);u.done=m.done;u.rv=m.rv;u.h=CLOUD?undefined:h;if(!u.ev)u.ev=[];
+  const m=mergeData(u,remoteData);u.done=m.done;u.rv=m.rv;u.h=CLOUD?undefined:h;u.teacher=!!teacher;if(!u.ev)u.ev=[];
   if(legacyMerge){const g=DB.users.Guest;if(g){const m2=mergeData(u,g);u.done=m2.done;u.rv=m2.rv;delete DB.users.Guest;}}
   DB.cur=name;done=u.done;
   setSess({name,h});LS.set('pz-last',name);persist();
@@ -644,7 +664,7 @@ async function nameFree(nameRaw){
   if(CLOUD){const r=await rpc('pz_name_free',{p_name:name});if(r&&r.ok)return{ok:true,state:r.free?'free':'taken'};return{ok:false,state:'unknown'};}
   return{ok:true,state:Object.keys(DB.users).some(k=>k.toLowerCase()===name.toLowerCase()&&k!=='Guest')?'taken':'free'};
 }
-async function doRegister(nameRaw,pin){
+async function doRegister(nameRaw,pin,tkey){
   const name=cleanName(nameRaw);
   if(!validName(name))return{ok:false,msg:'Name must be 2–16 letters or numbers.'};
   if(!/^\d{4}$/.test(pin))return{ok:false,msg:'PIN must be exactly 4 digits.'};
@@ -652,9 +672,9 @@ async function doRegister(nameRaw,pin){
   let migrate=false;
   if(DB.users.Guest&&Object.keys(DB.users.Guest.done||{}).length)migrate=confirm('Move the progress saved under “Guest” on this device into your new account?');
   if(CLOUD){
-    const r=await rpc('pz_register',{p_name:name,p_hash:h,p_data:{v:2,done:{},rv:{}}});
-    if(!r.ok)return{ok:false,msg:r.error==='taken'?'That name is already taken. Please choose another one.':r.error==='network'?'Cannot reach the server. Check your internet and try again.':r.error==='bad_name'?'Name must be 2–16 letters or numbers.':'Could not register. Please try again.'};
-    adoptUser(r.name||name,null,h,migrate);
+    const r=tkey?await rpc('pz_register_teacher',{p_name:name,p_hash:h,p_key:tkey}):await rpc('pz_register',{p_name:name,p_hash:h,p_data:{v:2,done:{},rv:{}}});
+    if(!r.ok)return{ok:false,msg:r.error==='bad_key'?'Wrong teacher key.':r.error==='taken'?'That name is already taken. Please choose another one.':r.error==='network'?'Cannot reach the server. Check your internet and try again.':r.error==='bad_name'?'Name must be 2–16 letters or numbers.':'Could not register. Please try again.'};
+    adoptUser(r.name||name,null,h,migrate,!!tkey);
   }else{
     if(Object.keys(DB.users).some(k=>k.toLowerCase()===name.toLowerCase()&&k!=='Guest'))return{ok:false,msg:'That name is already taken on this device. Please choose another one.'};
     adoptUser(name,null,h,migrate);
@@ -669,7 +689,7 @@ async function doLogin(nameRaw,pin){
   if(CLOUD){
     const r=await rpc('pz_login',{p_name:name,p_hash:h});
     if(!r.ok)return{ok:false,msg:r.error==='no_user'?'No player with that name. Tap “New player” to register.':r.error==='bad_pin'?'Wrong PIN. Try again.':r.error==='locked'?'Too many wrong tries. Please wait 5 minutes.':r.error==='network'?'Cannot reach the server. Check your internet and try again.':'Could not log in. Please try again.'};
-    adoptUser(r.name||name,r.data,h,false);
+    adoptUser(r.name||name,r.data,h,false,r.teacher);
   }else{
     const key=Object.keys(DB.users).find(k=>k.toLowerCase()===name.toLowerCase()&&k!=='Guest');
     if(!key)return{ok:false,msg:'No player with that name on this device. Tap “New player” to register.'};
@@ -693,7 +713,7 @@ function showLogin(first){
      <input id="un" class="tin" maxlength="16" placeholder="YOUR NAME (CAPITAL LETTERS)" autocomplete="username" autocapitalize="characters" value="${mode==='in'?esc(LS.get('pz-last','')):''}">
      ${mode==='new'?'<div class="avail" id="avail">&nbsp;</div>':''}
      <input id="up" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="4-digit PIN" autocomplete="${mode==='in'?'current-password':'new-password'}">
-     ${mode==='new'?'<input id="up2" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Type the PIN again" autocomplete="off"><p class="small">Names are always in CAPITAL LETTERS. Pick a name nobody else uses and a PIN you can remember. Your PIN keeps your progress safe.</p>':''}
+     ${mode==='new'?'<input id="up2" class="tin" type="password" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="Type the PIN again" autocomplete="off"><p class="small">Names are always in CAPITAL LETTERS. Pick a name nobody else uses and a PIN you can remember. Your PIN keeps your progress safe.</p>'+(CLOUD?'<label class="tchk"><input type="checkbox" id="ist"> 🏫 I am a teacher</label><input id="utk" class="tin" type="password" placeholder="Teacher key" autocomplete="off" hidden>':''):''}
      <div class="msg" id="lmsg">&nbsp;</div><div class="row"><button class="btn" id="go">${mode==='in'?'Log in ▶':'Register & play ▶'}</button></div>
      <p class="small">${CLOUD?'☁ Your progress is saved online.':'📱 Your progress is saved on this device only.'}</p>`;
     box.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;draw();});
@@ -701,11 +721,14 @@ function showLogin(first){
       const n=$('#un',box).value,p=$('#up',box).value.trim(),msg=$('#lmsg',box),btn=$('#go',box);
       if(mode==='new'&&p!==$('#up2',box).value.trim()){msg.textContent='The two PINs are not the same.';return;}
       btn.disabled=true;msg.textContent='Please wait…';
-      const r=mode==='in'?await doLogin(n,p):await doRegister(n,p);
+      const ist=$('#ist',box),tk=ist&&ist.checked?$('#utk',box).value:'';
+      if(ist&&ist.checked&&!tk){btn.disabled=false;msg.textContent='Please type the teacher key.';return;}
+      const r=mode==='in'?await doLogin(n,p):await doRegister(n,p,tk);
       btn.disabled=false;
       if(!r.ok){msg.textContent=r.msg;return;}
       o.remove();renderMenu();toast('Hi '+r.name+'! 👋');
       if(CLOUD){flushEvents();}
+      if(isTeacher())showTeacher();
     };
     const un=$('#un',box);un.oninput=()=>{const a=un.selectionStart,z=un.selectionEnd;un.value=un.value.toUpperCase();try{un.setSelectionRange(a,z)}catch(e){}};
     if(mode==='new'){let tm=null,seq=0;const av=$('#avail',box);
@@ -714,6 +737,7 @@ function showLogin(first){
           av.className='avail '+(r.state==='free'?'ok':'bad');
           av.textContent=r.state==='free'?'✅ This name is free':r.state==='taken'?'❌ This name is already taken — try another':r.state==='bad'?'Use 2–16 letters or numbers':'Could not check the name right now';},450);};
       un.addEventListener('input',chk);}
+    const ist0=$('#ist',box);if(ist0)ist0.onchange=()=>{$('#utk',box).hidden=!ist0.checked;};
     $('#go',box).onclick=go;box.querySelectorAll('input').forEach(i=>i.onkeydown=e=>{if(e.key==='Enter')go();});
   }
   draw();
@@ -795,7 +819,24 @@ async function flushEvents(){
   evBusy=false;
   if(r&&r.ok){q=LS.get('pz-evq',[]).slice(batch.length);LS.set('pz-evq',q);if(q.length)evSoon();}
 }
-document.addEventListener('visibilitychange',()=>{if(document.hidden){flushEvents();pushNow();}});
+
+/* ---------- teacher flag (the server re-checks it on every teacher call) ---------- */
+function isTeacher(){const u=me();return !!(CLOUD&&u&&u.teacher);}
+
+/* ---------- play time: counts only while the game is open, the tab is visible and the student is touching the screen ---------- */
+const PT={g:null,lv:0,acc:0,act:Date.now()};
+function ptFlush(){
+  if(PT.g&&PT.acc>0&&me()&&!isTeacher()){logEvent(PT.g,PT.lv,'time',{secs:PT.acc});}
+  PT.acc=0;
+}
+['pointerdown','keydown','touchstart','scroll'].forEach(e=>window.addEventListener(e,()=>{PT.act=Date.now();},{passive:true,capture:true}));
+setInterval(()=>{
+  const g=typeof ctx!=='undefined'&&ctx?ctx.id:null,lv=g?ctx.lv:0;
+  if(g!==PT.g||lv!==PT.lv){ptFlush();PT.g=g;PT.lv=lv;}
+  if(g&&!document.hidden&&Date.now()-PT.act<60000){PT.acc+=5;if(PT.acc>=30)ptFlush();}
+},5000);
+document.addEventListener('visibilitychange',()=>{if(document.hidden){ptFlush();flushEvents();pushNow();}});
+window.addEventListener('pagehide',()=>{ptFlush();flushEvents();});
 
 /* ---------- start-up ---------- */
 async function bootAccount(){
@@ -803,12 +844,12 @@ async function bootAccount(){
   if(s&&DB.users[s.name]){DB.cur=s.name;loadUser();
     if(CLOUD){
       const r=await rpc('pz_login',{p_name:s.name,p_hash:s.h});
-      if(r&&r.ok){const u=me(),m=mergeData(u,r.data);u.done=m.done;u.rv=m.rv;done=u.done;LS.set('pz-v3',DB);dirty=true;pushNow();renderMenu();flushEvents();}
+      if(r&&r.ok){const u=me(),m=mergeData(u,r.data);u.done=m.done;u.rv=m.rv;u.teacher=!!r.teacher;done=u.done;LS.set('pz-v3',DB);dirty=true;pushNow();renderMenu();flushEvents();}
       else if(r&&(r.error==='bad_pin'||r.error==='no_user')){setSess(null);DB.cur=null;done={};showLogin(true);}
     }
   }else if(s&&CLOUD){ // session but no local cache: pull from the cloud
     const r=await rpc('pz_login',{p_name:s.name,p_hash:s.h});
-    if(r&&r.ok){adoptUser(r.name||s.name,r.data,s.h,false);renderMenu();}else{setSess(null);showLogin(true);}
+    if(r&&r.ok){adoptUser(r.name||s.name,r.data,s.h,false,r.teacher);renderMenu();}else{setSess(null);showLogin(true);}
   }else{DB.cur=null;done={};showLogin(true);}
 }
 
@@ -3277,6 +3318,97 @@ REG.push({id:'quad',name:'Quadratic Factoriser',emoji:'🔷',color:'#d6336c',cat
   build();
  }});
 })();
+
+/* ---------- teacher area: dashboard (all games) + per-level bar ---------- */
+let TS=null;
+async function teacherStats(force){
+  if(!force&&TS&&Date.now()-TS.at<60000)return TS.data;
+  const s=getSess();if(!s)return{ok:false,error:'auth'};
+  const r=await rpc('pz_teacher_stats',{p_name:s.name,p_hash:s.h});
+  if(r&&r.ok)TS={at:Date.now(),data:r};
+  return r;
+}
+const tErr=r=>r&&r.error==='not_teacher'?'This account is not a teacher account.':r&&r.error==='network'?'Cannot reach the server. Check your internet.':'Could not load. Has supabase-teacher.sql been run in Supabase?';
+function fmtDur(s){s=Math.round(s||0);if(s<60)return s+'s';const m=Math.round(s/60);if(m<60)return m+' min';return Math.floor(m/60)+' h '+String(m%60).padStart(2,'0')+' m';}
+const niceType=t=>String(t).replace(/_/g,' ');
+
+/* index the raw rows from pz_teacher_stats */
+function indexStats(r){
+  const lv={},pg={},tg={},tp={};
+  (r.levels||[]).forEach(x=>{(lv[x.g]=lv[x.g]||{})[x.l]=x.n;});
+  (r.pg||[]).forEach(x=>{(pg[x.g]=pg[x.g]||{})[x.p]=x.n;});
+  (r.time||[]).forEach(x=>{tg[x.g]=(tg[x.g]||0)+x.secs;(tp[x.g]=tp[x.g]||{})[x.p]=x.secs;});
+  return{lv,pg,tg,tp};
+}
+
+/* ---------- dashboard page ---------- */
+function showTeacher(fromRoute){
+  if(!isTeacher())return;
+  cleanup();
+  $('#menu').hidden=true;$('#game').hidden=true;$('#teacher').hidden=false;
+  document.documentElement.style.setProperty('--gc','#6741d9');
+  document.title='Teacher dashboard · Maths Puzzle Arcade';
+  if(!fromRoute)pushUrl(ROOT+'teacher/');
+  window.scrollTo(0,0);
+  drawTeacher(false);
+}
+async function drawTeacher(force){
+  const T=$('#teacher');
+  T.innerHTML=`<div class="tdh"><button class="back" id="tback">← Menu</button><h2>🏫 Teacher</h2><button class="back" id="trf">⟳ Refresh</button></div><div id="tbody" class="tload">Loading…</div>`;
+  $('#tback').onclick=()=>{goMenu();document.title='Maths Puzzle Arcade';};
+  $('#trf').onclick=()=>drawTeacher(true);
+  const r=await teacherStats(force);
+  const body=$('#tbody');if(!body||T.hidden)return;
+  if(!r||!r.ok){body.className='tload';body.textContent=tErr(r);return;}
+  const X=indexStats(r);
+  const rows=REG.map(G=>{
+    const lvs=X.lv[G.id]||{},ps=X.pg[G.id]||{};
+    const passed=Object.values(lvs).reduce((a,b)=>a+b,0);
+    return{G,lvs,ps,passed,players:Object.keys(ps).length,secs:X.tg[G.id]||0};
+  }).sort((a,b)=>b.secs-a.secs||b.passed-a.passed);
+  const totSecs=rows.reduce((a,x)=>a+x.secs,0),totPass=rows.reduce((a,x)=>a+x.passed,0);
+  body.className='';
+  body.innerHTML=`<div class="tsum"><div><b>${r.students}</b><span>students</span></div><div><b>${totPass}</b><span>levels passed</span></div><div><b>${fmtDur(totSecs)}</b><span>play time</span></div></div>
+   <div class="tcards">${rows.map(x=>`<div class="tcard${x.passed||x.secs?'':' idle'}" data-g="${x.G.id}" style="--c:${x.G.color}">
+     <button class="tch" aria-expanded="false"><span class="te">${x.G.emoji}</span><span class="tgn">${esc(x.G.name)}</span><span class="tm"><i>✅ ${x.passed}</i><i>👥 ${x.players}</i><i>⏱ ${fmtDur(x.secs)}</i></span><span class="tcv">▾</span></button>
+     <div class="tcb" hidden></div></div>`).join('')}</div>
+   <div class="row"><button class="btn alt" id="tcsv">📋 Copy as table (CSV)</button></div>`;
+  body.querySelectorAll('.tcard').forEach(c=>{
+    const x=rows.find(z=>z.G.id===c.dataset.g),hd=c.querySelector('.tch'),bd=c.querySelector('.tcb');
+    hd.onclick=()=>{const open=bd.hidden;bd.hidden=!open;hd.setAttribute('aria-expanded',open);c.classList.toggle('open',open);if(open&&!bd.innerHTML)bd.innerHTML=teacherGameBody(x,X);
+      bd.querySelectorAll('.tlp').forEach(b=>b.onclick=()=>openGame(x.G.id,+b.dataset.l));};
+  });
+  $('#tcsv').onclick=()=>{const out=[['Game','Student','Levels passed','Total levels','Play time (s)'].join(',')];
+    REG.forEach(G=>{const ps=X.pg[G.id]||{},tp=X.tp[G.id]||{};new Set([...Object.keys(ps),...Object.keys(tp)]).forEach(n=>out.push([G.name,n.replace(/,/g,' '),ps[n]||0,G.levels.length,tp[n]||0].join(',')));});
+    copyText(out.join('\n'),'Table copied — paste into Excel / Sheets');};
+}
+function teacherGameBody(x,X){
+  const G=x.G,N=G.levels.length,tp=X.tp[G.id]||{};
+  const names=[...new Set([...Object.keys(x.ps),...Object.keys(tp)])].sort((a,b)=>(x.ps[b]||0)-(x.ps[a]||0)||a.localeCompare(b));
+  const stu=names.map(n=>`<div class="ts"><span class="tsn">${esc(n)}</span><span class="tsb"><i style="width:${(x.ps[n]||0)/N*100}%"></i></span><span class="tsv">${x.ps[n]||0}/${N}</span><span class="tst">${fmtDur(tp[n]||0)}</span></div>`).join('')||'<p class="small">Nobody has played this game yet.</p>';
+  const pills=G.levels.map((_,i)=>`<button class="tlp" data-l="${i+1}"><b>${i+1}</b><small>${x.lvs[i+1]||0}</small></button>`).join('');
+  return `<h4>Students — levels passed</h4>${stu}<h4>Students who passed each level <small>(tap to open)</small></h4><div class="tlv">${pills}</div>`;
+}
+
+/* ---------- bar shown on every level page for teachers ---------- */
+async function teacherBar(id,lv){
+  const b=$('#tbar');if(!b)return;
+  if(!isTeacher()){b.hidden=true;b.innerHTML='';return;}
+  b.hidden=false;b.innerHTML='<span class="tb-n">👩‍🏫 …</span>';
+  const r=await teacherStats();
+  if(!ctx||ctx.id!==id||ctx.lv!==lv)return;
+  if(!r||!r.ok){b.innerHTML=`<span class="tb-n">${esc(tErr(r))}</span>`;return;}
+  const n=((indexStats(r).lv[id]||{})[lv])||0;
+  b.innerHTML=`<span class="tb-n">👩‍🏫 <b>${n}</b> / ${r.students} students passed</span><button class="tb-b" id="tmis">❓ Mistakes</button><div class="tb-m" id="tmbox" hidden></div>`;
+  const btn=$('#tmis',b),box=$('#tmbox',b);
+  btn.onclick=async()=>{
+    if(!box.hidden){box.hidden=true;return;}
+    box.hidden=false;box.textContent='Loading…';
+    const s=getSess(),m=await rpc('pz_teacher_mistakes',{p_name:s.name,p_hash:s.h,p_game:id,p_level:lv});
+    if(!m||!m.ok){box.textContent=tErr(m);return;}
+    box.innerHTML=(m.rows&&m.rows.length)?m.rows.map(x=>`<div class="tmr"><span class="tmt">${esc(niceType(x.t))}</span><span class="tmc">${x.n}×</span><span class="tms">${x.students} 👥</span></div>`).join(''):'<span class="small">No mistakes recorded for this level yet.</span>';
+  };
+}
 
 
 renderMenu();bootAccount();if(window.__GAME_PAGE)routeNow();</script></body></html>
