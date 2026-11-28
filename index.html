@@ -505,6 +505,7 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .px .t.dsv{background:#fff;border:2px solid #b197fc;padding:4px 5px;box-shadow:0 2px 0 rgba(0,0,0,.12)}.px .t.dsv .db{min-width:15px;height:17px;line-height:17px;font-size:11px;padding:0 2px}.px .dg{max-width:128px}.px .db.cx{opacity:.5}
 .px .db.one{background:#fff;border:1.5px solid #adb5bd;color:#495057}.px .db.c3{background:#ff8787;color:#4a0a0a}
 .px .dg.gx{opacity:.5;border-style:dotted}.px .dg.gg:not(.gx){border:2px solid #5f3dc4;background:#f3f0ff}
+.px .t.cvb{position:relative;cursor:pointer}.px .t.cvb::after{content:'⇄';position:absolute;right:-6px;top:-9px;font-size:12px;background:#12b886;color:#fff;border-radius:50%;width:17px;height:17px;line-height:17px;text-align:center}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><button class="back" id="lvbtn">Levels ▾</button><button class="back" id="pbtn">👤</button><div class="pills" id="glevels"></div></div>
@@ -4801,10 +4802,11 @@ function Q(o){
     const tl=v==null?0:f.tl(v),level=v!=null&&Math.abs(tl)<1e-7;
     const ang=v==null?0:Math.max(-16,Math.min(16,tl*7));   /* same sign as Balance Scale: positive = left pan lower */
     const prev=q._a==null?0:q._a;q._a=ang;
-    const ds=f.dis&&!o.build,sd=ds?(f.dis.side||'L'):'',dz=ds&&q.dis;const Lt=String(f.L(T,v)),Rt=o.build?stH(bs,q.st,true):String(f.R(T,v)),Lh=dz&&sd==='L'?dsH(f.dis):Lt,Rh=dz&&sd==='R'?dsH(f.dis):Rt;
+    const dl=o.build?[]:[].concat(f.dis||[]),dz=dl.length&&q.dis&&!answered;const Lt=String(f.L(T,v)),Rt=o.build?stH(bs,q.st,true):String(f.R(T,v)),sp=sd=>dl.find(x=>(x.side||'L')===sd),Lh=dz&&sp('L')?dsH(sp('L')):Lt,Rh=dz&&sp('R')?dsH(sp('R')):Rt;
     const gl=v==null&&Lh.includes('?'),gr=v==null&&Rh.includes('?');   /* dashed outline on the pan that still holds the “?” */
     const chip=(x,g,c)=>`<div class="t chip ${g?'q':c||'tn'} big">${`<span>${x}</span>`}</div>`;
-    const dcl=sd?(dz?' dsv':' dsb'):'';const left=chip(Lh,gl,o.build?bcls(bs):'tn').replace('t chip',`t chip${sd==='L'?dcl:''}`),right=o.build?Rh:chip(Rh,gr,'tn').replace('t chip',`t chip${sd==='R'?dcl:''}`);
+    const dmk=sd=>{if(o.build)return '';const base=sd==='L'?Lt:Rt;if(f.conv===sd&&q.forms.length>1&&!answered)return ' cvb';return sp(sd)&&!base.includes('?')&&!answered?(dz?' dsv':' dsb'):'';};   /* cvb: tap converts log ↔ index form; dsb/dsv: tap dissolves into blocks / folds back */
+    const left=chip(Lh,gl,o.build?bcls(bs):'tn').replace('t chip',`t chip${dmk('L')}`),right=o.build?Rh:chip(Rh,gr,'tn').replace('t chip',`t chip${dmk('R')}`);
     const ev=o.build?evalSt(q.st):null;
     let top;
     if(o.build){
@@ -4832,7 +4834,7 @@ function Q(o){
     const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
     place();q._raf=requestAnimationFrame(step);
     if(q.build&&api)bindBuild(root,api,pans[1]);
-    else if(api&&api.open){root.querySelectorAll('.t.dsb,.t.dsv').forEach(t=>{t.style.cursor='pointer';t.onclick=()=>{q.dis=!q.dis;api.set(api.buf());};});root.querySelectorAll('.t.q').forEach(t=>{t.style.cursor='pointer';t.onclick=api.open;});}};
+    else if(api&&api.open){root.querySelectorAll('.t.dsb,.t.dsv').forEach(t=>{t.style.cursor='pointer';t.onclick=()=>{q.dis=!q.dis;api.set(api.buf());};});root.querySelectorAll('.t.cvb').forEach(t=>{t.style.cursor='pointer';t.onclick=()=>{q.form=1-(q.form||0);q.dis=false;api.set(api.buf());};});root.querySelectorAll('.t.q').forEach(t=>{t.style.cursor='pointer';t.onclick=api.open;});}};
   /* build mode: every operation (×a, ÷a, raise the whole pan to a power, take a root) acts on the right pan and adds a line to the working */
   function bindBuild(root,api,pan){
     const lg=root.querySelector('#bklog');if(lg)lg.scrollTop=1e5;
@@ -4859,10 +4861,12 @@ function Q(o){
   return q;
 }
 /* an index equation  b^x = N  and its log form  x = log_b N  (answer x = e) */
+function cbase(b,e){const N=Math.pow(b,e);for(let c=2;c<=b;c++){const u=Math.round(Math.log(b)/Math.log(c)),v=Math.round(Math.log(N)/Math.log(c));if(u>=1&&Math.abs(Math.pow(c,u)-b)<1e-9&&Math.abs(Math.pow(c,v)-N)<1e-9*Math.max(1,N)&&Math.abs(v)<=9)return{c,u,v};}return null;}
 function idx(b,e,Nh,first,o){
-  const D=Number.isInteger(e)&&Math.abs(e)<=8?{side:'R',op:'blk',b,n:e}:null;   /* N breaks into e blocks of the base */
+  /* integer answer: N breaks into e blocks of the base. Otherwise both sides are written in a common base c: b = c^u (x groups of u blocks) and N = c^v (v blocks), so x = v ÷ u */
+  const cb=cbase(b,e),D=Number.isInteger(e)&&Math.abs(e)<=8?{side:'R',op:'blk',b,n:e}:cb?[{side:'L',op:'cbl',b:cb.c,u:cb.u},{side:'R',op:'blk',b:cb.c,n:cb.v}]:null;
   const iF={dis:D,L:T=>pw(b,T),R:()=>Nh,tl:v=>v-e,btn:'Show as a log equation'};
-  const lF={dis:D,L:T=>T,R:()=>lg(b,Nh),tl:v=>v-e,btn:'Show as an index equation'};
+  const lF={conv:'R',L:T=>T,R:()=>lg(b,Nh),tl:v=>v-e,btn:'Show as an index equation'};
   return Q(Object.assign({forms:first==='log'?[lF,iF]:[iF,lF]},o));
 }
 const valQ=(X,Lh,o,dis)=>Q(Object.assign({forms:[{dis,L:()=>Lh,R:T=>T,tl:v=>v>0?log2(X/v):8}]},o));
@@ -4896,6 +4900,7 @@ const dsH=d=>{const{op,b,m,n,k}=d;
     const h=a=>a.map(c=>`<i class="db c${c}">${bv(b)}</i>`).join(''),x=a=>a.map(c=>`<i class="db c${c} cx">${bv(b)}</i>`).join('');
     return `<span class="dz">${dFr(h(keep)+x(gone),x(gone))}</span>`;}
   if(op==='mix3')return `<span class="dz">${Array.from({length:k},(_,i)=>dDiv(b,m,n,i%2?2:1)).join('<span class="tmul">×</span>')}</span>`;
+  if(op==='cbl')return `<span class="gp"><span class="br">(</span>${dbk(b,d.u,1)}<span class="br">)</span><sup>?</sup></span>`;
   if(op==='blk')return `<span class="dz">${n<0?dFr(ONEB,dbk(b,-n,1)):n===0?ONEB:`<span class="dg">${dbk(b,n,1)}</span>`}</span>`;
   if(op==='root'){const nb=(c)=>`<i class="db c${c}">${d.r}</i>`,gp=(i,x)=>`<span class="dg gg${x?'':' gx'}">${Array.from({length:d.p},()=>nb(i%3+1)).join('')}</span>`;
     /* N = r^q is p·q blocks of r, split into q equal groups of p blocks: one group is the answer */
@@ -5016,14 +5021,14 @@ B10(){const b=BK(),k=pick([2,3]),p=pick([1,2,3].filter(x=>x!==k));return bq('B10
  G3(){const b=pick([2,3,5,10]),n=pick([2,3]);let a,D=null;if(R(0,1)){const kk=R(1,2);a=exp(b,kk);D={op:'lgs',b,add:Array(n).fill(kk),sub:0};}else a=R(2,6);return logLaw('G3',b,`${n} × ${lg(b,a)}`,Math.pow(a,n),`${a}<sup>${n}</sup>`,`A number in front becomes a power: ${n} × log<sub>${b}</sub> ${a} = log<sub>${b}</sub> ${a}<sup>${n}</sup> = log<sub>${b}</sub> ${Math.pow(a,n)}.`,D);},
  G4(){const b=pick([2,3,5,10]);let A,C,d,X,D=null;if(R(0,1)){const s1=R(1,3),t=R(1,3),u=R(1,s1+t-1);A=exp(b,s1);C=exp(b,t);d=exp(b,u);X=exp(b,s1+t-u);D={op:'lgs',b,add:[s1,t],sub:u};}else{d=pick([2,3,4,6]);let g=0;do{A=R(2,9);C=R(2,9);g++;}while(((A*C)%d||A===d||C===d)&&g<500);X=A*C/d;}return logLaw('G4',b,`${lg(b,A)} + ${lg(b,C)} − ${lg(b,d)}`,X,`${A} × ${C} ÷ ${d}`,`Add → multiply, subtract → divide: ${A} × ${C} ÷ ${d} = ${X}.`,D);},
  G5(){const b=pick([2,3,5]),k=R(1,3),c=R(2,6),a=c*exp(b,k);return Q({k:'G5',q:`Work out ${lg(b,a)} − ${lg(b,c)}.`,ans:k,forms:[
-   {dis:{op:'fcan',b,c,k},L:()=>`${lg(b,a)} − ${lg(b,c)}`,R:T=>T,tl:v=>k-v,btn:'Show in index form'},
+   {conv:'L',L:()=>`${lg(b,a)} − ${lg(b,c)}`,R:T=>T,tl:v=>k-v,btn:'Show in index form'},
    {dis:{op:'fcan',b,c,k},L:()=>`${a} ÷ ${c}`,R:T=>pw(b,T),tl:v=>(k-v)*log2(b),btn:'Show in log form'}],ex:`Subtract logs → divide: ${a} ÷ ${c} = ${exp(b,k)} = ${pw(b,k)}, so the answer is ${k}.`});},
  G6(){const c=pick([[2,5,1],[4,25,2],[5,20,2],[2,50,2],[25,40,3],[8,125,3],[5,200,3],[20,50,3],[4,250,3]]),[a,d,k]=c;return Q({k:'G6',q:`Work out log ${a} + log ${d}. (log means log<sub>10</sub>)`,ans:k,forms:[
    {L:()=>`log ${a} + log ${d}`,R:T=>T,tl:v=>k-v,btn:'Show in index form'},
    {L:()=>`${a} × ${d}`,R:T=>pw(10,T),tl:v=>(k-v)*log2(10),btn:'Show in log form'}],ex:`Add logs → multiply: ${a} × ${d} = ${a*d} = ${pw(10,k)}, so the answer is ${k}.`});},
  G7(){const b=pick([2,3,5,10]);let c,m,D=null;if(R(0,1)){const t=R(1,2),u=R(1,2);c=exp(b,t);m=exp(b,u);D={op:'lgs',b,add:[2*t+u],sub:2*t};}else{c=R(2,4);m=R(2,5);}const a=c*c*m,X=m;return logLaw('G7',b,`${lg(b,a)} − 2 × ${lg(b,c)}`,X,`${a} ÷ ${c}<sup>2</sup>`,`2 × log<sub>${b}</sub> ${c} = log<sub>${b}</sub> ${c*c}. Then subtract → divide: ${a} ÷ ${c*c} = ${X}.`,D);},
  G8(){const b=pick([2,3,5]),k=R(1,3),n=R(2,4),a=exp(b,k);return Q({k:'G8',q:`Work out ${lg(b,a+'<sup>'+n+'</sup>')}.`,ans:k*n,forms:[
-   {dis:{op:'pow',b,m:k,n},L:()=>lg(b,a+'<sup>'+n+'</sup>'),R:T=>T,tl:v=>k*n-v,btn:'Show in index form'},
+   {conv:'L',L:()=>lg(b,a+'<sup>'+n+'</sup>'),R:T=>T,tl:v=>k*n-v,btn:'Show in index form'},
    {dis:{side:'R',op:'pow',b,m:k,n},L:T=>pw(b,T),R:()=>`${a}<sup>${n}</sup>`,tl:v=>(v-k*n)*log2(b),btn:'Show in log form'}],ex:`${n} × log<sub>${b}</sub> ${a} = ${n} × ${k} = ${k*n}.`});}
 };
 /* an index-law question: balance of the numbers form, log version one tap away */
@@ -5035,7 +5040,7 @@ function lawQ(k,b,L,s,logL,logW,ex,dis){
 /* a log-law question: log version, with an index version (raise the base to both sides) one tap away */
 function logLaw(k,b,Lh,X,indexH,ex,dis){
   return Q({k,q:`${Lh} = ${lg(b,'?')}. What goes in the box?`,ans:X,forms:[
-   {dis,L:()=>Lh,R:T=>lg(b,T),tl:v=>v>0?log2(X/v):8,btn:'Show in index form'},
+   {conv:'L',L:()=>Lh,R:T=>lg(b,T),tl:v=>v>0?log2(X/v):8,btn:'Show in index form'},
    {dis,L:()=>indexH,R:T=>T,tl:v=>v>0?log2(X/v):8,btn:'Show in log form'}],ex});
 }
 
