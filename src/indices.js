@@ -107,7 +107,7 @@ function Q(o){
     return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}<div class="px ${level?'lv':''} ${answered?'done':''} ${o.ops&&o.ops.length&&!answered?'ops2':''}">${top}
      <div class="sc-scene" data-a="${ang}" data-p="${prev}"><svg class="sc-svg"></svg><div class="sc-beam"><i></i></div>
       <div class="sc-pan" data-p="L"><div class="sc-tiles">${left}</div><div class="sc-dish"></div></div><div class="sc-pan" data-p="R"><div class="sc-tiles">${right}</div><div class="sc-dish"></div></div>
-      <div class="sc-post"></div><div class="sc-base">${ctl}</div></div></div>${mh}`;
+      <div class="sc-post"></div><div class="sc-base">${ctl}</div></div></div>${TUTMAP[o.k]!=null?'<button class="tutb" id="tutb">🎓 Show me how</button>':''}`;
   };
   q.after=(root,api)=>{const sc=root.querySelector('.sc-scene');if(!sc)return;cancelAnimationFrame(q._raf);
     const beam=sc.querySelector('.sc-beam'),svg=sc.querySelector('.sc-svg'),pans=[...sc.querySelectorAll('.sc-pan')];
@@ -120,7 +120,7 @@ function Q(o){
       svg.setAttribute('viewBox',`0 0 ${w} ${sc.clientHeight||260}`);svg.innerHTML=sv+`<circle cx="${cx}" cy="${fy}" r="9" class="sc-pin big"/>`;};
     const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
     place();q._raf=requestAnimationFrame(step);
-    {const mb=root.querySelector('#mbtn');if(mb&&api)mb.onclick=()=>{q.ms=q.ms>=q.proc.length?0:q.ms+1;(api.redraw||api.set)(api.buf());};}
+    {const tbn=root.querySelector('#tutb');if(tbn)tbn.onclick=()=>openTut(TUTMAP[o.k],null);}
     if(q.solve&&api){const lg=root.querySelector('#bklog');if(lg)lg.scrollTop=1e5;
       root.querySelectorAll('[data-sop]').forEach(b=>b.onclick=()=>{const op=b.dataset.sop,sv=q.sv;if(!sCan[op](sv))return;const snap=JSON.parse(JSON.stringify(sv));sApply(op,sv);const e=sEq(sv);q.shist.push({tag:sTag[op][0],cls:sTag[op][1],L:e.L,R:e.R,snap});api.set(api.buf());});
       const un=root.querySelector('#sun');if(un)un.onclick=()=>{const h=q.shist.pop();if(h){q.sv=h.snap;api.set(api.buf());}};}
@@ -389,7 +389,7 @@ const D={B8:[3,['ix-law-pow']],B9:[5,['ix-frac']],B10:[6,['ix-frac','ix-frac-pq'
  F1:[4,['ix-frac']],F2:[4,['ix-frac']],F3:[5,['ix-frac']],F4:[6,['ix-frac','ix-frac-pq']],F5:[7,['ix-frac','ix-frac-pq','ix-frac-neg']],F6:[7,['ix-frac','ix-find-index']],
  L1:[3,['ix-law-mul']],L2:[3,['ix-law-div']],L3:[4,['ix-law-pow']],L4:[5,['ix-law-neg']],L5:[4,['ix-letters']],L6:[5,['ix-missing']],L7:[6,['ix-combine']],L8:[3,['ix-law-div','ix-eval']],
  C1:[4,['lg-convert','ix-find-index']],C2:[5,['lg-convert','lg-value']],C3:[5,['lg-value','lg-neg']],C4:[5,['lg-special']],C5:[7,['lg-value','lg-neg','lg-frac']],C6:[7,['lg-base']],C8:[8,['lg-convert','lg-neg','lg-frac']],
- G1:[6,['lg-add']],G2:[6,['lg-sub']],G3:[7,['lg-pow']],G4:[8,['lg-mix']],G5:[7,['lg-simplify','lg-sub']],G6:[7,['lg-simplify','lg-add']],G7:[8,['lg-mix','lg-pow']],G8:[7,['lg-pow','lg-simplify']],S1:[3,['lg-convert','ix-find-index']],S2:[5,['ix-find-index','ix-frac','lg-frac']],S3:[7,['ix-find-index','lg-convert','ix-law-pow']],S4:[8,['lg-convert','lg-value','ix-find-index']],T1:[1,['ix-find-base']],T2:[1,['ix-law-mul']],T3:[1,['ix-law-div']],T4:[1,['ix-law-pow']],T5:[1,['ix-neg','ix-zero']],T6:[1,['ix-frac','ix-frac-pq']],T7:[1,['lg-value','lg-convert']],T8:[1,['ix-find-index','lg-convert']],T9:[1,['lg-add','lg-sub']]};
+ G1:[6,['lg-add']],G2:[6,['lg-sub']],G3:[7,['lg-pow']],G4:[8,['lg-mix']],G5:[7,['lg-simplify','lg-sub']],G6:[7,['lg-simplify','lg-add']],G7:[8,['lg-mix','lg-pow']],G8:[7,['lg-pow','lg-simplify']],S1:[3,['lg-convert','ix-find-index']],S2:[5,['ix-find-index','ix-frac','lg-frac']],S3:[7,['ix-find-index','lg-convert','ix-law-pow']],S4:[8,['lg-convert','lg-value','ix-find-index']]};
 const clamp=d=>Math.max(1,Math.min(10,d));
 /* one level = one question.  A level is named  “skill · easy|medium|hard”; the difficulty word is worked out from the question tags, the same way the player profile does it. */
 const LVS=[
@@ -404,9 +404,10 @@ const LVS=[
  ['Mixed indices',['R2','Z3','N2','F4','L1','L4','L7']],['Mixed logs and laws',['C2','C5','G1','G2','G3','G4','G7']]];
 
 /* ---- animated tutorials: blocks slide, group, cancel and regroup on a small stage ---- */
-const GAP=31,tb=(id,t,c,x,y,o)=>Object.assign({id,k:'b',t,c,x,y},o||{}),tt=(id,h,x,y,o)=>Object.assign({id,k:'t',h,x,y},o||{}),
+const TOPY=40,GAP=31,tb=(id,t,c,x,y,o)=>Object.assign({id,k:'b',t,c,x,y},o||{}),tt=(id,h,x,y,o)=>Object.assign({id,k:'t',h,x,y},o||{}),
   tbar=(id,x,y,w,o)=>Object.assign({id,k:'bar',x,y,w},o||{}),tbox=(id,x,y,w,h,o)=>Object.assign({id,k:'box',x,y,w,h},o||{});
 const TF=(cap,eq,items)=>({cap,eq,items}),BLK=(pre,b,n,c,x0,y,o)=>Array.from({length:n},(_,i)=>tb(pre+i,bv(b),typeof c==='function'?c(i):c,x0+i*GAP,y,o));
+const pwc=(b,e,c)=>`<span class="pwr">${bv(b)}<sup class="ec${c}">${e}</sup></span>`;
 const rpt=(v,n)=>Array(n).fill(v).join(' × ');
 const TUTS=[
 {name:'make the same base',tags:['ix-find-base'],make(){const[b1,b2,c,u,v]=pick([[8,4,2,3,2],[9,27,3,2,3],[4,32,2,2,5],[25,125,5,2,3],[16,8,2,4,3],[27,9,3,3,2],[4,8,2,2,3]]);
@@ -415,23 +416,23 @@ const TUTS=[
    TF(`${b1} and ${b2} are different numbers. To compare them we need the same base.`,`${b1} &nbsp; ${b2}`,[big('n1',b1,90,70),big('n2',b2,210,70)]),
    TF(`Break ${b1} into ${c}s: ${rpt(c,u)}. That is ${u} blocks.`,`${b1} = ${rpt(c,u)}`,[big('n1',`${b1} =`,14,28),...r1,big('n2',b2,210,98)]),
    TF(`Break ${b2} into ${c}s too: ${rpt(c,v)}. That is ${v} blocks.`,`${b2} = ${rpt(c,v)}`,[big('n1',`${b1} =`,14,28),...r1,big('n2',`${b2} =`,14,96),...r2]),
-   TF(`Count the blocks: the count is the index.`,`${b1} = ${pw(c,u)} &nbsp; ${b2} = ${pw(c,v)}`,[big('n1',`${b1} =`,14,28),...r1,big('p1',pw(c,u),92+u*GAP+8,26),big('n2',`${b2} =`,14,96),...r2,big('p2',pw(c,v),92+v*GAP+8,94)]),
-   TF(`Now both are powers of ${c}. Same base!`,`${pw(b1,'x')} = ${b2} &nbsp;⇒&nbsp; (${pw(c,u)})<sup>x</sup> = ${pw(c,v)}`,[big('f1',`${pw(b1,'<var>x</var>')} = ${b2}`,80,40),big('f2','⬇',150,84),big('f3',`(${pw(c,u)})<sup><var>x</var></sup> = ${pw(c,v)}`,70,126)])]};}},
+   TF(`Count the blocks: the count is the index.`,`${b1} = ${pwc(c,u,1)} &nbsp; ${b2} = ${pwc(c,v,2)}`,[big('n1',`${b1} =`,14,28),...r1,big('p1',pwc(c,u,1),92+u*GAP+8,26),big('n2',`${b2} =`,14,96),...r2,big('p2',pwc(c,v,2),92+v*GAP+8,94)]),
+   TF(`Now both are powers of ${c}. Same base!`,`${pw(b1,'x')} = ${b2} &nbsp;⇒&nbsp; (${pwc(c,u,1)})<sup>x</sup> = ${pwc(c,v,2)}`,[big('f1',`${pw(b1,'<var>x</var>')} = ${b2}`,80,40),big('f2','⬇',150,84),big('f3',`(${pwc(c,u,1)})<sup><var>x</var></sup> = ${pwc(c,v,2)}`,70,126)])]};}},
 {name:'multiply powers',tags:['ix-law-mul'],make(){const b=pick([2,3,5,'a','x']),m=R(2,4),n=R(2,4),s=m+n,A=y=>BLK('a',b,m,1,44,y),B=(x,y,o)=>BLK('b',b,n,2,x,y,o);
-  return{title:`Multiply powers: ${pw(b,m)} × ${pw(b,n)}`,frames:[
-   TF(`${pw(b,m)} is ${m} blocks of ${bv(b)}. ${pw(b,n)} is ${n} blocks of ${bv(b)}.`,`${pw(b,m)} × ${pw(b,n)}`,[...A(24),...B(44,96),tt('x','×',14,60,{sz:26})]),
-   TF(`Multiplying means pushing all the blocks into one pile.`,`${pw(b,m)} × ${pw(b,n)}`,[...A(24),...B(44+m*GAP,24),tt('x','×',14,60,{sz:26,o:0})]),
+  return{title:`Multiply powers: ${pwc(b,m,1)} × ${pwc(b,n,2)}`,frames:[
+   TF(`${pwc(b,m,1)} is ${m} blocks of ${bv(b)}. ${pwc(b,n,2)} is ${n} blocks of ${bv(b)}.`,`${pwc(b,m,1)} × ${pwc(b,n,2)}`,[...A(24),...B(44,96),tt('x','×',14,60,{sz:26})]),
+   TF(`Multiplying means pushing all the blocks into one pile.`,`${pwc(b,m,1)} × ${pwc(b,n,2)}`,[...A(24),...B(44+m*GAP,24),tt('x','×',14,60,{sz:26,o:0})]),
    TF(`Count the blocks: ${m} + ${n} = ${s}.`,`${m} + ${n} = ${s}`,[...A(24),...B(44+m*GAP,24),tt('c',`${m} + ${n} = ${s}`,90,84,{sz:26})]),
-   TF(`${pw(b,m)} × ${pw(b,n)} = ${pw(b,s)}. Same base: add the indices.`,`${pw(b,m)} × ${pw(b,n)} = ${pw(b,s)}`,[...A(24),...B(44+m*GAP,24),tt('c',`${m} + ${n} = ${s}`,90,84,{sz:20,o:.35}),tt('r',`= ${pw(b,s)}`,110,118,{sz:30})])]};}},
+   TF(`${pwc(b,m,1)} × ${pwc(b,n,2)} = ${pw(b,s)}. Same base: add the indices.`,`${pwc(b,m,1)} × ${pwc(b,n,2)} = ${pw(b,s)}`,[...A(24),...B(44+m*GAP,24),tt('c',`${m} + ${n} = ${s}`,90,84,{sz:20,o:.35}),tt('r',`= ${pw(b,s)}`,110,118,{sz:30})])]};}},
 {name:'divide powers',tags:['ix-law-div'],make(){const b=pick([2,3,5,'a','x']),n=R(1,3),m=n+R(1,4),x0=44,mid=165-(m-n)*GAP/2;
   const top=(mode)=>Array.from({length:m},(_,i)=>{const gone=i>=m-n;return tb('t'+i,bv(b),gone?2:1,mode==='left'&&!gone?mid+i*GAP:x0+i*GAP,mode==='res'?40:mode==='left'?60:22,mode==='cancel'&&gone?{o:.35,cx:1}:(mode==='left'||mode==='res')&&gone?{o:0,cx:1}:{});});
   const bot=(mode)=>Array.from({length:n},(_,j)=>tb('u'+j,bv(b),2,x0+(m-n+j)*GAP,74,mode==='cancel'?{o:.35,cx:1}:mode==='full'?{}:{o:0,cx:1}));
   const bar=(on)=>tbar('bar',x0-6,58,m*GAP+6,on?{}:{o:0});
-  return{title:`Divide powers: ${pw(b,m)} ÷ ${pw(b,n)}`,frames:[
-   TF(`${pw(b,m)} ÷ ${pw(b,n)} is a fraction: ${m} blocks over ${n} blocks.`,`${pw(b,m)} ÷ ${pw(b,n)} = <span class="fr"><i>${pw(b,m)}</i><i>${pw(b,n)}</i></span>`,[...top('full'),bar(1),...bot('full')]),
+  return{title:`Divide powers: ${pwc(b,m,1)} ÷ ${pwc(b,n,2)}`,frames:[
+   TF(`${pwc(b,m,1)} ÷ ${pwc(b,n,2)} is a fraction: ${m} blocks over ${n} blocks.`,`${pwc(b,m,1)} ÷ ${pwc(b,n,2)} = <span class="fr"><i>${pwc(b,m,1)}</i><i>${pwc(b,n,2)}</i></span>`,[...top('full'),bar(1),...bot('full')]),
    TF(`Each block on the bottom cancels one block on top.`,`cancel ${n} pair${n>1?'s':''}`,[...top('cancel'),bar(1),...bot('cancel')]),
    TF(`The cancelled blocks are gone. ${m-n} block${m-n>1?'s are':' is'} left.`,`${m} − ${n} = ${m-n}`,[...top('left'),bar(0),...bot('gone')]),
-   TF(`${pw(b,m)} ÷ ${pw(b,n)} = ${pw(b,m-n)}. Same base: subtract the indices.`,`${pw(b,m)} ÷ ${pw(b,n)} = ${pw(b,m-n)}`,[...top('res'),bar(0),...bot('gone'),tt('r',`= ${pw(b,m-n)}`,125,92,{sz:30})])]};}},
+   TF(`${pwc(b,m,1)} ÷ ${pwc(b,n,2)} = ${pw(b,m-n)}. Same base: subtract the indices.`,`${pwc(b,m,1)} ÷ ${pwc(b,n,2)} = ${pw(b,m-n)}`,[...top('res'),bar(0),...bot('gone'),tt('r',`= ${pw(b,m-n)}`,125,92,{sz:30})])]};}},
 {name:'power of a power',tags:['ix-law-pow'],make(){const b=pick([2,3,5,'a','x']);let m,n;do{m=R(2,4);n=R(2,3);}while(m*n>8);
   const blk=(f)=>Array.from({length:m*n},(_,i)=>{const g=Math.floor(i/m),k=i%m;return tb('k'+i,bv(b),g%2?2:1,...f(g,k,i));}),pos=(x,y)=>[x,y];
   const boxes=(o)=>Array.from({length:n},(_,g)=>tbox('g'+g,52,14+g*58-4,m*GAP+4,35,o));
@@ -481,47 +482,68 @@ const TUTS=[
    TF(`Adding logs puts the blocks together.`,`${s1} + ${t} = ${s1+t}`,[...BLK('a',b,s1,1,120,26),tt('la',`log<sub>${b}</sub> ${A} =`,8,26,{sz:16}),...BLK('b',b,t,2,120+s1*GAP,26),tt('lb',`log<sub>${b}</sub> ${C} =`,8,92,{sz:16,o:0}),tt('p','+',70,60,{sz:30,o:0})]),
    TF(`${s1+t} blocks of ${b} make ${A*C}. Adding logs multiplies the numbers: ${A} × ${C} = ${A*C}.`,`log<sub>${b}</sub> ${A} + log<sub>${b}</sub> ${C} = log<sub>${b}</sub> ${A*C} = ${s1+t}`,[...BLK('a',b,s1,1,120,26),...BLK('b',b,t,2,120+s1*GAP,26),tt('r',`= log<sub>${b}</sub> ${A*C} = ${s1+t}`,50,92,{sz:26})])]};}}
 ];
+
+/* ---- voice guide: the caption of each step is read aloud (Web Speech) ---- */
+const SPK=typeof speechSynthesis!=='undefined'&&typeof SpeechSynthesisUtterance!=='undefined';
+const spokenT=h=>String(h).replace(/<span class="xf"><b>(.*?)<\/b><b>(.*?)<\/b><\/span>/g,' $1 over $2 ').replace(/<span class="fr"><i>(.*?)<\/i><i>(.*?)<\/i><\/span>/g,' $1 over $2 ').replace(/<sup[^>]*>(.*?)<\/sup>/g,' to the power $1 ').replace(/<sub>(.*?)<\/sub>/g,' base $1 ').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/×/g,' times ').replace(/÷/g,' divided by ').replace(/−/g,' minus ').replace(/⇄/g,' is the same as ').replace(/=/g,' equals ').replace(/\+/g,' plus ').replace(/(\d)\/(\d)/g,'$1 over $2').replace(/\s+/g,' ').trim();
+const TUTMAP={L1:1,L2:2,L8:2,L3:3,L4:4,L5:1,L6:1,L7:1,Z1:4,Z2:4,Z3:4,N1:4,N2:4,N3:4,N4:4,N5:4,F1:5,F2:5,F3:5,F4:5,F5:5,F6:7,C1:6,C2:6,C3:6,C4:6,C5:6,C6:7,C8:7,G1:8,G2:8,G3:8,G4:8,G5:8,G6:8,G7:8,G8:8,S1:7,S2:7,S3:7,S4:7,R3:0,B3:1,B2:2,B7:2,B8:3,B9:5,B10:5,B4:4,B5:4};
+function openTut(ti,ctx){document.querySelectorAll('.tutpop').forEach(o=>o.remove());
+  const ov=document.createElement('div');ov.className='overlay tutpop';ov.innerHTML='<div class="tutcard"><button class="tutx" aria-label="Close">✕</button><div class="tutbody"></div></div>';document.body.appendChild(ov);
+  let h=null;const close=()=>{try{h&&h.stop();}catch(e){}ov.remove();};ov.querySelector('.tutx').onclick=close;ov.addEventListener('click',e=>{if(e.target===ov)close();});
+  if(ctx&&ctx.cleanups)ctx.cleanups.push(()=>{try{h&&h.stop();}catch(e){}});
+  h=tutMount(ov.querySelector('.tutbody'),ti,{win:close,q:null,log(){}});}
 function tutMount(root,ti,ctx){
-  const T=TUTS[ti];let tut=T.make(),fi=0,playing=true,sp=1,timer=null,els={};
-  const stop=()=>{clearTimeout(timer);timer=null;};
-  const draw=()=>{stop();els={};root.innerHTML=`<div class="ch tutc"><div class="tut-title">${tut.title}</div><div class="tut-eq" id="teq"></div><div class="tstage" id="tst"></div><div class="tut-cap" id="tcap"></div><div class="tut-dots" id="tdots"></div>
-    <div class="tut-ctl"><button id="tprev" class="lv go">◀</button><button id="tplay" class="lv go">⏸</button><button id="tnext" class="lv go">▶</button><button id="tspd" class="lv go sm">1×</button></div>
+  const T=TUTS[ti];let tut=T.make(),fi=0,playing=true,sp=1,timer=null,fb=null,els={},voiceOn=SPK,tok=0;
+  const stopT=()=>{clearTimeout(timer);clearTimeout(fb);timer=fb=null;};
+  const hush=()=>{tok++;if(SPK)try{speechSynthesis.cancel();}catch(e){}};
+  const stop=()=>{stopT();hush();clearInterval(wd);};const wd=setInterval(()=>{if(!root.isConnected)stop();},500);
+  const voice=()=>{if(!SPK)return null;const vs=speechSynthesis.getVoices();return vs.find(v=>/^en[-_]GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;};
+  const draw=()=>{stop();els={};root.innerHTML=`<div class="ch tutc"><div class="tut-title">${tut.title}</div><div class="tstage" id="tst"><div class="tut-eq" id="teq"></div></div><div class="tut-cap" id="tcap"></div><div class="tut-dots" id="tdots"></div>
+    <div class="tut-ctl"><button id="tprev">◀</button><button id="tplay">⏸</button><button id="tnext">▶</button><button id="tspd" class="sm">1×</button>${SPK?'<button id="tvox" class="sm">🔊</button>':''}</div>
     <div class="toolrow"><button class="btn" id="tdone" style="visibility:hidden">✅ I understand</button><button class="btn" id="tagain" style="background:#868e96">🔄 Another example</button></div></div>`;
     root.querySelector('#tprev').onclick=()=>{playing=false;show(fi-1);};root.querySelector('#tnext').onclick=()=>{playing=false;show(fi+1);};
-    root.querySelector('#tplay').onclick=()=>{if(playing){playing=false;stop();upd();}else{playing=true;if(fi>=tut.frames.length-1)show(0);else sched();upd();}};
-    root.querySelector('#tspd').onclick=e=>{sp=sp===1?.5:sp===.5?2:1;e.target.textContent=({1:'1×',.5:'½×',2:'2×'})[sp];};
+    root.querySelector('#tplay').onclick=()=>{if(playing){playing=false;stop();upd();}else{playing=true;if(fi>=tut.frames.length-1)show(0);else show(fi);upd();}};
+    root.querySelector('#tspd').onclick=e=>{sp=sp===1?.75:sp===.75?1.4:1;e.target.textContent=({1:'1×',.75:'¾×',1.4:'1.4×'})[sp];};
+    const vx=root.querySelector('#tvox');if(vx)vx.onclick=()=>{voiceOn=!voiceOn;vx.textContent=voiceOn?'🔊':'🔇';if(voiceOn)show(fi);else{hush();stopT();sched(0);}};
     root.querySelector('#tagain').onclick=()=>{tut=T.make();fi=0;playing=true;draw();};
-    root.querySelector('#tdone').onclick=()=>ctx.win('Lesson complete!',T.name[0].toUpperCase()+T.name.slice(1)+' — now try the practice levels.',()=>{tut=T.make();fi=0;playing=true;draw();},'Another example');
+    root.querySelector('#tdone').onclick=()=>{stop();ctx.win('Lesson complete!',T.name,()=>{},'');};
     root.querySelector('#tdots').innerHTML=tut.frames.map((_,i)=>`<i data-i="${i}"></i>`).join('');root.querySelectorAll('#tdots i').forEach(d=>d.onclick=()=>{playing=false;show(+d.dataset.i);});
     show(0);};
   const upd=()=>{const pb=root.querySelector('#tplay');if(pb)pb.textContent=playing?'⏸':'▶';};
-  const sched=()=>{stop();if(!playing||fi>=tut.frames.length-1)return;timer=setTimeout(()=>{if(!root.isConnected)return;show(fi+1);},2900/sp);};
+  /* move on after the voice finishes (or after a fixed time when the voice is off / unavailable) */
+  const next=()=>{if(!root.isConnected||!playing)return;if(fi<tut.frames.length-1)show(fi+1);};
+  const sched=(speechMs)=>{stopT();if(!playing||fi>=tut.frames.length-1)return;timer=setTimeout(next,(speechMs?speechMs*2+3000:3200)/sp);};
+  function speak(text,my){if(!SPK||!voiceOn)return false;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);const v=voice();if(v){u.voice=v;u.lang=v.lang;}else u.lang='en-GB';u.rate=.95*sp;
+      const done=()=>{if(my!==tok||!root.isConnected)return;clearTimeout(fb);if(playing){clearTimeout(timer);timer=setTimeout(next,900/sp);}};u.onend=done;u.onerror=done;speechSynthesis.speak(u);return true;}catch(e){return false;}}
   function show(i){if(i<0||i>=tut.frames.length){return;}fi=i;const f=tut.frames[i],st=root.querySelector('#tst');if(!st)return;const seen={};
     f.items.forEach(it=>{seen[it.id]=1;let el=els[it.id],fresh=false;if(!el){el=document.createElement('div');els[it.id]=el;st.appendChild(el);el.style.opacity='0';fresh=true;}
       el.className=`ti ti-${it.k}${it.c?' c'+it.c:''}${it.cx?' cx':''}${it.hi?' hi':''}`;if(it.k==='b'||it.k==='t')el.innerHTML=it.k==='b'?it.t:it.h;
-      el.style.left=it.x+'px';el.style.top=it.y+'px';if(it.w!=null)el.style.width=it.w+'px';if(it.h!=null&&it.k==='box')el.style.height=it.h+'px';if(it.sz)el.style.fontSize=it.sz+'px';
-      const o=it.o==null?1:it.o;el._want=o;if(fresh)requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.opacity=el._want;}));else el.style.opacity=o;});
+      el.style.left=it.x+'px';el.style.top=(it.y+TOPY)+'px';if(it.w!=null)el.style.width=it.w+'px';if(it.h!=null&&it.k==='box')el.style.height=it.h+'px';if(it.sz)el.style.fontSize=it.sz+'px';
+      const o=it.o==null?1:it.o;el._want=o;if(fresh)setTimeout(()=>{el.style.opacity=el._want;},30);else el.style.opacity=o;});
     Object.keys(els).forEach(id=>{if(!seen[id]){els[id]._want=0;els[id].style.opacity='0';}});
-    root.querySelector('#teq').innerHTML=f.eq;root.querySelector('#tcap').innerHTML=f.cap;
+    const eq=root.querySelector('#teq');if(eq.innerHTML!==f.eq){eq.innerHTML=f.eq;eq.classList.remove('flash');void eq.offsetWidth;eq.classList.add('flash');}root.querySelector('#tcap').innerHTML=f.cap;
     root.querySelectorAll('#tdots i').forEach((d,k)=>d.className=k===i?'on':k<i?'dn':'');
     const last=i>=tut.frames.length-1,dn=root.querySelector('#tdone');if(dn)dn.style.visibility=last?'visible':'hidden';
-    if(last){playing=false;ctx.q={v:1,tags:T.tags,diff:1,score:1,qt:'T',eq:T.name};}upd();sched();}
+    upd();stopT();hush();const my=tok;const text=spokenT(f.cap);
+    if(speak(text,my)){fb=setTimeout(()=>{if(my===tok&&playing)next();},Math.max(4000,text.length*130)/sp+2500);}else sched(0);
+    if(last){ctx.q={v:1,tags:T.tags,diff:1,score:1,qt:'T',eq:T.name};}}
   draw();
+  return{stop};
 }
 const LVS2=[['Solve with operations',['S1']],['Solve with operations',['S2']],['Solve with operations',['S3','S4']]];
 const stg2=([sk,pool])=>{const d=Math.round(clamp(pool.reduce((t,k)=>t+D[k][0],0)/pool.length));return[sk+' · '+(d<=3?'easy':d<=6?'medium':'hard'),pool];};
-const NQ0=LVS.length,LV=LVS.map(stg2).concat(TUTS.map((t,i)=>['Tutorial: '+t.name,['T'+(i+1)]])).concat(LVS2.map(stg2));
+const LV=LVS.map(stg2).concat(LVS2.map(stg2));
 const POOL=LV.map(l=>l[1]);
 const plain=h=>String(h).replace(/<sup>/g,'^(').replace(/<\/sup>/g,')').replace(/<\/i><i>/g,'/').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 const qq=(key,cur)=>{const m=D[cur.k||key];if(!m)return null;return{v:1,tags:[...m[1]].sort(),diff:m[0],score:m[0],qt:cur.k||key,eq:plain(cur.q)};};
 const qmeta=lv=>{const pool=[...new Set(POOL[lv-1])],ms=pool.map(k=>D[k]),all=new Set(ms.flatMap(m=>m[1])),tags=[...all].filter(t=>ms.every(m=>m[1].includes(t))).sort(),
   sometimes=[...all].filter(t=>!tags.includes(t)).sort(),d=ms.reduce((a,m)=>a+m[0],0)/ms.length;
   return{tags,sometimes,types:pool,diff:Math.round(clamp(d)),score:Math.round(clamp(d)*10)/10};};
-window.__ix={QT,POOL,D,LV,solve:{sCan,sApply,sEq}};
+window.__ix={QT,POOL,D,LV,solve:{sCan,sApply,sEq},spokenT};
 REG.push({id:'indices',name:'Power Balance',emoji:'🔋',color:'#0b7285',cat:'Algebra',qmeta,
  desc:'Powers, indices and logs on a balance. See why n⁰ = 1, why negative indices flip, what a fractional index means, and how every index law turns into a log law. Tap the button to swap an equation between index form and log form.',
  skills:['powers and indices','zero, negative and fractional indices','index laws','logarithms','log laws'],levels:LV.map(l=>l[0]),
- how:'Tutorial levels: watch the animated lesson (▶ ⏸ ◀ and the speed button), then press “I understand”. Solve levels: press the buttons to change the whole equation (same base, ( )ⁿ, √, log ⇄ power), then type x. Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan (some levels also have ( )ⁿ and √ buttons that act on the whole pan), then press Check.',
+ how:'Stuck? Tap “🎓 Show me how” under any question for a short animated lesson with a voice guide. Solve levels: press the buttons to change the whole equation (same base, ( )ⁿ, √, log ⇄ power), then type x. Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan (some levels also have ( )ⁿ and √ buttons that act on the whole pan), then press Check.',
  art:'<div class="minibal">🔋</div>',
- mount(root,lv,ctx){if(lv>NQ0&&lv<=NQ0+TUTS.length)return tutMount(root,lv-NQ0-1,ctx);mountQuiz(root,ctx,{single:true,popup:true,game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
+ mount(root,lv,ctx){mountQuiz(root,ctx,{single:true,popup:true,game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
 })();
