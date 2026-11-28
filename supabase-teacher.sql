@@ -34,19 +34,24 @@ begin
   return json_build_object('ok',true,'name',p.name,'data',coalesce(d,'{}'::jsonb),'teacher',p.is_teacher);
 end $$;
 
--- create a teacher account (needs the teacher key set in supabase.sql)
-create or replace function pz_register_teacher(p_name text, p_hash text, p_key text) returns json
+-- Teacher accounts can NOT be registered in the game. The site owner creates them here (SQL Editor), e.g.:
+--   select pz_create_teacher('MISS SMITH','1234');   -- name, 4-digit PIN
+-- Not callable from the app (no grant to anon / authenticated).
+drop function if exists pz_register_teacher(text,text,text);
+create or replace function pz_create_teacher(p_name text, p_pin text) returns json
 language plpgsql security definer set search_path=public,extensions as $$
-declare r json;
+declare n text:=upper(btrim(regexp_replace(coalesce(p_name,''),'\s+',' ','g'))); h text;
 begin
-  if not exists(select 1 from pz_settings where k='teacher_key' and extensions.crypt(coalesce(p_key,''),v)=v) then
-    return json_build_object('ok',false,'error','bad_key'); end if;
-  r:=pz_register(p_name,p_hash,'{"v":2,"done":{},"rv":{}}'::jsonb);
-  if (r->>'ok')::boolean then
-    update pz_players set is_teacher=true where name_lower=lower(r->>'name');
-  end if;
-  return r;
+  if char_length(n)<2 or char_length(n)>16 then return json_build_object('ok',false,'error','bad_name'); end if;
+  if coalesce(p_pin,'') !~ '^[0-9]{4}$' then return json_build_object('ok',false,'error','bad_pin'); end if;
+  h:=encode(extensions.digest('pz1:'||lower(n)||':'||p_pin,'sha256'),'hex');
+  insert into pz_players(name_lower,name,pin_hash,is_teacher) values(lower(n),n,extensions.crypt(h,extensions.gen_salt('bf')),true);
+  insert into pz_progress(name_lower,data) values(lower(n),'{"v":2,"done":{},"rv":{}}'::jsonb);
+  return json_build_object('ok',true,'name',n);
+exception when unique_violation then
+  return json_build_object('ok',false,'error','taken');
 end $$;
+revoke execute on function pz_create_teacher(text,text) from anon, authenticated, public;
 
 -- 1) + 3) numbers for the dashboard (students only; teacher accounts are left out)
 --   levels : how many students passed each level of each game
@@ -89,5 +94,5 @@ begin
       group by 1) q),'[]'::json));
 end $$;
 
-grant execute on function pz_login(text,text), pz_register_teacher(text,text,text),
+grant execute on function pz_login(text,text),
   pz_teacher_stats(text,text), pz_teacher_mistakes(text,text,text,int) to anon, authenticated;

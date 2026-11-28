@@ -29,7 +29,7 @@ Stored online: players (name + hashed PIN), progress, and an event log (`pz_even
 
 ## Teacher accounts & dashboard
 1. Run `supabase-teacher.sql` once in the Supabase SQL Editor (after `supabase.sql`).
-2. In the app: **New player → tick “I am a teacher” → enter your teacher key** to create a teacher account. Later, log in normally.
+2. Teacher accounts cannot be registered in the game. Create each one yourself in the SQL Editor: `select pz_create_teacher('MISS SMITH','1234');` (name, 4-digit PIN). Teachers then log in normally.
 3. Teacher login opens the dashboard (`/teacher/`, also the 🏫 Teacher button on the menu):
    - per game: levels passed, students who played, total play time; expand a game for each student's levels/time and how many students passed each level;
    - on every level page: “N / total students passed” and a ❓ Mistakes button (mistake types grouped from the logged `wrong` events — framework, to be refined per game).
