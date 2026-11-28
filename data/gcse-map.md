@@ -1,12 +1,12 @@
 # GCSE Maths map — topics, knowledge points and game coverage
 
-310 knowledge points in 82 topics. **91 covered** by a game, **219 gaps**.
+310 knowledge points in 82 topics. **84 covered** by a game, **226 gaps**.
 
 Tier: F = Foundation and Higher, H = Higher only, X = extension beyond GCSE (approximate). Source of truth: `tools/gcse-map-src.txt` → `data/gcse-spec.json`.
 
 ## Where we are
 
-82 game-sized topics: **10 fully covered**, **21 partly covered** (a game exists but more can be added), **51 with no game yet**.
+82 game-sized topics: **9 fully covered**, **20 partly covered** (a game exists but more can be added), **53 with no game yet**.
 
 ## Topics and games
 
@@ -20,7 +20,7 @@ Each topic is a block one game could cover. Status: ✅ fully covered · 🟡 pa
 | 🟡 | Mental arithmetic and times tables | 2/4 | Number Match, Times Table Tricks |
 | ⬜ | Negative numbers | 0/3 | — |
 | ⬜ | Order of operations and calculator skills | 0/3 | — |
-| 🟡 | Powers and roots | 4/7 | Power Balance |
+| ⬜ | Powers and roots | 0/7 | — |
 | 🟡 | Factors, multiples and primes | 3/5 | Ball Factory |
 | ⬜ | Prime factors, HCF and LCM | 0/5 | — |
 | 🟡 | Fraction basics: naming, equivalent, simplifying, ordering | 4/5 | Fraction Factory |
@@ -61,7 +61,7 @@ Each topic is a block one game could cover. Status: ✅ fully covered · 🟡 pa
 | ⬜ | Transforming graphs and circle equations | 0/3 | — |
 | ⬜ | Real-life graphs and rates of change | 0/5 | — |
 | ⬜ | Functions | 0/3 | — |
-| ✅ | Logarithms (extension beyond GCSE) | 3/3 | Power Balance |
+| ⬜ | Logarithms (extension beyond GCSE) | 0/3 | — |
 
 ### Ratio, proportion and rates of change
 
@@ -128,19 +128,18 @@ Each topic is a block one game could cover. Status: ✅ fully covered · 🟡 pa
 ## Games
 
 - Balance Scale: 30/32 skills mapped to a knowledge point
-- Break Bracket: 39/39 skills mapped to a knowledge point
+- Break Bracket: 106/106 skills mapped to a knowledge point
 - Factorise It!: 28/28 skills mapped to a knowledge point
-- Quadratic Factoriser: 22/24 skills mapped to a knowledge point
-- Line Hunter: 12/12 skills mapped to a knowledge point
+- Quadratic Factoriser: 26/53 skills mapped to a knowledge point
+- Line Hunter: 18/47 skills mapped to a knowledge point
 - Ball Factory: 100/100 skills mapped to a knowledge point
-- Fraction Factory: 11/12 skills mapped to a knowledge point
-- Percent Shop: 11/12 skills mapped to a knowledge point
+- Fraction Factory: 15/29 skills mapped to a knowledge point
+- Percent Shop: 13/32 skills mapped to a knowledge point
 - Chance Lab: 30/33 skills mapped to a knowledge point
 - Angle Hunter: 28/28 skills mapped to a knowledge point
-- Transform Quest: 12/12 skills mapped to a knowledge point
+- Transform Quest: 33/50 skills mapped to a knowledge point
 - Times Table Tricks: 9/9 skills mapped to a knowledge point
 - Number Match: 12/12 skills mapped to a knowledge point
-- Power Balance: 31/36 skills mapped to a knowledge point
 
 ## Number
 
@@ -171,14 +170,14 @@ Each topic is a block one game could cover. Status: ✅ fully covered · 🟡 pa
 - ⬜ Use a calculator efficiently (brackets, memory, fraction keys)
 - ⬜ Use inverse operations to check an answer
 
-### Powers and roots (4/7 covered)
+### Powers and roots (0/7 covered)
 
 - ⬜ Square numbers and square roots
 - ⬜ Cube numbers and cube roots
-- ✅ Powers and index notation — Power Balance
-- ✅ Laws of indices (multiply, divide, power of a power) — Power Balance
-- ✅ Zero and negative indices (H) — Power Balance
-- ✅ Fractional indices (roots and p/q) (H) — Power Balance
+- ⬜ Powers and index notation
+- ⬜ Laws of indices (multiply, divide, power of a power)
+- ⬜ Zero and negative indices (H)
+- ⬜ Fractional indices (roots and p/q) (H)
 - ⬜ Reciprocals
 
 ### Factors, multiples and primes (3/5 covered)
@@ -425,11 +424,11 @@ Each topic is a block one game could cover. Status: ✅ fully covered · 🟡 pa
 - ⬜ Composite functions (H)
 - ⬜ Inverse functions (H)
 
-### Logarithms (extension beyond GCSE) (3/3 covered)
+### Logarithms (extension beyond GCSE) (0/3 covered)
 
-- ✅ Index form and log form, log values (extension) — Power Balance
-- ✅ Laws of logarithms (extension) — Power Balance
-- ✅ Solve index equations using logs (extension) — Power Balance
+- ⬜ Index form and log form, log values (extension)
+- ⬜ Laws of logarithms (extension)
+- ⬜ Solve index equations using logs (extension)
 
 ## Ratio, proportion and rates of change
 
@@ -718,13 +717,110 @@ These are mostly "Boss" and mixed levels that practise several knowledge points 
 - Balance Scale: Boss 2: all equation types
 - Quadratic Factoriser: Boss: anything goes!
 - Quadratic Factoriser: Boss 2: the hardest
+- Quadratic Factoriser: Common factor · x² + 5x
+- Quadratic Factoriser: Common factor · x² − 7x
+- Quadratic Factoriser: Common factor · 3x² + 6x
+- Quadratic Factoriser: Common factor · 6x² − 9x
+- Quadratic Factoriser: Common factor · any signs and sizes
+- Quadratic Factoriser: Perfect squares · (x + p)²
+- Quadratic Factoriser: Perfect squares · (x − p)²
+- Quadratic Factoriser: Perfect squares · (mx ± p)²
+- Quadratic Factoriser: Take out a factor first · 2x² + 10x + 12
+- Quadratic Factoriser: Take out a factor first · minus in the middle
+- Quadratic Factoriser: Take out a factor first · minus at the end
+- Quadratic Factoriser: Take out a factor first · any signs
+- Quadratic Factoriser: Take out a factor first · difference of two squares
+- Quadratic Factoriser: Take out a factor first · number in front
+- Quadratic Factoriser: Solve · x² + 5x + 6 = 0
+- Quadratic Factoriser: Solve · minus in the middle
+- Quadratic Factoriser: Solve · minus at the end
+- Quadratic Factoriser: Solve · difference of two squares
+- Quadratic Factoriser: Solve · common factor x² + 5x = 0
+- Quadratic Factoriser: Solve · perfect squares
+- Quadratic Factoriser: Solve · any monic quadratic
+- Quadratic Factoriser: Solve · take out a factor first
+- Quadratic Factoriser: Larger numbers · up to 20
+- Quadratic Factoriser: Boss: factorise anything
+- Quadratic Factoriser: Boss: solve anything
+- Line Hunter: Read the graph · y = x and y = −x
+- Line Hunter: Read the graph · y = mx through the origin
+- Line Hunter: Read the graph · y = x + c
+- Line Hunter: Read the graph · y = −x + c
+- Line Hunter: Read the graph · positive gradients
+- Line Hunter: Read the graph · negative gradients
+- Line Hunter: Read the graph · fractional gradients
+- Line Hunter: Read the graph · no hints
+- Line Hunter: Read the graph · horizontal lines
+- Line Hunter: Parallel lines · same gradient
+- Line Hunter: Parallel · through the origin
+- Line Hunter: Parallel · fractional gradients
+- Line Hunter: Parallel · steep lines
+- Line Hunter: Perpendicular · gradient 1 and −1
+- Line Hunter: Perpendicular · gradient 2 and ½
+- Line Hunter: Perpendicular · all the pairs
+- Line Hunter: Rearrange · y = c + mx
+- Line Hunter: Rearrange · y − c = mx
+- Line Hunter: Rearrange · y − mx = c
+- Line Hunter: Rearrange · x + y = k
+- Line Hunter: Rearrange · ax + y = k
+- Line Hunter: Rearrange · mixed simple forms
+- Line Hunter: Rearrange · 2y = …
+- Line Hunter: Rearrange · 3y = …
+- Line Hunter: Rearrange · ax + 2y = k
+- Line Hunter: Rearrange · y = x/2 + c
+- Line Hunter: Two stars · steep lines
+- Line Hunter: Fixed gradient · big intercepts
+- Line Hunter: Final boss · any kind of line puzzle
 - Fraction Factory: Boss mix
+- Fraction Factory: Compare & order
+- Fraction Factory: Express as a fraction
+- Fraction Factory: Fractions of fractions
+- Fraction Factory: Divide fractions
+- Fraction Factory: Brackets & BIDMAS
+- Fraction Factory: Reciprocals
+- Fraction Factory: Fractions & decimals
+- Fraction Factory: Fractions & percentages
+- Fraction Factory: Word problems
+- Fraction Factory: Ratio & fractions
+- Fraction Factory: Unit fractions
+- Fraction Factory: Fractions in algebra
+- Fraction Factory: Grand boss
 - Percent Shop: Boss mix
+- Percent Shop: Mental percentages
+- Percent Shop: Multipliers
+- Percent Shop: Decrease with a multiplier
+- Percent Shop: Express as a percentage
+- Percent Shop: Parts of a total
+- Percent Shop: Find the whole
+- Percent Shop: Awkward conversions
+- Percent Shop: Percentage points & marks
+- Percent Shop: Profit & loss
+- Percent Shop: Successive changes
+- Percent Shop: Compound growth
+- Percent Shop: Depreciation
+- Percent Shop: Simple interest (any unknown)
+- Percent Shop: Ratio & percentage
+- Percent Shop: Comparing offers
+- Percent Shop: Tax, tips & commission
+- Percent Shop: Pie charts & units
+- Percent Shop: Grand boss
 - Chance Lab: Boss mix
 - Chance Lab: Boss 2 · GCSE mix
 - Chance Lab: Boss 3 · GCSE mix
-- Power Balance: Find the fractional index
-- Power Balance: Find the base
-- Power Balance: Solve index equations with logs
-- Power Balance: Boss · indices
-- Power Balance: Boss · logs and laws
+- Transform Quest: Two steps: reflect then translate
+- Transform Quest: Two steps: rotate then translate
+- Transform Quest: Two steps: reflect in both axes
+- Transform Quest: Two steps: translate then enlarge
+- Transform Quest: Describe it · translations
+- Transform Quest: Describe it · reflections in the axes
+- Transform Quest: Describe it · reflections in any line
+- Transform Quest: Describe it · rotations about the origin
+- Transform Quest: Describe it · rotations about any point
+- Transform Quest: Describe it · enlargements
+- Transform Quest: Describe it · enlargements, any centre or ½
+- Transform Quest: Describe it · negative scale factors
+- Transform Quest: Describe it · any single transformation
+- Transform Quest: Undo it · translations
+- Transform Quest: Undo it · reflections
+- Transform Quest: Undo it · rotations
+- Transform Quest: Undo it · enlargements

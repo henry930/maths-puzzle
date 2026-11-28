@@ -7,7 +7,7 @@ const root=path.join(__dirname,'..');
 const STAGE=/ · (warm-up|easy|medium|hard|tough)$/;
 
 /* ---- 1. real skills per game (levels grouped by name, same rule as the in-game profile) ---- */
-const gameFiles=['balance','expand','factorise','quad','lines','factors','fraction','percent','chance','angles','transform','times','match','indices'];
+const gameFiles=['balance','expand','factorise','quad','lines','factors','fraction','percent','chance','angles','transform','times','match'];
 const src=['tags.js',...gameFiles.map(g=>g+'.js'),'qtags.js'].map(f=>fs.readFileSync(path.join(root,'src',f),'utf8')).join('\n');
 const pre=`const window={};const REG=[];const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));const pick=a=>a[R(0,a.length-1)];const shuffle=a=>a;const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);const esc=String;`;
 const {REG}=vm.runInNewContext(pre+src+';({REG})',{Math,String,Array,Object,Set,Map});

@@ -193,72 +193,25 @@
        "id": "n-powers",
        "name": "Powers and index notation",
        "tier": "F",
-       "games": [
-        {
-         "game": "indices",
-         "skills": [
-          "Repeated multiplication → power",
-          "Repeated multiplication · find the index",
-          "Evaluate powers",
-          "Find the missing base"
-         ]
-        }
-       ]
+       "games": []
       },
       {
        "id": "n-index-laws",
        "name": "Laws of indices (multiply, divide, power of a power)",
        "tier": "F",
-       "games": [
-        {
-         "game": "indices",
-         "skills": [
-          "Index law · multiply",
-          "Index law · divide",
-          "Index law · power of a power",
-          "Index laws · all three",
-          "Index laws · negative indices",
-          "Index laws · with letters",
-          "Index laws · missing index"
-         ]
-        }
-       ]
+       "games": []
       },
       {
        "id": "n-index-zeroneg",
        "name": "Zero and negative indices",
        "tier": "H",
-       "games": [
-        {
-         "game": "indices",
-         "skills": [
-          "Zero index · the halving ladder",
-          "Zero index",
-          "Zero index · mixed",
-          "Negative index · keep dividing",
-          "Negative index · fractions",
-          "Negative index · decimals",
-          "Powers as negative indices",
-          "Negative index · fraction base"
-         ]
-        }
-       ]
+       "games": []
       },
       {
        "id": "n-index-frac",
        "name": "Fractional indices (roots and p/q)",
        "tier": "H",
-       "games": [
-        {
-         "game": "indices",
-         "skills": [
-          "Fractional index · square roots",
-          "Fractional index · cube roots and more",
-          "Fractional index · p/q",
-          "Negative fractional index"
-         ]
-        }
-       ]
+       "games": []
       },
       {
        "id": "n-recip",
@@ -267,12 +220,10 @@
        "games": []
       }
      ],
-     "covered": 4,
+     "covered": 0,
      "total": 7,
-     "games": [
-      "indices"
-     ],
-     "status": "partial"
+     "games": [],
+     "status": "none"
     },
     {
      "id": "N-fm",
@@ -618,7 +569,8 @@
         {
          "game": "fraction",
          "skills": [
-          "Simplify"
+          "Simplify",
+          "Simplify & HCF"
          ]
         }
        ]
@@ -637,7 +589,9 @@
         {
          "game": "fraction",
          "skills": [
-          "Mixed → improper"
+          "Mixed → improper",
+          "Mixed numbers + / −",
+          "Mixed & improper"
          ]
         }
        ]
@@ -770,7 +724,8 @@
         {
          "game": "fraction",
          "skills": [
-          "Reverse fractions"
+          "Reverse fractions",
+          "Reverse problems"
          ]
         }
        ]
@@ -916,7 +871,8 @@
          "game": "percent",
          "skills": [
           "Sale prices",
-          "Increase (VAT, pay rises)"
+          "Increase (VAT, pay rises)",
+          "Increase with a multiplier"
          ]
         }
        ]
@@ -949,7 +905,8 @@
          "game": "percent",
          "skills": [
           "Reverse percentages",
-          "Reverse · sales"
+          "Reverse · sales",
+          "Reverse with multipliers"
          ]
         }
        ]
@@ -1245,13 +1202,80 @@
           "xy outside: xy(x + y)",
           "Three terms: a(x + y + b)",
           "Three terms: a(bx ± cy ± d)",
+          "Two letters · three terms · negative outside",
           "x(x + y + b)",
           "y(bx + cy + d)",
           "−x(bx − cy + d)",
           "ax(bx + cy + d)",
           "Three letters: a(x + y + z)",
           "Four terms: a(bx ± cy ± dz ± e)",
-          "Boss: four terms, anything goes!"
+          "Boss: four terms, anything goes!",
+          "x²(x + b)",
+          "x²(x − b)",
+          "x³(x + b)",
+          "x²(bx + c)",
+          "x²(x² + b)",
+          "x²(x² − bx)",
+          "x³(x² ± b)",
+          "ax²(x + b)",
+          "ax²(bx − c)",
+          "−x²(x + b)",
+          "−ax²(x − b)",
+          "x²(x² + bx + c)",
+          "x²(ax² − bx + c)",
+          "ax²(bx + c)",
+          "x³(x² − x + b)",
+          "x(x² + bx + c)",
+          "x(x³ − bx² + c)",
+          "−x(x² + bx − c)",
+          "ax³(bx − c)",
+          "ax²(bx² + cx + d)",
+          "x²(x³ + x² + x)",
+          "Four terms: x(x³ + bx² + cx + d)",
+          "Four terms: ax(bx³ ± cx² ± dx ± e)",
+          "Four terms · negative outside",
+          "Five terms: a(bx⁴ ± cx³ ± dx² ± ex ± f)",
+          "x⁴(x ± b)",
+          "ax⁴(x² ± b)",
+          "−x³(x² ± bx)",
+          "Cubes: x³(x³ ± b)",
+          "Large numbers: a(bx − c)",
+          "Large numbers · negative outside",
+          "Large numbers: ax²(bx − c)",
+          "Large numbers · three terms",
+          "Boss: powers of x",
+          "x²(y + b)",
+          "x²(x + y)",
+          "xy(x² + y)",
+          "xy(ax + by)",
+          "x²y(x + y)",
+          "xy²(x − y)",
+          "x²y(ax + by + c)",
+          "y²(x² + xy + y²)",
+          "x(x² + xy + y²)",
+          "−xy(x² ± xy ± y²)",
+          "ax²(y + bx − c)",
+          "x²y²(x + y)",
+          "ax²(by ± cx ± d)",
+          "ax²y(bx + cy)",
+          "−ax²y(bx ± cy ± d)",
+          "Large numbers: ax(by − c)",
+          "Boss: two letters with powers",
+          "xy(x + y + z)",
+          "xyz(x + y + z)",
+          "x²(x + y + z)",
+          "ax(by ± cz ± d)",
+          "xz(xy − z)",
+          "−xyz(ax ± by ± cz)",
+          "Four terms with powers",
+          "Boss: three letters with powers",
+          "x²(−bx − c)",
+          "a(−bx − c)",
+          "−a(−bx − c)",
+          "−x²(−x − b)",
+          "−ax(−bx² − cx − d)",
+          "xyz(xy − yz)",
+          "Mega boss: anything so far"
          ]
         }
        ]
@@ -1271,7 +1295,17 @@
           "−x(bx + c)",
           "−a(bx² ± cx ± d)",
           "−ax(bx − c)",
-          "−x(bx − cy + d)"
+          "−x(bx − cy + d)",
+          "−x²(x + b)",
+          "−ax²(x − b)",
+          "−x(x² + bx − c)",
+          "−x³(x² ± bx)",
+          "−xy(x² ± xy ± y²)",
+          "−ax²y(bx ± cy ± d)",
+          "−xyz(ax ± by ± cz)",
+          "−a(−bx − c)",
+          "−x²(−x − b)",
+          "−ax(−bx² − cx − d)"
          ]
         }
        ]
@@ -1288,6 +1322,7 @@
           "Two letters: a(x − y)",
           "Two letters: a(bx + cy)",
           "Two letters · mixed signs",
+          "Two letters · three terms · negative outside",
           "Letter outside: x(x + y)",
           "Letter outside: x(y ± b)",
           "Letter outside: y(x − y)",
@@ -1422,7 +1457,10 @@
          "game": "quad",
          "skills": [
           "Difference of two squares: x² − 9",
-          "Difference of two squares · up to 12"
+          "Difference of two squares · up to 12",
+          "Difference of two squares · 9x² − 16",
+          "Difference of two squares · bigger numbers",
+          "Difference of two squares · all kinds"
          ]
         }
        ]
@@ -1440,6 +1478,7 @@
           "Number in front · minus in the middle",
           "Number in front · mixed signs",
           "Number in front: 4x² − 9",
+          "Number in front · larger numbers",
           "Up to 4x² · any signs"
          ]
         }
@@ -1882,7 +1921,8 @@
           "Gradient only (1 star)",
           "Gradient only (2 stars)",
           "Negative gradients",
-          "Fractional gradients"
+          "Fractional gradients",
+          "Fractional gradient · through the origin"
          ]
         }
        ]
@@ -1913,7 +1953,12 @@
           "Both · steeper & negative",
           "Three stars",
           "Three stars · tricky",
+          "Three stars · all gradients",
           "Boss line",
+          "Boss · read any line",
+          "Boss · parallel lines",
+          "Boss · perpendicular lines",
+          "Boss · rearrange anything",
           "Horizontal lines"
          ]
         }
@@ -2111,54 +2156,25 @@
        "id": "x-log-def",
        "name": "Index form and log form, log values",
        "tier": "X",
-       "games": [
-        {
-         "game": "indices",
-         "skills": [
-          "Index → log · 2ˣ = 8",
-          "Log values",
-          "Special logs · log 1 and log a",
-          "Negative and fractional logs"
-         ]
-        }
-       ]
+       "games": []
       },
       {
        "id": "x-log-laws",
        "name": "Laws of logarithms",
        "tier": "X",
-       "games": [
-        {
-         "game": "indices",
-         "skills": [
-          "Log law · add",
-          "Log law · subtract",
-          "Log law · powers",
-          "Log laws · combine"
-         ]
-        }
-       ]
+       "games": []
       },
       {
        "id": "x-log-eq",
        "name": "Solve index equations using logs",
        "tier": "X",
-       "games": [
-        {
-         "game": "indices",
-         "skills": [
-          "Index → log · 2ˣ = 8"
-         ]
-        }
-       ]
+       "games": []
       }
      ],
-     "covered": 3,
+     "covered": 0,
      "total": 3,
-     "games": [
-      "indices"
-     ],
-     "status": "full"
+     "games": [],
+     "status": "none"
     }
    ]
   },
@@ -2931,7 +2947,8 @@
          "game": "transform",
          "skills": [
           "Translations · positive vectors",
-          "Translations · negative vectors"
+          "Translations · negative vectors",
+          "Translations · bigger vectors"
          ]
         }
        ]
@@ -2948,7 +2965,11 @@
           "Reflect in the y-axis",
           "Reflect in either axis",
           "Reflect in x = k or y = k",
-          "Reflect in y = x or y = −x"
+          "Reflect in y = x or y = −x",
+          "Reflect in x = k",
+          "Reflect in y = k",
+          "Reflect in any horizontal or vertical line",
+          "Reflect · all mirror lines"
          ]
         }
        ]
@@ -2974,7 +2995,13 @@
          "game": "transform",
          "skills": [
           "Rotate 90° about the origin",
-          "Rotate 90° or 180°"
+          "Rotate 90° or 180°",
+          "Rotate 90° clockwise about a point",
+          "Rotate 90° anticlockwise about a point",
+          "Rotate 180° about a point",
+          "Rotate about any point",
+          "Rotate 270° about the origin",
+          "Rotate 90°, 180° or 270° about any point"
          ]
         }
        ]
@@ -2988,7 +3015,15 @@
          "game": "transform",
          "skills": [
           "Enlarge · scale factor 2",
-          "Enlarge · scale factor 2 or 3"
+          "Enlarge · scale factor 2 or 3",
+          "Enlarge · scale factor 2, any centre",
+          "Enlarge · scale factor 3, any centre",
+          "Enlarge · scale factor ½ (origin)",
+          "Enlarge · scale factor ½, any centre",
+          "Enlarge · scale factor −1",
+          "Enlarge · scale factor −2",
+          "Enlarge · negative scale factor, any centre",
+          "Enlarge · any scale factor, any centre"
          ]
         }
        ]
@@ -3019,7 +3054,9 @@
         {
          "game": "transform",
          "skills": [
-          "Boss: any transformation"
+          "Boss: any transformation",
+          "Boss: two-step transformations",
+          "Boss: describe it · two steps"
          ]
         }
        ]
