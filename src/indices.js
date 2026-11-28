@@ -1,7 +1,7 @@
 /* ---------- Power Balance: powers, indices and logs, shown on a balance ----------
    Every question is an equation with a "?" on one pan. The pans show the two sides and the beam tilts as you type, so
    you SEE when both sides are equal. A button swaps the equation between its index form and its log form (or, for the
-   log laws, between the log version and the index version). 5 questions per level, 4 to pass. */
+   log laws, between the log version and the index version). One question per level. */
 (function(){
 const TAG={
  'ix-repeat':['repeated multiplication','repeated multiplication'],'ix-eval':['evaluate a power','evaluate a power'],'ix-find-index':['find the index','find the index'],
@@ -245,17 +245,20 @@ const D={B1:[1,['ix-repeat']],B2:[2,['ix-law-div']],B3:[2,['ix-law-mul']],B4:[3,
  L1:[3,['ix-law-mul']],L2:[3,['ix-law-div']],L3:[4,['ix-law-pow']],L4:[5,['ix-law-neg']],L5:[4,['ix-letters']],L6:[5,['ix-missing']],L7:[6,['ix-combine']],L8:[3,['ix-law-div','ix-eval']],
  C1:[4,['lg-convert','ix-find-index']],C2:[5,['lg-convert','lg-value']],C3:[5,['lg-value','lg-neg']],C4:[5,['lg-special']],C5:[7,['lg-value','lg-neg','lg-frac']],C6:[7,['lg-base']],C8:[8,['lg-convert','lg-neg','lg-frac']],
  G1:[6,['lg-add']],G2:[6,['lg-sub']],G3:[7,['lg-pow']],G4:[8,['lg-mix']],G5:[7,['lg-simplify','lg-sub']],G6:[7,['lg-simplify','lg-add']],G7:[8,['lg-mix','lg-pow']],G8:[7,['lg-pow','lg-simplify']]};
-const LV=[
- ['Repeated multiplication → power',['R1']],['Repeated multiplication · find the index',['R1','R3']],['Evaluate powers',['R2']],['Find the missing base',['R4','R3']],['Build a power · add blocks',['B1']],['Build · take blocks away',['B2','B1']],
- ['Zero index · the halving ladder',['Z1']],['Zero index',['Z1','Z2']],['Zero index · mixed',['Z2','Z3']],['Build · zero index',['B4']],
- ['Negative index · keep dividing',['N1']],['Negative index · fractions',['N1','N2']],['Negative index · decimals',['N2','N3']],['Powers as negative indices',['N4','N2']],['Negative index · fraction base',['N5','N2']],['Build · negative index',['B5']],
- ['Fractional index · square roots',['F1']],['Fractional index · cube roots and more',['F1','F2','F3']],['Fractional index · p/q',['F4','F2']],['Negative fractional index',['F5','F4']],['Find the fractional index',['F6']],
- ['Build · multiply powers',['B3']],['Index law · multiply',['L1']],['Build · divide powers',['B7','B2']],['Index law · divide',['L2','L8']],['Index law · power of a power',['L3']],['Index laws · all three',['L1','L2','L3']],['Index laws · negative indices',['L4']],['Index laws · with letters',['L5']],['Index laws · missing index',['L6','L7']],
- ['Index → log · 2ˣ = 8',['C1']],['Log values',['C2','C3']],['Special logs · log 1 and log a',['C4']],['Negative and fractional logs',['C5']],['Find the base',['C6','C2']],['Solve index equations with logs',['C8','C1']],
- ['Log law · add',['G1']],['Log law · subtract',['G2','G5']],['Log law · powers',['G3','G8']],['Log laws · combine',['G4','G6','G7']],
- ['Build · change the power',['B6']],['Boss · indices',['R2','Z3','N2','F4','L1','L4','L7']],['Boss · logs and laws',['C2','C5','G1','G2','G3','G4','G7']]];
-const POOL=LV.map(l=>l[1]);
 const clamp=d=>Math.max(1,Math.min(10,d));
+/* one level = one question.  A level is named  “skill · easy|medium|hard”; the difficulty word is worked out from the question tags, the same way the player profile does it. */
+const LVS=[
+ ['Repeated multiplication',['R1','R3']],['Evaluate powers',['R2']],['Find the missing base',['R4','R3']],['Build a power',['B1','B2']],
+ ['Zero index',['Z1','Z2','Z3']],['Build zero index',['B4']],
+ ['Negative index',['N1','N2','N3']],['Negative index',['N4','N5','N2']],['Build negative index',['B5']],
+ ['Fractional index',['F1','F2','F3']],['Fractional index',['F5','F4','F6']],
+ ['Index law: multiply',['L1']],['Index law: divide',['L2','L8']],['Index law: power of a power',['L3']],['Index laws with negative indices',['L4']],['Index laws with letters',['L5']],['Index laws with a missing index',['L6','L7']],
+ ['Build multiplying powers',['B3']],['Build dividing powers',['B7','B2']],['Build change the power',['B6']],
+ ['Index form and log form',['C1']],['Log values',['C2','C3']],['Special logs',['C4']],['Negative and fractional logs',['C5']],['Find the base',['C6','C2']],['Solve index equations with logs',['C8','C1']],
+ ['Log law: add',['G1']],['Log law: subtract',['G2','G5']],['Log law: powers',['G3','G8']],['Log laws combined',['G4','G6','G7']],
+ ['Mixed indices',['R2','Z3','N2','F4','L1','L4','L7']],['Mixed logs and laws',['C2','C5','G1','G2','G3','G4','G7']]];
+const LV=LVS.map(([sk,pool])=>{const d=Math.round(clamp(pool.reduce((t,k)=>t+D[k][0],0)/pool.length));return[sk+' · '+(d<=3?'easy':d<=6?'medium':'hard'),pool];});
+const POOL=LV.map(l=>l[1]);
 const plain=h=>String(h).replace(/<sup>/g,'^(').replace(/<\/sup>/g,')').replace(/<\/i><i>/g,'/').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 const qq=(key,cur)=>{const m=D[cur.k||key];if(!m)return null;return{v:1,tags:[...m[1]].sort(),diff:m[0],score:m[0],qt:cur.k||key,eq:plain(cur.q)};};
 const qmeta=lv=>{const pool=[...new Set(POOL[lv-1])],ms=pool.map(k=>D[k]),all=new Set(ms.flatMap(m=>m[1])),tags=[...all].filter(t=>ms.every(m=>m[1].includes(t))).sort(),
@@ -265,7 +268,7 @@ window.__ix={QT,POOL,D,LV};
 REG.push({id:'indices',name:'Power Balance',emoji:'🔋',color:'#0b7285',cat:'Algebra',qmeta,
  desc:'Powers, indices and logs on a balance. See why n⁰ = 1, why negative indices flip, what a fractional index means, and how every index law turns into a log law. Tap the button to swap an equation between index form and log form.',
  skills:['powers and indices','zero, negative and fractional indices','index laws','logarithms','log laws'],levels:LV.map(l=>l[0]),
- how:'Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan, then press Check. 4 out of 5 to pass.',
+ how:'Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan, then press Check.',
  art:'<div class="minibal">🔋</div>',
- mount(root,lv,ctx){mountQuiz(root,ctx,{popup:true,game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
+ mount(root,lv,ctx){mountQuiz(root,ctx,{single:true,popup:true,game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
 })();
