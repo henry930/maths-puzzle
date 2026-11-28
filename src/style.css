@@ -404,3 +404,5 @@ a.card.news{text-decoration:none;color:inherit}
 .intro.live .fi-dots{margin:2px 0 0}.dm-hand{position:fixed;z-index:6}
 .dm-end{position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:7;background:rgba(60,30,140,.92);padding:12px;border-radius:20px}
 .dm-hl{outline:4px solid #ffd43b!important;outline-offset:3px;border-radius:10px;animation:dmhl 1s infinite}@keyframes dmhl{50%{outline-color:#fff}}
+
+.ch-list{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:320px}.ch-list span{background:#f2efff;border-radius:8px;padding:4px 8px;font-weight:800;font-size:14px;letter-spacing:1px}.ch-list span.hl{background:#ffd23f}.ch-tw td,.ch-tw th{width:auto;padding:4px 10px}
