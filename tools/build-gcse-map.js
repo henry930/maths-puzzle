@@ -7,7 +7,7 @@ const root=path.join(__dirname,'..');
 const STAGE=/ · (warm-up|easy|medium|hard|tough)$/;
 
 /* ---- 1. real skills per game (levels grouped by name, same rule as the in-game profile) ---- */
-const gameFiles=['balance','expand','factorise','quad','lines','factors','fraction','percent','chance','angles','transform','times','match'];
+const gameFiles=['balance','expand','factorise','quad','lines','factors','fraction','percent','chance','angles','transform','times','match','indices'];
 const src=['tags.js',...gameFiles.map(g=>g+'.js'),'qtags.js'].map(f=>fs.readFileSync(path.join(root,'src',f),'utf8')).join('\n');
 const pre=`const window={};const REG=[];const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));const pick=a=>a[R(0,a.length-1)];const shuffle=a=>a;const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);const esc=String;`;
 const {REG}=vm.runInNewContext(pre+src+';({REG})',{Math,String,Array,Object,Set,Map});
@@ -25,7 +25,7 @@ fs.readFileSync(path.join(root,'tools','gcse-map-src.txt'),'utf8').split('\n').f
   if(f.length<3){errors.push(`line ${i+1}: cannot read "${line}"`);return;}
   const[id,name,tier,cov]=f;
   if(ids.has(id))errors.push(`duplicate id ${id}`);ids.add(id);
-  if(!/^[FH]$/.test(tier))errors.push(`${id}: tier must be F or H`);
+  if(!/^[FHX]$/.test(tier))errors.push(`${id}: tier must be F, H or X`);
   const games=[];
   (cov?cov.split(';'):[]).forEach(c=>{
     const k=c.indexOf(':'),g=c.slice(0,k).trim(),re=c.slice(k+1).trim();
@@ -46,7 +46,7 @@ const topicInfo=t=>{const c=t.points.filter(p=>p.games.length).length,gs=[...new
 areas.forEach(a=>a.topics.forEach(t=>Object.assign(t,topicInfo(t))));
 /* ---- 3. write JSON ---- */
 const out={version:1,generated:new Date().toISOString().slice(0,10),
-  note:'Teaching-level knowledge points grouped under the six content areas of the DfE national GCSE Maths content. Tier: F = Foundation and Higher, H = Higher only (approximate). Point ids are permanent.',
+  note:'Teaching-level knowledge points grouped under the six content areas of the DfE national GCSE Maths content. Tier: F = Foundation and Higher, H = Higher only, X = extension beyond GCSE (approximate). Point ids are permanent.',
   areas};
 fs.writeFileSync(path.join(root,'data','gcse-spec.json'),JSON.stringify(out,null,1)+'\n');
 
@@ -56,7 +56,7 @@ const cov=all.filter(p=>p.games.length),gap=all.filter(p=>!p.games.length);
 const used=new Set();all.forEach(p=>p.games.forEach(g=>g.skills.forEach(s=>used.add(g.game+'|'+s))));
 let md=`# GCSE Maths map — topics, knowledge points and game coverage\n\n`;
 md+=`${all.length} knowledge points in ${areas.reduce((a,x)=>a+x.topics.length,0)} topics. **${cov.length} covered** by a game, **${gap.length} gaps**.\n\n`;
-md+=`Tier: F = Foundation and Higher, H = Higher only (approximate). Source of truth: \`tools/gcse-map-src.txt\` → \`data/gcse-spec.json\`.\n\n`;
+md+=`Tier: F = Foundation and Higher, H = Higher only, X = extension beyond GCSE (approximate). Source of truth: \`tools/gcse-map-src.txt\` → \`data/gcse-spec.json\`.\n\n`;
 const nTop=areas.reduce((a,x)=>a+x.topics.length,0),cnt=st=>areas.reduce((a,x)=>a+x.topics.filter(t=>t.status===st).length,0);
 md+=`## Where we are\n\n${nTop} game-sized topics: **${cnt('full')} fully covered**, **${cnt('partial')} partly covered** (a game exists but more can be added), **${cnt('none')} with no game yet**.\n\n`;
 md+=`## Topics and games\n\nEach topic is a block one game could cover. Status: ✅ fully covered · 🟡 partly · ⬜ no game yet.\n`;
@@ -71,7 +71,7 @@ areas.forEach(a=>{
   a.topics.forEach(t=>{
     const c=t.points.filter(p=>p.games.length).length;
     md+=`\n### ${t.name} (${c}/${t.points.length} covered)\n\n`;
-    t.points.forEach(p=>{md+=`- ${p.games.length?'✅':'⬜'} ${p.name}${p.tier==='H'?' (H)':''}${p.games.length?' — '+p.games.map(g=>gname[g.game]).join(', '):''}\n`;});
+    t.points.forEach(p=>{md+=`- ${p.games.length?'✅':'⬜'} ${p.name}${p.tier==='H'?' (H)':p.tier==='X'?' (extension)':''}${p.games.length?' — '+p.games.map(g=>gname[g.game]).join(', '):''}\n`;});
   });
 });
 md+=`\n## Game skills not linked to any knowledge point\n\nThese are mostly "Boss" and mixed levels that practise several knowledge points at once.\n\n`;

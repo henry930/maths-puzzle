@@ -38,7 +38,10 @@ n-inverse ~ Use inverse operations to check an answer ~ F
 # N-pow ~ Powers and roots
 n-squares ~ Square numbers and square roots ~ F
 n-cubes ~ Cube numbers and cube roots ~ F
-n-powers ~ Powers and index notation ~ F
+n-powers ~ Powers and index notation ~ F ~ indices:^(Repeated multiplication|Evaluate powers|Find the missing base)
+n-index-laws ~ Laws of indices (multiply, divide, power of a power) ~ F ~ indices:^Index law
+n-index-zeroneg ~ Zero and negative indices ~ H ~ indices:^(Zero index|Negative index|Powers as negative)
+n-index-frac ~ Fractional indices (roots and p/q) ~ H ~ indices:^(Fractional index|Negative fractional)
 n-recip ~ Reciprocals ~ F
 # N-fm ~ Factors, multiples and primes
 n-multiples ~ Multiples of a number ~ F
@@ -214,6 +217,11 @@ a-area-curve ~ Area under a graph ~ H
 a-func-notation ~ Function notation ~ H
 a-func-compose ~ Composite functions ~ H
 a-func-inverse ~ Inverse functions ~ H
+
+# X-log ~ Logarithms (extension beyond GCSE)
+x-log-def ~ Index form and log form, log values ~ X ~ indices:^(Index → log|Log values|Special logs|Negative and fractional logs)
+x-log-laws ~ Laws of logarithms ~ X ~ indices:^Log law
+x-log-eq ~ Solve index equations using logs ~ X ~ indices:^Index → log
 
 @ R ~ Ratio, proportion and rates of change
 # R-ratio ~ Simplifying and comparing ratios

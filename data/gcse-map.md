@@ -1,12 +1,12 @@
 # GCSE Maths map — topics, knowledge points and game coverage
 
-304 knowledge points in 81 topics. **84 covered** by a game, **220 gaps**.
+310 knowledge points in 82 topics. **91 covered** by a game, **219 gaps**.
 
-Tier: F = Foundation and Higher, H = Higher only (approximate). Source of truth: `tools/gcse-map-src.txt` → `data/gcse-spec.json`.
+Tier: F = Foundation and Higher, H = Higher only, X = extension beyond GCSE (approximate). Source of truth: `tools/gcse-map-src.txt` → `data/gcse-spec.json`.
 
 ## Where we are
 
-81 game-sized topics: **9 fully covered**, **20 partly covered** (a game exists but more can be added), **52 with no game yet**.
+82 game-sized topics: **10 fully covered**, **21 partly covered** (a game exists but more can be added), **51 with no game yet**.
 
 ## Topics and games
 
@@ -20,7 +20,7 @@ Each topic is a block one game could cover. Status: ✅ fully covered · 🟡 pa
 | 🟡 | Mental arithmetic and times tables | 2/4 | Number Match, Times Table Tricks |
 | ⬜ | Negative numbers | 0/3 | — |
 | ⬜ | Order of operations and calculator skills | 0/3 | — |
-| ⬜ | Powers and roots | 0/4 | — |
+| 🟡 | Powers and roots | 4/7 | Power Balance |
 | 🟡 | Factors, multiples and primes | 3/5 | Ball Factory |
 | ⬜ | Prime factors, HCF and LCM | 0/5 | — |
 | 🟡 | Fraction basics: naming, equivalent, simplifying, ordering | 4/5 | Fraction Factory |
@@ -61,6 +61,7 @@ Each topic is a block one game could cover. Status: ✅ fully covered · 🟡 pa
 | ⬜ | Transforming graphs and circle equations | 0/3 | — |
 | ⬜ | Real-life graphs and rates of change | 0/5 | — |
 | ⬜ | Functions | 0/3 | — |
+| ✅ | Logarithms (extension beyond GCSE) | 3/3 | Power Balance |
 
 ### Ratio, proportion and rates of change
 
@@ -139,6 +140,7 @@ Each topic is a block one game could cover. Status: ✅ fully covered · 🟡 pa
 - Transform Quest: 12/12 skills mapped to a knowledge point
 - Times Table Tricks: 9/9 skills mapped to a knowledge point
 - Number Match: 12/12 skills mapped to a knowledge point
+- Power Balance: 31/36 skills mapped to a knowledge point
 
 ## Number
 
@@ -169,11 +171,14 @@ Each topic is a block one game could cover. Status: ✅ fully covered · 🟡 pa
 - ⬜ Use a calculator efficiently (brackets, memory, fraction keys)
 - ⬜ Use inverse operations to check an answer
 
-### Powers and roots (0/4 covered)
+### Powers and roots (4/7 covered)
 
 - ⬜ Square numbers and square roots
 - ⬜ Cube numbers and cube roots
-- ⬜ Powers and index notation
+- ✅ Powers and index notation — Power Balance
+- ✅ Laws of indices (multiply, divide, power of a power) — Power Balance
+- ✅ Zero and negative indices (H) — Power Balance
+- ✅ Fractional indices (roots and p/q) (H) — Power Balance
 - ⬜ Reciprocals
 
 ### Factors, multiples and primes (3/5 covered)
@@ -419,6 +424,12 @@ Each topic is a block one game could cover. Status: ✅ fully covered · 🟡 pa
 - ⬜ Function notation (H)
 - ⬜ Composite functions (H)
 - ⬜ Inverse functions (H)
+
+### Logarithms (extension beyond GCSE) (3/3 covered)
+
+- ✅ Index form and log form, log values (extension) — Power Balance
+- ✅ Laws of logarithms (extension) — Power Balance
+- ✅ Solve index equations using logs (extension) — Power Balance
 
 ## Ratio, proportion and rates of change
 
@@ -712,3 +723,8 @@ These are mostly "Boss" and mixed levels that practise several knowledge points 
 - Chance Lab: Boss mix
 - Chance Lab: Boss 2 · GCSE mix
 - Chance Lab: Boss 3 · GCSE mix
+- Power Balance: Find the fractional index
+- Power Balance: Find the base
+- Power Balance: Solve index equations with logs
+- Power Balance: Boss · indices
+- Power Balance: Boss · logs and laws
