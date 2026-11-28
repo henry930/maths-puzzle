@@ -862,6 +862,7 @@ function skillHtml(G){
   return skillsOf(G).map(s=>`<div class="srow"><span class="sn">${esc(s.name)}</span>${s.achieved>=0?`<span class="sbd sbd-${s.achieved}">${BAND_NAME[s.achieved]}</span>`:'<span class="sst">–</span>'}</div>`).join('');
 }
 
+function syncLabel(){return !CLOUD?'📱 Saved on this device':SYNC==='ok'?'☁ Saved online':SYNC==='pending'?'⏳ Saving…':'⚠ Offline — will sync when you are back online';}
 function showProfile(){
   const u=me();
   const rows=REG.map(G=>{const d=done[G.id]||{};let p=0;for(const l in d){p+=d[l].p||0;}
