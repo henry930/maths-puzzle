@@ -43,15 +43,26 @@ function Q(o){
     q._a2=ang;
     const prev=q._a==null?0:q._a;q._a=ang;
     const gl=v==null&&String(f.L(T)).includes('?'),gr=v==null&&String(f.R(T)).includes('?');   /* dashed outline on the pan that still holds the “?” */
+    const tile=(x,g)=>`<div class="bw-t ${g?'q':''}">${x}</div>`;
     return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}
-     <div class="pw ${level?'lv':''}"><div class="pw-post"></div><div class="pw-beam" data-a="${ang}" style="transform:rotate(${prev}deg)">
-       <div class="pw-hang l"><div class="pw-pan ${gl?'ghost':''}" style="--r:${-prev}deg">${f.L(T)}</div></div>
-       <div class="pw-hang r"><div class="pw-pan ${gr?'ghost':''}" style="--r:${-prev}deg">${f.R(T)}</div></div></div><div class="pw-base"></div></div>
+     <div class="bw ${level?'lv':''}" data-a="${ang}" data-p="${prev}"><svg class="bw-svg"></svg><div class="bw-post"></div><div class="bw-beam"></div>
+       <div class="bw-pan" data-s="L">${tile(f.L(T),gl)}<div class="bw-dish"></div></div>
+       <div class="bw-pan" data-s="R">${tile(f.R(T),gr)}<div class="bw-dish"></div></div><div class="bw-base"></div></div>
      <div class="pw-eq">${f.L(T)} <b>=</b> ${f.R(T)}${level?' <span class="pw-ok">level ✓</span>':''}</div>
      ${q.forms.length>1?`<button class="btn alt pw-tg" id="ftg">↔ ${f.btn}</button>`:''}`;
   };
-  q.after=root=>{const b=root.querySelector('.pw-beam');if(!b)return;void b.offsetWidth;const a=b.dataset.a;b.style.transform=`rotate(${a}deg)`;
-    root.querySelectorAll('.pw-pan').forEach(p=>p.style.setProperty('--r',-a+'deg'));};
+  /* same geometry as the Balance Scale game: the beam turns about the pin, each pan hangs from its end by two strings and stays upright */
+  q.after=root=>{const sc=root.querySelector(".bw");if(!sc)return;cancelAnimationFrame(q._raf);
+    const beam=sc.querySelector('.bw-beam'),svg=sc.querySelector('.bw-svg'),pans=[...sc.querySelectorAll('.bw-pan')];
+    const tgt=+sc.dataset.a;let ang=+sc.dataset.p,vel=0;
+    const place=()=>{const w=sc.clientWidth||320,pw=Math.max(112,Math.round(w*.42)),h=(w-pw)/2,cx=w/2,fy=34,r=ang*Math.PI/180,c=Math.cos(r),sn=Math.sin(r);
+      const ex=[[cx-h*c,fy-h*sn],[cx+h*c,fy+h*sn]];
+      beam.style.width=(2*h+22)+'px';beam.style.left=(cx-h-11)+'px';beam.style.top=(fy-6)+'px';beam.style.transform=`rotate(${ang}deg)`;
+      let sv='';pans.forEach((p,i)=>{const px=ex[i][0]-pw/2,py=ex[i][1]+34,ph=p.offsetHeight||52;p.style.width=pw+'px';p.style.left=px+'px';p.style.top=py+'px';
+        sv+=`<line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+6}" y2="${py+ph-4}" class="sc-str"/><line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+pw-6}" y2="${py+ph-4}" class="sc-str"/><circle cx="${ex[i][0]}" cy="${ex[i][1]}" r="4" class="sc-pin"/>`;});
+      svg.setAttribute('viewBox',`0 0 ${w} ${sc.clientHeight||200}`);svg.innerHTML=sv+`<circle cx="${cx}" cy="${fy}" r="9" class="sc-pin big"/>`;};
+    const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
+    place();q._raf=requestAnimationFrame(step);};
   return q;
 }
 /* an index equation  b^x = N  and its log form  x = log_b N  (answer x = e) */

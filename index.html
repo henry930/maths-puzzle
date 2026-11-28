@@ -422,21 +422,23 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .pgt{margin:10px 0 2px;font-size:16px}.sk{padding-left:0}
 
 /* Power Balance: indices and logs on a balance */
-.pw{position:relative;width:100%;max-width:360px;height:178px;margin:4px auto 0}.pw-post{position:absolute;left:50%;top:44px;width:6px;height:112px;margin-left:-3px;background:#845ef7;border-radius:3px}
-.pw-base{position:absolute;left:50%;bottom:0;width:110px;height:14px;margin-left:-55px;background:#5f3dc4;border-radius:8px 8px 0 0}
-.pw-beam{position:absolute;left:23%;right:23%;top:40px;height:8px;background:#5f3dc4;border-radius:5px;transition:transform .7s cubic-bezier(.3,1.5,.5,1)}
-.pw-beam::after{content:"";position:absolute;left:50%;top:-5px;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#ffd43b;border:3px solid #5f3dc4}
-.pw-hang{position:absolute;top:8px;width:0;height:70px}.pw-hang.l{left:0}.pw-hang.r{right:0}
-.pw-hang::before{content:"";position:absolute;left:0;top:0;height:46px;width:0;border-left:2px dashed #7048e8}
-.pw-pan{position:absolute;top:46px;left:50%;transform:translateX(-50%) rotate(var(--r,0deg));transition:transform .7s cubic-bezier(.3,1.5,.5,1);min-width:84px;max-width:150px;padding:6px 8px;background:#fff;border:3px solid #7048e8;border-radius:6px 6px 22px 22px;text-align:center;font-size:17px;font-weight:800;line-height:1.25;color:#2b2160;box-shadow:0 3px 8px rgba(40,30,100,.15)}
-.pw-pan.ghost{border-style:dashed;color:#adb5bd}.pw.lv .pw-pan{border-color:#2eaa5e;background:#ebfbee}.pw.lv .pw-beam{background:#2b8a3e}
+.bw{position:relative;width:100%;max-width:380px;height:196px;margin:4px auto 0}.bw-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.bw-post{position:absolute;left:50%;top:34px;bottom:8px;width:12px;margin-left:-6px;background:linear-gradient(90deg,#9775fa,#5f3dc4);border-radius:6px}
+.bw-base{position:absolute;left:50%;bottom:0;width:120px;height:14px;margin-left:-60px;background:linear-gradient(#6741d9,#4c2fb3);border-radius:10px 10px 6px 6px;box-shadow:0 3px 0 #0003}
+.bw-beam{position:absolute;height:12px;background:linear-gradient(#845ef7,#5f3dc4);border-radius:8px;box-shadow:0 2px 4px #0003;z-index:2}
+.bw-pan{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:center}
+.bw-t{min-width:56px;min-height:42px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;max-width:100%;padding:6px 10px;margin-bottom:2px;background:#ffd43b;color:#2b2160;border-radius:10px;box-shadow:0 2px 0 #0003;text-align:center;font-size:19px;font-weight:900;line-height:1.2;white-space:nowrap}
+.bw-t.q{background:#e5dbff;color:#845ef7;box-shadow:none;border:2px dashed #845ef7}
+.bw-dish{width:100%;height:10px;background:linear-gradient(#ced4da,#868e96);border-radius:0 0 40px 40px/0 0 14px 14px}
+.bw.lv .bw-t{background:#69db7c}.bw.lv .bw-beam{background:linear-gradient(#51cf66,#2b8a3e)}
+.bw .fr,.bw-t .fr{font-size:.8em;margin:0 1px}
 .pw sup,.pw-eq sup,.pw-ladder sup,.ch-q sup{font-size:.68em;line-height:0}.pw sub,.ch-q sub,.pw-eq sub,.pw-ladder sub{font-size:.68em}
 .pw sup .fr,.ch-q sup .fr,.pw-eq sup .fr{font-size:.7em;margin:0}.pw-sub{font-size:13px;margin-top:3px;font-weight:700}
 .tile{display:inline-block;min-width:22px;padding:1px 5px;margin:1px;background:#e5dbff;border-radius:6px;color:#4c2fb5}.tx{margin:0 2px;color:#868e96}
 .pw-eq{text-align:center;font-size:19px;font-weight:800;margin:6px 0 2px;color:#2b2160}.pw-ok{font-size:13px;color:#2b8a3e;margin-left:6px}
 .pw-tg{margin:6px auto;display:block;font-size:14px;padding:7px 12px}
 .pw-ladder{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center;margin:2px 0 6px;font-size:14px;font-weight:800}.lp{background:#e7f5ff;border-radius:8px;padding:2px 7px;color:#1864ab}.lp.d{background:#fff3bf;color:#e67700}
-@media(max-width:380px){.pw-pan{font-size:15px;min-width:72px;max-width:128px}}
+@media(max-width:380px){.bw-t{font-size:16px;padding:5px 7px}}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><button class="back" id="lvbtn">Levels ▾</button><button class="back" id="pbtn">👤</button><div class="pills" id="glevels"></div></div>
@@ -3941,15 +3943,26 @@ function Q(o){
     q._a2=ang;
     const prev=q._a==null?0:q._a;q._a=ang;
     const gl=v==null&&String(f.L(T)).includes('?'),gr=v==null&&String(f.R(T)).includes('?');   /* dashed outline on the pan that still holds the “?” */
+    const tile=(x,g)=>`<div class="bw-t ${g?'q':''}">${x}</div>`;
     return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}
-     <div class="pw ${level?'lv':''}"><div class="pw-post"></div><div class="pw-beam" data-a="${ang}" style="transform:rotate(${prev}deg)">
-       <div class="pw-hang l"><div class="pw-pan ${gl?'ghost':''}" style="--r:${-prev}deg">${f.L(T)}</div></div>
-       <div class="pw-hang r"><div class="pw-pan ${gr?'ghost':''}" style="--r:${-prev}deg">${f.R(T)}</div></div></div><div class="pw-base"></div></div>
+     <div class="bw ${level?'lv':''}" data-a="${ang}" data-p="${prev}"><svg class="bw-svg"></svg><div class="bw-post"></div><div class="bw-beam"></div>
+       <div class="bw-pan" data-s="L">${tile(f.L(T),gl)}<div class="bw-dish"></div></div>
+       <div class="bw-pan" data-s="R">${tile(f.R(T),gr)}<div class="bw-dish"></div></div><div class="bw-base"></div></div>
      <div class="pw-eq">${f.L(T)} <b>=</b> ${f.R(T)}${level?' <span class="pw-ok">level ✓</span>':''}</div>
      ${q.forms.length>1?`<button class="btn alt pw-tg" id="ftg">↔ ${f.btn}</button>`:''}`;
   };
-  q.after=root=>{const b=root.querySelector('.pw-beam');if(!b)return;void b.offsetWidth;const a=b.dataset.a;b.style.transform=`rotate(${a}deg)`;
-    root.querySelectorAll('.pw-pan').forEach(p=>p.style.setProperty('--r',-a+'deg'));};
+  /* same geometry as the Balance Scale game: the beam turns about the pin, each pan hangs from its end by two strings and stays upright */
+  q.after=root=>{const sc=root.querySelector(".bw");if(!sc)return;cancelAnimationFrame(q._raf);
+    const beam=sc.querySelector('.bw-beam'),svg=sc.querySelector('.bw-svg'),pans=[...sc.querySelectorAll('.bw-pan')];
+    const tgt=+sc.dataset.a;let ang=+sc.dataset.p,vel=0;
+    const place=()=>{const w=sc.clientWidth||320,pw=Math.max(112,Math.round(w*.42)),h=(w-pw)/2,cx=w/2,fy=34,r=ang*Math.PI/180,c=Math.cos(r),sn=Math.sin(r);
+      const ex=[[cx-h*c,fy-h*sn],[cx+h*c,fy+h*sn]];
+      beam.style.width=(2*h+22)+'px';beam.style.left=(cx-h-11)+'px';beam.style.top=(fy-6)+'px';beam.style.transform=`rotate(${ang}deg)`;
+      let sv='';pans.forEach((p,i)=>{const px=ex[i][0]-pw/2,py=ex[i][1]+34,ph=p.offsetHeight||52;p.style.width=pw+'px';p.style.left=px+'px';p.style.top=py+'px';
+        sv+=`<line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+6}" y2="${py+ph-4}" class="sc-str"/><line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+pw-6}" y2="${py+ph-4}" class="sc-str"/><circle cx="${ex[i][0]}" cy="${ex[i][1]}" r="4" class="sc-pin"/>`;});
+      svg.setAttribute('viewBox',`0 0 ${w} ${sc.clientHeight||200}`);svg.innerHTML=sv+`<circle cx="${cx}" cy="${fy}" r="9" class="sc-pin big"/>`;};
+    const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
+    place();q._raf=requestAnimationFrame(step);};
   return q;
 }
 /* an index equation  b^x = N  and its log form  x = log_b N  (answer x = e) */
