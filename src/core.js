@@ -204,6 +204,7 @@ window.addEventListener('popstate',routeNow);
 /* reusable number pad: returns element; onKey gets '0'-'9','-','.','del','ok' */
 function numpad(onKey,opts={}){
   const p=el('div','npad');
+  if(opts.compact){p.className='npad cp';['1','2','3','4','5','6','7','8','9','0',opts.minus?'-':null,opts.slash?'/':null,'del','ok'].filter(Boolean).forEach(k=>{const b=el('button','key'+(k==='del'?' del':k==='ok'?' ok':''),k==='del'?'⌫':k==='-'?'−':k==='ok'?'✓':k);b.onclick=()=>onKey(k);p.appendChild(b);});return p;}
   const both=opts.minus&&opts.slash;                                   /* minus and slash: 3 columns of digits + − 0 / and a bottom row */
   const keys=both?['7','8','9','4','5','6','1','2','3','-','0','/']:['7','8','9','4','5','6','1','2','3',opts.minus?'-':(opts.slash?'/':'del'),'0',opts.minus||opts.slash?'del':'ok'];
   keys.forEach(k=>{const b=el('button','key'+(k==='del'?' del':''),k==='del'?'⌫':k==='-'?'−':k==='ok'?'✓':k);b.onclick=()=>onKey(k);p.appendChild(b);});

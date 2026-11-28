@@ -6,20 +6,21 @@ function mountQuiz(root,ctx,o){
   function draw(msg,ok){
     root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.visf?cur.visf(buf,answered,ok):(cur.vis||'')}</div><div class="ch-q">${cur.q}</div>
-     <div class="ch-in ${ok===true?'good':ok===false?'bad':''}">${buf||'&nbsp;'}</div>
+     <div class="ch-in ${ok===true?'good':ok===false?'bad':''}" ${cur.nopad?'hidden':''}>${buf||'&nbsp;'}</div>
      <div class="msg">${msg||'&nbsp;'}</div><div id="chp"></div>
      <div class="toolrow">${answered?`<button class="btn" id="nx">${qi<4?'Next question ▶':'See result ▶'}</button>`:''}</div></div>`;
-    if(!answered)$('#chp').appendChild(numpad(press,{slash:!!o.slash,minus:!!o.minus}));
+    if(!answered&&!cur.nopad)$('#chp').appendChild(numpad(press,{slash:!!o.slash,minus:!!o.minus,compact:!!o.compact}));
     {const fb=$('#ftg',root);if(fb)fb.onclick=()=>{cur.form=1-(cur.form||0);draw(msg,ok);};}   /* games can offer a second form of the same equation */
-    if(cur.after)cur.after(root);
+    if(cur.after)cur.after(root,{set:s=>{if(!answered){buf=String(s);draw();}},submit,buf:()=>buf});   /* games with their own input (drag-and-drop) set the answer and submit through this */
     if($('#nx'))$('#nx').onclick=advance;
   }
   function press(k){
-    if(answered)return;
+    if(answered||(cur.nopad&&k!=='ok'))return;
     if(k==='del')buf=buf.slice(0,-1);else if(k==='ok')return submit();else if(buf.length<12)buf+=k;
     draw();
   }
   function submit(){
+    if(cur.nopad&&buf==='')buf=String(cur.start);
     const p=o.parse(buf);if(!p){draw(o.slash?'Type an answer first, e.g. 3/10':'Type an answer first');return;}
     answered=true;
     const val=Math.abs(p.v-cur.ans)<1e-6;let ok=val;

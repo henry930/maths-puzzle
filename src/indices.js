@@ -34,25 +34,31 @@ const num=s=>{const v=parseT(s);return v==null?null:{v,n:null,d:1};};
    forms[i] = {L(T),R(T),tl(v),btn}:  L/R give the HTML of each pan (T = what has been typed so far),
    tl(v) = left − right in "steps" for a typed value v, and is 0 exactly when the balance is level. */
 function Q(o){
-  const q={k:o.k,q:o.q,ans:o.ans,ex:o.ex,forms:o.forms,form:0};
+  const q={k:o.k,q:o.q,ans:o.ans,ex:o.ex,forms:o.forms,form:0,start:o.start,build:o.build,hist:[],nopad:!!o.build};
+  const bs=o.build,eT=e=>e<0?'−'+(-e):String(e),eh=e=>e===0?'1':e===1?bs:pw(bs,eT(e));
   q.visf=function(buf,answered,ok){
     const f=q.forms[q.form||0];
-    const v=answered?q.ans:parseT(buf),T=answered?H(q.ans):typedH(buf);
+    let v=answered?q.ans:parseT(buf);if(v==null&&q.start!=null&&!answered)v=q.start;
+    const T=answered?H(q.ans):(q.start!=null&&v!=null?H(v):typedH(buf));
     const tl=v==null?0:f.tl(v),level=v!=null&&Math.abs(tl)<1e-7;
     const ang=v==null?0:-Math.max(-16,Math.min(16,tl*7));
     q._a2=ang;
     const prev=q._a==null?0:q._a;q._a=ang;
-    const gl=v==null&&String(f.L(T)).includes('?'),gr=v==null&&String(f.R(T)).includes('?');   /* dashed outline on the pan that still holds the “?” */
-    const tile=(x,g)=>`<div class="bw-t ${g?'q':''}">${x}</div>`;
+    const gl=v==null&&String(f.L(T,v)).includes('?'),gr=v==null&&String(f.R(T,v)).includes('?');   /* dashed outline on the pan that still holds the “?” */
+    const tile=(x,g,c)=>`<div class="bw-t ${g?'q':''} ${c||''}">${c==='blk'?x:`<span>${x}</span>`}</div>`;
+    const buildBits=o.build?`<div class="bk-log" id="bklog">${q.hist.length?q.hist.map(x=>`<div class="el"><span class="otg ${x.d>0?'ml':'dv'}">${x.d>0?'×':'÷'}${bs}</span> ${eh(x.from)} ${x.d>0?'×':'÷'} ${bs} = <b>${eh(x.to)}</b></div>`).join(''):`<div class="el old">${eh(q.start)} — add or take away a block to start</div>`}</div>
+      <div class="bk-tray"><button class="bk src" data-d="1" ${answered?'disabled':''}>${bs}</button>${o.neg?`<button class="bk src inv" data-d="-1" ${answered?'disabled':''}>÷${bs}</button>`:''}
+       ${answered?'':`<button class="btn alt bk-un" id="bkun">↶</button><button class="btn bk-ck" id="chk">Check ✓</button>`}
+       <div class="bk-hint">Drag or tap a block to add it · tap a block on the pan to remove it</div></div>`:'';
     return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}
      <div class="bw ${level?'lv':''}" data-a="${ang}" data-p="${prev}"><svg class="bw-svg"></svg><div class="bw-post"></div><div class="bw-beam"></div>
-       <div class="bw-pan" data-s="L">${tile(f.L(T),gl)}<div class="bw-dish"></div></div>
-       <div class="bw-pan" data-s="R">${tile(f.R(T),gr)}<div class="bw-dish"></div></div><div class="bw-base"></div></div>
-     <div class="pw-eq">${f.L(T)} <b>=</b> ${f.R(T)}${level?' <span class="pw-ok">level ✓</span>':''}</div>
-     ${q.forms.length>1?`<button class="btn alt pw-tg" id="ftg">↔ ${f.btn}</button>`:''}`;
+       <div class="bw-pan" data-s="L">${tile(f.L(T,v),gl)}<div class="bw-dish"></div></div>
+       <div class="bw-pan" data-s="R">${tile(f.R(T,v),gr,f.blocks?'blk':'')}<div class="bw-dish"></div></div><div class="bw-base"></div></div>
+     ${o.build?buildBits:`<div class="pw-eq">${f.L(T,v)} <b>=</b> ${f.R(T,v)}${level?' <span class="pw-ok">level ✓</span>':''}</div>
+     ${q.forms.length>1?`<button class="btn alt pw-tg" id="ftg">↔ ${f.btn}</button>`:''}`}`;
   };
   /* same geometry as the Balance Scale game: the beam turns about the pin, each pan hangs from its end by two strings and stays upright */
-  q.after=root=>{const sc=root.querySelector(".bw");if(!sc)return;cancelAnimationFrame(q._raf);
+  q.after=(root,api)=>{const sc=root.querySelector('.bw');if(!sc)return;cancelAnimationFrame(q._raf);
     const beam=sc.querySelector('.bw-beam'),svg=sc.querySelector('.bw-svg'),pans=[...sc.querySelectorAll('.bw-pan')];
     const tgt=+sc.dataset.a;let ang=+sc.dataset.p,vel=0;
     const place=()=>{const w=sc.clientWidth||320,pw=Math.max(100,Math.round(w*.40)),h=(w-pw)/2,cx=w/2,fy=24,r=ang*Math.PI/180,c=Math.cos(r),sn=Math.sin(r);
@@ -62,7 +68,25 @@ function Q(o){
         sv+=`<line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+6}" y2="${py+ph-4}" class="sc-str"/><line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+pw-6}" y2="${py+ph-4}" class="sc-str"/><circle cx="${ex[i][0]}" cy="${ex[i][1]}" r="4" class="sc-pin"/>`;});
       svg.setAttribute('viewBox',`0 0 ${w} ${sc.clientHeight||200}`);svg.innerHTML=sv+`<circle cx="${cx}" cy="${fy}" r="9" class="sc-pin big"/>`;};
     const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
-    place();q._raf=requestAnimationFrame(step);};
+    place();q._raf=requestAnimationFrame(step);
+    if(q.build&&api)bindBuild(root,api,sc,pans[1]);};
+  /* build mode: drag blocks onto the right pan (or tap) to multiply / divide; every operation adds a line to the log */
+  function bindBuild(root,api,sc,pan){
+    const lg=root.querySelector('#bklog');if(lg)lg.scrollTop=1e5;
+    if(root.querySelector('.bk.src[disabled]'))return;
+    const now=()=>{const v=parseT(api.buf());return v==null?q.start:v;};
+    const op=d=>{const e=now();q.hist.push({d,from:e,to:e+d});api.set(String(e+d));};
+    const over=(x,y)=>{const p=pan.getBoundingClientRect();return x>p.left-30&&x<p.right+30&&y>p.top-40&&y<p.bottom+30;};
+    const drag=(el,onDrop,onTap)=>el.addEventListener('pointerdown',ev=>{ev.preventDefault();const sx=ev.clientX,sy=ev.clientY;let g=null,moved=false;
+      const mv=e=>{if(!moved&&Math.hypot(e.clientX-sx,e.clientY-sy)>8){moved=true;g=document.createElement('div');g.className='bk gh'+(el.classList.contains('inv')?' inv':'');g.textContent=el.textContent;document.body.appendChild(g);}
+        if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';pan.classList.toggle('hot',over(e.clientX,e.clientY));}};
+      const up=e=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointercancel',up);if(g)g.remove();pan.classList.remove('hot');if(!moved)onTap();else onDrop(over(e.clientX,e.clientY));};
+      window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up,{once:true});window.addEventListener('pointercancel',up,{once:true});});
+    root.querySelectorAll('.bk.src').forEach(el=>{const d=+el.dataset.d;drag(el,hit=>{if(hit)op(d);},()=>op(d));});
+    pan.querySelectorAll('.bk:not(.one)').forEach(el=>{const rm=()=>{const e=now();op(e>0?-1:1);};drag(el,hit=>{if(!hit)rm();},rm);});
+    const un=root.querySelector('#bkun');if(un)un.onclick=()=>{const h=q.hist.pop();if(h)api.set(String(h.from));};
+    const ck=root.querySelector('#chk');if(ck)ck.onclick=()=>{if(api.buf()==='')api.set(String(q.start));api.submit();};
+  }
   return q;
 }
 /* an index equation  b^x = N  and its log form  x = log_b N  (answer x = e) */
@@ -76,7 +100,23 @@ const BASES=[2,3,4,5,10];
 const exp=(b,n)=>Math.pow(b,n);
 const ladder=(b,from,to,last)=>{const a=[];for(let e=from;e>=to;e--){const v=Math.pow(b,e);a.push(`<span class="lp">${pw(b,e<0?'−'+(-e):e)} = ${e===to&&last?'<b>?</b>':H(v)}</span>`);if(e>to)a.push(`<span class="lp d">÷${b}</span>`);}return a.join('');};
 
+/* ---- build mode: blocks on the right pan.  e = net index (a-block = ×a, ÷a-block = ÷a); 0 blocks = 1 ---- */
+const eT=e=>e<0?'−'+(-e):String(e);
+const blk=(b,n)=>Array.from({length:n},()=>`<b class="bk">${b}</b>`).join('');
+const blocksH=(b,e,s)=>{if(e==null)e=s;return e===0?'<b class="bk one">1</b>':e>0?blk(b,e):`<span class="fr"><i>1</i><i>${blk(b,-e)}</i></span>`;};
+const bq=(k,b,t,s,qt,ex,o)=>Q(Object.assign({k,q:qt,ans:t,start:s,build:b,ex,forms:[{L:()=>(o&&o.L)||pw(b,eT(t)),R:(T,v)=>blocksH(b,v,s),tl:v=>t-v,blocks:true}]},o||{}));
+const BK=()=>pick(['a','x','y','m','n','2','3','5']);
+
 const QT={
+/* ---- build the power from blocks ---- */
+B1(){const b=BK(),n=R(2,5);return bq('B1',b,n,0,`Make ${pw(b,n)}: add ${b}-blocks to the right pan until the balance levels.`,`${tiles(b,n)} = ${pw(b,n)}. ${n} blocks multiplied together.`);},
+B2(){const b=BK(),n=R(1,3),m=n+R(1,3);return bq('B2',b,n,m,`The right pan holds ${pw(b,m)}. Take blocks away so it equals ${pw(b,n)}.`,`${pw(b,m)} ÷ ${pw(b,m-n)} = ${pw(b,n)}. Each block you take away divides by ${b}.`);},
+B3(){const b=BK(),p=R(1,3),q=R(1,3);return bq('B3',b,p+q,0,`Build ${pw(b,p)} × ${pw(b,q)} with ${b}-blocks. How many blocks does it need?`,`${pw(b,p)} × ${pw(b,q)} = ${pw(b,p+q)}: ${p} blocks and ${q} blocks make ${p+q}. Add the indices.`,{L:pw(b,p)+' × '+pw(b,q)});},
+B4(){const b=BK(),m=R(2,4);return bq('B4',b,0,m,`The right pan holds ${pw(b,m)}. Take away every ${b}-block. What is ${pw(b,0)}?`,`${pw(b,m)} ÷ ${pw(b,m)} = ${pw(b,0)} = 1. No blocks left means 1 (not 0).`);},
+B5(){const b=BK(),n=R(1,3);return bq('B5',b,-n,0,`Make ${pw(b,'−'+n)}. Use the ÷${b} block: each one divides by ${b}.`,`${pw(b,'−'+n)} = 1 ÷ ${pw(b,n)}: ${n} divide-block${n>1?'s':''}.`,{neg:true});},
+B6(){const b=BK();let s=R(-2,3),t=R(-3,4);if(t===s)t=s+1;return bq('B6',b,t,s,`Change the right pan from ${pw(b,eT(s))} to ${pw(b,eT(t))}.`,`${b}-blocks multiply, ÷${b}-blocks divide. From ${pw(b,eT(s))} to ${pw(b,eT(t))} is a change of ${t-s>0?'+':'−'}${Math.abs(t-s)} in the index.`,{neg:true});},
+B7(){const b=BK(),p=R(1,4),q=p+R(1,3);return bq('B7',b,p-q,0,`Build ${pw(b,p)} ÷ ${pw(b,q)}. Use ${b}-blocks to multiply and ÷${b}-blocks to divide.`,`${pw(b,p)} ÷ ${pw(b,q)} = ${pw(b,eT(p-q))}: the index is ${p} − ${q} = ${p-q}.`,{neg:true,L:pw(b,p)+' ÷ '+pw(b,q)});},
+
 /* ---- repeated multiplication ---- */
  R1(){const b=pick([2,3,4,5,10]),n=R(2,6);return Q({k:'R1',q:`The right pan holds ${n} copies of ${b} multiplied together. Write that as a power: ${pw(b,'?')}.`,ans:n,
    forms:[{L:T=>pw(b,T),R:()=>tiles(b,n),tl:v=>v-n,btn:''}],ex:`${b} is multiplied ${n} times, so ${tiles(b,n).replace(/<[^>]+>/g,'')} = ${pw(b,n)}. The index counts how many times the base is multiplied.`});},
@@ -187,7 +227,7 @@ function logLaw(k,b,Lh,X,indexH,ex){
 }
 
 /* ---- levels: name, question types, and difficulty / tags per question type ---- */
-const D={R1:[1,['ix-repeat']],R2:[1,['ix-eval']],R3:[2,['ix-find-index','lg-convert']],R4:[3,['ix-find-base']],
+const D={B1:[1,['ix-repeat']],B2:[2,['ix-law-div']],B3:[2,['ix-law-mul']],B4:[3,['ix-zero']],B5:[3,['ix-neg']],B6:[4,['ix-law-mul','ix-law-div','ix-neg']],B7:[4,['ix-law-div','ix-neg']],R1:[1,['ix-repeat']],R2:[1,['ix-eval']],R3:[2,['ix-find-index','lg-convert']],R4:[3,['ix-find-base']],
  Z1:[2,['ix-zero']],Z2:[2,['ix-zero']],Z3:[3,['ix-zero','ix-eval']],
  N1:[3,['ix-neg']],N2:[3,['ix-neg']],N3:[3,['ix-neg']],N4:[4,['ix-neg','ix-find-index']],N5:[5,['ix-neg','ix-neg-frac-base']],
  F1:[4,['ix-frac']],F2:[4,['ix-frac']],F3:[5,['ix-frac']],F4:[6,['ix-frac','ix-frac-pq']],F5:[7,['ix-frac','ix-frac-pq','ix-frac-neg']],F6:[7,['ix-frac','ix-find-index']],
@@ -195,14 +235,14 @@ const D={R1:[1,['ix-repeat']],R2:[1,['ix-eval']],R3:[2,['ix-find-index','lg-conv
  C1:[4,['lg-convert','ix-find-index']],C2:[5,['lg-convert','lg-value']],C3:[5,['lg-value','lg-neg']],C4:[5,['lg-special']],C5:[7,['lg-value','lg-neg','lg-frac']],C6:[7,['lg-base']],C8:[8,['lg-convert','lg-neg','lg-frac']],
  G1:[6,['lg-add']],G2:[6,['lg-sub']],G3:[7,['lg-pow']],G4:[8,['lg-mix']],G5:[7,['lg-simplify','lg-sub']],G6:[7,['lg-simplify','lg-add']],G7:[8,['lg-mix','lg-pow']],G8:[7,['lg-pow','lg-simplify']]};
 const LV=[
- ['Repeated multiplication → power',['R1']],['Repeated multiplication · find the index',['R1','R3']],['Evaluate powers',['R2']],['Find the missing base',['R4','R3']],
- ['Zero index · the halving ladder',['Z1']],['Zero index',['Z1','Z2']],['Zero index · mixed',['Z2','Z3']],
- ['Negative index · keep dividing',['N1']],['Negative index · fractions',['N1','N2']],['Negative index · decimals',['N2','N3']],['Powers as negative indices',['N4','N2']],['Negative index · fraction base',['N5','N2']],
+ ['Repeated multiplication → power',['R1']],['Repeated multiplication · find the index',['R1','R3']],['Evaluate powers',['R2']],['Find the missing base',['R4','R3']],['Build a power · add blocks',['B1']],['Build · take blocks away',['B2','B1']],
+ ['Zero index · the halving ladder',['Z1']],['Zero index',['Z1','Z2']],['Zero index · mixed',['Z2','Z3']],['Build · zero index',['B4']],
+ ['Negative index · keep dividing',['N1']],['Negative index · fractions',['N1','N2']],['Negative index · decimals',['N2','N3']],['Powers as negative indices',['N4','N2']],['Negative index · fraction base',['N5','N2']],['Build · negative index',['B5']],
  ['Fractional index · square roots',['F1']],['Fractional index · cube roots and more',['F1','F2','F3']],['Fractional index · p/q',['F4','F2']],['Negative fractional index',['F5','F4']],['Find the fractional index',['F6']],
- ['Index law · multiply',['L1']],['Index law · divide',['L2','L8']],['Index law · power of a power',['L3']],['Index laws · all three',['L1','L2','L3']],['Index laws · negative indices',['L4']],['Index laws · with letters',['L5']],['Index laws · missing index',['L6','L7']],
+ ['Build · multiply powers',['B3']],['Index law · multiply',['L1']],['Build · divide powers',['B7','B2']],['Index law · divide',['L2','L8']],['Index law · power of a power',['L3']],['Index laws · all three',['L1','L2','L3']],['Index laws · negative indices',['L4']],['Index laws · with letters',['L5']],['Index laws · missing index',['L6','L7']],
  ['Index → log · 2ˣ = 8',['C1']],['Log values',['C2','C3']],['Special logs · log 1 and log a',['C4']],['Negative and fractional logs',['C5']],['Find the base',['C6','C2']],['Solve index equations with logs',['C8','C1']],
  ['Log law · add',['G1']],['Log law · subtract',['G2','G5']],['Log law · powers',['G3','G8']],['Log laws · combine',['G4','G6','G7']],
- ['Boss · indices',['R2','Z3','N2','F4','L1','L4','L7']],['Boss · logs and laws',['C2','C5','G1','G2','G3','G4','G7']]];
+ ['Build · change the power',['B6']],['Boss · indices',['R2','Z3','N2','F4','L1','L4','L7']],['Boss · logs and laws',['C2','C5','G1','G2','G3','G4','G7']]];
 const POOL=LV.map(l=>l[1]);
 const clamp=d=>Math.max(1,Math.min(10,d));
 const plain=h=>String(h).replace(/<\/i><i>/g,'/').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
@@ -214,7 +254,7 @@ window.__ix={QT,POOL,D,LV};
 REG.push({id:'indices',name:'Power Balance',emoji:'🔋',color:'#0b7285',cat:'Algebra',qmeta,
  desc:'Powers, indices and logs on a balance. See why n⁰ = 1, why negative indices flip, what a fractional index means, and how every index law turns into a log law. Tap the button to swap an equation between index form and log form.',
  skills:['powers and indices','zero, negative and fractional indices','index laws','logarithms','log laws'],levels:LV.map(l=>l[0]),
- how:'Type the missing number (− for negative, / for fractions) and watch the beam level out. Use the ↔ button to flip between index and log form. 4 out of 5 to pass.',
+ how:'Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan, then press Check. 4 out of 5 to pass.',
  art:'<div class="minibal">🔋</div>',
- mount(root,lv,ctx){mountQuiz(root,ctx,{game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,winTitle:'Power player!'});}});
+ mount(root,lv,ctx){mountQuiz(root,ctx,{game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
 })();
