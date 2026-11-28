@@ -39,6 +39,10 @@ qd-all-positive|all positive|全部正數
 qd-neg-middle|minus in the middle|中間係負數
 qd-neg-last|minus at the end|最後一項係負數
 qd-dos|difference of two squares|平方差
+qd-common-factor|common factor|公因數
+qd-factor-first|take out a common factor first|先提公因數
+qd-perfect-square|perfect square|完全平方
+qd-solve|solve the equation|解方程
 ln-gradient-only|gradient only|只調 m
 ln-intercept-only|intercept only|只調 c
 ln-both|gradient and intercept|m 同 c
@@ -278,10 +282,18 @@ function tagFactorise(q){
 }
 /* ---------- Quadratic Factoriser: q = {a,b,c,m,p,n,q} ---------- */
 function tagQuad(q){
-  const tags=[q.a===1?'qd-monic':'qd-lead-coef'],dos=q.b===0&&q.c<0;
-  if(dos)tags.push('qd-dos');else{if(q.b>0&&q.c>0)tags.push('qd-all-positive');if(q.b<0&&q.c>0)tags.push('qd-neg-middle');if(q.c<0)tags.push('qd-neg-last');}
-  const big=Math.max(Math.abs(q.p),Math.abs(q.q))>=10||Math.abs(q.c)>=50;if(big)tags.push('big-numbers');
-  const d=(q.a>1?4.5:2)+(!dos&&q.b<0&&q.c>0?1:0)+(!dos&&q.c<0?1.5:0)+(dos?.5:0)+(big?1:0)+(q.a>1&&Math.max(q.m,q.n)>=3?1:0);
+  const kind=q.kind||'std',tags=[];
+  const sq=kind!=='cf'&&q.m===q.n&&q.p===q.q&&q.p!==0,dos=kind!=='cf'&&q.b===0&&q.c<0;
+  if(kind==='cf')tags.push('qd-common-factor');
+  else{tags.push(q.m===1&&q.n===1?'qd-monic':'qd-lead-coef');
+    if(dos)tags.push('qd-dos');else if(sq)tags.push('qd-perfect-square');else{if(q.b>0&&q.c>0)tags.push('qd-all-positive');if(q.b<0&&q.c>0)tags.push('qd-neg-middle');if(q.c<0)tags.push('qd-neg-last');}}
+  if(kind==='cf2')tags.push('qd-factor-first');
+  if(q.solve)tags.push('qd-solve');
+  const big=kind==='cf'?Math.abs(q.b)>=40:(Math.max(Math.abs(q.p),Math.abs(q.q))>=10||Math.abs(q.c)>=50);if(big)tags.push('big-numbers');
+  let d;
+  if(kind==='cf')d=2+(q.k>1?1:0)+(q.m>1?1:0)+(q.n<0?.5:0);
+  else d=(q.a>1?4.5:2)+(!dos&&q.b<0&&q.c>0?1:0)+(!dos&&q.c<0?1.5:0)+(dos?.5:0)+(sq?-.3:0)+(big?1:0)+(q.a>1&&Math.max(q.m,q.n)>=3?1:0)+(kind==='cf2'?1.5:0);
+  if(q.solve)d+=1.2;
   return fin(tags,d);
 }
 /* ---------- Line Hunter: P = {m,c,st,s} ---------- */
