@@ -58,30 +58,34 @@ window.__ch={QT,parseAns,POOL};
 REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probability',
  desc:'Probability puzzles with bags of balls, spinners and two-dice grids. Answer 5 questions per level — get 4 right to pass!',skills:['probability','fractions','sample space'],
  levels:['Bags · one colour','Bags · “not” events','Bags · “or” events','Spinners','Two dice · sums','Two dice · at least / less than','Two dice · tricky events','Two picks · with replacement','Two picks · without replacement','Expected & relative frequency','Probability rules','Boss mix'],
- how:'Read the picture, then type your answer as a fraction like 3/10 (any equivalent fraction is accepted) or a decimal. You can use the keypad or your keyboard.',
+ how:'Read the picture, then tap a box and type your answer: the top box is the numerator and the bottom box is the denominator, like 3 over 10 (any equivalent fraction is accepted). If the question asks for a decimal, just fill in the top box. You can use the keypad or your keyboard (Tab switches boxes).',
  art:'<div class="minich">🎲🎲</div>',
  mount(root,lv,ctx){
-  const pool=POOL[lv-1];let qs,qi,right,cur,buf,answered,res;
+  const pool=POOL[lv-1];let qs,qi,right,cur,num,den,fld,answered,res;
   function start(){qs=Array.from({length:5},()=>pick(pool));qi=0;right=0;res=[];next();}
-  function next(){cur=QT[qs[qi]]();buf='';answered=false;ctx.q=quizQ('chance',qs[qi],cur);draw();}
+  function next(){cur=QT[qs[qi]]();num='';den='';fld='n';answered=false;ctx.q=quizQ('chance',qs[qi],cur);draw();}
   function draw(msg,ok){
     root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.vis}</div><div class="ch-q">${cur.q}</div>
-     <div class="ch-in ${ok===true?'good':ok===false?'bad':''}">${buf||'&nbsp;'}</div>
+     <div class="ch-frac ${ok===true?'good':ok===false?'bad':''}"><button class="fbox${fld==='n'&&!answered?' act':''}" id="fn" aria-label="numerator">${num||'&nbsp;'}</button><div class="fbar"></div><button class="fbox${fld==='d'&&!answered?' act':''}" id="fd" aria-label="denominator">${den||'&nbsp;'}</button></div>
      <div class="msg">${msg||'&nbsp;'}</div><div id="chp"></div>
      <div class="toolrow">${answered?`<button class="btn" id="nx">${qi<4?'Next question ▶':'See result ▶'}</button>`:''}</div></div>`;
-    if(!answered)$('#chp').appendChild(numpad(press,{slash:true}));
+    if(!answered){$('#fn').onclick=()=>{fld='n';draw();};$('#fd').onclick=()=>{fld='d';draw();};
+      const p=el('div','npad');['7','8','9','4','5','6','1','2','3','.','0','del'].forEach(k=>{const b=el('button','key'+(k==='del'?' del':''),k==='del'?'⌫':k);b.onclick=()=>press(k);p.appendChild(b);});
+      const b=el('button','key ok','Enter ✓');b.style.gridColumn='span 3';b.onclick=()=>press('ok');p.appendChild(b);$('#chp').appendChild(p);}
     if($('#nx'))$('#nx').onclick=advance;
   }
   function press(k){
     if(answered)return;
-    if(k==='del')buf=buf.slice(0,-1);
+    if(k==='del'){if(fld==='n')num=num.slice(0,-1);else den=den.slice(0,-1);}
     else if(k==='ok')return submit();
-    else if(buf.length<12)buf+=k;
+    else if(k==='tab'){fld=fld==='n'?'d':'n';}
+    else if(k!=='.'||!(fld==='n'?num:den).includes('.')){if((fld==='n'?num:den).length<8){if(fld==='n')num+=k;else den+=k;}}
     draw();
   }
   function submit(){
-    const v=parseAns(buf);if(isNaN(v)){draw('Type an answer first, e.g. 3/10');return;}
+    const buf=den?num+'/'+den:num;if(!num){draw('Fill in the top box (numerator) first');return;}
+    const v=den?parseFloat(num)/parseFloat(den):parseFloat(num);if(isNaN(v)||!isFinite(v)){draw('Check your numbers');return;}
     answered=true;const ok=Math.abs(v-cur.ans)<1e-6;if(ok)right++;res.push({qt:qs[qi],ok});ctx.log(ok?'right':'wrong',ok?{}:{typed:buf,expect:cur.ans,err:'wrong_value'});
     if(cur.vis.includes('ch-grid')||cur.hl){const hl=cur.hl;if(hl)cur.vis=grid(hl);}
     draw((ok?'✅ Correct! ':'❌ Not quite. ')+cur.ex,ok);
@@ -92,7 +96,7 @@ REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probab
     if(right>=4){ctx.win('Probability pro!',`You got ${right}/5 right.`,start,'Play again');}
     else{ctx.log('fail',ctx.perf);root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — have another go!</div><div class="toolrow"><button class="btn" id="rt">Try again ⟲</button></div></div>`;$('#rt').onclick=start;}
   }
-  ctx.keys=e=>{if(/^[0-9./%]$/.test(e.key))press(e.key==='%'?'%':e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter')press('ok');};
+  ctx.keys=e=>{if(/^[0-9.]$/.test(e.key))press(e.key);else if(e.key==='Tab'||e.key==='ArrowDown'||e.key==='ArrowUp'||e.key==='/'){e.preventDefault();press('tab');}else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter')press('ok');};
   start();
  }});
 })();
