@@ -24,9 +24,11 @@ const TAXO={
  /* where the x is */
  'x-one-side':{g:'shape',en:'x on one side',zh:'x 只在一邊'},
  'x-both-sides':{g:'shape',en:'x on both sides',zh:'兩邊都有 x'},
+ 'x-on-right':{g:'shape',en:'x on the right',zh:'x 喺右邊'},
  /* kinds of numbers */
  'neg-const':{g:'num',en:'negative numbers',zh:'有負數'},
  'neg-answer':{g:'num',en:'negative answer',zh:'答案係負數'},
+ 'frac-answer':{g:'num',en:'fraction answer',zh:'答案係分數'},
  'fractions':{g:'num',en:'fractions',zh:'有分數'},
  /* finer fraction tags: kept in the data, hidden in the level header (hide:1) */
  'frac-unit':{g:'num',en:'fraction x/a',zh:'分數 x/a（分子係 1）',hide:1},

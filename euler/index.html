@@ -657,9 +657,11 @@ const TAXO={
  /* where the x is */
  'x-one-side':{g:'shape',en:'x on one side',zh:'x 只在一邊'},
  'x-both-sides':{g:'shape',en:'x on both sides',zh:'兩邊都有 x'},
+ 'x-on-right':{g:'shape',en:'x on the right',zh:'x 喺右邊'},
  /* kinds of numbers */
  'neg-const':{g:'num',en:'negative numbers',zh:'有負數'},
  'neg-answer':{g:'num',en:'negative answer',zh:'答案係負數'},
+ 'frac-answer':{g:'num',en:'fraction answer',zh:'答案係分數'},
  'fractions':{g:'num',en:'fractions',zh:'有分數'},
  /* finer fraction tags: kept in the data, hidden in the level header (hide:1) */
  'frac-unit':{g:'num',en:'fraction x/a',zh:'分數 x/a（分子係 1）',hide:1},
@@ -2220,6 +2222,7 @@ function gen0(l){
 }
 
 function gen(l){
+  if(l>20)return gen2(l);
   if(l<=12)return gen0(l);
   const t=RR(1,6);let a,p,q,b,c,d,e,r;
   const mk=(lx,ln,rx,rn,x)=>({L:{x:lx,n:ln},Rr:{x:rx,n:rn},sol:x});
@@ -2231,6 +2234,23 @@ function gen(l){
   if(l===18){q=pick([3,4,5]);p=pick([2,3,4].filter(v=>v<q&&G(v,q)===1));b=RR(1,9);return mk(F(p,q),F(b),F(0),F(p*t+b),F(q*t));}
   if(l===19){a=pick([2,3,4]);b=RR(1,9);return mk(F(1,a),F(b),F(1),F(t+b-a*t),F(a*t));}
   q=pick([2,3,4,5]);r=RR(1,q-1);b=RR(1,9);return mk(F(r+1,q),F(b),F(r,q),F(b+t),F(q*t));
+}
+/* families 21+: flipped equations (x on the right), fraction answers, and a mixed boss */
+const mir=E=>({L:E.Rr,Rr:E.L,sol:E.sol});
+function gen2(f){
+  const mk=(lx,ln,rx,rn,x)=>({L:{x:lx,n:ln},Rr:{x:rx,n:rn},sol:x});
+  if(f===21)return mir(gen0(1));
+  if(f===22)return mir(gen0(2));
+  if(f===23)return mir(gen0(3));
+  if(f===24)return mir(gen0(4));
+  if(f===25)return mir(gen0(pick([5,6])));
+  if(f===26)return mir(gen0(pick([7,8,9,10])));
+  if(f===27)return mir(gen(pick([13,14,15,16])));
+  if(f===28)return mir(gen(pick([17,18,19,20])));
+  if(f===29){const a=RR(2,9);let p;do{p=RR(1,a*3);}while(p%a===0||G(p,a)!==1);return mk(F(a),F(0),F(0),F(p),F(p,a));}
+  if(f===30){const a=RR(2,6),b=RR(1,9);let m;do{m=RR(1,a*3);}while(m%a===0||G(m,a)!==1);return mk(F(a),F(b),F(0),F(b+m),F(m,a));}
+  if(f===31){const k=RR(2,4),c=RR(1,3),b=RR(1,9);let m;do{m=RR(1,k*4);}while(m%k===0||G(m,k)!==1);return mk(F(c+k),F(b),F(c),F(b+m),F(m,k));}
+  const o=pick([...Array(31).keys()].map(i=>i+1));return o>20?gen2(o):gen(o);   // 32: boss mix
 }
 const genL=lv=>{const f=Math.ceil(lv/5),s=(lv-1)%5;SC=1+.5*s;try{let E;for(let i=0;i<60;i++){E=gen(f);if(Math.abs(E.sol[0]/E.sol[1])<=100)break;}return E;}finally{SC=1;}};
 function termsHTML(s){
@@ -2267,6 +2287,8 @@ function analyse(E){
   const sides=[E.L,E.Rr],xt=sides.map(s=>s.x).filter(a=>!z(a)),all=[E.L.x,E.L.n,E.Rr.x,E.Rr.n];
   if(sides.some(s=>s.n[0]<0))tags.push('neg-const');
   if(E.sol[0]<0)tags.push('neg-answer');
+  if(E.sol[1]>1)tags.push('frac-answer');
+  if(P.xs===E.Rr&&(z(E.L.x)||fz(E.Rr.x)>fz(E.L.x)))tags.push('x-on-right');
   if(xt.some(a=>a[1]>1)||sides.some(s=>s.n[1]>1))tags.push('fractions');
   if(xt.some(a=>a[1]>1)){tags.push(xt.some(a=>a[1]>1&&Math.abs(a[0])>1)?'frac-nonunit':'frac-unit');}
   if(sides.some(s=>s.n[1]>1))tags.push('frac-const');
@@ -2276,7 +2298,7 @@ function analyse(E){
   /* difficulty 1-10: how many moves, plus what makes each move harder */
   const has=t=>tags.includes(t);
   let d=steps+(has('x-both-sides')?1:0)+(has('neg-const')?.75:0)+(has('neg-answer')?.75:0)
-       +(has('frac-unit')?1.5:0)+(has('frac-nonunit')?2.25:0)+(has('frac-both')?.75:0)+(has('frac-const')?1:0)+Math.min(1.5,big/40);
+       +(has('frac-unit')?1.5:0)+(has('frac-nonunit')?2.25:0)+(has('frac-both')?.75:0)+(has('frac-answer')?1.25:0)+(has('x-on-right')?.25:0)+(has('frac-const')?1:0)+Math.min(1.5,big/40);
   d=Math.max(1,Math.min(10,d*1.15));return{v:1,eq:eqTxt(E),tags:tags.sort(),ops,steps,diff:Math.round(d),score:Math.round(d*10)/10};
 }
 function tilesOf(side){
@@ -2288,7 +2310,7 @@ function tilesOf(side){
 const GX={'+':'＋','-':'−'};
 REG.push({id:'balance',qmeta:lv=>levelFromSamples(()=>analyse(genL(lv))),qtest:{genL,plan,analyse,F,add,sub,mul,dv},name:'Balance Scale',emoji:'⚖️',color:'#6741d9',cat:'Algebra',
  desc:'A real balance! Drag x and 1 weights on and off the pans (both sides always change together), and swing the pointer on the base right to multiply or left to divide. Keep it level to find x.',skills:['solving equations','inverse operations','balancing method','fractions in equations'],
- levels:['x + a = b','Multiples: 2x = b','Two-step: 2x + a = b','Two-step: ax + b = c','Negatives: x − a = b','Negatives: ax − b = c','x on both sides (easy)','x on both sides','x on both sides + negatives','x on both sides · bigger numbers','Negative answers','Boss equations','x/a = b','x/a = b · bigger','x/a + b = c','x/a − b = c','Fractions: (p/q)x = c','Fractions: (p/q)x + b = c','x/a + b = x + c','Fractions on both sides'].flatMap(n=>['warm-up','easy','medium','hard','tough'].map(d=>n+' · '+d)),
+ levels:['x + a = b','Multiples: 2x = b','Two-step: 2x + a = b','Two-step: ax + b = c','Negatives: x − a = b','Negatives: ax − b = c','x on both sides (easy)','x on both sides','x on both sides + negatives','x on both sides · bigger numbers','Negative answers','Boss equations','x/a = b','x/a = b · bigger','x/a + b = c','x/a − b = c','Fractions: (p/q)x = c','Fractions: (p/q)x + b = c','x/a + b = x + c','Fractions on both sides','Flipped: b = x + a','Flipped: b = ax','Flipped: b = ax + a','Flipped: c = ax + b','Flipped negatives','Flipped: x on both sides','Flipped: x/a','Flipped: (p/q)x','Fraction answers: ax = b','Fraction answers: ax + b = c','Fraction answers: x on both sides','Boss 2: all equation types'].flatMap(n=>['warm-up','easy','medium','hard','tough'].map(d=>n+' · '+d)),
  how:'Drop an x or 1 weight on a pan to add it to BOTH sides. Drag a tile off a pan to take ALL of it away from both sides (tap a tile to take away just one). The tiles show the totals. On the base, swing the pointer right (×) or left (÷), flip +/− for negatives, then press Apply. Get x alone.',
  art:'<div class="minibal">⚖️</div>',
  mount(root,lv,ctx){
