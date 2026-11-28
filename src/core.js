@@ -65,7 +65,7 @@ function showIntro(g){
   o.innerHTML='<div class="in-top"><button class="in-v" id="inv"></button><button class="in-x" id="inx">Skip ✕</button></div><div class="in-body" id="inb"></div>';
   document.body.appendChild(o);document.body.style.overflow='hidden';
   $('#inx').onclick=closeIntro;
-  introStop=g.anim(o.querySelector('#inb'),{close:closeIntro,voiceBtn:o.querySelector('#inv')});
+  const au=new Audio();au.preload='auto';introStop=g.anim(o.querySelector('#inb'),{close:closeIntro,voiceBtn:o.querySelector('#inv'),audio:au});
 }
 function cleanup(){closeIntro();if(!ctx)return;ctx.cleanups.forEach(f=>{try{f()}catch(e){}});ctx=null;document.querySelectorAll('.overlay').forEach(o=>o.remove());}
 const ROOT=(()=>{let p=location.pathname.replace(/index\.html$/,'');const sg=p.split('/').filter(Boolean);if(sg.length&&/^[a-z0-9_-]+$/.test(sg[sg.length-1])&&window.__GAME_PAGE){sg.pop();}return '/'+sg.join('/')+(sg.length?'/':'');})();
