@@ -17,6 +17,7 @@ bk-letters-1|1 letter|1 個字母
 bk-letters-2|2 letters|2 個字母
 bk-letters-3|3 letters|3 個字母
 bk-gives-square|x² in answer|答案有平方
+bk-high-power|power of 4 or more|四次或以上
 bk-sq-inside|x² inside|括號內有平方項
 bk-coef-inside|coefficients inside|括號內有係數
 bk-multi-outside|xy outside|括號外有多個字母
@@ -38,6 +39,10 @@ qd-all-positive|all positive|全部正數
 qd-neg-middle|minus in the middle|中間係負數
 qd-neg-last|minus at the end|最後一項係負數
 qd-dos|difference of two squares|平方差
+qd-common-factor|common factor|公因數
+qd-factor-first|take out a common factor first|先提公因數
+qd-perfect-square|perfect square|完全平方
+qd-solve|solve the equation|解方程
 ln-gradient-only|gradient only|只調 m
 ln-intercept-only|intercept only|只調 c
 ln-both|gradient and intercept|m 同 c
@@ -46,6 +51,12 @@ ln-frac-gradient|fractional gradient|分數斜率
 ln-flat|horizontal line|水平線
 ln-steep|steep line|斜率大
 ln-neg-intercept|negative intercept|負截距
+ln-read-graph|read the equation from a graph|由圖像讀方程
+ln-parallel|parallel lines|平行線
+ln-perpendicular|perpendicular lines|垂直線
+ln-rearrange|rearrange to y = mx + c|整理成 y = mx + c
+ln-standard-form|ax + by = c form|ax + by = c 形式
+ln-fraction-rearrange|rearranging with a coefficient on y|y 前面有係數
 fa-prime|prime|質數
 fa-composite|composite|合成數
 fa-square|square number|平方數
@@ -67,6 +78,21 @@ fr-mixed-improper|mixed ↔ improper|帶分數轉假分數
 fr-mul|multiply|乘
 fr-div|divide|除
 fr-reverse|find the whole|倒推原數
+fr-compare|compare and order|比較大細
+fr-hcf|highest common factor|最大公因數
+fr-express|one quantity as a fraction of another|化為分數
+fr-remaining|what is left|剩下幾多
+fr-improper|improper fractions|假分數
+fr-unit|units and fractions|單位同分數
+fr-brackets|brackets and order of operations|括號同運算次序
+fr-reciprocal|reciprocals|倒數
+fr-decimal|fractions and decimals|分數同小數
+fr-percent|fractions and percentages|分數同百分比
+fr-word|word problems|文字題
+fr-ratio|ratio and fractions|比同分數
+fr-unit-frac|unit fractions|單位分數
+fr-algebra|fractions in algebra|分數代數
+fr-power|squaring fractions|分數平方
 pc-read-grid|percent of a grid|睇格仔寫百分比
 pc-of-amount|percent of an amount|求某數嘅百分之幾
 pc-easy|10% / 25% / 50%|簡單百分比
@@ -84,6 +110,21 @@ pc-reverse|reverse percentage|逆向百分比
 pc-interest|interest|利息
 pc-simple-interest|simple interest|單利息
 pc-compound-interest|compound interest|複利息
+pc-mental|mental percentages|心算百分比
+pc-multiplier|multipliers|乘數
+pc-express|one amount as a percentage of another|求百分比
+pc-unit|units and percentages|單位同百分比
+pc-part-total|parts of a total|整體嘅部分
+pc-find-whole|find the whole|求原數
+pc-from-percent|from a percentage|百分比轉換
+pc-points|percentage points|百分點
+pc-profit-loss|profit and loss|盈虧
+pc-successive|successive changes|連續變化
+pc-depreciation|depreciation|貶值
+pc-ratio|ratio and percentage|比同百分比
+pc-offers|comparing offers|比較優惠
+pc-tax|tax, tips and commission|稅、貼士同佣金
+pc-pie|pie charts|圓形圖
 pr-bag|bag of balls|袋入面揀波
 pr-not|not event|「唔係」事件
 pr-or|or event|「或者」事件
@@ -191,6 +232,14 @@ tf-sf-2|scale factor 2|比例 2
 tf-sf-3|scale factor 3|比例 3
 tf-shape-3|triangle|三角形
 tf-shape-4|quadrilateral|四邊形
+tf-rot-270|270°|270°
+tf-rot-centre|about a point (not the origin)|繞某點旋轉
+tf-enl-centre|centre not the origin|放大中心唔係原點
+tf-sf-half|scale factor ½|比例 ½
+tf-sf-neg|negative scale factor|負比例
+tf-combined|two-step transformation|兩步變換
+tf-describe|describe the transformation|描述變換
+tf-inverse|undo a transformation|還原變換
 dd-1-die|one die|1 粒骰
 dd-2-dice|two dice|2 粒骰
 dd-3-dice|three dice|3 粒骰
@@ -216,9 +265,9 @@ function tagExpand(q){
   const no=q.m.c<0,ni=q.t.some(t=>t.c<0),L=Math.min(3,letters([q.m,...q.t]).size),sq=q.t.some(t=>maxExp(t)>=2),
         coef=q.t.some(t=>Math.abs(t.c)>1),mo=Object.keys(q.m.p).length>=2||maxExp(q.m)>=2,big=prod.some(t=>Math.abs(t.c)>=20);
   if(no)tags.push('bk-neg-outside');if(ni)tags.push('bk-neg-inside');if(no&&ni)tags.push('bk-neg-times-neg');
-  tags.push('bk-letters-'+L);if(prod.some(t=>maxExp(t)>=2))tags.push('bk-gives-square');
+  tags.push('bk-letters-'+L);if(prod.some(t=>maxExp(t)>=2))tags.push('bk-gives-square');const hp=prod.some(t=>maxExp(t)>=4);if(hp)tags.push('bk-high-power');
   if(sq)tags.push('bk-sq-inside');if(coef)tags.push('bk-coef-inside');if(mo)tags.push('bk-multi-outside');if(big)tags.push('big-numbers');
-  const d=1+.9*(nt-1)+(vo?1.4:0)+(no?1:0)+(ni?.5:0)+(no&&ni?.8:0)+(L-1)*.8+(sq?.8:0)+(coef?.5:0)+(mo?1:0)+(big?.5:0);
+  const d=(hp?.8:0)+(nt>=5?.6:0)+1+.9*(nt-1)+(vo?1.4:0)+(no?1:0)+(ni?.5:0)+(no&&ni?.8:0)+(L-1)*.8+(sq?.8:0)+(coef?.5:0)+(mo?1:0)+(big?.5:0);
   return fin(tags,d);
 }
 /* ---------- Factorise It!: q = {terms,H,cv} ---------- */
@@ -233,10 +282,18 @@ function tagFactorise(q){
 }
 /* ---------- Quadratic Factoriser: q = {a,b,c,m,p,n,q} ---------- */
 function tagQuad(q){
-  const tags=[q.a===1?'qd-monic':'qd-lead-coef'],dos=q.b===0&&q.c<0;
-  if(dos)tags.push('qd-dos');else{if(q.b>0&&q.c>0)tags.push('qd-all-positive');if(q.b<0&&q.c>0)tags.push('qd-neg-middle');if(q.c<0)tags.push('qd-neg-last');}
-  const big=Math.max(Math.abs(q.p),Math.abs(q.q))>=10||Math.abs(q.c)>=50;if(big)tags.push('big-numbers');
-  const d=(q.a>1?4.5:2)+(!dos&&q.b<0&&q.c>0?1:0)+(!dos&&q.c<0?1.5:0)+(dos?.5:0)+(big?1:0)+(q.a>1&&Math.max(q.m,q.n)>=3?1:0);
+  const kind=q.kind||'std',tags=[];
+  const sq=kind!=='cf'&&q.m===q.n&&q.p===q.q&&q.p!==0,dos=kind!=='cf'&&q.b===0&&q.c<0;
+  if(kind==='cf')tags.push('qd-common-factor');
+  else{tags.push(q.m===1&&q.n===1?'qd-monic':'qd-lead-coef');
+    if(dos)tags.push('qd-dos');else if(sq)tags.push('qd-perfect-square');else{if(q.b>0&&q.c>0)tags.push('qd-all-positive');if(q.b<0&&q.c>0)tags.push('qd-neg-middle');if(q.c<0)tags.push('qd-neg-last');}}
+  if(kind==='cf2')tags.push('qd-factor-first');
+  if(q.solve)tags.push('qd-solve');
+  const big=kind==='cf'?Math.abs(q.b)>=40:(Math.max(Math.abs(q.p),Math.abs(q.q))>=10||Math.abs(q.c)>=50);if(big)tags.push('big-numbers');
+  let d;
+  if(kind==='cf')d=2+(q.k>1?1:0)+(q.m>1?1:0)+(q.n<0?.5:0);
+  else d=(q.a>1?4.5:2)+(!dos&&q.b<0&&q.c>0?1:0)+(!dos&&q.c<0?1.5:0)+(dos?.5:0)+(sq?-.3:0)+(big?1:0)+(q.a>1&&Math.max(q.m,q.n)>=3?1:0)+(kind==='cf2'?1.5:0);
+  if(q.solve)d+=1.2;
   return fin(tags,d);
 }
 /* ---------- Line Hunter: P = {m,c,st,s} ---------- */
@@ -244,7 +301,8 @@ function tagLine(P){
   const s=P.s,tags=[s.fixC?'ln-gradient-only':s.fixM?'ln-intercept-only':'ln-both'];
   if(P.m<0)tags.push('ln-neg-gradient');if(P.m%1!==0)tags.push('ln-frac-gradient');if(P.m===0)tags.push('ln-flat');if(Math.abs(P.m)>=3)tags.push('ln-steep');
   if(P.c<0)tags.push('ln-neg-intercept');
-  const d=(s.fixC||s.fixM?2:3.5)+(P.m<0?.8:0)+(P.m%1!==0?1.5:0)+(Math.abs(P.m)>=3?.7:0)+(P.c<0?.5:0)+(s.boss?2:0);
+  const mode=s.mode||'star';if(mode==='read')tags.push('ln-read-graph');if(mode==='par')tags.push('ln-parallel');if(mode==='perp')tags.push('ln-perpendicular');if(mode==='eq')tags.push('ln-rearrange');if(P.form==='xy'||P.form==='std2')tags.push('ln-standard-form');if(P.form==='2y'||P.form==='3y'||P.form==='half')tags.push('ln-fraction-rearrange');
+  const md2=s.mode,d=(md2==='read'?1.5:0)+(md2==='par'?1:0)+(md2==='perp'?3:0)+(md2==='eq'?2.5:0)+(P.form==='2y'||P.form==='3y'||P.form==='std2'||P.form==='half'?1.2:0)+(s.fixC||s.fixM?2:3.5)+(P.m<0?.8:0)+(P.m%1!==0?1.5:0)+(Math.abs(P.m)>=3?.7:0)+(P.c<0?.5:0)+(s.boss?2:0);
   return fin(tags,d,{eq:'y = '+(P.m===0?'':P.m+'x + ')+P.c});
 }
 /* ---------- Ball Factory: N ---------- */
@@ -257,14 +315,17 @@ function tagFactors(N){
 }
 /* ---------- Transform Quest: task = {t:instruction}, shape n ---------- */
 function tagTransform(task,n){
-  const t=task.t,tags=[];
+  const t=task.t,tags=task.tags?[...task.tags]:[];
+  if(!task.tags){
   if(/^Translate/.test(t)){tags.push('tf-translation');const v=/\((-?\d+), (-?\d+)\)/.exec(t);if(v&&(+v[1]<0||+v[2]<0))tags.push('tf-neg-vector');}
   else if(/^Reflect/.test(t)){tags.push('tf-reflection');tags.push(/line y = (−)?x/.test(t)?'tf-reflect-diagonal':/line [xy] = /.test(t)?'tf-reflect-line':'tf-reflect-axis');}
   else if(/^Rotate/.test(t)){tags.push('tf-rotation',/180/.test(t)?'tf-rot-180':'tf-rot-90');if(/anticlockwise/.test(t))tags.push('tf-anticlockwise');else if(/clockwise/.test(t))tags.push('tf-clockwise');}
-  else if(/^Enlarge/.test(t)){tags.push('tf-enlargement');const k=/factor (\d+)/.exec(t);if(k)tags.push('tf-sf-'+k[1]);}
+  else if(/^Enlarge/.test(t)){tags.push('tf-enlargement');const k=/factor (\d+)/.exec(t);if(k)tags.push('tf-sf-'+k[1]);}}
   tags.push(n===3?'tf-shape-3':'tf-shape-4');
-  const has=x=>tags.includes(x);
-  const d=(has('tf-translation')?(has('tf-neg-vector')?2.5:1.5):has('tf-reflect-axis')?3:has('tf-reflect-line')?4.5:has('tf-reflect-diagonal')?5.5:has('tf-rotation')?(has('tf-rot-180')?4:5):has('tf-sf-3')?5:4)+(n===4?.5:0);
+  const has=x=>tags.includes(x),dk=[];
+  if(has('tf-translation'))dk.push(has('tf-neg-vector')?2.5:1.5);if(has('tf-reflect-axis'))dk.push(3);if(has('tf-reflect-line'))dk.push(4.5);if(has('tf-reflect-diagonal'))dk.push(5.5);
+  if(has('tf-rotation'))dk.push(has('tf-rot-180')?4:5);if(has('tf-enlargement'))dk.push(has('tf-sf-3')?5:4);
+  const d=Math.max(1,...dk)+(has('tf-rot-centre')?1.5:0)+(has('tf-enl-centre')?1.5:0)+(has('tf-sf-half')?1:0)+(has('tf-sf-neg')?1.5:0)+(has('tf-rot-270')?.5:0)+(has('tf-combined')?2:0)+(has('tf-describe')?1:0)+(has('tf-inverse')?1.5:0)+(n===4?.5:0);
   return fin(tags,d,{eq:t});
 }
 /* ---------- quiz-style games: one table row per question type ---------- */
@@ -272,9 +333,19 @@ const Q=(t,d,v)=>({t,d,v:v||[]});   // t = always, v = variants that show up onl
 const QTAGS={
  fraction:{A1:Q(['fr-name-picture'],1),A2:Q(['fr-equivalent'],2),A3:Q(['fr-simplify'],2),A4:Q(['fr-of-amount'],3),A5:Q(['fr-add','fr-same-denom'],2),
   A6:Q(['fr-add','fr-diff-denom'],4),A7:Q(['fr-sub','fr-diff-denom'],4),A8:Q(['fr-mixed','fr-mixed-improper'],3),A9:Q(['fr-mul'],4),A10:Q(['fr-div'],5),
-  A11:Q(['fr-reverse','fr-of-amount'],5),A12:Q(['fr-add','fr-mixed','fr-diff-denom'],6)},
+  A11:Q(['fr-reverse','fr-of-amount'],5),A12:Q(['fr-add','fr-mixed','fr-diff-denom'],6),
+  B1:Q(['fr-compare'],4,['fr-add','fr-sub']),B2:Q(['fr-equivalent'],3,['fr-algebra']),B3:Q(['fr-simplify'],3,['fr-hcf','fr-improper']),B4:Q(['fr-of-amount'],4,['fr-unit','fr-improper','fr-add']),
+  B5:Q(['fr-express','fr-simplify'],4,['fr-unit']),B6:Q(['fr-remaining'],5,['fr-add','fr-mul','fr-of-amount']),B7:Q(['fr-mixed'],6,['fr-add','fr-sub','fr-same-denom','fr-diff-denom']),
+  B8:Q(['fr-mixed','fr-mixed-improper'],3,['fr-decimal','fr-improper']),B9:Q(['fr-mul'],5,['fr-mixed','fr-power']),B10:Q(['fr-div'],6,['fr-mixed']),B11:Q(['fr-brackets'],7,['fr-add','fr-sub','fr-mul','fr-div']),
+  B12:Q(['fr-reciprocal'],4,['fr-mixed','fr-decimal']),B13:Q(['fr-decimal'],4,['fr-simplify','fr-compare']),B14:Q(['fr-percent'],4,['fr-decimal','fr-simplify','fr-improper']),
+  B15:Q(['fr-word'],6,['fr-mul','fr-div','fr-of-amount','fr-remaining','fr-mixed']),B16:Q(['fr-reverse'],7,['fr-remaining','fr-add','fr-of-amount']),B17:Q(['fr-ratio'],5,['fr-remaining','fr-of-amount']),
+  B18:Q(['fr-unit-frac'],5,['fr-add','fr-div']),B19:Q(['fr-algebra'],6,['fr-equivalent'])},
  percent:{P1:Q(['pc-read-grid'],1),P2:Q(['pc-of-amount','pc-easy'],2),P3:Q(['pc-convert'],3,['pc-from-fraction','pc-from-decimal']),P4:Q(['pc-of-amount','pc-any'],3),P5:Q(['pc-sale','pc-decrease'],3),
-  P6:Q(['pc-increase'],4,['pc-vat']),P7:Q(['pc-as-percent'],3),P8:Q(['pc-change'],5),P9:Q(['pc-reverse','pc-increase'],6),P10:Q(['pc-reverse','pc-decrease'],6),P11:Q(['pc-interest'],6,['pc-simple-interest','pc-compound-interest'])},
+  P6:Q(['pc-increase'],4,['pc-vat']),P7:Q(['pc-as-percent'],3),P8:Q(['pc-change'],5),P9:Q(['pc-reverse','pc-increase'],6),P10:Q(['pc-reverse','pc-decrease'],6),P11:Q(['pc-interest'],6,['pc-simple-interest','pc-compound-interest']),
+  P13:Q(['pc-of-amount','pc-mental'],4),P14:Q(['pc-multiplier'],5),P15:Q(['pc-increase','pc-multiplier'],4),P16:Q(['pc-decrease','pc-multiplier'],4),P17:Q(['pc-express'],3,['pc-unit']),
+  P18:Q(['pc-part-total'],4),P19:Q(['pc-find-whole','pc-reverse'],5),P20:Q(['pc-convert'],5,['pc-from-fraction','pc-from-decimal','pc-from-percent']),P21:Q(['pc-points'],4),P22:Q(['pc-profit-loss'],5,['pc-reverse']),
+  P23:Q(['pc-successive','pc-multiplier'],7),P24:Q(['pc-compound-interest'],7),P25:Q(['pc-depreciation','pc-multiplier'],7),P26:Q(['pc-simple-interest'],5,['pc-find-whole']),P27:Q(['pc-reverse','pc-multiplier'],7,['pc-vat']),
+  P28:Q(['pc-ratio'],6,['pc-change']),P29:Q(['pc-offers'],5,['pc-decrease']),P30:Q(['pc-tax'],5,['pc-vat']),P31:Q(['pc-pie'],5,['pc-unit'])},
  chance:{T1:Q(['pr-bag'],1),T2:Q(['pr-bag','pr-not'],2),T3:Q(['pr-bag','pr-or'],3),T4:Q(['pr-spinner'],2),T5:Q(['pr-two-dice','pr-sample-space'],4),
   T6:Q(['pr-two-dice','pr-sample-space','pr-at-least'],4),T7:Q(['pr-two-dice','pr-sample-space'],5),T8:Q(['pr-bag','pr-and','pr-independent','pr-with-replacement'],5),
   T9:Q(['pr-bag','pr-and','pr-without-replacement'],6),T10:Q(['pr-expected'],4),T11:Q(['pr-relative-freq'],3),T12:Q([],5,['pr-not','pr-or','pr-mutually-exclusive','pr-and','pr-independent','pr-ratio']),
@@ -324,7 +395,7 @@ window.quizQ=function(game,key,cur){
 };
 /* level meta for a pool of question types: tags in every type = tags; in some types = sometimes */
 function fromPool(game,pool){
-  const ALIAS={percent:{P12:['P6','P8','P9','P10','P11','P7']}};
+  const ALIAS={percent:{P12:['P6','P8','P9','P10','P11','P7'],P32:['P13','P14','P15','P16','P17','P18','P19','P20','P21','P22','P23','P24','P25','P26','P27','P28','P29','P30','P31']},fraction:{B20:['B1','B2','B3','B4','B5','B6','B7','B8','B9','B10','B11','B12','B13','B14','B15','B16','B17','B18','B19']}};
   pool=pool.flatMap(k=>(ALIAS[game]&&ALIAS[game][k])||[k]);
   const ms=[...new Set(pool)].map(k=>QTAGS[game][k]),all=new Set(ms.flatMap(m=>m.t)),tags=[...all].filter(t=>ms.every(m=>m.t.includes(t))).sort();
   const sometimes=[...new Set([...all,...ms.flatMap(m=>m.v)])].filter(t=>!tags.includes(t)).sort(),d=ms.reduce((a,m)=>a+m.d,0)/ms.length;

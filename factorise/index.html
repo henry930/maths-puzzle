@@ -2425,19 +2425,35 @@ REG.push({id:'angles',name:'Angle Hunter',emoji:'📐',color:'#0b7285',cat:'Geom
 })();
 
 (function(){
+const fr=k=>k===.5?'½':k===-.5?'−½':String(k).replace('-','−');
+const orig=c=>c[0]===0&&c[1]===0;
+const cs=c=>`(${c[0]}, ${c[1]})`;
+const ROT=(p,c,dir,ang)=>{const v=[p[0]-c[0],p[1]-c[1]];let r;
+  if(ang===180)r=[-v[0],-v[1]];else if(ang===90)r=dir==='c'?[v[1],-v[0]]:[-v[1],v[0]];else r=dir==='c'?[-v[1],v[0]]:[v[1],-v[0]];
+  return[r[0]+c[0],r[1]+c[1]];};
+const nz=(a,b)=>{let x;do{x=R(a,b);}while(!x);return x;};
+const cen=()=>{let c;do{c=[R(-3,3),R(-3,3)];}while(orig(c));return c;};
 const T={
- trans:(a,b)=>({t:`Translate the shape by the vector (${a}, ${b})`,sub:`${Math.abs(a)} ${a>=0?'right':'left'}, ${Math.abs(b)} ${b>=0?'up':'down'}`,f:p=>[p[0]+a,p[1]+b],hint:{arrow:[a,b]}}),
- rx:()=>({t:'Reflect the shape in the x-axis',f:p=>[p[0],-p[1]],hint:{mirror:['y',0]}}),
- ry:()=>({t:'Reflect the shape in the y-axis',f:p=>[-p[0],p[1]],hint:{mirror:['x',0]}}),
- rxk:k=>({t:`Reflect the shape in the line x = ${k}`,f:p=>[2*k-p[0],p[1]],hint:{mirror:['x',k]}}),
- ryk:k=>({t:`Reflect the shape in the line y = ${k}`,f:p=>[p[0],2*k-p[1]],hint:{mirror:['y',k]}}),
- ryx:()=>({t:'Reflect the shape in the line y = x',f:p=>[p[1],p[0]],hint:{diag:1}}),
- rymx:()=>({t:'Reflect the shape in the line y = −x',f:p=>[-p[1],-p[0]],hint:{diag:-1}}),
- rot90c:()=>({t:'Rotate the shape 90° clockwise about the origin (0, 0)',f:p=>[p[1],-p[0]],hint:{}}),
- rot90a:()=>({t:'Rotate the shape 90° anticlockwise about the origin (0, 0)',f:p=>[-p[1],p[0]],hint:{}}),
- rot180:()=>({t:'Rotate the shape 180° about the origin (0, 0)',f:p=>[-p[0],-p[1]],hint:{}}),
- enl:k=>({t:`Enlarge the shape by scale factor ${k}, centre the origin (0, 0)`,f:p=>[k*p[0],k*p[1]],hint:{rays:1}})
+ trans:(a,b)=>({kind:'trans',par:[a,b],t:`Translate the shape by the vector (${a}, ${b})`,sub:`${Math.abs(a)} ${a>=0?'right':'left'}, ${Math.abs(b)} ${b>=0?'up':'down'}`,p:`translate by the vector (${a}, ${b})`,d:`Translation by the vector (${a}, ${b})`,f:p=>[p[0]+a,p[1]+b],finv:p=>[p[0]-a,p[1]-b],hint:{arrow:[a,b]},tags:['tf-translation'].concat(a<0||b<0?['tf-neg-vector']:[])}),
+ rx:()=>({kind:'ref',par:['rx'],t:'Reflect the shape in the x-axis',p:'reflect in the x-axis',d:'Reflection in the x-axis',f:p=>[p[0],-p[1]],finv:p=>[p[0],-p[1]],hint:{mirror:['y',0]},tags:['tf-reflection','tf-reflect-axis']}),
+ ry:()=>({kind:'ref',par:['ry'],t:'Reflect the shape in the y-axis',p:'reflect in the y-axis',d:'Reflection in the y-axis',f:p=>[-p[0],p[1]],finv:p=>[-p[0],p[1]],hint:{mirror:['x',0]},tags:['tf-reflection','tf-reflect-axis']}),
+ rxk:k=>({kind:'ref',par:['rxk',k],t:`Reflect the shape in the line x = ${k}`,p:`reflect in the line x = ${k}`,d:`Reflection in the line x = ${k}`,f:p=>[2*k-p[0],p[1]],finv:p=>[2*k-p[0],p[1]],hint:{mirror:['x',k]},tags:['tf-reflection','tf-reflect-line']}),
+ ryk:k=>({kind:'ref',par:['ryk',k],t:`Reflect the shape in the line y = ${k}`,p:`reflect in the line y = ${k}`,d:`Reflection in the line y = ${k}`,f:p=>[p[0],2*k-p[1]],finv:p=>[p[0],2*k-p[1]],hint:{mirror:['y',k]},tags:['tf-reflection','tf-reflect-line']}),
+ ryx:()=>({kind:'ref',par:['ryx'],t:'Reflect the shape in the line y = x',p:'reflect in the line y = x',d:'Reflection in the line y = x',f:p=>[p[1],p[0]],finv:p=>[p[1],p[0]],hint:{diag:1},tags:['tf-reflection','tf-reflect-diagonal']}),
+ rymx:()=>({kind:'ref',par:['rymx'],t:'Reflect the shape in the line y = −x',p:'reflect in the line y = −x',d:'Reflection in the line y = −x',f:p=>[-p[1],-p[0]],finv:p=>[-p[1],-p[0]],hint:{diag:-1},tags:['tf-reflection','tf-reflect-diagonal']}),
+ rot:(ang,dir,c)=>{c=c||[0,0];const o=orig(c),dn=dir==='c'?'clockwise':'anticlockwise',at=o?'the origin (0, 0)':`the point ${cs(c)}`;const od=dir==='c'?'a':'c';
+   return{kind:'rot',par:[ang,dir,c],t:`Rotate the shape ${ang}° ${dn} about ${at}`,p:`rotate ${ang}° ${dn} about ${at}`,d:`Rotation ${ang}° ${dn} about ${at}`,f:p=>ROT(p,c,dir,ang),finv:p=>ROT(p,c,ang===180?dir:od,ang),hint:{ctr:c},
+     tags:['tf-rotation','tf-rot-'+ang,dir==='c'?'tf-clockwise':'tf-anticlockwise'].concat(o?[]:['tf-rot-centre'])};},
+ enl:(k,c)=>{c=c||[0,0];const o=orig(c);
+   return{kind:'enl',par:[k,c],t:`Enlarge the shape by scale factor ${fr(k)}, centre ${o?'the origin (0, 0)':cs(c)}`,p:`enlarge by scale factor ${fr(k)}, centre ${o?'the origin (0, 0)':cs(c)}`,d:`Enlargement, scale factor ${fr(k)}, centre ${o?'the origin (0, 0)':cs(c)}`,f:p=>[c[0]+k*(p[0]-c[0]),c[1]+k*(p[1]-c[1])],finv:p=>[c[0]+(p[0]-c[0])/k,c[1]+(p[1]-c[1])/k],hint:{rays:1,c},
+     tags:['tf-enlargement',k===2?'tf-sf-2':k===3?'tf-sf-3':Math.abs(k)===.5?'tf-sf-half':'tf-sf-'+Math.abs(k)].concat(k<0?['tf-sf-neg']:[]).concat(o?[]:['tf-enl-centre'])};},
+ then:(a,b)=>({kind:'combo',par:[a,b],t:`${a.p[0].toUpperCase()+a.p.slice(1)}, then ${b.p}`,p:`${a.p}, then ${b.p}`,d:`${a.d}, then ${b.p}`,f:p=>b.f(a.f(p)),finv:p=>a.finv(b.finv(p)),hint:{mid:a},tags:[...new Set([...a.tags,...b.tags,'tf-combined'])]})
 };
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const ANY=()=>pick([()=>T.trans(nz(-4,4),nz(-4,4)),T.rx,T.ry,T.ryx,T.rymx,()=>T.rot(90,'c'),()=>T.rot(90,'a'),()=>T.rot(180,'c'),()=>T.rxk(nz(-2,2)),()=>T.enl(2)])();
+const REFL=()=>pick([T.rx,T.ry,T.ryx,T.rymx,()=>T.rxk(nz(-3,3)),()=>T.ryk(nz(-3,3))])();
+const ROTC=(angs,dirs,c)=>()=>T.rot(pick(angs),pick(dirs),c());
+const ENLC=(ks,c)=>()=>T.enl(pick(ks),c());
 const LV=[
  {n:'Translations · positive vectors',g:()=>T.trans(R(1,4),R(1,4)),shape:3},
  {n:'Translations · negative vectors',g:()=>T.trans(R(-4,4)||2,R(-4,4)||-3),shape:3},
@@ -2446,11 +2462,52 @@ const LV=[
  {n:'Reflect in either axis',g:()=>pick([T.rx,T.ry])(),shape:3},
  {n:'Reflect in x = k or y = k',g:()=>pick([()=>T.rxk(R(-2,2)||1),()=>T.ryk(R(-2,2)||1)])(),shape:3},
  {n:'Reflect in y = x or y = −x',g:()=>pick([T.ryx,T.rymx])(),shape:3},
- {n:'Rotate 90° about the origin',g:()=>pick([T.rot90c,T.rot90a])(),shape:3},
- {n:'Rotate 90° or 180°',g:()=>pick([T.rot90c,T.rot90a,T.rot180])(),shape:4},
+ {n:'Rotate 90° about the origin',g:()=>pick([()=>T.rot(90,'c'),()=>T.rot(90,'a')])(),shape:3},
+ {n:'Rotate 90° or 180°',g:()=>pick([()=>T.rot(90,'c'),()=>T.rot(90,'a'),()=>T.rot(180,'c')])(),shape:4},
  {n:'Enlarge · scale factor 2',g:()=>T.enl(2),shape:3,small:true},
  {n:'Enlarge · scale factor 2 or 3',g:()=>T.enl(pick([2,3])),shape:4,small:true},
- {n:'Boss: any transformation',g:()=>pick([()=>T.trans(R(-4,4)||1,R(-4,4)||2),T.rx,T.ry,T.ryx,T.rymx,T.rot90c,T.rot90a,T.rot180,()=>T.rxk(R(-2,2)||1),()=>T.enl(2)])(),shape:4}
+ {n:'Boss: any transformation',g:()=>pick([()=>T.trans(R(-4,4)||1,R(-4,4)||2),T.rx,T.ry,T.ryx,T.rymx,()=>T.rot(90,'c'),()=>T.rot(90,'a'),()=>T.rot(180,'c'),()=>T.rxk(R(-2,2)||1),()=>T.enl(2)])(),shape:4},
+ // ---- GCSE extension (levels 13+) ----
+ {n:'Translations · bigger vectors',g:()=>T.trans(nz(-6,6),nz(-6,6)),shape:4},
+ {n:'Reflect in x = k',g:()=>T.rxk(nz(-4,4)),shape:3},
+ {n:'Reflect in y = k',g:()=>T.ryk(nz(-4,4)),shape:3},
+ {n:'Reflect in any horizontal or vertical line',g:()=>pick([()=>T.rxk(nz(-4,4)),()=>T.ryk(nz(-4,4)),T.rx,T.ry])(),shape:4},
+ {n:'Reflect · all mirror lines',g:REFL,shape:4},
+ {n:'Rotate 90° clockwise about a point',g:ROTC([90],['c'],cen),shape:3},
+ {n:'Rotate 90° anticlockwise about a point',g:ROTC([90],['a'],cen),shape:3},
+ {n:'Rotate 180° about a point',g:ROTC([180],['c'],cen),shape:3},
+ {n:'Rotate about any point',g:ROTC([90,180],['c','a'],cen),shape:4},
+ {n:'Rotate 270° about the origin',g:ROTC([270],['c','a'],()=>[0,0]),shape:3},
+ {n:'Rotate 90°, 180° or 270° about any point',g:ROTC([90,180,270],['c','a'],()=>pick([[0,0],cen()])),shape:4},
+ {n:'Enlarge · scale factor 2, any centre',g:ENLC([2],cen),shape:3,small:true},
+ {n:'Enlarge · scale factor 3, any centre',g:ENLC([3],cen),shape:3,small:true},
+ {n:'Enlarge · scale factor ½ (origin)',g:ENLC([.5],()=>[0,0]),shape:3},
+ {n:'Enlarge · scale factor ½, any centre',g:ENLC([.5],cen),shape:3},
+ {n:'Enlarge · scale factor −1',g:ENLC([-1],()=>[0,0]),shape:3,small:true},
+ {n:'Enlarge · scale factor −2',g:ENLC([-2],()=>[0,0]),shape:3,small:true},
+ {n:'Enlarge · negative scale factor, any centre',g:ENLC([-1,-2],cen),shape:3,small:true},
+ {n:'Enlarge · any scale factor, any centre',g:ENLC([2,3,.5,-1,-2],()=>pick([[0,0],cen()])),shape:3,small:true},
+ {n:'Two steps: reflect then translate',g:()=>T.then(pick([T.rx,T.ry,T.ryx])(),T.trans(nz(-3,3),nz(-3,3))),shape:3},
+ {n:'Two steps: rotate then translate',g:()=>T.then(T.rot(pick([90,180]),pick(['c','a']),[0,0]),T.trans(nz(-3,3),nz(-3,3))),shape:3},
+ {n:'Two steps: reflect in both axes',g:()=>pick([()=>T.then(T.rx(),T.ry()),()=>T.then(T.ry(),T.rx())])(),shape:3},
+ {n:'Two steps: translate then enlarge',g:()=>T.then(T.trans(nz(-2,2),nz(-2,2)),T.enl(pick([2,.5,-1]))),shape:3,small:true},
+ {n:'Boss: two-step transformations',g:()=>{const a=pick([()=>T.rx(),()=>T.ry(),()=>T.ryx(),()=>T.rot(90,'c',[0,0]),()=>T.rot(90,'a',[0,0]),()=>T.rot(180,'c',[0,0]),()=>T.trans(nz(-2,2),nz(-2,2))])(),b=pick([()=>T.rx(),()=>T.ry(),()=>T.rot(90,'c',[0,0]),()=>T.rot(180,'c',[0,0]),()=>T.trans(nz(-3,3),nz(-3,3))])();return T.then(a,b);},shape:3},
+ // describe the transformation (multiple choice)
+ {n:'Describe it · translations',g:()=>T.trans(nz(-5,5),nz(-5,5)),shape:3,mode:'describe'},
+ {n:'Describe it · reflections in the axes',g:()=>pick([T.rx,T.ry])(),shape:3,mode:'describe'},
+ {n:'Describe it · reflections in any line',g:REFL,shape:3,mode:'describe'},
+ {n:'Describe it · rotations about the origin',g:ROTC([90,180,270],['c','a'],()=>[0,0]),shape:3,mode:'describe'},
+ {n:'Describe it · rotations about any point',g:ROTC([90,180],['c','a'],cen),shape:3,mode:'describe'},
+ {n:'Describe it · enlargements',g:ENLC([2,3],()=>[0,0]),shape:3,small:true,mode:'describe'},
+ {n:'Describe it · enlargements, any centre or ½',g:ENLC([2,.5],()=>pick([[0,0],cen()])),shape:3,small:true,mode:'describe'},
+ {n:'Describe it · negative scale factors',g:ENLC([-1,-2],()=>pick([[0,0],cen()])),shape:3,small:true,mode:'describe'},
+ {n:'Describe it · any single transformation',g:()=>pick([ANY,REFL,ROTC([90,180,270],['c','a'],()=>pick([[0,0],cen()])),ENLC([2,.5,-1],()=>pick([[0,0],cen()]))])(),shape:3,small:true,mode:'describe'},
+ {n:'Boss: describe it · two steps',g:()=>T.then(pick([()=>T.rx(),()=>T.ry(),()=>T.rot(90,'c',[0,0]),()=>T.rot(180,'c',[0,0])])(),T.trans(nz(-3,3),nz(-3,3))),shape:3,mode:'describe'},
+ // inverse: given the image, find the original
+ {n:'Undo it · translations',g:()=>T.trans(nz(-4,4),nz(-4,4)),shape:3,mode:'inverse'},
+ {n:'Undo it · reflections',g:REFL,shape:3,mode:'inverse'},
+ {n:'Undo it · rotations',g:ROTC([90,180],['c','a'],()=>pick([[0,0],cen()])),shape:3,mode:'inverse'},
+ {n:'Undo it · enlargements',g:ENLC([2,.5,-1],()=>pick([[0,0],cen()])),shape:3,small:true,mode:'inverse'}
 ];
 const same=(a,b)=>a[0]===b[0]&&a[1]===b[1];
 function shapeFor(n,small){
@@ -2471,35 +2528,73 @@ REG.push({id:'transform',name:'Transform Quest',emoji:'🪞',color:'#087f5b',cat
  how:'Read the instruction, then tap the grid points where the corners of the transformed shape (the image) should be. Tap a placed point again to remove it. Use 💡 for a visual clue.',
  art:'<svg viewBox="0 0 120 80" width="130" height="90"><path d="M15 60L45 60L30 20Z" fill="#fff" opacity=".9"/><path d="M105 60L75 60L90 20Z" fill="#fff" opacity=".5" stroke="#fff"/><path d="M60 8V76" stroke="#fff" stroke-width="3" stroke-dasharray="4 4"/></svg>',
  mount(root,lv,ctx){
-  const L=LV[lv-1];let task,shape,img,placed,over,hintOn,wrong;
+  const L=LV[lv-1],mode=L.mode||'make';let task,shape,img,placed,over,hintOn,wrong,opts,tried;
+  const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+  const isInt=pts=>pts.every(p=>Number.isInteger(p[0])&&Number.isInteger(p[1]));
   function ok(pts){return pts.every(p=>Math.abs(p[0])<=6&&Math.abs(p[1])<=6);}
-  function newTask(){
-    for(;;){task=L.g();shape=shapeFor(L.shape,L.small);img=shape.map(task.f);if(ok(img)&&!shape.every((p,i)=>same(p,img[i])))break;}
-    ctx.q=tagTransform(task,L.shape);placed=[];over=false;hintOn=false;wrong=false;draw();
+  function alternatives(t){
+    const k=t.kind,a=t.par,out=[];
+    if(k==='trans'){const[x,y]=a;[[y,x],[-x,y],[x,-y],[-x,-y],[x+1,y],[x,y+1],[x-1,y],[x,y-1]].forEach(v=>{if(v[0]||v[1])out.push(T.trans(v[0],v[1]));});}
+    else if(k==='ref'){[T.rx(),T.ry(),T.ryx(),T.rymx()].forEach(x=>out.push(x));[-4,-3,-2,-1,1,2,3,4].forEach(m=>{out.push(T.rxk(m));out.push(T.ryk(m));});}
+    else if(k==='rot'){const[ang,dir,c]=a,od=dir==='c'?'a':'c';
+      out.push(T.rot(ang,od,c),T.rot(ang===180?90:180,dir,c),T.rot(90,dir,c),T.rot(270,dir,c),T.rot(ang,dir,[0,0]),T.rot(ang,dir,[c[0]+1,c[1]]),T.rot(ang,dir,[c[0],c[1]+1]),T.rot(ang,dir,[-c[0],-c[1]]),T.rot(ang,dir,[c[1],c[0]]));}
+    else if(k==='enl'){const[kk,c]=a;[2,3,.5,-1,-2,-.5].forEach(x=>out.push(T.enl(x,c)));out.push(T.enl(kk,[0,0]),T.enl(kk,[c[0]+1,c[1]]),T.enl(kk,[c[0],c[1]+1]),T.enl(kk,[-c[0],-c[1]]),T.enl(kk,[c[1],c[0]]));}
+    else if(k==='combo'){const[x,y]=a;out.push(T.then(y,x));if(y.kind==='trans'){const[u,v]=y.par;[[v,u],[-u,v],[u,-v],[-u,-v]].forEach(w=>{if(w[0]||w[1])out.push(T.then(x,T.trans(w[0],w[1])));});}}
+    return out;
   }
-  const X=x=>x,Y=y=>-y;
+  function makeOpts(){
+    const sig=t=>shape.map(t.f).map(String).sort().join('|'),right=sig(task),seen=new Set([task.d]),pool=[];
+    shuf(alternatives(task)).forEach(t=>{if(!seen.has(t.d)&&sig(t)!==right){seen.add(t.d);pool.push(t);}});
+    const ds=pool.slice(0,3),fill=[()=>T.rx(),()=>T.ry(),()=>T.ryx(),()=>T.rymx(),()=>T.rot(90,'c'),()=>T.rot(90,'a'),()=>T.rot(180,'c'),()=>T.enl(2),()=>T.trans(nz(-4,4),nz(-4,4))];
+    let g=0;while(ds.length<3&&g++<300){const t=pick(fill)();if(!seen.has(t.d)&&sig(t)!==right){seen.add(t.d);ds.push(t);}}
+    return shuf([task.d,...ds.map(t=>t.d)]);
+  }
+  function newTask(){
+    let tries=0;
+    for(;;){tries++;task=L.g();const S=shapeFor(L.shape,L.small),I=S.map(task.f);
+      if(!(ok(I)&&isInt(I)&&!S.every((p,i)=>same(p,I[i])))&&tries<20000)continue;
+      if(mode==='inverse'){shape=I;img=S;}else{shape=S;img=I;}break;}
+    task.tags=[...task.tags].concat(mode==='describe'?['tf-describe']:mode==='inverse'?['tf-inverse']:[]);
+    ctx.q=tagTransform(task,L.shape);placed=[];over=false;hintOn=false;wrong=false;tried=[];opts=mode==='describe'?makeOpts():null;draw();
+  }
   function poly(pts,cls){return`<polygon points="${pts.map(p=>p[0]+','+(-p[1])).join(' ')}" class="${cls}"/>`;}
+  const prompt=()=>mode==='describe'?'<b>Which transformation maps the blue shape onto the green shape?</b>'
+    :mode==='inverse'?`<b>This blue shape is the IMAGE after you ${task.p}. Tap the corners of the ORIGINAL shape.</b>`
+    :`<b>${task.t}</b>${task.sub?`<br><small>(${task.sub})</small>`:''}`;
   function draw(msg){
     let s='<svg viewBox="-7 -7 14 14" class="tf-svg" id="tfs">';
     for(let i=-6;i<=6;i++){s+=`<line x1="${i}" y1="-6.5" x2="${i}" y2="6.5" class="tf-g${i===0?' ax':''}"/><line x1="-6.5" y1="${i}" x2="6.5" y2="${i}" class="tf-g${i===0?' ax':''}"/>`;
       if(i!==0)s+=`<text x="${i}" y="0.75" class="tf-n" text-anchor="middle">${i}</text><text x="-0.2" y="${-i+0.2}" class="tf-n" text-anchor="end">${i}</text>`;}
     s+=poly(shape,'tf-orig');
-    if(hintOn){const h=task.hint;
+    if(mode==='describe'){s+=poly(img,'tf-ans');
+      shape.forEach((p,i)=>{s+=`<text x="${p[0]-.15}" y="${-p[1]-.3}" class="tf-lb" text-anchor="end">${'ABCD'[i]}</text>`;});
+      img.forEach((p,i)=>{s+=`<text x="${p[0]+.15}" y="${-p[1]-.3}" class="tf-lb im">${'ABCD'[i]}′</text>`;});}
+    if(hintOn&&mode!=='describe'){const h=task.hint,inv=mode==='inverse'?-1:1;
       if(h.mirror)s+=h.mirror[0]==='x'?`<line x1="${h.mirror[1]}" y1="-6.5" x2="${h.mirror[1]}" y2="6.5" class="tf-mir"/>`:`<line x1="-6.5" y1="${-h.mirror[1]}" x2="6.5" y2="${-h.mirror[1]}" class="tf-mir"/>`;
       if(h.diag)s+=`<line x1="-6.5" y1="${6.5*h.diag}" x2="6.5" y2="${-6.5*h.diag}" class="tf-mir"/>`;
-      if(h.arrow)s+=shape.slice(0,1).map(p=>`<line x1="${p[0]}" y1="${-p[1]}" x2="${p[0]+h.arrow[0]}" y2="${-(p[1]+h.arrow[1])}" class="tf-arr"/>`).join('');
-      if(h.rays)s+=shape.map(p=>`<line x1="0" y1="0" x2="${task.f(p)[0]}" y2="${-task.f(p)[1]}" class="tf-mir"/>`).join('');
-      if(!h.mirror&&!h.diag&&!h.arrow&&!h.rays)s+=shape.map((p,i)=>`<line x1="${p[0]}" y1="${-p[1]}" x2="${img[i][0]}" y2="${-img[i][1]}" class="tf-mir" style="opacity:.35"/>`).join('')+`<circle cx="0" cy="0" r="0.22" class="tf-ctr"/>`;}
+      if(h.arrow)s+=shape.slice(0,1).map(p=>`<line x1="${p[0]}" y1="${-p[1]}" x2="${p[0]+inv*h.arrow[0]}" y2="${-(p[1]+inv*h.arrow[1])}" class="tf-arr"/>`).join('');
+      if(h.rays){const c=h.c||[0,0];s+=img.map(p=>`<line x1="${c[0]}" y1="${-c[1]}" x2="${p[0]}" y2="${-p[1]}" class="tf-mir"/>`).join('')+`<circle cx="${c[0]}" cy="${-c[1]}" r="0.22" class="tf-ctr"/>`;}
+      if(h.ctr)s+=shape.map((p,i)=>`<line x1="${p[0]}" y1="${-p[1]}" x2="${img[i][0]}" y2="${-img[i][1]}" class="tf-mir" style="opacity:.35"/>`).join('')+`<circle cx="${h.ctr[0]}" cy="${-h.ctr[1]}" r="0.22" class="tf-ctr"/>`;
+      if(h.mid&&mode==='make'){const mid=shape.map(h.mid.f);s+=poly(mid,'tf-mid')+shape.map((p,i)=>`<line x1="${p[0]}" y1="${-p[1]}" x2="${mid[i][0]}" y2="${-mid[i][1]}" class="tf-mir" style="opacity:.35"/>`).join('');}}
     if(over||wrong)s+=poly(img,'tf-ans');
     if(placed.length>=3&&!over&&!wrong)s+=poly(placed,'tf-mine');
     placed.forEach(p=>{s+=`<circle cx="${p[0]}" cy="${-p[1]}" r="0.3" class="tf-pt"/>`;});
     s+='</svg>';
-    root.innerHTML=`<div class="tf"><div class="ch-q"><b>${task.t}</b>${task.sub?`<br><small>(${task.sub})</small>`:''}</div>${s}
-      <div class="statrow"><span>Corners placed: <b>${placed.length}/${shape.length}</b></span><span>Original: ${shape.map(p=>`(${p[0]}, ${p[1]})`).join(' ')}</span></div>
+    const info=mode==='describe'?`<div class="statrow"><span>${shape.map((p,i)=>`${'ABCD'[i]} (${p[0]}, ${p[1]}) → ${'ABCD'[i]}′ (${img[i][0]}, ${img[i][1]})`).join(' · ')}</span></div>`
+      :`<div class="statrow"><span>Corners placed: <b>${placed.length}/${shape.length}</b></span><span>${mode==='inverse'?'Image':'Original'}: ${shape.map(p=>`(${p[0]}, ${p[1]})`).join(' ')}</span></div>`;
+    const body=mode==='describe'?`<div class="tf-opts">${opts.map((o,i)=>`<button class="btn alt tf-opt${tried.includes(o)?' bad':''}" data-o="${i}" ${tried.includes(o)||over?'disabled':''}>${o}</button>`).join('')}</div>`:'';
+    root.innerHTML=`<div class="tf"><div class="ch-q">${prompt()}</div>${s}${info}${body}
       <div class="msg">${msg||'&nbsp;'}</div>
-      <div class="toolrow"><button class="btn alt" id="un">↶ Undo</button><button class="btn alt" id="hn">💡 Hint</button><button class="btn" id="nw">New task ⏭</button></div></div>`;
-    $('#tfs').onclick=tap;$('#un').onclick=()=>{if(over)return;wrong=false;placed.pop();draw();};
-    $('#hn').onclick=()=>{hintOn=!hintOn;draw(hintOn?'Clue shown: use it to find where each corner goes.':'');};$('#nw').onclick=newTask;
+      <div class="toolrow">${mode==='describe'?'':'<button class="btn alt" id="un">↶ Undo</button>'}<button class="btn alt" id="hn">💡 Hint</button><button class="btn" id="nw">New task ⏭</button></div></div>`;
+    if(mode!=='describe'){$('#tfs').onclick=tap;$('#un').onclick=()=>{if(over)return;wrong=false;placed.pop();draw();};}
+    $('#hn').onclick=()=>{hintOn=!hintOn;if(mode==='describe'){draw(hintOn?`💡 Follow one corner: A (${shape[0][0]}, ${shape[0][1]}) goes to A′ (${img[0][0]}, ${img[0][1]}). Is the shape the same size? Did it flip or turn?`:'');}else draw(hintOn?'Clue shown: use it to find where each corner goes.':'');};
+    $('#nw').onclick=newTask;
+    root.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>choose(opts[+b.dataset.o]));
+  }
+  function choose(o){
+    if(over)return;
+    if(o===task.d){over=true;draw('✅ Yes!');ctx.win('Described!',`${task.d}. Always name the type of transformation AND the details (vector, mirror line, angle & centre, scale factor & centre).`,newTask,'Another task');return;}
+    tried.push(o);ctx.log('wrong',{mode:'describe',chose:o,expect:task.d});draw('❌ Not that one — check where the corners land and try again.');
   }
   function tap(e){
     if(over||wrong)return;const r=e.currentTarget.getBoundingClientRect();
@@ -2510,11 +2605,12 @@ REG.push({id:'transform',name:'Transform Quest',emoji:'🪞',color:'#087f5b',cat
     if(placed.length===shape.length){
       const a=placed.map(String).sort().join('|'),b=img.map(String).sort().join('|');
       if(a===b){over=true;draw('✅ Perfect!');ctx.win('Transformation complete!','Every corner is in exactly the right place.',newTask,'Another task');return;}
-      wrong=true;ctx.log('wrong',{placed:placed.map(p=>p.slice()),expect:img});draw(`❌ Not quite. The orange outline shows the correct image: ${img.map(p=>`(${p[0]}, ${p[1]})`).join(' ')}. Press Undo to try again.`);return;
+      wrong=true;ctx.log('wrong',{placed:placed.map(p=>p.slice()),expect:img});draw(`❌ Not quite. The orange outline shows the correct ${mode==='inverse'?'original':'image'}: ${img.map(p=>`(${p[0]}, ${p[1]})`).join(' ')}. Press Undo to try again.`);return;
     }
     draw();
   }
   ctx.keys=null;newTask();
+  window.__tfq=()=>({task,shape,img,opts,mode,choose,tapAt:(x,y)=>{const svg=$('#tfs'),r=svg.getBoundingClientRect();tap({currentTarget:svg,clientX:r.left+(x+7)/14*r.width,clientY:r.top+(7-y)/14*r.height});}});
  }});
 })();
 
@@ -2793,12 +2889,63 @@ const LV=[
  {m:[1.5,-1.5,.5,-.5,2.5],c:[-4,-3,-1,1,3,4],n:3,half:true},{m:[0,0,0],c:[-4,-3,-2,2,3,4],n:2,flat:true},
  {m:[.5,-.5,1.5,-1.5,2,-2,3],c:[-5,-3,-1,1,3,5],n:3,half:true,boss:true}];
 const W=6;
-function gen(l){
-  const s=LV[l-1];
+const CR=[-5,-4,-3,-2,-1,1,2,3,4,5],CS=[-4,-3,-2,-1,0,1,2,3,4],CE=[-4,-3,-2,-1,1,2,3,4],CH=[-4,-2,0,2,4];
+const HM=[.5,-.5,1.5,-1.5,2.5,-2.5];
+// ---- GCSE extension (levels 13+): read the graph, parallel, perpendicular, rearranging equations ----
+LV.push(
+ {n:0,mode:'read',m:[1,-1],c:[0],dots:'pts',nm:'Read the graph · y = x and y = −x'},
+ {n:0,mode:'read',m:[2,3,-2,-3,4],c:[0],dots:'pts',nm:'Read the graph · y = mx through the origin'},
+ {n:0,mode:'read',m:[1],c:CR,dots:'int',nm:'Read the graph · y = x + c'},
+ {n:0,mode:'read',m:[-1],c:CR,dots:'int',nm:'Read the graph · y = −x + c'},
+ {n:0,mode:'read',m:[2,3,1,4],c:CE,dots:'int',nm:'Read the graph · positive gradients'},
+ {n:0,mode:'read',m:[-2,-3,-1,-4],c:CE,dots:'int',nm:'Read the graph · negative gradients'},
+ {n:0,mode:'read',m:HM,c:CH,dots:'pts',half:true,nm:'Read the graph · fractional gradients'},
+ {n:0,mode:'read',m:[1,2,3,-1,-2,-3,.5,-.5,1.5,-1.5],c:CE,dots:0,half:true,nm:'Read the graph · no hints'},
+ {n:0,mode:'read',m:[0],c:CE,dots:0,nm:'Read the graph · horizontal lines'},
+ {n:0,mode:'read',m:[1,2,3,4,-1,-2,-3,-4,.5,-.5,1.5,-1.5,2.5,-2.5],c:CE.concat([-5,5]),dots:0,half:true,boss:true,nm:'Boss · read any line'},
+ {n:1,mode:'par',fixM:true,m:[1,2,-1,-2],c:[-3,-2,-1,0,1,2,3],dc:[-4,-3,-2,2,3,4],nm:'Parallel lines · same gradient'},
+ {n:1,mode:'par',fixM:true,m:[1,2,3,-1,-2,-3],c:CE,tc:0,nm:'Parallel · through the origin'},
+ {n:1,mode:'par',fixM:true,m:HM.concat([.5,-.5]),c:CH,dc:[-4,-2,2,4],half:true,nm:'Parallel · fractional gradients'},
+ {n:1,mode:'par',fixM:true,m:[3,-3,4,-4],c:CS,dc:[-4,-3,-2,2,3,4],nm:'Parallel · steep lines'},
+ {n:1,mode:'par',fixM:true,m:[1,2,3,-1,-2,-3,.5,-.5,1.5,-1.5],c:CS,dc:[-5,-4,-3,-2,2,3,4,5],half:true,boss:true,nm:'Boss · parallel lines'},
+ {n:1,mode:'perp',m:[1,-1],c:CS,tc:CS,nm:'Perpendicular · gradient 1 and −1'},
+ {n:1,mode:'perp',m:[2,-2,.5,-.5],c:CS,tc:CH,half:true,nm:'Perpendicular · gradient 2 and ½'},
+ {n:1,mode:'perp',m:[1,-1,2,-2,.5,-.5],c:CS,tc:CS,half:true,nm:'Perpendicular · all the pairs'},
+ {n:1,mode:'perp',m:[1,-1,2,-2,.5,-.5],c:CE,tc:CE,half:true,boss:true,nm:'Boss · perpendicular lines'},
+ {n:0,mode:'eq',forms:['swap'],m:[1,2,3,-1,-2,-3],c:CE,nm:'Rearrange · y = c + mx'},
+ {n:0,mode:'eq',forms:['ymc'],m:[1,2,3,-1,-2,-3],c:CE,nm:'Rearrange · y − c = mx'},
+ {n:0,mode:'eq',forms:['move'],m:[1,2,3,-1,-2,-3],c:CE,nm:'Rearrange · y − mx = c'},
+ {n:0,mode:'eq',forms:['xy'],m:[-1],c:[1,2,3,4,5,6,7,8],nm:'Rearrange · x + y = k'},
+ {n:0,mode:'eq',forms:['xy'],m:[-2,-3,-4,-5],c:[1,2,3,4,5,6,7,8],nm:'Rearrange · ax + y = k'},
+ {n:0,mode:'eq',forms:['swap','ymc','move','xy'],m:[1,2,3,-1,-2,-3,-4],c:CE,nm:'Rearrange · mixed simple forms'},
+ {n:0,mode:'eq',forms:['2y'],m:[.5,-.5,1.5,-1.5,1,2,-1,-2],c:CE,half:true,nm:'Rearrange · 2y = …'},
+ {n:0,mode:'eq',forms:['3y'],m:[1,2,3,-1,-2,-3],c:CE,nm:'Rearrange · 3y = …'},
+ {n:0,mode:'eq',forms:['std2'],m:[-.5,-1,-1.5,-2,-2.5,-3,-3.5,-4],c:CE,half:true,nm:'Rearrange · ax + 2y = k'},
+ {n:0,mode:'eq',forms:['half'],m:[.5,-.5,1.5,-1.5,2.5,-2.5],c:CE,half:true,nm:'Rearrange · y = x/2 + c'},
+ {n:0,mode:'eq',forms:['swap','ymc','move','xy','2y','3y','std2','half'],m:[1,2,3,-1,-2,-3,-4,.5,-.5,1.5,-1.5],c:CE,half:true,boss:true,nm:'Boss · rearrange anything'},
+ {m:[3,-3,4,-4,5,-5],c:[-4,-2,0,2,4],n:2,nm:'Two stars · steep lines'},
+ {m:[.5,-.5,1.5,-1.5,2.5,-2.5],c:0,fixC:true,n:2,half:true,nm:'Fractional gradient · through the origin'},
+ {m:[2,-2,3,-3],c:[-8,-7,-6,-5,5,6,7,8],fixM:true,n:1,nm:'Fixed gradient · big intercepts'},
+ {m:[1,-1,2,-2,3,-3,.5,-.5,1.5,-1.5],c:CS,n:3,half:true,nm:'Three stars · all gradients'},
+ {mix:true,boss:true,n:0,nm:'Final boss · any kind of line puzzle'}
+);
+const mxs=m=>m===1?'x':m===-1?'−x':String(m).replace('-','−')+'x';
+const ab=Math.abs;
+const EQ={
+ swap:(m,c)=>Number.isInteger(m)&&m&&c?`y = ${String(c).replace('-','−')} ${m<0?'−':'+'} ${ab(m)===1?'':ab(m)}x`:null,
+ ymc:(m,c)=>Number.isInteger(m)&&m&&c?`y ${c>0?'−':'+'} ${ab(c)} = ${mxs(m)}`:null,
+ move:(m,c)=>Number.isInteger(m)&&m&&c?`y ${m<0?'+':'−'} ${ab(m)===1?'':ab(m)}x = ${String(c).replace('-','−')}`:null,
+ xy:(m,c)=>Number.isInteger(m)&&m<0?`${m===-1?'':-m}x + y = ${c}`:null,
+ '2y':(m,c)=>(2*m)%1===0&&c&&m?`2y = ${mxs(2*m)} ${c<0?'−':'+'} ${2*ab(c)}`:null,
+ '3y':(m,c)=>Number.isInteger(m)&&m&&c?`3y = ${mxs(3*m)} ${c<0?'−':'+'} ${3*ab(c)}`:null,
+ std2:(m,c)=>m<0&&(2*m)%1===0&&c?`${-2*m===1?'':-2*m}x + 2y = ${String(2*c).replace('-','−')}`:null,
+ half:(m,c)=>{const k=2*m;return Number.isInteger(k)&&k%2!==0&&c?`y = ${k===1?'':k===-1?'−':String(k).replace('-','−')}x/2 ${c<0?'−':'+'} ${ab(c)}`:null;}
+};
+const lattice=(m,c)=>{const pts=[];for(let x=-W;x<=W;x++){const y=m*x+c;if(Math.abs(y)<=W&&Number.isInteger(y))pts.push([x,y]);}return pts;};
+function genStar(s){
   for(let t=0;t<300;t++){
     const m=pick(s.m),c=Array.isArray(s.c)?pick(s.c):s.c;
-    const pts=[];
-    for(let x=-W;x<=W;x++){const y=m*x+c;if(Math.abs(y)<=W&&Number.isInteger(y))pts.push([x,y]);}
+    const pts=lattice(m,c);
     if(pts.length<s.n)continue;
     shuffle(pts);
     const st=[];
@@ -2809,51 +2956,119 @@ function gen(l){
   }
   return{m:1,c:0,st:[[1,1],[3,3]],s};
 }
+function gen(l){
+  let s=LV[l-1];
+  if(s.mix)s=pick(LV.slice(12).filter(x=>!x.mix));
+  const md=s.mode||'star';
+  if(md==='star')return genStar(s);
+  for(let t=0;t<500;t++){
+    if(md==='read'){
+      const m=pick(s.m),c=pick(s.c),pts=lattice(m,c);if(pts.length<2)continue;
+      let dots=[];if(s.dots==='int'&&Math.abs(c)<=W)dots=[[0,c]];else if(s.dots==='pts'){const q=pts.filter(p=>p[0]!==0);shuffle(q);if(q.length<2)continue;dots=q.slice(0,2);}
+      return{m,c,st:[],s,mode:md,ghost:{m,c},dots};
+    }
+    if(md==='par'){
+      const gm=pick(s.m),gc=pick(s.c),tc=s.tc!==undefined?s.tc:gc+pick(s.dc);
+      if(Math.abs(tc)>W||tc===gc)continue;
+      const pts=lattice(gm,tc).filter(p=>p[0]!==0);if(!pts.length)continue;
+      return{m:gm,c:tc,st:[pick(pts)],s,mode:md,ghost:{m:gm,c:gc}};
+    }
+    if(md==='perp'){
+      const rm=pick(s.m),gc=pick(s.c),tm=-1/rm,tc=pick(s.tc);
+      if(!Number.isInteger(tm*2))continue;
+      const pts=lattice(tm,tc).filter(p=>p[0]!==0);if(!pts.length)continue;
+      return{m:tm,c:tc,st:[pick(pts)],s,mode:md,ghost:{m:rm,c:gc}};
+    }
+    if(md==='eq'){
+      const f=pick(s.forms),m=pick(s.m),c=pick(s.c),e=EQ[f](m,c);if(!e)continue;
+      return{m,c,st:[],s,mode:md,eq:e,form:f};
+    }
+  }
+  return genStar(LV[0]);
+}
 const fmt=(m,c)=>{let t='y = ';if(m===0)return t+c;const ms=m===1?'':m===-1?'−':String(m).replace('-','−');t+=ms+'x';
   if(c>0)t+=' + '+c;else if(c<0)t+=' − '+(-c);return t;};
-window.__ln={gen,fmt,LV};
+window.__ln={gen,fmt,LV,EQ};
 REG.push({id:'lines',name:'Line Hunter',emoji:'📈',color:'#0c8599',cat:'Algebra',
  desc:'Tune the gradient m and the intercept c of y = mx + c so that the line passes through every ⭐.',skills:['y = mx + c','gradient','y-intercept','coordinates'],
- levels:['Gradient only (1 star)','Gradient only (2 stars)','Negative gradients','Intercept only','Intercept only · steeper','Both m and c','Both · steeper & negative','Fractional gradients','Three stars','Three stars · tricky','Horizontal lines','Boss line'],
+ levels:['Gradient only (1 star)','Gradient only (2 stars)','Negative gradients','Intercept only','Intercept only · steeper','Both m and c','Both · steeper & negative','Fractional gradients','Three stars','Three stars · tricky','Horizontal lines','Boss line'].concat(LV.slice(12).map(x=>x.nm)),
  how:'Use the − and + buttons to change m (gradient = how steep) and c (where the line crosses the y-axis). Make the line pass through all the stars!',
  art:'<div class="minibal">📈</div>',
  mount(root,lv,ctx){
   let P,m,c,done;
   const S=34,O=7*S+10;
-  function newQ(){P=gen(lv);ctx.q=tagLine(P);const s=P.s;m=s.fixM?P.m:0;c=s.fixC?P.c:0;if(s.fixM)m=P.m;done=false;draw();}
+  const md=()=>P.s.mode||'star';
+  const needsCheck=()=>md()==='read'||md()==='eq';
+  function newQ(){P=gen(lv);ctx.q=tagLine(P);const s=P.s;m=s.fixM?P.m:0;c=s.fixC?P.c:0;done=false;draw();}
   function ys(x){return m*x+c}
-  function ok(){return P.st.every(p=>Math.abs(ys(p[0])-p[1])<1e-9);}
+  const starsHit=()=>P.st.every(p=>Math.abs(ys(p[0])-p[1])<1e-9);
+  const exact=()=>Math.abs(m-P.m)<1e-9&&Math.abs(c-P.c)<1e-9;
+  function ok(){
+    if(needsCheck())return exact();
+    return starsHit()&&(md()==='star'||Math.abs(m-P.m)<1e-9);
+  }
+  const mm=v=>String(v).replace('-','−');
+  function caption(){
+    if(md()==='read')return'Match the <b>dotted line</b>: type its equation by tuning m and c, then press Check.';
+    if(md()==='par')return`Make a line <b>parallel</b> to <span class="ln-ref">${fmt(P.ghost.m,P.ghost.c)}</span> (dotted) that goes through the ⭐.`;
+    if(md()==='perp')return`Make a line <b>perpendicular</b> to <span class="ln-ref">${fmt(P.ghost.m,P.ghost.c)}</span> (dotted) that goes through the ⭐.`;
+    if(md()==='eq')return'Rearrange this into <b>y = mx + c</b>, then set m and c and press Check.';
+    return'';
+  }
   function draw(msg){
     const s=P.s;let g='';
     for(let i=-W;i<=W;i++){const p=O+i*S;g+=`<line x1="${p}" y1="${O-W*S}" x2="${p}" y2="${O+W*S}" class="ln-g${i===0?' ax':''}"/><line x1="${O-W*S}" y1="${O-i*S}" x2="${O+W*S}" y2="${O-i*S}" class="ln-g${i===0?' ax':''}"/>`;
       if(i&&i%2===0)g+=`<text x="${p}" y="${O+13}" class="ln-t">${i}</text><text x="${O-4}" y="${O-i*S+4}" class="ln-t r">${i}</text>`;}
+    if(P.ghost){const gm=P.ghost.m,gc=P.ghost.c;g+=`<line x1="${O-W*S}" y1="${O-(gm*-W+gc)*S}" x2="${O+W*S}" y2="${O-(gm*W+gc)*S}" class="ln-gh"/>`;}
+    (P.dots||[]).forEach(d=>{g+=`<circle cx="${O+d[0]*S}" cy="${O-d[1]*S}" r="5" class="ln-dot"/><text x="${O+d[0]*S+8}" y="${O-d[1]*S-8}" class="ln-dl">(${mm(d[0])}, ${mm(d[1])})</text>`;});
     const x1=-W,x2=W,y1=ys(x1),y2=ys(x2);
-    g+=`<line x1="${O+x1*S}" y1="${O-y1*S}" x2="${O+x2*S}" y2="${O-y2*S}" class="ln-l${ok()?' ok':''}"/>`;
+    g+=`<line x1="${O+x1*S}" y1="${O-y1*S}" x2="${O+x2*S}" y2="${O-y2*S}" class="ln-l${!needsCheck()&&ok()?' ok':''}"/>`;
     P.st.forEach(p=>{const hit=Math.abs(ys(p[0])-p[1])<1e-9;g+=`<text x="${O+p[0]*S}" y="${O-p[1]*S+8}" class="ln-s${hit?' hit':''}" text-anchor="middle">⭐</text>`;});
-    const sv=O*2;
-    root.innerHTML=`<div class="ln"><div class="ln-eq">${fmt(m,c)}</div>
+    const sv=O*2,cap=caption();
+    root.innerHTML=`<div class="ln">${cap?`<div class="ln-cap">${cap}</div>`:''}${md()==='eq'?`<div class="ln-eq ln-given">${P.eq}</div>`:''}<div class="ln-eq">${fmt(m,c)}</div>
      <svg viewBox="0 0 ${sv} ${sv}" class="ln-svg">${g}</svg>
-     <div class="ln-ctl"><div class="ln-c">m = <button class="key" data-a="m-" ${s.fixM?'disabled':''}>−</button><b>${String(m).replace('-','−')}</b><button class="key" data-a="m+" ${s.fixM?'disabled':''}>+</button></div>
-      <div class="ln-c">c = <button class="key" data-a="c-" ${s.fixC?'disabled':''}>−</button><b>${String(c).replace('-','−')}</b><button class="key" data-a="c+" ${s.fixC?'disabled':''}>+</button></div></div>
+     <div class="ln-ctl"><div class="ln-c">m = <button class="key" data-a="m-" ${s.fixM?'disabled':''}>−</button><b>${mm(m)}</b><button class="key" data-a="m+" ${s.fixM?'disabled':''}>+</button></div>
+      <div class="ln-c">c = <button class="key" data-a="c-" ${s.fixC?'disabled':''}>−</button><b>${mm(c)}</b><button class="key" data-a="c+" ${s.fixC?'disabled':''}>+</button></div></div>
      <div class="msg">${msg||'&nbsp;'}</div>
-     <div class="toolrow"><button class="btn alt" id="lh">💡 Hint</button><button class="btn" id="ln-nw">New puzzle ⏭</button></div></div>`;
+     <div class="toolrow">${needsCheck()?'<button class="btn go" id="ln-ck">Check ✓</button>':''}<button class="btn alt" id="lh">💡 Hint</button><button class="btn" id="ln-nw">New puzzle ⏭</button></div></div>`;
     root.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{
       const a=b.dataset.a,st=P.s.half?.5:1;
       if(a==='m-')m=Math.max(-6,m-st);if(a==='m+')m=Math.min(6,m+st);
       if(a==='c-')c=Math.max(-8,c-1);if(a==='c+')c=Math.min(8,c+1);
-      if(ok()){done=true;draw();ctx.win('Line found!',`${fmt(m,c)} goes through every star. m is the gradient, c is where it crosses the y-axis.`,newQ,'New puzzle');}else draw();});
+      if(!needsCheck()&&ok())win();else draw();});
     $('#ln-nw').onclick=newQ;
-    $('#lh').onclick=()=>{
-      const p=P.st[0];let t;
-      if(P.s.fixM)t=`Gradient is fixed at ${m}. Star (${p[0]}, ${p[1]}) means y = ${p[1]} when x = ${p[0]}. Which c makes ${m}×${p[0]} + c = ${p[1]}?`;
-      else if(P.s.fixC)t=`The line passes through the origin (c = 0). From (0,0) to the star (${p[0]}, ${p[1]}): gradient = up ÷ across = ${p[1]} ÷ ${p[0]}.`;
-      else if(P.st.length>1){const q=P.st[1];t=`Gradient = change in y ÷ change in x between two stars: (${q[1]} − ${p[1]}) ÷ (${q[0]} − ${p[0]}). Then c is where the line hits x = 0.`;}
-      else t='Gradient = up ÷ across.';
-      draw('💡 '+t);};
+    if($('#ln-ck'))$('#ln-ck').onclick=check;
+    $('#lh').onclick=()=>draw('💡 '+hint());
+  }
+  function win(){
+    done=true;draw();
+    const t=md()==='eq'?`${P.eq} rearranges to ${fmt(m,c)}. m = ${mm(m)} is the gradient and c = ${mm(c)} is the y-intercept.`
+      :md()==='read'?`The dotted line is ${fmt(m,c)}: gradient m = ${mm(m)}, y-intercept c = ${mm(c)}.`
+      :md()==='par'?`Parallel lines have the same gradient. ${fmt(m,c)} is parallel to ${fmt(P.ghost.m,P.ghost.c)} and goes through the star.`
+      :md()==='perp'?`The gradients ${mm(P.ghost.m)} and ${mm(m)} multiply to −1, so the lines are perpendicular. ${fmt(m,c)} goes through the star.`
+      :`${fmt(m,c)} goes through every star. m is the gradient, c is where it crosses the y-axis.`;
+    ctx.win('Line found!',t,newQ,'New puzzle');
+  }
+  function check(){
+    if(exact()){win();return;}
+    const bad=[];if(Math.abs(m-P.m)>1e-9)bad.push('gradient');if(Math.abs(c-P.c)>1e-9)bad.push('intercept');
+    ctx.log('wrong',{mode:md(),m,c,expectM:P.m,expectC:P.c,err:bad});
+    draw(`❌ Not yet — the ${bad.join(' and ')} ${bad.length>1?'are':'is'} not right.`);
+  }
+  function hint(){
+    const p=P.st[0];
+    if(md()==='read')return P.dots&&P.dots.length===2?`Use the two marked points: gradient = up ÷ across = (${mm(P.dots[1][1])} − ${mm(P.dots[0][1])}) ÷ (${mm(P.dots[1][0])} − ${mm(P.dots[0][0])}). c is where the line crosses the y-axis.`:'Pick two points where the dotted line crosses grid corners. Gradient = up ÷ across. c is where it crosses the y-axis (x = 0).';
+    if(md()==='par')return`Parallel lines have the same gradient, so m is ${mm(m)} already. Which c makes the line go through (${mm(p[0])}, ${mm(p[1])})? Solve ${mm(m)}×${mm(p[0])} + c = ${mm(p[1])}.`;
+    if(md()==='perp')return`Perpendicular gradients multiply to −1: ${mm(P.ghost.m)} × m = −1, so m = −1 ÷ ${mm(P.ghost.m)}. Then choose c so the line goes through (${mm(p[0])}, ${mm(p[1])}).`;
+    if(md()==='eq')return'Get y on its own on the left: do the same thing to both sides, then divide everything by the number in front of y. Read off the number in front of x (m) and the number on its own (c).';
+    if(P.s.fixM)return`Gradient is fixed at ${mm(m)}. Star (${mm(p[0])}, ${mm(p[1])}) means y = ${mm(p[1])} when x = ${mm(p[0])}. Which c makes ${mm(m)}×${mm(p[0])} + c = ${mm(p[1])}?`;
+    if(P.s.fixC)return`The line passes through the origin (c = 0). From (0,0) to the star (${mm(p[0])}, ${mm(p[1])}): gradient = up ÷ across = ${mm(p[1])} ÷ ${mm(p[0])}.`;
+    if(P.st.length>1){const q=P.st[1];return`Gradient = change in y ÷ change in x between two stars: (${mm(q[1])} − ${mm(p[1])}) ÷ (${mm(q[0])} − ${mm(p[0])}). Then c is where the line hits x = 0.`;}
+    return'Gradient = up ÷ across.';
   }
   newQ();
   // test hook
-  root.__solve=()=>{m=P.m;c=P.c;if(ok()){draw();ctx.win('Line found!','done',newQ,'New puzzle');}};
+  root.__solve=()=>{m=P.m;c=P.c;if(needsCheck())check();else if(ok())win();};
  }});
 })();
 
@@ -3048,12 +3263,198 @@ const QT={
  A11(){const d=R(2,8),n=R(1,d-1),m=R(2,9),N=d*m;return{vis:'<div class="ch-big">🕵️</div>',q:`${fh(n,d)} of a number is <b>${n*m}</b>. What is the number?`,ans:N,ex:`${n} parts = ${n*m}, so 1 part = ${m}. ${d} parts = ${d} × ${m} = ${N}`};},
  A12(){const c=pick([2,3,4,5]),f=pick([2,3,4,5]),w1=R(1,4),w2=R(1,3),b=R(1,c-1),e=R(1,f-1);const v=w1+b/c+w2+e/f;const L=c*f/gcd(c,f);const num=Math.round(v*L);return{vis:'<div class="ch-big">🧮</div>',q:`${mix(w1,b,c)} + ${mix(w2,e,f)} = ? Give an improper fraction (a/b) in simplest form.`,ans:v,simplest:true,ex:`Whole parts: ${w1+w2}. Fractions: ${b}/${c} + ${e}/${f} = ${ft(Math.round((b/c+e/f)*L),L)}. Total = ${ft(num,L)}`};}
 };
-const POOL=[['A1'],['A1','A2'],['A2','A3'],['A3','A4'],['A5'],['A6'],['A6','A7'],['A8','A4'],['A9'],['A9','A10'],['A11','A4'],['A7','A10','A11','A12','A9']];
+/* ---- GCSE extension: levels 13-32 (each type has several distinct variants, tagged v = type.index) ---- */
+const r6=x=>Math.round(x*1e6)/1e6;
+const big=e=>`<div class="ch-big">${e}</div>`;
+const O=(vis,q,ans,ex,extra,simplest)=>({vis,q,ans:r6(ans),ex:String(ex).replace(/(\d+\/\d+) = \1(?![\d\/])/g,'$1'),extra,simplest:!!simplest});
+const V=(id,arr)=>{QT[id]=()=>{const i=R(0,arr.length-1),r=arr[i]();r.v=id+'.'+i;return r;};};
+const int=f=>{let r;for(let i=0;i<300;i++){r=f();if(r)return r;}return f()||{};};
+const DEN=[2,3,4,5,6,7,8,9,10,12];
+const prop=(ds)=>{const d=pick(ds||DEN),n=R(1,d-1);return[n,d];};
+const two=()=>int(()=>{const a=prop(),b=prop();if(a[1]===b[1]||a[0]*b[1]===b[0]*a[1])return 0;return[a,b];});
+const F=a=>fh(a[0],a[1]);
+const lcm=(a,b)=>a*b/gcd(a,b);
+const frac=(a,b)=>ft(a,b);
+const mixed=(n,d)=>{const w=Math.floor(n/d),r=n%d;return r?`${w} ${r}/${d}`:`${w}`;};
+const fadd=(a,b)=>[a[0]*b[1]+b[0]*a[1],a[1]*b[1]],fsub=(a,b)=>[a[0]*b[1]-b[0]*a[1],a[1]*b[1]],fmul=(a,b)=>[a[0]*b[0],a[1]*b[1]],fdiv=(a,b)=>[a[0]*b[1],a[1]*b[0]];
+const val=a=>a[0]/a[1];
+const cm=(a,b)=>{const L=lcm(a[1],b[1]);return[a[0]*L/a[1],b[0]*L/b[1],L];};
+// B1 compare and order
+V('B1',[
+ ()=>{const[a,b]=two(),[x,y,L]=cm(a,b);const w=x>y?a:b;return O(bar(a[1],a[0],COLS[0])+bar(b[1],b[0],COLS[1]),`Which is <b>larger</b>: ${F(a)} or ${F(b)}? Type that fraction.`,val(w),`Common denominator ${L}: ${x}/${L} and ${y}/${L}. The larger is ${frac(w[0],w[1])}`,['fr-compare']);},
+ ()=>{const[a,b]=two(),[x,y,L]=cm(a,b);const w=x<y?a:b;return O(bar(a[1],a[0],COLS[0])+bar(b[1],b[0],COLS[1]),`Which is <b>smaller</b>: ${F(a)} or ${F(b)}? Type that fraction.`,val(w),`Common denominator ${L}: ${x}/${L} and ${y}/${L}. The smaller is ${frac(w[0],w[1])}`,['fr-compare']);},
+ ()=>{const[a,b]=two(),s=fadd(a,b),m=[s[0],s[1]*2];return O(big('⚖️'),`What fraction is <b>exactly halfway</b> between ${F(a)} and ${F(b)}? (simplest form)`,val(m),`Add them: ${frac(s[0],s[1])}. Then halve it: ${frac(m[0],m[1])}`,['fr-compare','fr-add'],true);},
+ ()=>{const[a,b]=two(),[x,y,L]=cm(a,b),hi=x>y?a:b,lo=x>y?b:a,d=fsub(hi,lo);return O(big('📏'),`How much <b>bigger</b> is ${F(hi)} than ${F(lo)}? (simplest form)`,val(d),`${Math.max(x,y)}/${L} − ${Math.min(x,y)}/${L} = ${Math.abs(x-y)}/${L} = ${frac(d[0],d[1])}`,['fr-compare','fr-sub'],true);},
+ ()=>int(()=>{const a=prop(),b=prop(),c=prop(),vs=[val(a),val(b),val(c)];if(new Set(vs.map(v=>r6(v))).size<3)return 0;const w=[a,b,c].sort((p,q)=>val(q)-val(p))[0];return O(big('🏆'),`Which is the <b>largest</b>: ${F(a)}, ${F(b)} or ${F(c)}? Type that fraction.`,val(w),`Change to decimals: ${vs.map(v=>(Math.round(v*1000)/1000)).join(', ')}. Largest = ${frac(w[0],w[1])}`,['fr-compare']);}),
+ ()=>int(()=>{const a=prop(),b=prop(),c=prop(),vs=[val(a),val(b),val(c)];if(new Set(vs.map(v=>r6(v))).size<3)return 0;const m=[a,b,c].sort((p,q)=>val(p)-val(q))[1];return O(big('🎯'),`Put ${F(a)}, ${F(b)} and ${F(c)} in order. Which is the <b>middle</b> one? Type that fraction.`,val(m),`Decimals: ${vs.map(v=>(Math.round(v*1000)/1000)).join(', ')}. The middle one is ${frac(m[0],m[1])}`,['fr-compare']);})
+]);
+// B2 equivalent fractions, all directions
+V('B2',[
+ ()=>{const b=pick([3,4,5,6,7,8,9,11,12]),a=R(1,b-1),m=R(2,9),c=b*m;return O(bar(b,a,COLS[0]),`${fh(a,b)} = ${fh('?',c)} &nbsp; Find the missing numerator.`,a*m,`${b} × ${m} = ${c}, so ${a} × ${m} = ${a*m}`,['fr-equivalent']);},
+ ()=>{const b=pick([3,4,5,6,7,8,9,11,12]),a=R(1,b-1),m=R(2,9);return O(big('🔎'),`${fh(a,b)} = ${fh(a*m,'?')} &nbsp; Find the missing denominator.`,b*m,`${a} × ${m} = ${a*m}, so ${b} × ${m} = ${b*m}`,['fr-equivalent']);},
+ ()=>{let p,q;do{q=R(2,9);p=R(1,q-1);}while(gcd(p,q)!==1);const f=R(2,9);return O(big('🔎'),`${fh(p*f,q*f)} = ${fh('?',q)} &nbsp; Find the missing numerator.`,p,`${q*f} ÷ ${f} = ${q}, so ${p*f} ÷ ${f} = ${p}`,['fr-equivalent']);},
+ ()=>{let p,q;do{q=R(3,11);p=R(1,q-1);}while(gcd(p,q)!==1);const f=R(2,9);return O(big('🔎'),`${fh(p*f,q*f)} = ${fh(p,'?')} &nbsp; Find the missing denominator.`,q,`${p*f} ÷ ${f} = ${p}, so ${q*f} ÷ ${f} = ${q}`,['fr-equivalent']);},
+ ()=>{const d=pick([8,12,16,20,24,40]),k=pick([2,3,4,5].filter(x=>d%x===0)),n=pick([3,5,7,9,11]);const b=d/k;if(n>=b)return QT.B2();return O(big('🧩'),`How many <b>${ordinal(d)}s</b> is ${fh(n,b)}?`,n*k,`${b} × ${k} = ${d}, so ${n} × ${k} = ${n*k} → ${n*k}/${d}`,['fr-equivalent']);},
+ ()=>{const b=pick([6,8,9,12,15]),m=pick([2,3,4,5]),a=R(1,b-1);return O(big('✖️'),`${fh('x',b)} = ${fh(a*m,b*m)}. Find <b>x</b>.`,a,`${b*m} ÷ ${m} = ${b}, so x = ${a*m} ÷ ${m} = ${a}`,['fr-equivalent','fr-algebra']);}
+]);
+function ordinal(d){return({8:'eighth',12:'twelfth',16:'sixteenth',20:'twentieth',24:'twenty-fourth',40:'fortieth'})[d]||'part';}
+// B3 simplifying (bigger numbers, HCF)
+const cp=()=>{let p,q;do{q=R(2,11);p=R(1,q-1);}while(gcd(p,q)!==1);return[p,q];};
+V('B3',[
+ ()=>{const[p,q]=cp(),f=R(3,12);return O(big('✂️'),`Simplify ${fh(p*f,q*f)} to its simplest form.`,p/q,`Divide by ${f}: ${p*f}/${q*f} = ${p}/${q}`,['fr-simplify'],true);},
+ ()=>{const[p,q]=cp(),f=pick([10,20,25,30,40,50]);return O(big('✂️'),`Simplify ${fh(p*f,q*f)} to its simplest form.`,p/q,`Divide top and bottom by ${f}: ${p}/${q}`,['fr-simplify'],true);},
+ ()=>{const[p,q]=cp(),f=R(3,15);return O(big('🔢'),`What is the <b>highest common factor</b> of ${p*f} and ${q*f}?`,f,`${p*f} = ${f} × ${p} and ${q*f} = ${f} × ${q}, and ${p} and ${q} share no factor. HCF = ${f}`,['fr-hcf']);},
+ ()=>{const[p,q]=cp(),f=R(3,12);return O(big('✂️'),`${fh(p*f,q*f)} simplifies to a fraction in its simplest form. What is its <b>denominator</b>?`,q,`Divide by ${f}: ${p}/${q}. The denominator is ${q}`,['fr-simplify']);},
+ ()=>{const[p,q]=cp(),f=R(3,12);return O(big('✂️'),`${fh(p*f,q*f)} simplifies to a fraction in its simplest form. What is its <b>numerator</b>?`,p,`Divide by ${f}: ${p}/${q}. The numerator is ${p}`,['fr-simplify']);},
+ ()=>{let p,q;do{q=R(2,8);p=q+R(1,9);}while(gcd(p,q)!==1);const f=R(2,8);return O(big('✂️'),`Simplify the improper fraction ${fh(p*f,q*f)} to its simplest form.`,p/q,`Divide by ${f}: ${p}/${q}`,['fr-simplify','fr-improper'],true);}
+]);
+// B4 fraction of an amount
+V('B4',[
+ ()=>{const d=pick([6,7,8,9,11,12]),n=R(2,d-1),m=R(2,9),N=d*m;return O(pie(d,n,COLS[1]),`Find ${fh(n,d)} of ${N}.`,N/d*n,`${N} ÷ ${d} = ${m}, then × ${n} = ${m*n}`,['fr-of-amount']);},
+ ()=>{const d=pick([4,5,6,8,10]),n=R(1,d-1),N=d*pick([5,8,10,12,15]);return O(big('🏷️'),`A coat costs £${N}. The sale takes ${fh(n,d)} off. How much is taken off (£)?`,N/d*n,`£${N} ÷ ${d} = £${N/d}, × ${n} = £${N/d*n}`,['fr-of-amount']);},
+ ()=>{const N=pick([6,12,18,24,30,42,60]);return O(big('💷'),`Find ${fh(5,6)} of £${N}.`,N/6*5,`${N} ÷ 6 = ${N/6}, × 5 = ${N/6*5}`,['fr-of-amount']);},
+ ()=>{const n=pick([1,3]),k=pick([2,3,5]);return O(big('⚖️'),`Find ${fh(n,4)} of <b>${k} kg</b>, in <b>grams</b>.`,k*1000/4*n,`${k} kg = ${k*1000} g. ${k*1000} ÷ 4 = ${k*250}, × ${n} = ${k*250*n} g`,['fr-of-amount','fr-unit']);},
+ ()=>{const[n,d]=pick([[5,12],[1,12],[7,12],[2,3],[3,4],[1,6],[5,6],[3,5]]);return O(big('⏱️'),`Find ${fh(n,d)} of <b>1 hour</b>, in <b>minutes</b>.`,60/d*n,`60 ÷ ${d} = ${60/d}, × ${n} = ${60/d*n} minutes`,['fr-of-amount','fr-unit']);},
+ ()=>{const N=pick([15,30,45,60,75,90]);return O(big('➕'),`Find ${fh(2,3)} of ${N} plus ${fh(1,5)} of ${N}.`,N*2/3+N/5,`${fh(2,3)} of ${N} = ${N*2/3}; ${fh(1,5)} of ${N} = ${N/5}. Total = ${N*2/3+N/5}`,['fr-of-amount','fr-add']);},
+ ()=>{const[n,d]=pick([[5,4],[7,4],[3,2],[4,3],[5,3],[7,5],[9,8]]),N=d*pick([4,5,6,8,10]);return O(big('📈'),`Find ${fh(n,d)} of ${N}.`,N/d*n,`${N} ÷ ${d} = ${N/d}, × ${n} = ${N/d*n}`,['fr-of-amount','fr-improper']);}
+]);
+// B5 express as a fraction of another quantity
+V('B5',[
+ ()=>{const a=pick([5,10,12,15,20,25,30,40,45,50]);return O(big('⏱️'),`Write <b>${a} minutes</b> as a fraction of <b>1 hour</b>, in simplest form.`,a/60,`${a}/60 = ${frac(a,60)}`,['fr-express','fr-unit'],true);},
+ ()=>{const b=pick([20,40,60,80,100]),a=R(1,b/5-1)*5;return O(big('💷'),`Write <b>£${a}</b> as a fraction of <b>£${b}</b>, in simplest form.`,a/b,`${a}/${b} = ${frac(a,b)}`,['fr-express'],true);},
+ ()=>{const a=R(1,19)*5;return O(big('📏'),`Write <b>${a} cm</b> as a fraction of <b>1 metre</b>, in simplest form.`,a/100,`1 m = 100 cm. ${a}/100 = ${frac(a,100)}`,['fr-express','fr-unit'],true);},
+ ()=>{const y=pick([30,36,40,45,48,60]),x=R(1,y-1);return O(big('🏫'),`<b>${x}</b> of the <b>${y}</b> children in a class walk to school. What fraction walk? (simplest form)`,x/y,`${x}/${y} = ${frac(x,y)}`,['fr-express'],true);},
+ ()=>{const a=pick([100,125,200,250,300,400,500,750]);return O(big('⚖️'),`Write <b>${a} g</b> as a fraction of <b>1 kg</b>, in simplest form.`,a/1000,`1 kg = 1000 g. ${a}/1000 = ${frac(a,1000)}`,['fr-express','fr-unit'],true);},
+ ()=>{const[u,t,w]=pick([[7,'days','a week'],[12,'months','a year'],[24,'hours','a day']]);const a=R(1,u-1);return O(big('📅'),`Write <b>${a} ${a===1?t.slice(0,-1):t}</b> as a fraction of <b>${w}</b> (${u} ${t}), in simplest form.`,a/u,`${a}/${u} = ${frac(a,u)}`,['fr-express','fr-unit'],true);}
+]);
+// B6 fractions of fractions and what's left
+V('B6',[
+ ()=>int(()=>{const[a,b]=two();const s=fadd(a,b);if(s[0]>=s[1])return 0;const r=fsub([1,1],s);return O(big('🍰'),`Sam spends ${F(a)} of his money on a book and ${F(b)} on lunch. What fraction is <b>left</b>? (simplest form)`,val(r),`Spent: ${frac(s[0],s[1])}. Left: 1 − ${frac(s[0],s[1])} = ${frac(r[0],r[1])}`,['fr-remaining','fr-add'],true);}),
+ ()=>{const a=prop([3,4,5,6,8,10]),r=fsub([1,1],a);return O(big('🛢️'),`A tank is ${F(a)} full. What fraction of the tank is <b>empty</b>? (simplest form)`,val(r),`1 − ${frac(a[0],a[1])} = ${frac(r[0],r[1])}`,['fr-remaining'],true);},
+ ()=>{const N=pick([30,60,90,120]);return O(big('✖️'),`Find ${fh(1,3)} of ${fh(2,5)} of ${N}.`,N*2/15,`${fh(2,5)} of ${N} = ${N*2/5}. ${fh(1,3)} of that = ${N*2/15}`,['fr-of-amount','fr-mul']);},
+ ()=>int(()=>{const a=pick([[1,2],[1,3],[1,4],[2,3],[1,5]]),b=pick([[1,2],[1,3],[1,4],[1,5],[2,5]]);const rem=fsub([1,1],a),e=fmul(b,rem),l=fsub(rem,e);return O(big('🍰'),`Ann eats ${F(a)} of a cake. Ben then eats ${F(b)} of what is <b>left</b>. What fraction of the <b>whole cake</b> is still left? (simplest form)`,val(l),`After Ann: ${frac(rem[0],rem[1])}. Ben eats ${frac(b[0],b[1])} of that = ${frac(e[0],e[1])}. Left = ${frac(rem[0],rem[1])} − ${frac(e[0],e[1])} = ${frac(l[0],l[1])}`,['fr-remaining','fr-mul'],true);}),
+ ()=>{const a=pick([[3,5],[2,3],[3,4],[5,8],[4,7]]),b=pick([[1,4],[1,3],[2,5],[1,2],[3,4]]),p=fmul(a,b);return O(big('⚽'),`${F(a)} of a class are girls. ${F(b)} of the girls play football. What fraction of the <b>whole class</b> are girls who play football? (simplest form)`,val(p),`${frac(a[0],a[1])} × ${frac(b[0],b[1])} = ${frac(p[0],p[1])}`,['fr-mul'],true);},
+ ()=>{const[a,b]=pick([[[1,2],[1,3]],[[1,2],[1,4]],[[1,3],[1,4]],[[1,5],[2,5]],[[1,6],[1,3]],[[2,5],[1,10]]]);const r=fsub(fsub([1,1],a),b);return O(big('🍰'),`A prize is shared between three people. The first gets ${F(a)}, the second gets ${F(b)}. What fraction does the <b>third</b> get? (simplest form)`,val(r),`Others: ${frac(...fadd(a,b))}. Third: 1 − ${frac(...fadd(a,b))} = ${frac(r[0],r[1])}`,['fr-remaining'],true);}
+]);
+// B7 mixed numbers add and subtract
+V('B7',[
+ ()=>{const c=pick([3,4,5,6,8]),w1=R(1,4),w2=R(1,4),b=R(1,c-1),e=R(1,c-1),s=[(w1*c+b)+(w2*c+e),c];return O(big('➕'),`${mix(w1,b,c)} + ${mix(w2,e,c)} = ? (improper fraction, simplest form)`,val(s),`Whole: ${w1}+${w2}. Fractions: ${b}/${c}+${e}/${c}. Total ${frac(s[0],s[1])}`,['fr-mixed','fr-add','fr-same-denom'],true);},
+ ()=>int(()=>{const c=pick([4,5,6,7,8]),w1=R(3,6),w2=R(1,w1-2),b=R(1,c-2),e=R(b+1,c-1);if(e<=b)return 0;const s=[(w1*c+b)-(w2*c+e),c];return O(big('➖'),`${mix(w1,b,c)} − ${mix(w2,e,c)} = ? (improper fraction, simplest form)`,val(s),`Change to improper fractions: ${w1*c+b}/${c} − ${w2*c+e}/${c} = ${s[0]}/${c} = ${frac(s[0],s[1])}`,['fr-mixed','fr-sub','fr-same-denom'],true);}),
+ ()=>{const[b,c]=pick([[1,2],[1,3],[1,4],[3,4],[2,5]]),[e,f]=pick([[1,3],[2,3],[1,6],[1,2],[3,5]]);if(c===f)return QT.B7();const w=R(1,3),s=fadd([w*c+b,c],[e,f]);return O(big('➕'),`${mix(w,b,c)} + ${fh(e,f)} = ? (improper fraction, simplest form)`,val(s),`${w*c+b}/${c} + ${e}/${f} = ${frac(s[0],s[1])}`,['fr-mixed','fr-add','fr-diff-denom'],true);},
+ ()=>int(()=>{const[b,c]=pick([[1,4],[1,3],[1,2],[3,4],[2,3]]),[e,f]=pick([[1,2],[1,4],[1,3],[1,6],[1,5]]);if(c===f&&b===e)return 0;const w=R(2,5);const s=fsub([w*c+b,c],[e,f]);return O(big('➖'),`${mix(w,b,c)} − ${fh(e,f)} = ? (improper fraction, simplest form)`,val(s),`${w*c+b}/${c} − ${e}/${f} = ${frac(s[0],s[1])}`,['fr-mixed','fr-sub','fr-diff-denom'],true);}),
+ ()=>{const[b,c]=pick([[3,4],[1,2],[2,3],[1,3],[2,5],[3,8]]),w=R(1,4),W=w+R(1,4);const s=fsub([W,1],[w*c+b,c]);return O(big('➖'),`${W} − ${mix(w,b,c)} = ? (improper fraction, simplest form)`,val(s),`${W} = ${W*c}/${c}. ${W*c}/${c} − ${w*c+b}/${c} = ${frac(s[0],s[1])}`,['fr-mixed','fr-sub'],true);},
+ ()=>int(()=>{const[b,c]=pick([[1,2],[1,3],[3,4],[2,3],[1,4]]),[e,f]=pick([[1,3],[1,2],[1,4],[2,5],[1,6]]);if(c===f)return 0;const w1=R(3,6),w2=R(1,2);const s=fsub([w1*c+b,c],[w2*f+e,f]);if(val(s)<=0)return 0;return O(big('➖'),`${mix(w1,b,c)} − ${mix(w2,e,f)} = ? (improper fraction, simplest form)`,val(s),`${w1*c+b}/${c} − ${w2*f+e}/${f} = ${frac(s[0],s[1])}`,['fr-mixed','fr-sub','fr-diff-denom'],true);})
+]);
+// B8 mixed and improper, decimals
+V('B8',[
+ ()=>{const d=R(2,9),w=R(1,6),b=R(1,d-1);return O(big('🔁'),`Write ${fh(w*d+b,d)} as a mixed number. What is the <b>whole number part</b>?`,w,`${w*d+b} ÷ ${d} = ${w} remainder ${b}, so ${mixed(w*d+b,d)}`,['fr-mixed','fr-mixed-improper']);},
+ ()=>{const d=R(3,9),w=R(1,6),b=R(1,d-1);return O(big('🔁'),`Write ${fh(w*d+b,d)} as a mixed number. What is the <b>numerator</b> of the fraction part?`,b,`${w*d+b} ÷ ${d} = ${w} remainder ${b}, so ${mixed(w*d+b,d)}`,['fr-mixed','fr-mixed-improper']);},
+ ()=>{const c=R(3,9),w=R(1,6),b=R(1,c-1);return O(big('🔁'),`Write ${mix(w,b,c)} as an improper fraction. What is the <b>numerator</b>?`,w*c+b,`${w} × ${c} + ${b} = ${w*c+b}`,['fr-mixed','fr-mixed-improper']);},
+ ()=>{const[b,c]=pick([[1,2],[1,4],[3,4],[1,5],[2,5],[3,5],[1,8],[3,8],[1,10]]),w=R(1,6);return O(big('🔢'),`Write ${mix(w,b,c)} as a <b>decimal</b>.`,w+b/c,`${b}/${c} = ${b/c}, so ${r6(w+b/c)}`,['fr-mixed','fr-decimal']);},
+ ()=>{const d=pick([2,4,5,8]),n=d*R(1,3)+R(1,d-1);return O(big('🔢'),`Write ${fh(n,d)} as a <b>decimal</b>.`,n/d,`${n} ÷ ${d} = ${r6(n/d)}`,['fr-decimal','fr-improper']);},
+ ()=>{const d=R(3,9),w=R(1,6),b=R(1,d-1);return O(big('🔁'),`${fh(w*d+b,d)} lies between two whole numbers. What is the <b>larger</b> one?`,w+1,`${w}×${d} = ${w*d} and ${(w+1)*d} is bigger than ${w*d+b}, so it is between ${w} and ${w+1}`,['fr-mixed','fr-improper']);}
+]);
+// B9 multiply
+V('B9',[
+ ()=>{const[b,c]=pick([[1,2],[1,3],[1,4],[3,4],[2,3],[1,5]]),w=R(1,3),k=R(2,9);const r=fmul([w*c+b,c],[k,1]);return O(big('✖️'),`${mix(w,b,c)} × ${k} = ? (simplest form)`,val(r),`${w*c+b}/${c} × ${k} = ${r[0]}/${r[1]} = ${frac(r[0],r[1])}`,['fr-mul','fr-mixed'],true);},
+ ()=>int(()=>{const[b,c]=pick([[1,2],[1,3],[1,4],[3,4],[2,3]]),w=R(1,3),f=prop([2,3,4,5,6,8]);const r=fmul([w*c+b,c],f);return O(big('✖️'),`${mix(w,b,c)} × ${F(f)} = ? (simplest form)`,val(r),`${w*c+b}/${c} × ${f[0]}/${f[1]} = ${frac(r[0],r[1])}`,['fr-mul','fr-mixed'],true);}),
+ ()=>{const f=prop([3,4,5,6,7,8,9]),k=R(2,9);const r=fmul(f,[k,1]);return O(big('✖️'),`${F(f)} × ${k} = ? (simplest form)`,val(r),`${f[0]} × ${k} = ${f[0]*k}, so ${f[0]*k}/${f[1]} = ${frac(r[0],r[1])}`,['fr-mul'],true);},
+ ()=>{const f=prop([3,4,5,6,7,8,9]);const r=fmul(f,f);return O(big('²'),`Work out (${F(f)})² = ${F(f)} × ${F(f)}. (simplest form)`,val(r),`${f[0]}×${f[0]} = ${r[0]} and ${f[1]}×${f[1]} = ${r[1]} → ${frac(r[0],r[1])}`,['fr-mul','fr-power'],true);},
+ ()=>int(()=>{const[p,q]=cp(),[r,s]=cp(),f=R(2,5),g=R(2,5);const a=[p*f,q*g],b=[r*g,s*f];if(gcd(a[0],a[1])!==1&&false)return 0;const res=fmul(a,b);return O(big('✖️'),`${F(a)} × ${F(b)} = ? (simplest form)`,val(res),`Cancel common factors first, or multiply: ${res[0]}/${res[1]} = ${frac(res[0],res[1])}`,['fr-mul'],true);}),
+ ()=>int(()=>{const[b,c]=pick([[1,2],[1,3],[1,4],[2,3],[3,4]]),[e,f]=pick([[1,2],[1,3],[1,4],[2,3],[3,5]]),w1=R(1,3),w2=R(1,3);const r=fmul([w1*c+b,c],[w2*f+e,f]);return O(big('✖️'),`${mix(w1,b,c)} × ${mix(w2,e,f)} = ? (improper fraction, simplest form)`,val(r),`${w1*c+b}/${c} × ${w2*f+e}/${f} = ${frac(r[0],r[1])}`,['fr-mul','fr-mixed'],true);})
+]);
+// B10 divide
+V('B10',[
+ ()=>{const f=prop([3,4,5,6,7,8,9]),k=R(2,6);const r=fdiv(f,[k,1]);return O(big('➗'),`${F(f)} ÷ ${k} = ? (simplest form)`,val(r),`Dividing by ${k} is multiplying by 1/${k}: ${f[0]}/${f[1]*k} = ${frac(r[0],r[1])}`,['fr-div'],true);},
+ ()=>{const d=pick([2,3,4,5,6,8]),k=R(2,9),n=1;return O(big('🔪'),`How many ${fh(n,d)}s are there in <b>${k}</b>? (${k} ÷ ${fh(n,d)})`,k*d,`${k} ÷ ${n}/${d} = ${k} × ${d} = ${k*d}`,['fr-div']);},
+ ()=>int(()=>{const[b,c]=pick([[1,2],[1,3],[1,4],[3,4]]),w=R(1,3),f=prop([2,3,4,5,6,8]);const r=fdiv([w*c+b,c],f);return O(big('➗'),`${mix(w,b,c)} ÷ ${F(f)} = ? (simplest form)`,val(r),`${w*c+b}/${c} × ${f[1]}/${f[0]} = ${frac(r[0],r[1])}`,['fr-div','fr-mixed'],true);}),
+ ()=>int(()=>{const a=prop([3,4,5,6,7,8,9,10]),b=prop([3,4,5,6,7,8,9,10]);const r=fdiv(a,b);return O(big('➗'),`${F(a)} ÷ ${F(b)} = ? (simplest form)`,val(r),`Keep, flip, multiply: ${a[0]}/${a[1]} × ${b[1]}/${b[0]} = ${frac(r[0],r[1])}`,['fr-div'],true);}),
+ ()=>{const[n,d]=pick([[3,4],[2,3],[1,2],[1,4],[3,8],[5,8],[2,5]]),k=pick([2,3,4,5,6,8]),L=d*k*(n===1?1:n)/(n===1?1:1);const T=n*k;return O(big('🎀'),`A ribbon is <b>${T}/${d}</b> m long. It is cut into pieces each ${fh(n,d)} m long. How many pieces?`,k,`${T}/${d} ÷ ${n}/${d} = ${T}/${n} = ${k}`,['fr-div']);},
+ ()=>int(()=>{const[b,c]=pick([[1,2],[1,4],[1,3]]),[e,f]=pick([[1,2],[1,4],[1,3]]),w1=R(2,5),w2=R(1,2);const r=fdiv([w1*c+b,c],[w2*f+e,f]);return O(big('➗'),`${mix(w1,b,c)} ÷ ${mix(w2,e,f)} = ? (simplest form)`,val(r),`${w1*c+b}/${c} × ${f}/${w2*f+e} = ${frac(r[0],r[1])}`,['fr-div','fr-mixed'],true);})
+]);
+// B11 brackets and order of operations
+V('B11',[
+ ()=>{const[a,b]=pick([[[1,2],[1,3]],[[1,3],[1,6]],[[1,4],[1,2]],[[2,3],[1,6]],[[3,4],[1,2]]]),k=lcm(a[1],b[1]);const s=fadd(a,b),r=fmul(s,[k,1]);return O(big('🧮'),`Work out (${F(a)} + ${F(b)}) × ${k}. (simplest form)`,val(r),`Brackets first: ${frac(s[0],s[1])}. × ${k} = ${frac(r[0],r[1])}`,['fr-brackets','fr-add','fr-mul'],true);},
+ ()=>{const a=pick([[1,2],[1,3],[1,4]]),b=pick([[1,3],[1,2],[2,3]]),c=pick([[3,4],[1,2],[1,5],[2,5]]);const p=fmul(b,c),s=fadd(a,p);return O(big('🧮'),`Work out ${F(a)} + ${F(b)} × ${F(c)}. (simplest form)`,val(s),`Multiply first: ${frac(p[0],p[1])}. Then add: ${frac(s[0],s[1])}`,['fr-brackets','fr-mul','fr-add'],true);},
+ ()=>int(()=>{const a=pick([[3,4],[2,3],[5,6],[7,8],[3,5]]),b=pick([[1,2],[1,3],[1,4],[1,6]]),c=pick([[1,2],[1,4],[1,8],[1,6]]);const d=fsub(a,b);if(val(d)<=0)return 0;const r=fdiv(d,c);return O(big('🧮'),`Work out (${F(a)} − ${F(b)}) ÷ ${F(c)}. (simplest form)`,val(r),`Brackets: ${frac(d[0],d[1])}. Divide: ${frac(d[0],d[1])} × ${c[1]} = ${frac(r[0],r[1])}`,['fr-brackets','fr-sub','fr-div'],true);}),
+ ()=>{const a=pick([[1,2],[1,3],[3,4],[2,3]]),[b,c]=pick([[[1,3],[1,6]],[[1,4],[1,2]],[[1,6],[1,3]],[[1,5],[1,10]]]);const s=fadd(b,c),r=fmul(a,s);return O(big('🧮'),`Work out ${F(a)} × (${F(b)} + ${F(c)}). (simplest form)`,val(r),`Brackets: ${frac(s[0],s[1])}. × ${frac(a[0],a[1])} = ${frac(r[0],r[1])}`,['fr-brackets','fr-mul','fr-add'],true);},
+ ()=>int(()=>{const n=pick([2,3,4]),a=pick([[1,2],[1,4],[1,3]]),b=pick([[1,4],[1,8],[1,6],[1,5]]);const q=fdiv(a,b),r=fsub([n,1],q);if(val(r)<=0)return 0;return O(big('🧮'),`Work out ${n} − ${F(a)} ÷ ${F(b)}. (simplest form)`,val(r),`Divide first: ${frac(q[0],q[1])}. Then ${n} − ${frac(q[0],q[1])} = ${frac(r[0],r[1])}`,['fr-brackets','fr-div','fr-sub'],true);})
+]);
+// B12 reciprocals
+V('B12',[
+ ()=>{const f=prop([3,4,5,7,8,9,11]);return O(big('🔄'),`Write the <b>reciprocal</b> of ${F(f)}.`,f[1]/f[0],`Flip it: ${f[1]}/${f[0]}${f[0]===1?' = '+f[1]:''}`,['fr-reciprocal']);},
+ ()=>{const n=R(2,12);return O(big('🔄'),`Write the <b>reciprocal</b> of ${n}. (type it as a fraction)`,1/n,`${n} = ${n}/1. Flip it: 1/${n}`,['fr-reciprocal']);},
+ ()=>{const[b,c]=pick([[1,2],[1,3],[1,4],[2,3],[3,4]]),w=R(1,3);const t=[w*c+b,c];return O(big('🔄'),`Write the <b>reciprocal</b> of ${mix(w,b,c)}. (type it as a fraction)`,t[1]/t[0],`${mix(w,b,c)} = ${t[0]}/${t[1]}. Flip it: ${t[1]}/${t[0]}`,['fr-reciprocal','fr-mixed']);},
+ ()=>{const f=prop([3,4,5,7,8,9,11]);return O(big('🔄'),`What is ${F(f)} × its reciprocal?`,1,`A number times its reciprocal always equals 1: ${f[0]}/${f[1]} × ${f[1]}/${f[0]} = 1`,['fr-reciprocal']);},
+ ()=>{const x=pick([0.5,0.25,0.2,0.125,0.1,0.05]);return O(big('🔄'),`Write the <b>reciprocal</b> of <b>${x}</b>.`,1/x,`${x} = ${r6(x*100)}/100 = ${frac(Math.round(x*1000),1000)}. Flip it: ${r6(1/x)}`,['fr-reciprocal','fr-decimal']);}
+]);
+// B13 fractions and decimals
+V('B13',[
+ ()=>{const d=pick([8,16,20,25,40,50]),n=pick([1,3,5,7,9,11,13].filter(x=>x<d));return O(big('🔢'),`Write ${fh(n,d)} as a <b>decimal</b>.`,n/d,`${n} ÷ ${d} = ${r6(n/d)}`,['fr-decimal']);},
+ ()=>{const x=pick([0.35,0.45,0.15,0.65,0.85,0.12,0.24,0.36,0.8,0.6]);const[n,d]=simp(Math.round(x*100),100);return O(big(x),`Write <b>${x}</b> as a fraction in its simplest form.`,x,`${x} = ${Math.round(x*100)}/100 = ${n}/${d}`,['fr-decimal','fr-simplify'],true);},
+ ()=>{const[n,d]=pick([[5,16],[3,16],[7,16],[9,16],[1,32],[3,32],[7,40],[11,50]]);return O(big('🔢'),`Write ${fh(n,d)} as a <b>decimal</b>.`,n/d,`${n} ÷ ${d} = ${r6(n/d)}`,['fr-decimal']);},
+ ()=>{const x=pick([0.625,0.375,0.875,0.125,0.025,0.075,0.225]);const[n,d]=simp(Math.round(x*1000),1000);return O(big(x),`Write <b>${x}</b> as a fraction in its simplest form.`,x,`${x} = ${Math.round(x*1000)}/1000 = ${n}/${d}`,['fr-decimal','fr-simplify'],true);},
+ ()=>{const[n,d]=pick([[1,3],[2,3],[1,6],[5,6],[1,9],[4,9],[1,7],[2,7]]);const v=Math.round(n/d*100)/100;return O(big('🔢'),`Write ${fh(n,d)} as a decimal, correct to <b>2 decimal places</b>.`,v,`${n} ÷ ${d} = ${(n/d).toFixed(4)}… ≈ ${v}`,['fr-decimal']);},
+ ()=>{const[a,x]=pick([[[3,8],0.4],[[2,5],0.35],[[7,20],0.34],[[5,8],0.6],[[3,4],0.7],[[1,3],0.3],[[4,5],0.85]]);const v=a[0]/a[1];const w=v>x?a:null;return O(big('⚖️'),`Which is <b>larger</b>: ${F(a)} or <b>${x}</b>? Type the larger value (as a decimal).`,Math.max(v,x),`${F(a)} = ${r6(v)}. Compare ${r6(v)} with ${x}: the larger is ${r6(Math.max(v,x))}`,['fr-decimal','fr-compare']);}
+]);
+// B14 fractions and percentages
+V('B14',[
+ ()=>{const[n,d]=pick([[3,20],[7,20],[9,25],[13,20],[17,50],[3,5],[7,10]]);return O(big('%'),`Write ${fh(n,d)} as a <b>percentage</b>.`,n*100/d,`${n}/${d} = ${n*100/d}/100 = ${n*100/d}%`,['fr-percent']);},
+ ()=>{const p=pick([45,35,65,85,12,24,36,60,15,5]);const[n,d]=simp(p,100);return O(big(p+'%'),`Write <b>${p}%</b> as a fraction in its simplest form.`,p/100,`${p}% = ${p}/100 = ${n}/${d}`,['fr-percent','fr-simplify'],true);},
+ ()=>{const[n,d]=pick([[7,8],[3,8],[5,8],[1,8],[3,16],[5,16]]);return O(big('%'),`Write ${fh(n,d)} as a <b>percentage</b>.`,n*100/d,`${n}/${d} = ${r6(n/d)} = ${r6(n*100/d)}%`,['fr-percent','fr-decimal']);},
+ ()=>{const p=pick([12.5,37.5,62.5,87.5,2.5,7.5]);const[n,d]=simp(Math.round(p*10),1000);return O(big(p+'%'),`Write <b>${p}%</b> as a fraction in its simplest form.`,p/100,`${p}% = ${p*10}/1000 = ${n}/${d}`,['fr-percent','fr-simplify'],true);},
+ ()=>{const[n,d]=pick([[3,4],[1,4],[2,5],[4,5],[1,5],[1,2],[1,10],[9,10],[19,20]]);return O(big('%'),`Write ${fh(n,d)} as a <b>percentage</b>.`,n*100/d,`${n}/${d} × 100 = ${n*100/d}%`,['fr-percent']);},
+ ()=>{const p=pick([125,150,175,200,250,120]);const[n,d]=simp(p,100);return O(big(p+'%'),`Write <b>${p}%</b> as an improper fraction in its simplest form.`,p/100,`${p}% = ${p}/100 = ${n}/${d}`,['fr-percent','fr-improper'],true);}
+]);
+// B15 word problems
+V('B15',[
+ ()=>{const a=pick([[3,4],[2,3],[3,5],[5,6],[7,8]]),b=pick([[1,3],[1,2],[1,4],[2,5],[1,5]]),p=fmul(a,b);return O(big('🍕'),`Anna has ${F(a)} of a pizza left and eats ${F(b)} of it. What fraction of the <b>whole pizza</b> did she eat? (simplest form)`,val(p),`${frac(a[0],a[1])} × ${frac(b[0],b[1])} = ${frac(p[0],p[1])}`,['fr-word','fr-mul'],true);},
+ ()=>{const f=pick([[2,3],[3,4],[1,2],[3,5],[5,6]]),k=pick([2,3,4,5,6]);const r=fmul(f,[k,1]);return O(big('🥣'),`A recipe uses ${F(f)} of a cup of flour. How many cups are needed for <b>${k} times</b> the recipe? (simplest form)`,val(r),`${f[0]}/${f[1]} × ${k} = ${frac(r[0],r[1])}`,['fr-word','fr-mul'],true);},
+ ()=>{const d=pick([4,8]),k=pick([2,3,4,6,8]),n=1;const T=[3*k/ (k%3===0?1:1),d];return O(big('🥛'),`A jug holds <b>${3}/${d}</b> litre. Glasses hold ${fh(1,d*2)} litre each. How many glasses can be filled?`,3*2,`${3}/${d} ÷ 1/${d*2} = ${3}/${d} × ${d*2} = 6`,['fr-word','fr-div']);},
+ ()=>{const K=pick([15,30,45,60]);return O(big('🏃'),`Tom runs ${fh(2,5)} of ${K} km in the morning and ${fh(1,3)} of ${K} km in the afternoon. How many km did he run in <b>total</b>?`,K*2/5+K/3,`Morning: ${K*2/5} km. Afternoon: ${K/3} km. Total = ${K*2/5+K/3} km`,['fr-word','fr-of-amount']);},
+ ()=>{const d=pick([4,5,8,10]),N=d*pick([20,30,50,60]);return O(big('🏠'),`A deposit of ${fh(1,d)} of £${N} is paid. How much is <b>still to pay</b> (£)?`,N-N/d,`Deposit = ${N/d}. Left = ${N} − ${N/d} = ${N-N/d}`,['fr-word','fr-remaining']);},
+ ()=>{const[a,b]=pick([[[5,2],[3,5]],[[3,2],[2,3]],[[7,2],[4,7]],[[5,2],[2,5]],[[9,2],[2,3]]]);const r=fmul(a,b);return O(big('🎬'),`A film lasts ${mix(Math.floor(a[0]/a[1]),a[0]%a[1],a[1])} hours. Jo has watched ${F(b)} of it. For how many <b>hours</b> has she watched? (simplest form)`,val(r),`${a[0]}/${a[1]} × ${b[0]}/${b[1]} = ${frac(r[0],r[1])}`,['fr-word','fr-mul','fr-mixed'],true);}
+]);
+// B16 reverse fractions
+V('B16',[
+ ()=>{const[n,d]=pick([[3,5],[2,5],[3,4],[2,3],[5,8]]),L=pick([6,8,12,15,20]);const rem=d-n,T=L*d/rem;if(T%1)return QT.B16();return O(big('💷'),`Dev spends ${fh(n,d)} of his money and has £${L} left. How much did he have at the <b>start</b> (£)?`,T,`Left = ${rem}/${d} = £${L}. 1/${d} = £${L/rem}. Start = ${d} × ${L/rem} = £${T}`,['fr-reverse','fr-remaining']);},
+ ()=>{const[n,d]=pick([[2,3],[3,5],[3,4],[5,8]]),B=pick([8,6,10,12,5]),k=d-n,T=B*d/k;if(T%1)return QT.B16();return O(big('🏫'),`${fh(n,d)} of a group are girls. There are <b>${B}</b> boys. How many people are in the group?`,T,k===1?`Boys = 1/${d} = ${B}. Total = ${B} × ${d} = ${T}`:`Boys = ${k}/${d} = ${B}. 1/${d} = ${B/k}. Total = ${T}`,['fr-reverse']);},
+ ()=>{const d=R(3,9),n=R(2,d-1),m=R(2,9);return O(big('🕵️'),`${fh(n,d)} of a number is <b>${n*m}</b>. What is the number?`,d*m,`${n} parts = ${n*m}, so 1 part = ${m}. ${d} parts = ${d*m}`,['fr-reverse','fr-of-amount']);},
+ ()=>{const[n,d]=pick([[2,7],[3,8],[2,9],[3,10],[4,9]]),m=pick([20,28,35,14,24]),T=d*m,L=(d-n)*m;return O(big('📖'),`Mia has read ${fh(n,d)} of a book. She still has <b>${L}</b> pages to read. How many pages are in the book?`,T,`Left = ${d-n}/${d} = ${L} pages. 1/${d} = ${m}. Total = ${T}`,['fr-reverse','fr-remaining']);},
+ ()=>{const[n,d]=pick([[3,4],[2,5],[3,5],[5,8],[1,3]]),m=pick([2,3,4,5]),T=d*m,L=(d-n)*m;return O(big('🚗'),`A journey is ${fh(n,d)} complete. There are <b>${L}</b> km to go. How long is the whole journey (km)?`,T,`Remaining = ${d-n}/${d} = ${L}. 1/${d} = ${m}. Total = ${T} km`,['fr-reverse','fr-remaining']);},
+ ()=>{const x=pick([12,24,36,48,60]);return O(big('🧩'),`${fh(1,3)} of a number plus ${fh(1,4)} of the same number is <b>${x*7/12}</b>. What is the number?`,x,`${fh(1,3)} + ${fh(1,4)} = ${fh(7,12)}. ${fh(7,12)} of the number = ${x*7/12}, so 1/12 = ${x/12} and the number = ${x}`,['fr-reverse','fr-add']);}
+]);
+// B17 ratio and fractions
+V('B17',[
+ ()=>{const[a,b]=pick([[1,2],[2,3],[3,4],[3,5],[2,5],[1,4],[4,5]]);return O(big('⚖️'),`Red and blue counters are in the ratio <b>${a} : ${b}</b>. What fraction are <b>red</b>? (simplest form)`,a/(a+b),`Total parts = ${a+b}. Red = ${a}/${a+b} = ${frac(a,a+b)}`,['fr-ratio'],true);},
+ ()=>{const[a,b]=pick([[1,2],[2,3],[3,4],[3,5],[2,5],[1,4],[4,5]]);return O(big('⚖️'),`Boys and girls are in the ratio <b>${a} : ${b}</b>. What fraction are <b>girls</b>? (simplest form)`,b/(a+b),`Total parts = ${a+b}. Girls = ${b}/${a+b} = ${frac(b,a+b)}`,['fr-ratio'],true);},
+ ()=>{const[a,t]=pick([[3,7],[2,5],[3,8],[4,9],[5,12],[2,9],[1,6]]);return O(big('⚖️'),`${fh(a,t)} of a club are boys. The ratio boys : girls is <b>${a} : ?</b>. What is the missing number?`,t-a,`Girls = ${t-a}/${t} so the ratio is ${a} : ${t-a}`,['fr-ratio','fr-remaining']);},
+ ()=>{const[a,b]=pick([[1,2],[2,3],[3,5],[2,5],[3,7],[1,4]]),k=pick([4,6,8,10,12]),N=k*(a+b);return O(big('🍰'),`£${N} is shared in the ratio <b>${a} : ${b}</b>. How many pounds is the <b>${a} share</b>?`,N/(a+b)*a,`Parts = ${a+b}. £${N} ÷ ${a+b} = £${k}. ${a} × ${k} = £${k*a}`,['fr-ratio','fr-of-amount']);},
+ ()=>{const[a,t]=pick([[2,5],[3,8],[3,7],[1,4],[5,9]]);return O(big('🔴'),`${fh(a,t)} of the marbles are red. The ratio red : <b>not red</b> is ${a} : ?. What is the missing number?`,t-a,`Not red = ${t-a}/${t}, so red : not red = ${a} : ${t-a}`,['fr-ratio','fr-remaining']);}
+]);
+// B18 unit fractions
+V('B18',[
+ ()=>{const[a,b,c]=pick([[2,3,6],[2,4,4],[3,3,3],[2,6,3]]);const s=fadd(fadd([1,a],[1,b]),[1,c]);return O(big('➕'),`${fh(1,a)} + ${fh(1,b)} + ${fh(1,c)} = ?`,val(s),`Common denominator ${lcm(lcm(a,b),c)}. Total = ${frac(s[0],s[1])}`,['fr-unit-frac','fr-add'],true);},
+ ()=>{const k=pick([[2,4,8],[2,3,6],[3,6,12],[2,5,10]]);const s=fadd(fadd([1,k[0]],[1,k[1]]),[1,k[2]]);return O(big('➕'),`${fh(1,k[0])} + ${fh(1,k[1])} + ${fh(1,k[2])} = ? (simplest form)`,val(s),`Common denominator ${k[2]}. Total = ${frac(s[0],s[1])}`,['fr-unit-frac','fr-add'],true);},
+ ()=>{const[a,b]=pick([[2,6],[2,8],[3,9],[2,10],[4,12],[3,12]]);return O(big('🔪'),`How many ${fh(1,b)}s are there in ${fh(1,a)}?`,b/a,`${fh(1,a)} ÷ ${fh(1,b)} = ${b}/${a} = ${r6(b/a)}`,['fr-unit-frac','fr-div']);},
+ ()=>int(()=>{const a=R(2,9),b=R(2,9);if(a===b)return 0;const s=fadd([1,a],[1,b]);return O(big('➕'),`${fh(1,a)} + ${fh(1,b)} = ? (simplest form)`,val(s),`Common denominator ${a*b}: ${b}/${a*b} + ${a}/${a*b} = ${frac(s[0],s[1])}`,['fr-unit-frac','fr-add'],true);})
+]);
+// B19 fractions in algebra and puzzles
+V('B19',[
+ ()=>{const a=pick([2,3,4,5]),m=pick([2,3,4,5]),b=pick([3,5,7]);return O(big('🔤'),`${fh('x',a*m)} = ${fh(b,m)}. Find <b>x</b>.`,a*b,`Multiply both sides by ${a*m}: x = ${b}/${m} × ${a*m} = ${a*b}`,['fr-algebra']);},
+ ()=>{const d=R(2,9),k=R(2,9);return O(big('🔤'),`${fh('x',d)} = ${k}. Find <b>x</b>.`,d*k,`Multiply both sides by ${d}: x = ${k} × ${d} = ${d*k}`,['fr-algebra']);},
+ ()=>{const d=pick([3,4,5,6,7]),n=R(2,4),k=R(2,6);return O(big('🔤'),`${fh(n+'x',d)} = ${n*k}. Find <b>x</b>.`,d*k,`Multiply by ${d}: ${n}x = ${n*k*d}. Divide by ${n}: x = ${d*k}`,['fr-algebra']);},
+ ()=>{const[a,b]=pick([[3,5],[2,7],[4,9],[5,8],[3,7]]),k=R(2,6);return O(big('🧩'),`A fraction is equal to ${fh(a,b)}. Its numerator and denominator add to <b>${(a+b)*k}</b>. What is the <b>numerator</b>?`,a*k,`${a}k + ${b}k = ${a+b}k = ${(a+b)*k}, so k = ${k}. Numerator = ${a*k}`,['fr-algebra','fr-equivalent']);},
+ ()=>{const[a,b]=pick([[2,7],[3,8],[4,9],[5,6],[3,10]]),k=R(2,6);return O(big('🧩'),`A fraction is equal to ${fh(a,b)} and its numerator is <b>${a*k}</b>. What is its <b>denominator</b>?`,b*k,`${a} × ${k} = ${a*k}, so denominator = ${b} × ${k} = ${b*k}`,['fr-algebra','fr-equivalent']);}
+]);
+const MIXB=['B1','B2','B3','B4','B5','B6','B7','B8','B9','B10','B11','B12','B13','B14','B15','B16','B17','B18','B19'];
+QT.B20=()=>{const k=pick(MIXB),r=QT[k]();r.k=k;return r;};
+const POOL=[['A1'],['A1','A2'],['A2','A3'],['A3','A4'],['A5'],['A6'],['A6','A7'],['A8','A4'],['A9'],['A9','A10'],['A11','A4'],['A7','A10','A11','A12','A9'],['B1'],['B2'],['B3'],['B4'],['B5'],['B6'],['B7'],['B8'],['B9'],['B10'],['B11'],['B12'],['B13'],['B14'],['B15'],['B16'],['B17'],['B18'],['B19'],['B20']];
 const num=s=>{s=s.trim();if(!s)return null;if(s.includes('/')){const[a,b]=s.split('/').map(Number);if(!b||isNaN(a))return null;return{v:a/b,n:a,d:b};}const v=parseFloat(s);return isNaN(v)?null:{v,n:null,d:1};};
 window.__fr={QT,POOL};
 REG.push({id:'fraction',name:'Fraction Factory',emoji:'🍕',color:'#e8590c',cat:'Arithmetic',
  desc:'Pizzas and chocolate bars make fractions visible. Name, simplify, add, subtract, multiply and divide fractions — 5 questions per level, 4 to pass!',skills:['equivalent fractions','simplifying','fraction of an amount','adding & subtracting fractions','multiplying & dividing fractions'],
- levels:['Name the fraction','Equivalent fractions','Simplify','Fraction of an amount','Add · same denominator','Add · different denominators','Add & subtract','Mixed → improper','Multiply fractions','Multiply & divide','Reverse fractions','Boss mix'],
+ levels:['Name the fraction','Equivalent fractions','Simplify','Fraction of an amount','Add · same denominator','Add · different denominators','Add & subtract','Mixed → improper','Multiply fractions','Multiply & divide','Reverse fractions','Boss mix','Compare & order','Equivalent fractions','Simplify & HCF','Fraction of an amount','Express as a fraction','Fractions of fractions','Mixed numbers + / −','Mixed & improper','Multiply fractions','Divide fractions','Brackets & BIDMAS','Reciprocals','Fractions & decimals','Fractions & percentages','Word problems','Reverse problems','Ratio & fractions','Unit fractions','Fractions in algebra','Grand boss'],
  how:'Look at the picture, then type your answer as a fraction like 3/4 (use the / key) or a whole number. When it says “simplest form”, divide the top and bottom by the same number until you can’t any more.',
  art:'<div class="minibal">🍕</div>',
  mount(root,lv,ctx){mountQuiz(root,ctx,{game:'fraction',QT,pool:POOL[lv-1],parse:num,slash:true,winTitle:'Fraction master!'});}});
@@ -3081,12 +3482,200 @@ const QT={
   const Pp=pick([400,800,1200]);return{vis:'<div class="ch-big">🏦</div>',q:`${P(Pp)} is invested at <b>5% compound interest</b> per year. How much is in the account after <b>2 years</b> (£)?`,ans:Pp*1.1025,ex:`${Pp} × 1.05 × 1.05 = ${Pp*1.1025}`};},
 };
 QT.P12=()=>{const k=pick(['P6','P8','P9','P10','P11','P7']),r=QT[k]();r.k=k;return r;};
-const POOL=[['P1'],['P1','P2'],['P2','P3'],['P3','P4'],['P4','P5'],['P5','P6'],['P6','P7'],['P7','P8'],['P9'],['P9','P10'],['P11'],['P12']];
+/* ---- GCSE extension: levels 13-32 (each type has several distinct variants, tagged v = type.index) ---- */
+const r6=x=>Math.round(x*1e6)/1e6;
+const big=e=>`<div class="ch-big">${e}</div>`;
+const O=(vis,q,ans,ex,extra)=>({vis,q,ans:r6(ans),ex,extra});
+const V=(id,arr)=>{QT[id]=()=>{const i=R(0,arr.length-1),r=arr[i]();r.v=id+'.'+i;return r;};};
+const fmt=x=>String(r6(x));
+const m=p=>r6(1+p/100),d=p=>r6(1-p/100);
+const int=(f)=>{let r;for(let i=0;i<200;i++){r=f();if(r)return r;}return f()||{};};
+// P13 mental percentages
+V('P13',[
+ ()=>{const A=pick([300,500,800,1200,2500,4000,6500]);return O(tag(P(A)),`Find <b>1%</b> of ${P(A)}.`,A/100,`1% means ÷ 100: ${A} ÷ 100 = ${A/100}`);},
+ ()=>{const A=pick([40,60,80,120,200,300,500]);return O(tag(P(A)),`Find <b>5%</b> of ${P(A)}.`,A/20,`10% = ${A/10}. Half of that is 5%: ${A/20}`);},
+ ()=>{const A=pick([40,60,80,120,200,300]);return O(tag(P(A)),`Find <b>15%</b> of ${P(A)}.`,A*.15,`10% = ${A/10}, 5% = ${A/20}. 15% = ${A/10} + ${A/20} = ${A*.15}`);},
+ ()=>{const A=pick([40,80,120,200,400,800]);return O(tag(P(A)),`Find <b>2.5%</b> of ${P(A)}.`,A*.025,`10% = ${A/10}. 2.5% is a quarter of 10%: ${A/10} ÷ 4 = ${A*.025}`);},
+ ()=>{const A=pick([16,24,40,64,80,160,240]);return O(tag(P(A)),`Find <b>12.5%</b> of ${P(A)}.`,A/8,`12.5% = 1/8. ${A} ÷ 8 = ${A/8}`);},
+ ()=>{const A=pick([40,80,120,200,400]);return O(tag(P(A)),`Find <b>17.5%</b> of ${P(A)}.`,A*.175,`10% = ${A/10}, 5% = ${A/20}, 2.5% = ${A/40}. Add: ${A*.175}`);},
+ ()=>{const A=pick([20,30,50,80,120,240]);return O(tag(P(A)),`Find <b>150%</b> of ${P(A)}.`,A*1.5,`100% = ${A}, 50% = ${A/2}. 150% = ${A*1.5}`);},
+ ()=>{const A=pick([30,50,70,90,110,250]);return O(tag(P(A)),`Find <b>30%</b> of ${P(A)}.`,A*.3,`10% = ${A/10}. × 3 = ${A*.3}`);}
+]);
+// P14 multipliers
+V('P14',[
+ ()=>{const p=pick([3,8,12,15,35,7,20,45]);return O(big('✖️'),`What <b>single multiplier</b> increases a number by <b>${p}%</b>?`,m(p),`100% + ${p}% = ${100+p}% → ${100+p}/100 = ${m(p)}`);},
+ ()=>{const p=pick([4,9,15,30,35,12,25,40]);return O(big('✖️'),`What <b>single multiplier</b> decreases a number by <b>${p}%</b>?`,d(p),`100% − ${p}% = ${100-p}% → ${100-p}/100 = ${d(p)}`);},
+ ()=>{const x=pick([1.04,1.15,1.35,1.08,1.6,1.12,1.07]);return O(big('✖️'),`A multiplier of <b>${x}</b> gives what percentage <b>increase</b>?`,(x-1)*100,`${x} = ${r6(x*100)}% so the increase is ${r6(x*100)}% − 100% = ${r6((x-1)*100)}%`);},
+ ()=>{const x=pick([0.92,0.85,0.7,0.95,0.88,0.6]);return O(big('✖️'),`A multiplier of <b>${x}</b> gives what percentage <b>decrease</b>?`,(1-x)*100,`${x} = ${r6(x*100)}% so the decrease is 100% − ${r6(x*100)}% = ${r6((1-x)*100)}%`);},
+ ()=>{const p=pick([150,120,200,125,175]);return O(big('✖️'),`What single multiplier increases a number by <b>${p}%</b>?`,m(p),`100% + ${p}% = ${100+p}% → ${m(p)}`);},
+ ()=>{const p=pick([12.5,2.5,17.5,7.5,22.5]);return O(big('✖️'),`What single multiplier <b>decreases</b> a number by <b>${p}%</b>?`,d(p),`100% − ${p}% = ${r6(100-p)}% → ${d(p)}`);},
+ ()=>{const p=pick([12.5,2.5,17.5,7.5,4.5]);return O(big('✖️'),`What single multiplier <b>increases</b> a number by <b>${p}%</b>?`,m(p),`100% + ${p}% = ${r6(100+p)}% → ${m(p)}`);}
+]);
+// P15 increase with a multiplier / P16 decrease with a multiplier (each context has its own realistic amounts)
+const CTX15=[
+ [(A,p)=>`A salary of £${A} is increased by <b>${p}%</b>.`,[20000,24000,30000,36000,40000],[3,4,5,8,10,12],'£'],
+ [(A,p)=>`A house worth £${A} rises in value by <b>${p}%</b>.`,[100000,150000,200000,250000,300000],[5,8,10,12,15,20],'£'],
+ [(A,p)=>`A town of ${A} people grows by <b>${p}%</b>.`,[2000,5000,8000,10000,20000],[3,4,5,8,12,15],''],
+ [(A,p)=>`A monthly rent of £${A} goes up by <b>${p}%</b>.`,[400,500,600,800,1000,1200],[4,5,8,10,15,20],'£'],
+ [(A,p)=>`A club with ${A} members gains <b>${p}%</b> more members.`,[200,400,500,800,1000],[10,15,20,25,35,45],''],
+ [(A,p)=>`A savings pot of £${A} grows by <b>${p}%</b>.`,[200,400,500,800,1000,2000],[3,4,5,6,8,12],'£']];
+const CTX16=[
+ [(A,p)=>`A car worth £${A} loses <b>${p}%</b> of its value.`,[8000,10000,12000,15000,20000],[10,12,15,20,25,30],'£'],
+ [(A,p)=>`A TV costing £${A} is cut in price by <b>${p}%</b>.`,[200,300,400,500,800],[10,15,20,25,30,35],'£'],
+ [(A,p)=>`A school roll of ${A} pupils falls by <b>${p}%</b>.`,[600,800,1000,1200,1500],[5,10,12,15,20],''],
+ [(A,p)=>`A club with ${A} members loses <b>${p}%</b> of them.`,[200,300,400,500,800],[10,15,20,25,35],''],
+ [(A,p)=>`A train fare of £${A} is reduced by <b>${p}%</b>.`,[20,40,60,80,100,200],[10,15,20,25,30,50],'£'],
+ [(A,p)=>`A phone costing £${A} is discounted by <b>${p}%</b>.`,[400,600,800,1000,1200],[10,15,20,25,30],'£']];
+V('P15',CTX15.map(([f,As,ps,u])=>()=>{const A=pick(As),p=pick(ps);return O(tag(u+A,'+'+p+'%'),`${f(A,p)} What is the new value${u?' (£)':''}?`,A*m(p),`Multiplier = ${m(p)}. ${A} × ${m(p)} = ${r6(A*m(p))}`,['pc-increase']);}));
+V('P16',CTX16.map(([f,As,ps,u])=>()=>{const A=pick(As),p=pick(ps);return O(tag(u+A,'−'+p+'%'),`${f(A,p)} What is the new value${u?' (£)':''}?`,A*d(p),`Multiplier = ${d(p)}. ${A} × ${d(p)} = ${r6(A*d(p))}`,['pc-decrease']);}));
+// P17 express one quantity as a percentage of another
+V('P17',[
+ ()=>{const a=R(1,19)*5;return O(big('📏'),`What percentage of <b>1 metre</b> is <b>${a} cm</b>?`,a,`1 m = 100 cm so ${a} cm is ${a}%`,['pc-unit']);},
+ ()=>{const a=pick([3,6,9,12,15,18,24,30,36,45,48]);return O(big('⏱️'),`Write <b>${a} minutes</b> as a percentage of <b>1 hour</b>.`,a*100/60,`1 hour = 60 min. ${a}/60 × 100 = ${r6(a*100/60)}%`,['pc-unit']);},
+ ()=>{const a=pick([50,120,250,375,600,850]);return O(big('⚖️'),`What percentage of <b>1 kg</b> is <b>${a} g</b>?`,a/10,`1 kg = 1000 g. ${a}/1000 × 100 = ${a/10}%`,['pc-unit']);},
+ ()=>int(()=>{const b=pick([8,16,40,80,200,400]),a=R(1,b-1);if((a*200/b)%1)return 0;return O(big('📝'),`Write <b>${a} out of ${b}</b> as a percentage.`,a*100/b,`${a}/${b} × 100 = ${r6(a*100/b)}%`);}),
+ ()=>{const n=pick([4,5,8,10,20,25,50]),k=R(1,n-1);return O(big('🟥'),`A shape is split into <b>${n}</b> equal parts and <b>${k}</b> are shaded. What percentage is shaded?`,k*100/n,`${k}/${n} × 100 = ${r6(k*100/n)}%`);},
+ ()=>int(()=>{const b=pick([20,25,40,50,100,200]),a=R(1,b-1);if((a*200/b)%1)return 0;return O(big('🏫'),`In a class survey, <b>${a}</b> of the <b>${b}</b> students walk to school. What percentage walk?`,a*100/b,`${a}/${b} × 100 = ${r6(a*100/b)}%`);}),
+ ()=>{const b=pick([2,4,5,10]),k=pick([20,40,50,80,100]);return O(big('💷'),`What percentage of <b>£${b}</b> is <b>${k}p</b>?`,k/b,`£${b} = ${b*100}p. ${k}/${b*100} × 100 = ${r6(k/b)}%`,['pc-unit']);}
+]);
+// P18 parts of a total
+V('P18',[
+ ()=>int(()=>{const N=pick([40,60,80,120,200,250]),x=pick([10,20,25,30,40,60,75]);if(N*x%100)return 0;return O(big('🧑‍🤝‍🧑'),`In a club of <b>${N}</b> people, <b>${x}%</b> are boys. How many are <b>girls</b>?`,N*(100-x)/100,`Boys = ${N*x/100}. Girls = ${N} − ${N*x/100} = ${N*(100-x)/100}`);}),
+ ()=>int(()=>{const N=pick([200,400,500,1000]),x=pick([10,20,25,30,40]),y=pick([10,20,30,35]);if(x+y>=90||N*x%100||N*y%100)return 0;return O(big('📊'),`${N} people voted. <b>${x}%</b> chose A and <b>${y}%</b> chose B. The rest chose C. How many chose <b>C</b>?`,N*(100-x-y)/100,`C = ${100-x-y}% of ${N} = ${N*(100-x-y)/100}`);}),
+ ()=>int(()=>{const N=pick([100,200,300,400,500]),x=pick([40,50,60,70]),y=pick([10,20,25,30]);if(x<=y||N*(x-y)%100||N*x%100||N*y%100)return 0;return O(big('🔴'),`A bag of <b>${N}</b> marbles is <b>${x}%</b> red and <b>${y}%</b> blue. How many <b>more</b> red than blue marbles are there?`,N*(x-y)/100,`Red = ${N*x/100}, blue = ${N*y/100}. Difference = ${N*(x-y)/100}`);}),
+ ()=>int(()=>{const A=pick([40,60,80,100,200,300]),x=pick([10,20,25,30,40]),y=pick([10,15,20,25]);if(A*x%100||A*y%100)return 0;return O(tag(P(A)),`Sam has ${P(A)}. He spends <b>${x}%</b> on a book and <b>${y}%</b> on lunch. How much does he have left (£)?`,A*(100-x-y)/100,`Spent ${x+y}% so ${100-x-y}% is left: ${A} × ${(100-x-y)/100} = ${A*(100-x-y)/100}`);}),
+ ()=>{const a=pick([[25,30],[50,20],[10,40],[20,35],[25,25],[40,15]]);const[x,y]=a;return O(big('🚌'),`In a class, <b>${x}%</b> walk to school, <b>${y}%</b> cycle and the rest take the bus. What percentage take the bus?`,100-x-y,`100% − ${x}% − ${y}% = ${100-x-y}%`);},
+ ()=>int(()=>{const N=pick([200,300,400,500,800]),x=pick([20,25,40,45,60]);if(N*x%100)return 0;return O(big('📖'),`A book has <b>${N}</b> pages. Mia has read <b>${x}%</b> of it. How many pages are <b>left</b> to read?`,N*(100-x)/100,`Read = ${N*x/100}. Left = ${N} − ${N*x/100} = ${N*(100-x)/100}`);})
+]);
+// P19 find the whole
+V('P19',[
+ ()=>{const W=pick([40,60,80,120,200,300,500]),p=pick([10,20,25,50,5,40]);const N=W*p/100;return O(big('🔍'),`<b>${fmt(N)}</b> is <b>${p}%</b> of a number. What is the number?`,W,`${p}% = ${fmt(N)} → 1% = ${fmt(N/p)} → 100% = ${W}`);},
+ ()=>{const W=pick([200,300,400,500,600]),p=pick([15,12,35,45,8,24]);const N=W*p/100;return O(big('🏫'),`<b>${N}</b> children is <b>${p}%</b> of a school year group. How many children are in the year group?`,W,`${p}% = ${N} → 1% = ${r6(N/p)} → 100% = ${W}`);},
+ ()=>{const W=pick([1000,2000,5000,8000]),p=pick([10,25,40,5,2,20]);const N=W*p/100;return O(big('🏙️'),`<b>${p}%</b> of the people in a town is <b>${N}</b> people. What is the town's population?`,W,`${p}% = ${N} → 1% = ${r6(N/p)} → 100% = ${W}`);},
+ ()=>{const W=pick([40,50,60,80,100,200]),p=pick([25,40,50,75,20,60]);const N=W*p/100;return O(big('🛢️'),`A tank is <b>${p}%</b> full and holds <b>${N}</b> litres. What is the tank's <b>capacity</b> (litres)?`,W,`${p}% = ${N} → 1% = ${r6(N/p)} → 100% = ${W}`);},
+ ()=>{const W=pick([25,50,75,125,250,375]),p=pick([4,8,12,16,20]);const N=W*p/100;return O(big('🔍'),`<b>${p}%</b> of a number is <b>${fmt(N)}</b>. Find <b>100%</b>.`,W,`1% = ${fmt(N)} ÷ ${p} = ${r6(N/p)}. 100% = ${W}`);},
+ ()=>{const W=pick([60,80,120,160,240]),p=pick([150,125,175,200]);const N=W*p/100;return O(big('🔍'),`<b>${fmt(N)}</b> is <b>${p}%</b> of a number. What is the number?`,W,`${p}% = ${fmt(N)} → 1% = ${r6(N/p)} → 100% = ${W}`);}
+]);
+// P20 awkward conversions
+V('P20',[
+ ()=>{const n=pick([1,3,5,7]);return O(fx(n,8),`Write ${fx(n,8)} as a percentage.`,n*12.5,`1/8 = 12.5%. ${n} × 12.5 = ${n*12.5}%`,['pc-from-fraction']);},
+ ()=>{const n=pick([1,3,7,9,11,13,17,19,21,23,27]);return O(fx(n,40),`Write ${fx(n,40)} as a percentage.`,n*2.5,`${n}/40 × 100 = ${n*2.5}%`,['pc-from-fraction']);},
+ ()=>{const x=pick([0.125,0.375,0.075,0.455,0.605,0.015,0.825]);return O(big(x),`Write <b>${x}</b> as a percentage.`,x*100,`${x} × 100 = ${r6(x*100)}%`,['pc-from-decimal']);},
+ ()=>{const p=pick([35,7,62,4,125,18,90,2]);return O(big(p+'%'),`Write <b>${p}%</b> as a <b>decimal</b>.`,p/100,`${p} ÷ 100 = ${p/100}`,['pc-from-percent']);},
+ ()=>{const p=pick([[12,25],[35,20],[45,20],[64,25],[84,25],[28,25],[65,20],[15,20]]),i=R(0,1);const[a,b]=[p[0],100];const g=gcd(a,b),n=a/g,dd=b/g;return O(big(a+'%'),`Write <b>${a}%</b> as a fraction in its simplest form. What is the <b>${i?'denominator':'numerator'}</b>?`,i?dd:n,`${a}% = ${a}/100 = ${n}/${dd}`,['pc-from-percent']);},
+ ()=>{const f=pick([[5,4],[7,4],[3,2],[9,5],[11,10],[13,10],[9,4],[8,5]]);return O(fx(f[0],f[1]),`Write ${fx(f[0],f[1])} as a percentage.`,f[0]*100/f[1],`${f[0]}/${f[1]} = ${f[0]*100/f[1]/100} = ${f[0]*100/f[1]}%`,['pc-from-fraction']);},
+ ()=>{const f=pick([[1,3],[2,3],[1,6],[5,6],[1,9],[4,9]]);const v=Math.round(f[0]*1000/f[1])/10;return O(fx(f[0],f[1]),`Write ${fx(f[0],f[1])} as a percentage, correct to <b>1 decimal place</b>.`,v,`${f[0]}/${f[1]} × 100 = ${(f[0]*100/f[1]).toFixed(3)}… ≈ ${v}%`,['pc-from-fraction']);}
+]);
+// P21 percentage points and marks
+V('P21',[
+ ()=>{const a=pick([2,2.5,3,4,5,6.5]),b=a+pick([1,1.5,2,0.5,3]);return O(big('🏦'),`An interest rate rises from <b>${a}%</b> to <b>${b}%</b>. By how many <b>percentage points</b> did it rise?`,b-a,`${b} − ${a} = ${r6(b-a)} percentage points`,['pc-points']);},
+ ()=>int(()=>{const N=pick([200,500,1000,2000]),a=pick([55,60,45,65,70,40]),b=pick([20,25,30,35]);if(a+b>100||N*(a-b)%100)return 0;return O(big('🗳️'),`In an election with <b>${N}</b> voters, Ann gets <b>${a}%</b> and Ben gets <b>${b}%</b>. How many <b>more votes</b> does Ann get than Ben?`,N*(a-b)/100,`Difference = ${a-b}% of ${N} = ${N*(a-b)/100}`);}),
+ ()=>int(()=>{const T=pick([40,50,60,80,120,200]),x=pick([50,60,65,75,45,35]);if(T*x%100)return 0;return O(big('🎯'),`A test is out of <b>${T}</b> marks. The pass mark is <b>${x}%</b>. How many marks are needed to pass?`,T*x/100,`${x}% of ${T} = ${T*x/100}`);}),
+ ()=>int(()=>{const N=pick([40,50,60,80,120,200]),a=pick([85,90,70,75,60,95]);if(N*(100-a)%100)return 0;return O(big('📝'),`Jo scored <b>${a}%</b> in a test out of <b>${N}</b> marks. How many marks did she <b>lose</b>?`,N*(100-a)/100,`Lost ${100-a}% of ${N} = ${N*(100-a)/100}`);}),
+ ()=>{const a=pick([45,52,60,38,70]),b=a+pick([6,9,12,15,18]);return O(big('📈'),`A school's pass rate goes up from <b>${a}%</b> to <b>${b}%</b>. How many percentage points is that?`,b-a,`${b}% − ${a}% = ${b-a} percentage points`,['pc-points']);}
+]);
+// P22 profit and loss
+const PL=()=>{const A=pick([20,40,50,80,100,200]),p=pick([10,20,25,30,50,40]);return[A,p];};
+V('P22',[
+ ()=>{const[A,p]=PL();const B=A*(1+p/100);return O(big('🛍️'),`A shop buys a bag for ${P(A)} and sells it for ${P(r6(B))}. What is the percentage <b>profit</b>?`,p,`Profit = ${r6(B-A)}. ${r6(B-A)}/${A} × 100 = ${p}%`);},
+ ()=>{const[A,p]=PL();return O(big('🛍️'),`A trader buys a table for ${P(A)} and sells it at a <b>${p}% profit</b>. What is the selling price (£)?`,A*(1+p/100),`${A} × ${m(p)} = ${r6(A*(1+p/100))}`);},
+ ()=>{const[A,p]=PL();const B=A*(1-p/100);return O(big('📉'),`A bike bought for ${P(A)} is sold for ${P(r6(B))}. What is the percentage <b>loss</b>?`,p,`Loss = ${r6(A-B)}. ${r6(A-B)}/${A} × 100 = ${p}%`);},
+ ()=>{const[A,p]=PL();return O(big('📉'),`A phone bought for ${P(A)} is sold at a <b>${p}% loss</b>. What is the selling price (£)?`,A*(1-p/100),`${A} × ${d(p)} = ${r6(A*(1-p/100))}`);},
+ ()=>{const[A,p]=PL();return O(big('💰'),`A shop pays ${P(A)} for a coat and sells it at <b>${p}% profit</b>. How much <b>profit</b> is made (£)?`,A*p/100,`${p}% of ${A} = ${r6(A*p/100)}`);},
+ ()=>int(()=>{const A=pick([40,80,100,200,400,160]),p=pick([10,20,25,50]);const B=A*(1+p/100);if(B%1)return 0;return O(big('🔍'),`An item is sold for ${P(B)} making a <b>${p}% profit</b>. What did it cost to buy (£)?`,A,`${100+p}% = ${B} → 1% = ${r6(B/(100+p))} → 100% = ${A}`,['pc-reverse']);})
+]);
+// P23 successive changes
+V('P23',[
+ ()=>{const A=pick([100,200,400,500,1000]),p=pick([10,20,25,50]);return O(big('↕️'),`${P(A)} is <b>increased by ${p}%</b> and the new amount is then <b>decreased by ${p}%</b>. What is the final amount (£)?`,A*m(p)*d(p),`${A} × ${m(p)} × ${d(p)} = ${r6(A*m(p)*d(p))}`);},
+ ()=>{const A=pick([100,200,400,500,1000]),[x,y]=pick([[20,25],[10,20],[50,20],[25,20],[10,10],[30,10]]);return O(big('↕️'),`A bike costs ${P(A)}. The price is <b>reduced by ${x}%</b> and then <b>increased by ${y}%</b>. What is the final price (£)?`,A*d(x)*m(y),`${A} × ${d(x)} × ${m(y)} = ${r6(A*d(x)*m(y))}`);},
+ ()=>{const A=pick([100,200,400,500,1000]),[x,y]=pick([[10,20],[10,10],[20,20],[50,10],[25,20]]);return O(big('📈'),`A value of ${P(A)} goes up by <b>${x}%</b>, then up by <b>${y}%</b>. What is the final value (£)?`,A*m(x)*m(y),`${A} × ${m(x)} × ${m(y)} = ${r6(A*m(x)*m(y))}`);},
+ ()=>{const[x,y]=pick([[10,20],[10,10],[20,20],[50,10],[25,20],[5,10]]);return O(big('✖️'),`A price rises by <b>${x}%</b> and then by <b>${y}%</b>. What <b>single multiplier</b> gives the overall change?`,m(x)*m(y),`${m(x)} × ${m(y)} = ${r6(m(x)*m(y))}`);},
+ ()=>{const p=pick([10,20,30,40,50]);return O(big('↕️'),`A price rises by <b>${p}%</b> and then falls by <b>${p}%</b>. The overall change is a <b>decrease</b> of what percentage?`,p*p/100,`${m(p)} × ${d(p)} = ${r6(m(p)*d(p))}. That is a decrease of ${r6(100-m(p)*d(p)*100)}%`);},
+ ()=>{const A=pick([100,200,50,400]),[x,y]=pick([[20,10],[10,10],[25,20],[50,10],[30,20]]);return O(big('🏷️'),`A coat costs ${P(A)}. It is reduced by <b>${x}%</b> and then a further <b>${y}%</b> is taken off the sale price. What is the final price (£)?`,A*d(x)*d(y),`${A} × ${d(x)} × ${d(y)} = ${r6(A*d(x)*d(y))}`);}
+]);
+// P24 compound growth
+V('P24',[
+ ()=>{const P0=pick([1000,2000,500]);return O(big('🏦'),`${P(P0)} is invested at <b>10% compound interest</b>. How much is there after <b>3 years</b> (£)?`,P0*1.331,`${P0} × 1.1³ = ${r6(P0*1.331)}`,['pc-compound-interest']);},
+ ()=>{const P0=pick([500,1000,250]),n=pick([2,3]);return O(big('🏦'),`${P(P0)} is invested at <b>20% compound interest</b> per year. How much is there after <b>${n} years</b> (£)?`,P0*1.2**n,`${P0} × 1.2${n===3?'³':'²'} = ${r6(P0*1.2**n)}`,['pc-compound-interest']);},
+ ()=>{const P0=pick([400,800,2000,1600]);return O(big('🏦'),`${P(P0)} is invested at <b>5% compound interest</b> per year. How much is there after <b>2 years</b> (£)?`,P0*1.1025,`${P0} × 1.05² = ${r6(P0*1.1025)}`,['pc-compound-interest']);},
+ ()=>{const P0=pick([10000,20000,5000,2000]);return O(big('🏙️'),`A town of ${P0} people grows by <b>10% each year</b>. What is the population after <b>2 years</b>?`,P0*1.21,`${P0} × 1.1² = ${r6(P0*1.21)}`);},
+ ()=>{const P0=pick([100,200,500,1000]),r=pick([10,20]);return O(big('🏦'),`${P(P0)} is invested at <b>${r}% compound interest</b>. How much <b>interest</b> is earned in <b>2 years</b> (£)?`,P0*(m(r)**2-1),`Total = ${P0} × ${m(r)}² = ${r6(P0*m(r)**2)}. Interest = ${r6(P0*m(r)**2)} − ${P0} = ${r6(P0*(m(r)**2-1))}`,['pc-compound-interest']);},
+ ()=>{const A=pick([3,5,10,50]),n=pick([2,3,4]);return O(big('🦠'),`A colony of <b>${A}</b> bacteria grows by <b>100%</b> every hour. How many are there after <b>${n} hours</b>?`,A*2**n,`100% growth = doubling. ${A} × 2${n===2?'²':n===3?'³':'⁴'} = ${A*2**n}`);},
+ ()=>{const P0=pick([10000,20000]);return O(big('🏦'),`${P(P0)} is invested at <b>10% compound interest</b> per year. How much is there after <b>4 years</b> (£)?`,P0*1.4641,`${P0} × 1.1⁴ = ${r6(P0*1.4641)}`,['pc-compound-interest']);}
+]);
+// P25 depreciation
+V('P25',[
+ ()=>{const P0=pick([10000,5000,20000,15000]);return O(big('🚗'),`A car worth ${P(P0)} loses <b>20%</b> of its value each year. What is it worth after <b>2 years</b> (£)?`,P0*.64,`${P0} × 0.8² = ${r6(P0*.64)}`);},
+ ()=>{const P0=pick([1000,2000,5000,10000,500]);return O(big('💻'),`A laptop worth ${P(P0)} depreciates by <b>10%</b> each year. What is it worth after <b>2 years</b> (£)?`,P0*.81,`${P0} × 0.9² = ${r6(P0*.81)}`);},
+ ()=>{const P0=pick([1000,2000,5000,10000]);return O(big('🚐'),`A van worth ${P(P0)} loses <b>10%</b> of its value each year. What is it worth after <b>3 years</b> (£)?`,P0*.729,`${P0} × 0.9³ = ${r6(P0*.729)}`);},
+ ()=>{const P0=pick([800,1600,4000,2400]);return O(big('📱'),`A phone worth ${P(P0)} halves in value every year (<b>50%</b> depreciation). What is it worth after <b>3 years</b> (£)?`,P0*.125,`${P0} × 0.5³ = ${r6(P0*.125)}`);},
+ ()=>{const P0=pick([10000,5000,2000,20000]);return O(big('🏘️'),`A village of ${P0} people has a population that falls by <b>20%</b> each year. What is the population after <b>2 years</b>?`,P0*.64,`${P0} × 0.8² = ${r6(P0*.64)}`);},
+ ()=>{const P0=pick([1600,3200,800]);return O(big('🚲'),`A bike worth ${P(P0)} loses <b>25%</b> each year. What is it worth after <b>2 years</b> (£)?`,P0*.5625,`${P0} × 0.75² = ${r6(P0*.5625)}`);}
+]);
+// P26 simple interest, all the unknowns
+const SI=()=>{const r=pick([2,3,4,5,6,2.5,7]),Pp=pick([200,500,800,1000,1500,2000]),y=pick([2,3,4,5,6]);return[r,Pp,y,r6(Pp*r*y/100)];};
+V('P26',[
+ ()=>{const[r,Pp,y,I]=SI();return O(big('🏦'),`${P(Pp)} is invested at <b>${r}% simple interest</b> per year. How much interest is earned in <b>${y} years</b> (£)?`,I,`Per year: ${r}% of ${Pp} = ${r6(Pp*r/100)}. × ${y} = ${I}`,['pc-simple-interest']);},
+ ()=>{const[r,Pp,y,I]=SI();return O(big('🏦'),`${P(Pp)} is invested at <b>${r}% simple interest</b> per year. How much is in the account after <b>${y} years</b> (£)?`,Pp+I,`Interest = ${I}. Total = ${Pp} + ${I} = ${r6(Pp+I)}`,['pc-simple-interest']);},
+ ()=>{const[r,Pp,y,I]=SI();return O(big('🏦'),`${P(Pp)} earns <b>${P(I)}</b> simple interest in <b>${y} years</b>. What is the yearly interest <b>rate</b> (%)?`,r,`Per year: ${I} ÷ ${y} = ${r6(I/y)}. ${r6(I/y)}/${Pp} × 100 = ${r}%`,['pc-simple-interest']);},
+ ()=>{const[r,Pp,y,I]=SI();return O(big('🏦'),`${P(Pp)} earns <b>${P(I)}</b> simple interest at <b>${r}% per year</b>. For how many <b>years</b> was it invested?`,y,`Per year: ${r}% of ${Pp} = ${r6(Pp*r/100)}. ${I} ÷ ${r6(Pp*r/100)} = ${y}`,['pc-simple-interest']);},
+ ()=>{const[r,Pp,y,I]=SI();return O(big('🏦'),`Simple interest of <b>${P(I)}</b> was earned in <b>${y} years</b> at <b>${r}% per year</b>. How much was <b>invested</b> (£)?`,Pp,`Over ${y} years: ${r6(r*y)}% of the amount = ${I}. 1% = ${r6(I/(r*y))}, so 100% = ${Pp}`,['pc-simple-interest','pc-find-whole']);},
+ ()=>{const Pp=pick([1000,2000,400,800]),r=pick([3,4,5,6]);return O(big('🏦'),`${P(Pp)} is invested at <b>${r}% simple interest</b> per year. How much interest is earned in <b>6 months</b> (£)?`,Pp*r/200,`One year = ${r6(Pp*r/100)}. Half a year = ${r6(Pp*r/200)}`,['pc-simple-interest']);}
+]);
+// P27 reverse percentages with multipliers
+V('P27',[
+ ()=>{const Oo=pick([50,100,150,200,250,300,400,500]);return O(big('🧾'),`A price <b>including 20% VAT</b> is ${P(Oo*1.2)}. What was the price <b>before VAT</b> (£)?`,Oo,`120% = ${r6(Oo*1.2)} → 1% = ${r6(Oo*.01)} → 100% = ${Oo}. (Or ${r6(Oo*1.2)} ÷ 1.2)`,['pc-vat']);},
+ ()=>{const p=pick([4,5,8,10,12,20,25]),Oo=pick([20000,25000,30000,40000]);return O(big('💼'),`After a <b>${p}% pay rise</b> a salary is ${P(r6(Oo*m(p)))}. What was the salary <b>before</b> the rise (£)?`,Oo,`${100+p}% = ${r6(Oo*m(p))}. Divide by ${m(p)}: ${Oo}`);},
+ ()=>int(()=>{const p=pick([10,15,20,30,40,25,35]),Oo=pick([20,40,60,80,100,200,300,400]);const F=Oo*(100-p)/100;if(F%1)return 0;return O(big('🏷️'),`A sale price of ${P(F)} is after a <b>${p}% reduction</b>. What was the <b>original</b> price (£)?`,Oo,`${100-p}% = ${F}. Divide by ${d(p)}: ${Oo}`);}),
+ ()=>{const p=pick([20,25,30,40,10]),Oo=pick([5000,8000,10000,12000,15000,20000]);return O(big('🚗'),`A car has lost <b>${p}%</b> of its value and is now worth ${P(Oo*d(p))}. What was it worth <b>new</b> (£)?`,Oo,`${100-p}% = ${r6(Oo*d(p))}. Divide by ${d(p)}: ${Oo}`);},
+ ()=>{const p=pick([5,10,20,25,50,4]),Oo=pick([2000,4000,5000,8000,10000]);return O(big('🏙️'),`A town's population has <b>risen by ${p}%</b> to <b>${r6(Oo*m(p))}</b>. What was the population <b>before</b>?`,Oo,`${100+p}% = ${r6(Oo*m(p))}. Divide by ${m(p)}: ${Oo}`);},
+ ()=>{const p=pick([4,5,10,20,25]),Oo=pick([200,300,400,500,800,1000,2000]);return O(big('💼'),`After a <b>${p}% rise</b> a wage is ${P(r6(Oo*m(p)))}. How much was the <b>rise</b> in pounds (£)?`,Oo*p/100,`Original = ${r6(Oo*m(p))} ÷ ${m(p)} = ${Oo}. Rise = ${r6(Oo*m(p))} − ${Oo} = ${r6(Oo*p/100)}`);}
+]);
+// P28 ratio and percentage
+V('P28',[
+ ()=>{const[a,b]=pick([[1,1],[1,3],[1,4],[3,7],[3,2],[1,9],[2,3],[3,1],[4,1],[7,3],[9,1]]);return O(big('⚖️'),`The ratio of boys to girls in a club is <b>${a} : ${b}</b>. What percentage are <b>boys</b>?`,a*100/(a+b),`Total parts = ${a+b}. ${a}/${a+b} × 100 = ${r6(a*100/(a+b))}%`,['pc-ratio']);},
+ ()=>{const p=pick([50,25,20,10,5,12.5,40,4]);return O(big('⚖️'),`A mixture is <b>${p}%</b> red paint and the rest is blue. The ratio red : blue is <b>1 : n</b>. What is <b>n</b>?`,(100-p)/p,`red : blue = ${p} : ${r6(100-p)} = 1 : ${r6((100-p)/p)}`,['pc-ratio']);},
+ ()=>{const[a,b]=pick([[1,1],[1,3],[1,4],[3,7],[3,2],[1,9],[2,3],[3,1],[4,1],[7,3],[9,1]]);const big2=Math.max(a,b);return O(big('🍰'),`A cake is shared in the ratio <b>${a} : ${b}</b>. What percentage does the <b>larger share</b> get?`,big2*100/(a+b),`${big2}/${a+b} × 100 = ${r6(big2*100/(a+b))}%`,['pc-ratio']);},
+ ()=>{const n=pick([1,3,4,9,19,7]);return O(big('🧃'),`A drink is made with <b>1 part</b> juice to <b>${n} parts</b> water. What percentage of the drink is juice?`,100/(1+n),`Total parts = ${1+n}. 1/${1+n} × 100 = ${r6(100/(1+n))}%`,['pc-ratio']);},
+ ()=>{const[a,b]=pick([[50,60],[40,50],[20,25],[80,100],[100,125],[60,75],[25,30],[200,250],[40,48]]);return O(big('📈'),`<b>${b}</b> is what percentage <b>more</b> than <b>${a}</b>?`,(b-a)*100/a,`Increase = ${b-a}. ${b-a}/${a} × 100 = ${r6((b-a)*100/a)}%`,['pc-change']);}
+]);
+// P29 comparing offers
+V('P29',[
+ ()=>{const A=pick([40,60,80,100,200]),p=pick([10,20,25,50]),dd=pick([5,10,15,20]);const s=A*p/100;return O(big('⚔️'),`Offer 1: <b>${p}% off</b> ${P(A)}. Offer 2: <b>${P(dd)} off</b>. What is the <b>bigger saving</b> (£)?`,Math.max(s,dd),`${p}% of ${A} = ${r6(s)}. Compare ${r6(s)} and ${dd}: ${r6(Math.max(s,dd))}`,['pc-decrease']);},
+ ()=>{const[A,p,B,q]=pick([[100,20,90,10],[80,25,70,10],[200,30,180,20],[50,10,48,5],[120,50,100,25],[60,20,55,10]]);return O(big('⚔️'),`Shop A sells a jacket for ${P(A)} with <b>${p}% off</b>. Shop B sells it for ${P(B)} with <b>${q}% off</b>. What is the <b>cheaper</b> final price (£)?`,Math.min(A*d(p),B*d(q)),`A: ${A} × ${d(p)} = ${r6(A*d(p))}. B: ${B} × ${d(q)} = ${r6(B*d(q))}`,['pc-decrease']);},
+ ()=>{const A=pick([10,20,30,40]);return O(big('🛒'),`Buy one shirt at ${P(A)} and get the <b>second half price</b>. What is the total cost of two shirts (£)?`,A*1.5,`${A} + ${A/2} = ${A*1.5}`);},
+ ()=>{const A=pick([2,4,5,8,10]);return O(big('🛒'),`A shop has a <b>3 for 2</b> offer on cakes at ${P(A)} each. How much do <b>6 cakes</b> cost (£)?`,A*4,`6 cakes = 2 lots of 3. You pay for 2 in each lot: 4 × ${A} = ${A*4}`);},
+ ()=>int(()=>{const A=pick([40,60,80,100,120,200]),p=pick([10,20,25,50]),v=pick([3,5,10]);if(A*p%100)return 0;return O(big('🎟️'),`A game costs ${P(A)}. It is <b>${p}% off</b> and then you use a <b>${P(v)} voucher</b>. What do you pay (£)?`,A*d(p)-v,`${A} × ${d(p)} = ${r6(A*d(p))}. Then − ${v} = ${r6(A*d(p)-v)}`,['pc-decrease']);}),
+ ()=>int(()=>{const S=pick([200,300,400,500,800]),p=pick([2,3,5,10]);const c=S*p/100;return O(big('💳'),`A card gives <b>${p}% cashback</b>. You spend ${P(S)}. How much cashback do you get (£)?`,c,`${p}% of ${S} = ${r6(c)}`);})
+]);
+// P30 tax, tips, commission
+V('P30',[
+ ()=>{const E=pick([20000,25000,30000,35000]),A=pick([10000,12000,15000]);return O(big('🧾'),`Tax is <b>20%</b> on income above ${P(A)}. Zoe earns ${P(E)}. How much tax does she pay (£)?`,(E-A)*.2,`Taxable = ${E} − ${A} = ${E-A}. 20% of ${E-A} = ${r6((E-A)*.2)}`);},
+ ()=>{const B=pick([1000,1200,1500]),S=pick([2000,5000,8000,10000]),c=pick([2,5,10,4,8]);return O(big('🧑‍💼'),`A salesperson is paid ${P(B)} plus <b>${c}% commission</b> on sales of ${P(S)}. What is the total pay (£)?`,B+S*c/100,`Commission = ${c}% of ${S} = ${r6(S*c/100)}. Total = ${B} + ${r6(S*c/100)} = ${r6(B+S*c/100)}`);},
+ ()=>{const A=pick([20,40,60,80,50]),p=pick([10,15,12.5,20]);return O(big('🍽️'),`A meal costs ${P(A)}. A <b>${p}% tip</b> is added. What is the total (£)?`,A*(1+p/100),`Tip = ${p}% of ${A} = ${r6(A*p/100)}. Total = ${r6(A*(1+p/100))}`);},
+ ()=>{const h=pick([8,10,12,15,20]),p=pick([5,10,20,25,50]);return O(big('⏰'),`A wage of ${P(h)} per hour goes up by <b>${p}%</b>. What is the new hourly wage (£)?`,h*m(p),`${h} × ${m(p)} = ${r6(h*m(p))}`);},
+ ()=>{const A=pick([35,45,65,85,120,250]);return O(big('🧾'),`A laptop costs ${P(A)} <b>before VAT</b>. VAT is <b>20%</b>. How much is the <b>VAT</b> (£)?`,A*.2,`20% of ${A} = ${r6(A*.2)}`,['pc-vat']);},
+ ()=>{const S=pick([20000,30000,40000]),p=pick([20,15,10]),q=pick([8,5,2]);return O(big('💼'),`A worker earning ${P(S)} pays <b>${p}%</b> income tax and <b>${q}%</b> National Insurance (both of ${P(S)}). How much does she keep (£)?`,S*(100-p-q)/100,`Taken = ${p+q}% of ${S} = ${r6(S*(p+q)/100)}. Left = ${r6(S*(100-p-q)/100)}`);}
+]);
+// P31 pie charts, units, percentages of percentages
+const pie=(deg)=>{let s='<svg viewBox="0 0 110 110" class="pc-grid"><circle cx="55" cy="55" r="48" fill="#fff" stroke="#6c5ce7" stroke-width="2"/>';const a=(deg-90)*Math.PI/180,x=55+48*Math.cos(a),y=55+48*Math.sin(a);s+=`<path d="M55 55 L55 7 A48 48 0 ${deg>180?1:0} 1 ${x.toFixed(1)} ${y.toFixed(1)} Z" fill="#ff6b6b" stroke="#6c5ce7" stroke-width="1.5"/>`;return s+'</svg>';};
+V('P31',[
+ ()=>{const t=pick([36,72,90,108,180,18,45,54,144]);return O(pie(t),`A pie-chart sector has an angle of <b>${t}°</b>. What percentage of the whole is it?`,t*100/360,`${t}/360 × 100 = ${r6(t*100/360)}%`,['pc-pie']);},
+ ()=>{const p=pick([10,20,25,30,5,15,40,60,75,12.5]);return O(pie(p*3.6),`A pie-chart sector represents <b>${p}%</b>. What is its angle in degrees?`,p*3.6,`${p}% of 360° = ${r6(p*3.6)}°`,['pc-pie']);},
+ ()=>int(()=>{const N=pick([200,250,400,500,800]),p=pick([10,15,30,35,40,60]);if(N*p%100)return 0;return O(big('🍕'),`In a survey of <b>${N}</b> people, <b>${p}%</b> chose pizza. How many people chose pizza?`,N*p/100,`${p}% of ${N} = ${r6(N*p/100)}`);}),
+ ()=>{const[a,b,c]=pick([[50,40,200],[50,20,400],[25,40,200],[10,50,300],[50,50,200],[20,25,400]]);return O(big('%'),`Find <b>${a}% of ${b}%</b> of ${c}.`,c*a*b/10000,`${b}% of ${c} = ${c*b/100}. ${a}% of that = ${r6(c*a*b/10000)}`);},
+ ()=>{const p=pick([10,20,25,50,5,75]),k=pick([2,3,4]);return O(big('⚖️'),`Find <b>${p}%</b> of <b>${k} kg</b>, in <b>grams</b>.`,k*1000*p/100,`${k} kg = ${k*1000} g. ${p}% of ${k*1000} = ${r6(k*1000*p/100)} g`,['pc-unit']);},
+ ()=>{const p=pick([10,15,25,50,5,75]),h=pick([1,2,3,4]);return O(big('⏱️'),`Find <b>${p}%</b> of <b>${h} hour${h>1?'s':''}</b>, in <b>minutes</b>.`,h*60*p/100,`${h} h = ${h*60} min. ${p}% of ${h*60} = ${r6(h*60*p/100)} min`,['pc-unit']);},
+ ()=>{const p=pick([0.5,0.2,2.5,0.1,1.5]),A=pick([2000,1000,4000,500]);return O(tag(P(A)),`Find <b>${p}%</b> of ${P(A)}.`,A*p/100,`${p}% of ${A} = ${A} × ${p/100} = ${r6(A*p/100)}`);}
+]);
+const MIX=['P13','P14','P15','P16','P17','P18','P19','P20','P21','P22','P23','P24','P25','P26','P27','P28','P29','P30','P31'];
+QT.P32=()=>{const k=pick(MIX),r=QT[k]();r.k=k;return r;};
+const POOL=[['P1'],['P1','P2'],['P2','P3'],['P3','P4'],['P4','P5'],['P5','P6'],['P6','P7'],['P7','P8'],['P9'],['P9','P10'],['P11'],['P12'],['P13'],['P14'],['P15'],['P16'],['P17'],['P18'],['P19'],['P20'],['P21'],['P22'],['P23'],['P24'],['P25'],['P26'],['P27'],['P28'],['P29'],['P30'],['P31'],['P32']];
 const num=s=>{const v=parseFloat(s);return isNaN(v)?null:{v,n:null,d:1};};
 window.__pc={QT,POOL};
 REG.push({id:'percent',name:'Percent Shop',emoji:'🏷️',color:'#2b8a3e',cat:'Arithmetic',
  desc:'Sales, VAT, pay rises, test scores and bank interest — real-life percentages! 5 questions per level, 4 to pass.',skills:['percentages of amounts','fraction ↔ percentage','percentage change','reverse percentages','compound interest'],
- levels:['Percent of a grid','10%, 25%, 50%…','Convert fractions & decimals','Any percentage of an amount','Sale prices','Increase (VAT, pay rises)','Test scores as %','Percentage change','Reverse percentages','Reverse · sales','Interest','Boss mix'],
+ levels:['Percent of a grid','10%, 25%, 50%…','Convert fractions & decimals','Any percentage of an amount','Sale prices','Increase (VAT, pay rises)','Test scores as %','Percentage change','Reverse percentages','Reverse · sales','Interest','Boss mix','Mental percentages','Multipliers','Increase with a multiplier','Decrease with a multiplier','Express as a percentage','Parts of a total','Find the whole','Awkward conversions','Percentage points & marks','Profit & loss','Successive changes','Compound growth','Depreciation','Simple interest (any unknown)','Reverse with multipliers','Ratio & percentage','Comparing offers','Tax, tips & commission','Pie charts & units','Grand boss'],
  how:'Type your answer as a number (no % or £ needed). Tip: find 10% first (÷10), then build any other percentage from it. For reverse percentages, work out 1% first.',
  art:'<div class="minibal">🏷️</div>',
  mount(root,lv,ctx){mountQuiz(root,ctx,{game:'percent',QT,pool:POOL[lv-1],parse:num,slash:false,winTitle:'Percentage pro!'});}});
@@ -3209,7 +3798,7 @@ const S2=[ // multi-letter levels: roles p,q,r
  {n:'xy outside: xy(x + y)',g:()=>({m:T(r(1,3),'pq'),t:[T(1,'p'),T(sg(),'q')]})},
  {n:'Three terms: a(x + y + b)',g:()=>({m:T(r(2,5)),t:[T(1,'p'),T(1,'q'),T(r(1,9))]})},
  {n:'Three terms: a(bx ± cy ± d)',g:()=>({m:T(r(2,6)),t:[T(r(1,5),'p'),T(sg()*r(1,5),'q'),T(sg()*r(1,9))]})},
- {n:'Three terms · negative outside',g:()=>({m:T(-r(2,6)),t:[T(r(1,5),'p'),T(sg()*r(1,5),'q'),T(sg()*r(1,9))]})},
+ {n:'Two letters · three terms · negative outside',g:()=>({m:T(-r(2,6)),t:[T(r(1,5),'p'),T(sg()*r(1,5),'q'),T(sg()*r(1,9))]})},
  {n:'x(x + y + b)',g:()=>({m:T(1,'p'),t:[T(1,'p'),T(sg(),'q'),T(sg()*r(1,9))]})},
  {n:'y(bx + cy + d)',g:()=>({m:T(sg(),'q'),t:[T(r(1,4),'p'),T(sg()*r(1,4),'q'),T(sg()*r(1,9))]})},
  {n:'−x(bx − cy + d)',g:()=>({m:T(-1,'p'),t:[T(r(1,4),'p'),T(sg()*r(1,4),'q'),T(sg()*r(1,9))]})},
@@ -3219,10 +3808,90 @@ const S2=[ // multi-letter levels: roles p,q,r
  {n:'Boss: four terms, anything goes!',g:()=>{const k=r(0,2);const L=[T(r(1,4),'p'),T(sg()*r(1,4),'q'),T(sg()*r(1,4),'r'),T(sg()*r(1,9))];
    return k===0?{m:T(sg()*r(2,5)),t:L}:k===1?{m:T(sg()*r(1,3),pick(['p','q','r'])),t:L}:{m:T(sg()*r(1,3),'pq'),t:[T(r(1,3),'p'),T(sg()*r(1,3),'q'),T(sg()*r(1,3),'r'),T(sg()*r(1,9))]};},L:3}
 ];
-const SPECS=S1.concat(S2);
+
+// ---- GCSE extension (levels 41+): powers of letters, bigger coefficients, 3-letter, 5-term brackets ----
+const X=(c,a,b,d)=>T(c,'p'.repeat(a||0)+'q'.repeat(b||0)+'r'.repeat(d||0));
+const S3=[ // single letter with powers (role p)
+ {n:'x²(x + b)',g:()=>({m:X(1,2),t:[X(1,1),T(r(1,9))]})},
+ {n:'x²(x − b)',g:()=>({m:X(1,2),t:[X(1,1),T(-r(1,9))]})},
+ {n:'x³(x + b)',g:()=>({m:X(1,3),t:[X(1,1),T(r(1,9))]})},
+ {n:'x²(bx + c)',g:()=>({m:X(1,2),t:[X(r(2,5),1),T(sg()*r(1,9))]})},
+ {n:'x²(x² + b)',g:()=>({m:X(1,2),t:[X(1,2),T(sg()*r(1,9))]})},
+ {n:'x²(x² − bx)',g:()=>({m:X(1,2),t:[X(1,2),X(-r(2,6),1)]})},
+ {n:'x³(x² ± b)',g:()=>({m:X(1,3),t:[X(1,2),T(sg()*r(1,9))]})},
+ {n:'ax²(x + b)',g:()=>({m:X(r(2,5),2),t:[X(1,1),T(sg()*r(1,9))]})},
+ {n:'ax²(bx − c)',g:()=>({m:X(r(2,5),2),t:[X(r(2,4),1),T(-r(1,9))]})},
+ {n:'−x²(x + b)',g:()=>({m:X(-1,2),t:[X(1,1),T(r(1,9))]})},
+ {n:'−ax²(x − b)',g:()=>({m:X(-r(2,5),2),t:[X(1,1),T(-r(1,9))]})},
+ {n:'x²(x² + bx + c)',g:()=>({m:X(1,2),t:[X(1,2),X(r(1,6),1),T(r(1,9))]})},
+ {n:'x²(ax² − bx + c)',g:()=>({m:X(1,2),t:[X(r(2,4),2),X(-r(1,6),1),T(r(1,9))]})},
+ {n:'ax²(bx + c)',g:()=>({m:X(r(2,5),2),t:[X(r(2,4),1),T(sg()*r(1,9))]})},
+ {n:'x³(x² − x + b)',g:()=>({m:X(1,3),t:[X(1,2),X(-1,1),T(r(1,9))]})},
+ {n:'x(x² + bx + c)',g:()=>({m:X(1,1),t:[X(1,2),X(r(1,6),1),T(r(1,9))]})},
+ {n:'x(x³ − bx² + c)',g:()=>({m:X(1,1),t:[X(1,3),X(-r(1,6),2),T(sg()*r(1,9))]})},
+ {n:'−x(x² + bx − c)',g:()=>({m:X(-1,1),t:[X(1,2),X(r(1,6),1),T(-r(1,9))]})},
+ {n:'ax³(bx − c)',g:()=>({m:X(r(2,4),3),t:[X(r(2,4),1),T(-r(1,9))]})},
+ {n:'ax²(bx² + cx + d)',g:()=>({m:X(r(2,4),2),t:[X(r(2,3),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]})},
+ {n:'x²(x³ + x² + x)',g:()=>({m:X(1,2),t:[X(1,3),X(1,2),X(1,1)]})},
+ {n:'Four terms: x(x³ + bx² + cx + d)',g:()=>({m:X(1,1),t:[X(1,3),X(r(1,4),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]})},
+ {n:'Four terms: ax(bx³ ± cx² ± dx ± e)',g:()=>({m:X(r(2,4),1),t:[X(r(2,3),3),X(sg()*r(1,4),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]})},
+ {n:'Four terms · negative outside',g:()=>({m:X(-r(1,3),2),t:[X(r(1,3),3),X(sg()*r(1,4),2),X(sg()*r(1,4),1),T(sg()*r(1,9))]})},
+ {n:'Five terms: a(bx⁴ ± cx³ ± dx² ± ex ± f)',g:()=>({m:T(sg()*r(2,4)),t:[X(r(1,3),4),X(sg()*r(1,3),3),X(sg()*r(1,4),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]})},
+ {n:'x⁴(x ± b)',g:()=>({m:X(1,4),t:[X(1,1),T(sg()*r(1,9))]})},
+ {n:'ax⁴(x² ± b)',g:()=>({m:X(r(2,3),4),t:[X(1,2),T(sg()*r(1,9))]})},
+ {n:'−x³(x² ± bx)',g:()=>({m:X(-1,3),t:[X(1,2),X(sg()*r(2,6),1)]})},
+ {n:'Cubes: x³(x³ ± b)',g:()=>({m:X(1,3),t:[X(1,3),T(sg()*r(1,9))]})},
+ {n:'Large numbers: a(bx − c)',g:()=>({m:T(r(10,15)),t:[X(r(3,9),1),T(sg()*r(2,12))]})},
+ {n:'Large numbers · negative outside',g:()=>({m:T(-r(10,15)),t:[X(r(3,9),1),T(sg()*r(2,12))]})},
+ {n:'Large numbers: ax²(bx − c)',g:()=>({m:X(r(6,9),2),t:[X(r(4,9),1),T(sg()*r(3,12))]})},
+ {n:'Large numbers · three terms',g:()=>({m:T(sg()*r(7,12)),t:[X(r(2,6),2),X(sg()*r(3,9),1),T(sg()*r(4,12))]})},
+ {n:'Boss: powers of x',g:()=>{const k=r(0,3);return k===0?{m:X(sg()*r(1,3),2),t:[X(r(1,3),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]}:k===1?{m:X(sg(),3),t:[X(1,2),T(sg()*r(1,9))]}:k===2?{m:X(sg()*r(1,3),1),t:[X(r(1,3),3),X(sg()*r(1,4),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]}:{m:X(sg()*r(2,4),4),t:[X(1,1),T(sg()*r(1,9))]};}}
+].map(o=>Object.assign(o,{L:1,pw:1}));
+const S4=[ // two letters with powers (roles p,q)
+ {n:'x²(y + b)',g:()=>({m:X(1,2),t:[X(1,0,1),T(sg()*r(1,9))]})},
+ {n:'x²(x + y)',g:()=>({m:X(1,2),t:[X(1,1),X(1,0,1)]})},
+ {n:'xy(x² + y)',g:()=>({m:X(1,1,1),t:[X(1,2),X(1,0,1)]})},
+ {n:'xy(ax + by)',g:()=>({m:X(r(1,3),1,1),t:[X(r(1,4),1),X(sg()*r(1,4),0,1)]})},
+ {n:'x²y(x + y)',g:()=>({m:X(1,2,1),t:[X(1,1),X(1,0,1)]})},
+ {n:'xy²(x − y)',g:()=>({m:X(1,1,2),t:[X(1,1),X(-1,0,1)]})},
+ {n:'x²y(ax + by + c)',g:()=>({m:X(1,2,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1),T(sg()*r(1,9))]})},
+ {n:'y²(x² + xy + y²)',g:()=>({m:X(1,0,2),t:[X(1,2),X(1,1,1),X(1,0,2)]})},
+ {n:'x(x² + xy + y²)',g:()=>({m:X(1,1),t:[X(1,2),X(1,1,1),X(1,0,2)]})},
+ {n:'−xy(x² ± xy ± y²)',g:()=>({m:X(-1,1,1),t:[X(1,2),X(sg(),1,1),X(sg(),0,2)]})},
+ {n:'ax²(y + bx − c)',g:()=>({m:X(r(2,4),2),t:[X(1,0,1),X(r(1,4),1),T(-r(1,9))]})},
+ {n:'x²y²(x + y)',g:()=>({m:X(1,2,2),t:[X(1,1),X(1,0,1)]})},
+ {n:'ax²(by ± cx ± d)',g:()=>({m:X(sg()*r(2,4),2),t:[X(r(1,4),0,1),X(sg()*r(1,4),1),T(sg()*r(1,9))]})},
+ {n:'ax²y(bx + cy)',g:()=>({m:X(r(2,4),2,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1)]})},
+ {n:'−ax²y(bx ± cy ± d)',g:()=>({m:X(-r(2,4),2,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1),T(sg()*r(1,9))]})},
+ {n:'Large numbers: ax(by − c)',g:()=>({m:X(r(6,9),1),t:[X(r(4,9),0,1),T(sg()*r(3,12))]})},
+ {n:'Boss: two letters with powers',g:()=>{const k=r(0,2);return k===0?{m:X(sg()*r(1,3),2,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1),T(sg()*r(1,9))]}:k===1?{m:X(sg(),1,2),t:[X(1,2),X(sg(),1,1),X(sg(),0,2)]}:{m:X(sg()*r(2,5),2),t:[X(r(1,3),0,1),X(sg()*r(1,4),1),T(sg()*r(1,9))]};}}
+].map(o=>Object.assign(o,{L:2,pw:1}));
+const S5=[ // three letters
+ {n:'xy(x + y + z)',g:()=>({m:X(1,1,1),t:[X(1,1),X(1,0,1),X(1,0,0,1)]})},
+ {n:'xyz(x + y + z)',g:()=>({m:X(1,1,1,1),t:[X(1,1),X(1,0,1),X(1,0,0,1)]})},
+ {n:'x²(x + y + z)',g:()=>({m:X(1,2),t:[X(1,1),X(1,0,1),X(1,0,0,1)]})},
+ {n:'ax(by ± cz ± d)',g:()=>({m:X(r(2,5),1),t:[X(r(1,4),0,1),X(sg()*r(1,4),0,0,1),T(sg()*r(1,9))]})},
+ {n:'xz(xy − z)',g:()=>({m:X(1,1,0,1),t:[X(1,1,1),X(-1,0,0,1)]})},
+ {n:'−xyz(ax ± by ± cz)',g:()=>({m:X(-1,1,1,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1),X(sg()*r(1,3),0,0,1)]})},
+ {n:'Four terms with powers',g:()=>({m:X(sg()*r(1,3),1,1),t:[X(r(1,3),2),X(sg()*r(1,3),0,1),X(sg()*r(1,3),0,0,1),T(sg()*r(1,9))]})},
+ {n:'Boss: three letters with powers',g:()=>{const k=r(0,2);return k===0?{m:X(sg()*r(1,3),1,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1),X(sg()*r(1,3),0,0,1)]}:k===1?{m:X(sg(),2,0,1),t:[X(1,1),X(sg(),0,1),X(sg(),0,0,1),T(sg()*r(1,9))]}:{m:X(sg()*r(2,4),1,1,1),t:[X(r(1,3),2),X(sg()*r(1,3),0,2),X(sg()*r(1,3),0,0,2)]};}}
+].map(o=>Object.assign(o,{L:3,pw:1}));
+
+const S6=[ // negative inside, and mixed bosses
+ {n:'x²(−bx − c)',g:()=>({m:X(1,2),t:[X(-r(2,5),1),T(-r(1,9))]}),L:1},
+ {n:'a(−bx − c)',g:()=>({m:T(r(2,6)),t:[X(-r(2,5),1),T(-r(1,9))]}),L:1},
+ {n:'−a(−bx − c)',g:()=>({m:T(-r(2,6)),t:[X(-r(2,5),1),T(-r(1,9))]}),L:1},
+ {n:'−x²(−x − b)',g:()=>({m:X(-1,2),t:[X(-1,1),T(-r(1,9))]}),L:1},
+ {n:'−ax(−bx² − cx − d)',g:()=>({m:X(-r(2,4),1),t:[X(-r(1,3),2),X(-r(1,4),1),T(-r(1,9))]}),L:1},
+ {n:'xyz(xy − yz)',g:()=>({m:X(1,1,1,1),t:[X(1,1,1),X(-1,0,1,1)]}),L:3},
+ {n:'Mega boss: anything so far',g:()=>pick(POOL_ALL).g(),L:3}
+].map(o=>Object.assign(o,{pw:1}));
+const POOL_ALL=S1.concat(S2,S3,S4,S5,S6.slice(0,6));
+const SPECS=S1.concat(S2,S3,S4,S5,S6);
 const mul=(a,b)=>{const p={};for(const k in a.p)p[k]=(p[k]||0)+a.p[k];for(const k in b.p)p[k]=(p[k]||0)+b.p[k];return{c:a.c*b.c,p};};
 const rename=(t,mp)=>{const p={};for(const k in t.p)p[mp[k]]=(p[mp[k]]||0)+t.p[k];return{c:t.c,p};};
-const SUP={1:'',2:'²',3:'³'};
+const SUP={1:'',2:'²',3:'³',4:'⁴',5:'⁵',6:'⁶',7:'⁷',8:'⁸',9:'⁹'};
+const SUPS='²³⁴⁵⁶⁷⁸⁹';
 function varStr(p){return Object.keys(p).sort().map(k=>k+(p[k]===1?'':(SUP[p[k]]||'^'+p[k]))).join('');}
 function fmt(t,first,spaced){
   const neg=t.c<0,ac=Math.abs(t.c),vs=varStr(t.p);
@@ -3231,11 +3900,11 @@ function fmt(t,first,spaced){
   return(neg?' − ':' + ')+body;
 }
 function parse(s,L){
-  s=s.replace(/[−–]/g,'-').replace(/\s/g,'').replace(/^\+/,'').replace(/²/g,'^2');
-  const m=s.match(new RegExp('^(-?)(\\d*)((?:['+L.join('')+'](?:\\^2)?)*)$'));
+  s=s.replace(/[−–]/g,'-').replace(/\s/g,'').replace(/^\+/,'').replace(/[²³⁴⁵⁶⁷⁸⁹]/g,c=>'^'+(SUPS.indexOf(c)+2));
+  const m=s.match(new RegExp('^(-?)(\\d*)((?:['+L.join('')+'](?:\\^\\d)?)*)$'));
   if(!m||(m[2]===''&&!m[3]))return null;
-  const p={};let rest=m[3];const re=new RegExp('(['+L.join('')+'])(\\^2)?','g');let x;
-  while((x=re.exec(rest)))p[x[1]]=(p[x[1]]||0)+(x[2]?2:1);
+  const p={};let rest=m[3];const re=new RegExp('(['+L.join('')+'])(?:\\^(\\d))?','g');let x;
+  while((x=re.exec(rest)))p[x[1]]=(p[x[1]]||0)+(x[2]?+x[2]:1);
   return{c:(m[2]===''?1:+m[2])*(m[1]?-1:1),p};
 }
 const same=(a,b)=>{if(!a||a.c!==b.c)return false;const ka=Object.keys(a.p),kb=Object.keys(b.p);return ka.length===kb.length&&ka.every(k=>a.p[k]===b.p[k]);};
@@ -3254,8 +3923,8 @@ REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Alg
   const stage=$('#exs'),svg=$('#exsv'),chips=[],pad=$('#expad');
   function buildPad(){
     pad.innerHTML='';
-    const ks=['7','8','9','del','4','5','6','neg','1','2','3','sq','0',...L];
-    ks.forEach(k=>{const b=el('button','key'+(k==='del'?' del':'')+(L.includes(k)?' var':''),k==='del'?'⌫':k==='neg'?'−':k==='sq'?'²':k);b.dataset.k=k;b.onclick=()=>press(k);pad.appendChild(b);});
+    const ks=['7','8','9','del','4','5','6','neg','1','2','3','sq','0',...L].concat(spec.pw?['pow']:[]);
+    ks.forEach(k=>{const b=el('button','key'+(k==='del'?' del':'')+(L.includes(k)?' var':''),k==='del'?'⌫':k==='neg'?'−':k==='sq'?'²':k==='pow'?'xⁿ':k);b.dataset.k=k;b.onclick=()=>press(k);pad.appendChild(b);});
     const ok=el('button','key ok','Check ✓');ok.dataset.k='ok';ok.style.gridColumn='1 / -1';ok.onclick=()=>press('ok');pad.appendChild(ok);
   }
   function build(){
@@ -3284,7 +3953,7 @@ REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Alg
       const c=chips[i];c.style.left=(x0+x1)/2+'px';c.style.top=(y0-hh*.75)+'px';});
     svg.innerHTML=h;
   }
-  const shown=()=>buf.replace(/\^2/g,'²').replace(/-/g,'−');
+  const shown=()=>buf.replace(/\^(\d)/g,(m,d)=>SUPS[d-2]).replace(/-/g,'−');
   const tm=(t)=>t.c<0?'('+fmt(t,true)+')':fmt(t,true);
   function draw(){
     chips.forEach((c,i)=>{c.className='ex-chip'+(done[i]?' ok':'')+(i===act&&!done[i]?' on':'');
@@ -3295,10 +3964,13 @@ REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Alg
   function press(k){
     if(done.every(Boolean)||document.querySelector('.overlay')||Date.now()-lastClose<200)return;
     const hasL=/[a-z]/.test(buf);
-    if(k==='del')buf=buf.endsWith('^2')?buf.slice(0,-2):buf.slice(0,-1);
+    if(k==='del')buf=/\^\d$/.test(buf)?buf.slice(0,-2):buf.slice(0,-1);
     else if(k==='neg')buf=buf.startsWith('-')?buf.slice(1):'-'+buf;
     else if(L.includes(k)){if(!buf.includes(k))buf+=k;}
     else if(k==='sq'){if(/[a-z]$/.test(buf))buf+='^2';}
+    else if(k==='pow'){if(/[a-z]$/.test(buf))buf+='^';}
+    else if(/^[2-9]$/.test(k)&&buf.endsWith('^'))buf+=k;
+    else if(/^[01]$/.test(k)&&buf.endsWith('^'))return;
     else if(k==='ok')return check();
     else if(!hasL&&buf.replace('-','').length<4)buf+=k;
     draw();
@@ -3310,7 +3982,7 @@ REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Alg
     const mA=Math.abs(m.c),tA=Math.abs(t.c);
     const row=(ok,title,good,bad)=>ok?'':`<div class="ex-ck ${ok?'g':'b'}"><span>❌</span><div><b>${title}</b><br>${bad}</div></div>`;
     const sameSign=(m.c<0)===(t.c<0);
-    let h=`<h2>❌ Not quite</h2><div class="ex-q">${tm(m)} × ${tm(t)}</div><div class="ex-you">You typed: <b>${shown()?buf.replace(/\^2/g,'²').replace(/-/g,'−'):'?'}</b></div>`;
+    let h=`<h2>❌ Not quite</h2><div class="ex-q">${tm(m)} × ${tm(t)}</div><div class="ex-you">You typed: <b>${shown()||'?'}</b></div>`;
     h+=row(numOk,'The number part','The numbers are right.',`Multiply the numbers in front: <b>${mA} × ${tA}</b>. (A letter on its own, like x, has an invisible 1 in front.) Check your times table.`);
     h+=row(sgnOk,'The sign',`The sign is right.`,`The two signs are <b>${m.c<0?'−':'+'}</b> and <b>${t.c<0?'−':'+'}</b>. ${sameSign?'Same signs give a <b>positive</b> answer.':'Different signs give a <b>negative</b> answer.'}`);
     h+=row(letOk,'The letters','The letters are right.',`Outside the bracket: <b>${lettersOf(m)}</b>. Inside: <b>${lettersOf(t)}</b>. Keep every letter from both, and add the powers when a letter is repeated (x × x = x², x × y = xy).`);
@@ -3343,7 +4015,7 @@ REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Alg
   $('#exh').onclick=()=>{if(done.every(Boolean))return;const p=Q.prod[act],vs=varStr(p.p);
     $('#exmsg').innerHTML='💡 Multiply the numbers, then combine the letters. '+(p.c<0?'The answer is negative. ':'The answer is positive. ')+(vs?`It contains: ${vs}.`:'It is just a number.');};
   $('#exn').onclick=build;
-  ctx.keys=e=>{const k=e.key.toLowerCase();if(/^[0-9]$/.test(k))press(k);else if(k==='-')press('neg');else if(L.includes(k))press(k);else if(k==='^')press('sq');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};
+  ctx.keys=e=>{const k=e.key.toLowerCase();if(/^[0-9]$/.test(k))press(k);else if(k==='-')press('neg');else if(L.includes(k))press(k);else if(k==='^')press('pow');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};
   const rs=()=>{if(Q){place();draw();}};window.addEventListener('resize',rs);ctx.cleanups.push(()=>window.removeEventListener('resize',rs));
   window.__exq=()=>({Q,L,press,get done(){return done}});
   build();
@@ -3761,6 +4433,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
 
 (function(){
 const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+const pick=window.pick||(a=>a[Math.floor(Math.random()*a.length)]);
 const LV=[
  {n:'x² + 5x + 6 · all positive',a1:1,sg:'pp',r:[1,5]},
  {n:'All positive · up to 6',a1:1,sg:'pp',r:[1,6]},
@@ -3787,27 +4460,80 @@ const LV=[
  {n:'Boss: anything goes!',mx:5,sg:'any',r:[1,10]},
  {n:'Boss 2: the hardest',mx:6,sg:'any',r:[1,12]}
 ];
+// ---- GCSE extension (levels 25+): common factors, perfect squares, factor first, solving ----
+const M1={a1:1,r:[1,9]};
+LV.push(
+ {n:'Common factor · x² + 5x',type:'cf',kr:[1,1],mr:[1,1],nr:[1,9],sgn:'pos'},
+ {n:'Common factor · x² − 7x',type:'cf',kr:[1,1],mr:[1,1],nr:[1,9],sgn:'neg'},
+ {n:'Common factor · 3x² + 6x',type:'cf',kr:[2,5],mr:[1,1],nr:[1,6],sgn:'pos'},
+ {n:'Common factor · 6x² − 9x',type:'cf',kr:[2,4],mr:[2,4],nr:[1,6],sgn:'any'},
+ {n:'Common factor · any signs and sizes',type:'cf',kr:[1,6],mr:[1,5],nr:[1,9],sgn:'any'},
+ {n:'Perfect squares · (x + p)²',a1:1,sg:'sq',r:[1,9]},
+ {n:'Perfect squares · (x − p)²',a1:1,sg:'sqn',r:[1,9]},
+ {n:'Perfect squares · (mx ± p)²',mx:4,sg:'sqa',r:[1,7]},
+ {n:'Difference of two squares · 9x² − 16',mx:4,sg:'dos',r:[1,5]},
+ {n:'Difference of two squares · bigger numbers',mx:6,sg:'dos',r:[1,9]},
+ {n:'Difference of two squares · all kinds',pool:[{a1:1,sg:'dos',r:[2,12]},{mx:5,sg:'dos',r:[1,7]}]},
+ {n:'Take out a factor first · 2x² + 10x + 12',type:'cf2',k:[2,3],inner:{a1:1,sg:'pp',r:[1,6]}},
+ {n:'Take out a factor first · minus in the middle',type:'cf2',k:[2,4],inner:{a1:1,sg:'nn',r:[1,6]}},
+ {n:'Take out a factor first · minus at the end',type:'cf2',k:[2,4],inner:{a1:1,sg:'mix',r:[1,7]}},
+ {n:'Take out a factor first · any signs',type:'cf2',k:[2,5],inner:{a1:1,sg:'any',r:[1,8]}},
+ {n:'Take out a factor first · difference of two squares',type:'cf2',k:[2,5],inner:{a1:1,sg:'dos',r:[1,7]}},
+ {n:'Take out a factor first · number in front',type:'cf2',k:[2,3],inner:{mx:3,sg:'any',r:[1,5]}},
+ {n:'Solve · x² + 5x + 6 = 0',a1:1,sg:'pp',r:[1,6],solve:1},
+ {n:'Solve · minus in the middle',a1:1,sg:'nn',r:[1,8],solve:1},
+ {n:'Solve · minus at the end',a1:1,sg:'mix',r:[1,8],solve:1},
+ {n:'Solve · difference of two squares',a1:1,sg:'dos',r:[2,12],solve:1},
+ {n:'Solve · common factor x² + 5x = 0',type:'cf',kr:[1,3],mr:[1,1],nr:[1,9],sgn:'any',solve:1},
+ {n:'Solve · perfect squares',a1:1,sg:'sq',r:[1,9],solve:1,neg:'any'},
+ {n:'Solve · any monic quadratic',a1:1,sg:'any',r:[1,12],solve:1},
+ {n:'Solve · take out a factor first',type:'cf2',k:[2,4],inner:{a1:1,sg:'any',r:[1,8]},solve:1},
+ {n:'Larger numbers · up to 20',a1:1,sg:'any',r:[1,20]},
+ {n:'Number in front · larger numbers',mx:6,sg:'any',r:[1,12]},
+ {n:'Boss: factorise anything',pool:null},
+ {n:'Boss: solve anything',pool:null}
+);
+LV[LV.length-2].pool=LV.filter(x=>x.pool===undefined&&!x.solve);
+LV[LV.length-1].pool=LV.filter(x=>x.solve);
+
 const R_=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const sg=()=>Math.random()<.5?-1:1;
-function gen(sp){
-  for(let at=0;at<2000;at++){
+function genStd(sp){
+  for(let at=0;at<3000;at++){
+    const sqk=sp.sg==='sq'||sp.sg==='sqn'||sp.sg==='sqa';
     const m=sp.a1?1:R_(1,sp.mx),n=sp.a1?1:R_(1,sp.mx);
-    if(!sp.a1&&m*n<2)continue;
+    if(!sp.a1&&m*n<2&&!sqk)continue;
     let p=R_(sp.r[0],sp.r[1]),q=R_(sp.r[0],sp.r[1]);
     if(sp.sg==='nn'){p=-p;q=-q;}
     else if(sp.sg==='mix'){if(Math.random()<.5)p=-p;else q=-q;}
     else if(sp.sg==='any'){p*=sg();q*=sg();}
-    else if(sp.sg==='dos'){if(!sp.a1){/* (mx+p)(mx-p) */}}
     let mm=m,nn=n;
     if(sp.sg==='dos'){if(sp.a1){q=-p;p=Math.abs(p);q=-p;}else{nn=mm;q=-p;p=Math.abs(p);q=-p;if(mm<2)continue;}}
+    if(sqk){nn=mm;if(sp.sg==='sqn')p=-p;else if(sp.sg==='sqa'||sp.neg==='any')p*=sg();q=p;if(sp.sg==='sqa'&&mm<2)continue;}
     if(gcd(mm,p)!==1||gcd(nn,q)!==1)continue;
     const a=mm*nn,b=mm*q+nn*p,c=p*q;
     if(sp.sg!=='dos'&&b===0)continue;
-    if(sp.sg!=='dos'&&sp.sg!=='any'&&b===0)continue;
     if(gcd(gcd(a,b),c)!==1)continue;
-    return{a,b,c,m:mm,p,n:nn,q};
+    return{a,b,c,m:mm,p,n:nn,q,kind:'std',solve:!!sp.solve};
   }
-  return{a:1,b:5,c:6,m:1,p:2,n:1,q:3};
+  return{a:1,b:5,c:6,m:1,p:2,n:1,q:3,kind:'std',solve:!!sp.solve};
+}
+function gen(sp){
+  if(sp.pool){const s2=pick(sp.pool);return gen(s2);}
+  if(sp.type==='cf'){
+    for(let at=0;at<2000;at++){
+      const k=R_(sp.kr[0],sp.kr[1]),m=R_(sp.mr[0],sp.mr[1]);let nv=R_(sp.nr[0],sp.nr[1]);
+      if(sp.sgn==='neg')nv=-nv;else if(sp.sgn==='any')nv*=sg();
+      if(gcd(m,nv)!==1)continue;
+      return{a:k*m,b:k*nv,c:0,k,m,n:nv,kind:'cf',solve:!!sp.solve};
+    }
+    return{a:3,b:6,c:0,k:3,m:1,n:2,kind:'cf',solve:!!sp.solve};
+  }
+  if(sp.type==='cf2'){
+    const inner=genStd(sp.inner),k=R_(sp.k[0],sp.k[1]);
+    return Object.assign({},inner,{kind:'cf2',k,F:{a:k*inner.a,b:k*inner.b,c:k*inner.c},solve:!!sp.solve});
+  }
+  return genStd(sp);
 }
 const absS=n=>Math.abs(n),sgnS=n=>n<0?'−':'+';
 const coef=(k,v)=>k===1?v:k+v;
@@ -3825,13 +4551,15 @@ REG.push({id:'quad',name:'Quadratic Factoriser',emoji:'🔷',color:'#d6336c',cat
   const sp=LV[lv-1];let Q,stage,sl,sel,buf,pair,cfg;
   root.innerHTML=`<div class="qd"><div class="qd-top" id="qt"></div><div class="qd-title" id="qti"></div><div class="qd-row" id="qr"></div><div class="qd-split" id="qs"></div><div class="msg" id="qm">&nbsp;</div><div class="ex-pad" id="qpad"></div><div class="toolrow"><button class="btn alt" id="qh">💡 Hint</button><button class="btn alt" id="qn">New question ⏭</button></div></div>`;
   const msg=h=>{$('#qm').innerHTML=h||'&nbsp;';};
-  function build(){Q=gen(sp);ctx.q=tagQuad(Q);ctx.q.eq=poly(Q.a,Q.b,Q.c);stage=1;pair=null;msg('');setStage();}
+  const mono=()=>Q.m===1&&Q.n===1;
+  // stages: 0 = take out the common factor first, 1 = find the pair, 2 = brackets, 3 = solve, 4 = common-factor brackets
+  function build(){Q=gen(sp);ctx.q=tagQuad(Q);ctx.q.eq=eqText();stage=Q.kind==='cf'?4:Q.kind==='cf2'?0:1;pair=null;msg('');setStage();}
+  const eqText=()=>(Q.kind==='cf2'?poly(Q.F.a,Q.F.b,Q.F.c):poly(Q.a,Q.b,Q.c))+(Q.solve?' = 0':'');
   function setStage(){
-    if(stage===1){cfg={n:2};}else cfg={n:Q.m===1&&Q.n===1&&sp.a1?2:4};
+    cfg={n:stage===0?1:stage===1?2:stage===3?2:stage===4?3:(mono()?2:4)};
     sl=Array(cfg.n).fill(null);sel=0;buf='';render();
   }
   const sh=()=>buf.replace(/-/g,'−');
-  const val=i=>sl[i];
   function slot(i,kind){ // kind: 'plain' | 'const' | 'coef'
     const v=sl[i],cur=i===sel;let t='';
     if(cur&&buf!=='')t=sh();
@@ -3839,12 +4567,22 @@ REG.push({id:'quad',name:'Quadratic Factoriser',emoji:'🔷',color:'#d6336c',cat
     return `<span class="qd-sl${cur?' cur':''}${v!==null&&!cur?' ok':''}" data-i="${i}">${t}</span>`;
   }
   function render(){
-    $('#qt').innerHTML=poly(Q.a,Q.b,Q.c);
+    const base=Q.kind==='cf2'?(stage===0?poly(Q.F.a,Q.F.b,Q.F.c):`${Q.k}( ${poly(Q.a,Q.b,Q.c)} )`):poly(Q.a,Q.b,Q.c);
+    $('#qt').innerHTML=base+(Q.solve?' = 0':'');
     const ac=Q.a*Q.c;
-    if(stage===1){
+    $('#qs').innerHTML='';
+    if(stage===0){
+      $('#qti').innerHTML='Take out the <b>highest common factor</b> of all the terms first';
+      $('#qr').innerHTML=`${slot(0,'plain')}<span class="qd-op">( … )</span>`;
+    }else if(stage===4){
+      $('#qti').innerHTML='Take out the <b>highest common factor</b>: write it as  <b>number × x × (bracket)</b>';
+      $('#qr').innerHTML=`${slot(0,'plain')}<span class="qd-op">x (</span>${slot(1,'coef')}<span class="qd-op">x</span>${slot(2,'const')}<span class="qd-op">)</span>`;
+    }else if(stage===3){
+      $('#qti').innerHTML='Now <b>solve</b> it: set each bracket equal to 0';
+      $('#qr').innerHTML=`<span class="qd-op">x =</span>${slot(0,'plain')}<span class="qd-op">or x =</span>${slot(1,'plain')}`;
+    }else if(stage===1){
       $('#qti').innerHTML=`Find two numbers that <b>multiply</b> to <b>${ac<0?'−'+absS(ac):ac}</b>${Q.a>1?` <small>(${Q.a} × ${Q.c<0?'('+Q.c+')':Q.c})</small>`:''} and <b>add</b> to <b>${Q.b<0?'−'+absS(Q.b):Q.b}</b>`;
       $('#qr').innerHTML=`${slot(0,'plain')}<span class="qd-op">and</span>${slot(1,'plain')}`;
-      $('#qs').innerHTML='';
     }else{
       $('#qti').innerHTML='Now write the <b>brackets</b>';
       if(cfg.n===2)$('#qr').innerHTML=`<span class="qd-op">(x</span>${slot(0,'const')}<span class="qd-op">)(x</span>${slot(1,'const')}<span class="qd-op">)</span>`;
@@ -3870,27 +4608,60 @@ REG.push({id:'quad',name:'Quadratic Factoriser',emoji:'🔷',color:'#d6336c',cat
     if(nx>=0){sel=nx;render();msg('');return;}
     evaluate();
   }
+  const reset=()=>{sl=sl.map(()=>null);sel=0;buf='';render();};
+  const finalText=()=>{
+    const m1=Q.m,p1=Q.p,m2=Q.n,p2=Q.q,sqr=m1===m2&&p1===p2;
+    const body=sqr?`${br(m1,p1)}²`:`${br(m1,p1)}${br(m2,p2)}`;
+    return `${eqText().replace(' = 0','')} = ${Q.kind==='cf2'?Q.k:''}${body}`;
+  };
+  function win(t){ctx.timeout(()=>ctx.win('Factorised!',t,build,'New question'),700);}
   function evaluate(){
+    if(stage===0){
+      const k=sl[0],fs=[Q.F.a,Q.F.b,Q.F.c];
+      if(k===Q.k){stage=1;msg(`✅ Yes! ${Q.F.a}, ${Q.F.b} and ${Q.F.c} all divide by ${k}. Now factorise the quadratic inside.`);setStage();return;}
+      ctx.log('wrong',{stage:'factor',typed:k,expect:Q.k,poly:eqText()});
+      msg(fs.every(v=>v%k===0&&k>0)?`❌ ${k} divides every term, but it is not the <b>highest</b> common factor — look for a bigger one.`:`❌ ${k} does not divide every term (${fs.join(', ')}). Try again.`);reset();return;
+    }
+    if(stage===4){
+      const [k,m,nn]=sl,e1=k*m,e2=k*nn;
+      if(e1===Q.a&&e2===Q.b&&k===Q.k&&m===Q.m&&nn===Q.n){
+        if(Q.solve){stage=3;msg(`✅ ${poly(Q.a,Q.b,0)} = ${Q.k===1?'':Q.k}x(${Q.m===1?'':Q.m}x ${sgnS(Q.n)} ${absS(Q.n)}).`);setStage();return;}
+        msg('✅ Correct!');win(`${poly(Q.a,Q.b,0)} = ${Q.k===1?'':Q.k}x(${Q.m===1?'':Q.m}x ${sgnS(Q.n)} ${absS(Q.n)})`);return;}
+      ctx.log('wrong',{stage:'cf',typed:[k,m,nn],poly:poly(Q.a,Q.b,0)});
+      if(e1!==Q.a||e2!==Q.b)msg(`❌ ${k}x(${m===1?'':m}x ${sgnS(nn)} ${absS(nn)}) multiplies out to <b>${poly(e1,e2,0)}</b>, not ${poly(Q.a,Q.b,0)}.`);
+      else msg(`❌ That multiplies out correctly, but you can take out <b>more</b>: the bracket must not have a common factor left. Use the <b>highest</b> common factor.`);
+      reset();return;
+    }
+    if(stage===3){
+      const r=[sl[0],sl[1]].sort((a,b)=>a-b),want=(Q.kind==='cf'?[0,-Q.n/Q.m]:[-Q.p,-Q.q]).sort((a,b)=>a-b);
+      if(r[0]===want[0]&&r[1]===want[1]){msg('✅ Correct!');win(`${eqText()} → ${finalRoots()}`);return;}
+      ctx.log('wrong',{stage:'solve',typed:sl.slice(),expect:want,poly:eqText()});
+      msg('❌ Not quite. Set each bracket equal to 0 and solve: (x + 3) = 0 gives x = −3. Flip the sign of the number in the bracket!');reset();return;
+    }
     if(stage===1){
-      const [u,v]=sl,ac=Q.a*Q.c,bad=[];
-      if(u*v!==ac)bad.push(`${u} × ${v} = ${u*v}, but they must multiply to ${ac}.`);
+      const [u,v]=sl,acv=Q.a*Q.c,bad=[];
+      if(u*v!==acv)bad.push(`${u} × ${v} = ${u*v}, but they must multiply to ${acv}.`);
       if(u+v!==Q.b)bad.push(`${u} + ${v} = ${u+v}, but they must add to ${Q.b}.`);
-      if(!bad.length){pair=[u,v];stage=2;msg('✅ Yes! '+u+' × '+v+' = '+ac+' and '+u+' + '+v+' = '+Q.b);setStage();return;}
-      ctx.log('wrong',{stage:'pair',typed:[u,v],ac,b:Q.b,poly:poly(Q.a,Q.b,Q.c),prod_ok:u*v===ac,sum_ok:u+v===Q.b});
-      msg('❌ '+bad.join(' '));sl=sl.map(()=>null);sel=0;buf='';render();return;
+      if(!bad.length){pair=[u,v];stage=2;msg('✅ Yes! '+u+' × '+v+' = '+acv+' and '+u+' + '+v+' = '+Q.b);setStage();return;}
+      ctx.log('wrong',{stage:'pair',typed:[u,v],ac:acv,b:Q.b,poly:poly(Q.a,Q.b,Q.c),prod_ok:u*v===acv,sum_ok:u+v===Q.b});
+      msg('❌ '+bad.join(' '));reset();return;
     }
     const m1=cfg.n===2?1:sl[0],p1=cfg.n===2?sl[0]:sl[1],m2=cfg.n===2?1:sl[2],p2=cfg.n===2?sl[1]:sl[3];
     const e=expand(m1,p1,m2,p2);
     if(m1>0&&m2>0&&e.a===Q.a&&e.b===Q.b&&e.c===Q.c){
-      msg('✅ Correct!');const res=`${br(m1,p1)}${br(m2,p2)}`;
-      ctx.timeout(()=>ctx.win('Factorised!',`${poly(Q.a,Q.b,Q.c)} = ${res}`,build,'New question'),700);return;}
+      if(Q.solve){stage=3;msg(`✅ Factorised! ${poly(Q.a,Q.b,Q.c)} = ${br(m1,p1)}${br(m2,p2)}`);setStage();return;}
+      msg('✅ Correct!');win(finalText());return;}
     ctx.log('wrong',{stage:'brackets',typed:[m1,p1,m2,p2],expands:e,poly:poly(Q.a,Q.b,Q.c)});
     msg(`❌ Your brackets multiply out to <b>${poly(e.a,e.b,e.c)}</b>, not ${poly(Q.a,Q.b,Q.c)}. ${e.c!==Q.c?'Check the last numbers (signs too).':e.a!==Q.a?'Check the numbers in front of x.':'Check the middle term — try swapping which bracket gets which number.'}`);
-    sl=sl.map(()=>null);sel=0;buf='';render();
+    reset();
   }
+  const finalRoots=()=>{const w=(Q.kind==='cf'?[0,-Q.n/Q.m]:[-Q.p,-Q.q]).map(v=>String(v).replace('-','−'));return w[0]===w[1]?`x = ${w[0]}`:`x = ${w[0]} or x = ${w[1]}`;};
   $('#qh').onclick=()=>{const ac=Q.a*Q.c;
-    msg(stage===1?`💡 List the factor pairs of ${absS(ac)}. If the multiply number is positive, both numbers have the same sign (as the middle number); if it is negative, one is + and one is −. Then see which pair adds to ${Q.b}.`
-      :(Q.a===1?'💡 Put your two numbers in the brackets: (x + first)(x + second). Keep their signs.':'💡 Split the middle term with your two numbers, then take a common factor out of each half — the same bracket appears twice.'));};
+    msg(stage===0?'💡 Find the biggest number that divides every term (the number in front of x², the number in front of x and the last number).'
+      :stage===4?'💡 Take out the biggest number AND a letter x from both terms. If there is no number to take out, the number is 1.'
+      :stage===3?'💡 If (x + 3)(x − 5) = 0 then one bracket must be 0: x + 3 = 0 gives x = −3 and x − 5 = 0 gives x = 5. The sign flips!'
+      :stage===1?`💡 List the factor pairs of ${absS(ac)}. If the multiply number is positive, both numbers have the same sign (as the middle number); if it is negative, one is + and one is −. Then see which pair adds to ${Q.b}.`
+      :(mono()?'💡 Put your two numbers in the brackets: (x + first)(x + second). Keep their signs.':'💡 Split the middle term with your two numbers, then take a common factor out of each half — the same bracket appears twice.'));};
   $('#qn').onclick=build;
   ctx.keys=e=>{const k=e.key;if(/^[0-9]$/.test(k))press(k);else if(k==='-')press('neg');else if(k==='Backspace')press('del');else if(k==='Enter')press('ok');};
   window.__qq=()=>({get Q(){return Q},get stage(){return stage},press,commit,select:i=>{sel=i;buf='';render();}});
@@ -4138,6 +4909,7 @@ bk-letters-1|1 letter|1 個字母
 bk-letters-2|2 letters|2 個字母
 bk-letters-3|3 letters|3 個字母
 bk-gives-square|x² in answer|答案有平方
+bk-high-power|power of 4 or more|四次或以上
 bk-sq-inside|x² inside|括號內有平方項
 bk-coef-inside|coefficients inside|括號內有係數
 bk-multi-outside|xy outside|括號外有多個字母
@@ -4159,6 +4931,10 @@ qd-all-positive|all positive|全部正數
 qd-neg-middle|minus in the middle|中間係負數
 qd-neg-last|minus at the end|最後一項係負數
 qd-dos|difference of two squares|平方差
+qd-common-factor|common factor|公因數
+qd-factor-first|take out a common factor first|先提公因數
+qd-perfect-square|perfect square|完全平方
+qd-solve|solve the equation|解方程
 ln-gradient-only|gradient only|只調 m
 ln-intercept-only|intercept only|只調 c
 ln-both|gradient and intercept|m 同 c
@@ -4167,6 +4943,12 @@ ln-frac-gradient|fractional gradient|分數斜率
 ln-flat|horizontal line|水平線
 ln-steep|steep line|斜率大
 ln-neg-intercept|negative intercept|負截距
+ln-read-graph|read the equation from a graph|由圖像讀方程
+ln-parallel|parallel lines|平行線
+ln-perpendicular|perpendicular lines|垂直線
+ln-rearrange|rearrange to y = mx + c|整理成 y = mx + c
+ln-standard-form|ax + by = c form|ax + by = c 形式
+ln-fraction-rearrange|rearranging with a coefficient on y|y 前面有係數
 fa-prime|prime|質數
 fa-composite|composite|合成數
 fa-square|square number|平方數
@@ -4188,6 +4970,21 @@ fr-mixed-improper|mixed ↔ improper|帶分數轉假分數
 fr-mul|multiply|乘
 fr-div|divide|除
 fr-reverse|find the whole|倒推原數
+fr-compare|compare and order|比較大細
+fr-hcf|highest common factor|最大公因數
+fr-express|one quantity as a fraction of another|化為分數
+fr-remaining|what is left|剩下幾多
+fr-improper|improper fractions|假分數
+fr-unit|units and fractions|單位同分數
+fr-brackets|brackets and order of operations|括號同運算次序
+fr-reciprocal|reciprocals|倒數
+fr-decimal|fractions and decimals|分數同小數
+fr-percent|fractions and percentages|分數同百分比
+fr-word|word problems|文字題
+fr-ratio|ratio and fractions|比同分數
+fr-unit-frac|unit fractions|單位分數
+fr-algebra|fractions in algebra|分數代數
+fr-power|squaring fractions|分數平方
 pc-read-grid|percent of a grid|睇格仔寫百分比
 pc-of-amount|percent of an amount|求某數嘅百分之幾
 pc-easy|10% / 25% / 50%|簡單百分比
@@ -4205,6 +5002,21 @@ pc-reverse|reverse percentage|逆向百分比
 pc-interest|interest|利息
 pc-simple-interest|simple interest|單利息
 pc-compound-interest|compound interest|複利息
+pc-mental|mental percentages|心算百分比
+pc-multiplier|multipliers|乘數
+pc-express|one amount as a percentage of another|求百分比
+pc-unit|units and percentages|單位同百分比
+pc-part-total|parts of a total|整體嘅部分
+pc-find-whole|find the whole|求原數
+pc-from-percent|from a percentage|百分比轉換
+pc-points|percentage points|百分點
+pc-profit-loss|profit and loss|盈虧
+pc-successive|successive changes|連續變化
+pc-depreciation|depreciation|貶值
+pc-ratio|ratio and percentage|比同百分比
+pc-offers|comparing offers|比較優惠
+pc-tax|tax, tips and commission|稅、貼士同佣金
+pc-pie|pie charts|圓形圖
 pr-bag|bag of balls|袋入面揀波
 pr-not|not event|「唔係」事件
 pr-or|or event|「或者」事件
@@ -4312,6 +5124,14 @@ tf-sf-2|scale factor 2|比例 2
 tf-sf-3|scale factor 3|比例 3
 tf-shape-3|triangle|三角形
 tf-shape-4|quadrilateral|四邊形
+tf-rot-270|270°|270°
+tf-rot-centre|about a point (not the origin)|繞某點旋轉
+tf-enl-centre|centre not the origin|放大中心唔係原點
+tf-sf-half|scale factor ½|比例 ½
+tf-sf-neg|negative scale factor|負比例
+tf-combined|two-step transformation|兩步變換
+tf-describe|describe the transformation|描述變換
+tf-inverse|undo a transformation|還原變換
 dd-1-die|one die|1 粒骰
 dd-2-dice|two dice|2 粒骰
 dd-3-dice|three dice|3 粒骰
@@ -4337,9 +5157,9 @@ function tagExpand(q){
   const no=q.m.c<0,ni=q.t.some(t=>t.c<0),L=Math.min(3,letters([q.m,...q.t]).size),sq=q.t.some(t=>maxExp(t)>=2),
         coef=q.t.some(t=>Math.abs(t.c)>1),mo=Object.keys(q.m.p).length>=2||maxExp(q.m)>=2,big=prod.some(t=>Math.abs(t.c)>=20);
   if(no)tags.push('bk-neg-outside');if(ni)tags.push('bk-neg-inside');if(no&&ni)tags.push('bk-neg-times-neg');
-  tags.push('bk-letters-'+L);if(prod.some(t=>maxExp(t)>=2))tags.push('bk-gives-square');
+  tags.push('bk-letters-'+L);if(prod.some(t=>maxExp(t)>=2))tags.push('bk-gives-square');const hp=prod.some(t=>maxExp(t)>=4);if(hp)tags.push('bk-high-power');
   if(sq)tags.push('bk-sq-inside');if(coef)tags.push('bk-coef-inside');if(mo)tags.push('bk-multi-outside');if(big)tags.push('big-numbers');
-  const d=1+.9*(nt-1)+(vo?1.4:0)+(no?1:0)+(ni?.5:0)+(no&&ni?.8:0)+(L-1)*.8+(sq?.8:0)+(coef?.5:0)+(mo?1:0)+(big?.5:0);
+  const d=(hp?.8:0)+(nt>=5?.6:0)+1+.9*(nt-1)+(vo?1.4:0)+(no?1:0)+(ni?.5:0)+(no&&ni?.8:0)+(L-1)*.8+(sq?.8:0)+(coef?.5:0)+(mo?1:0)+(big?.5:0);
   return fin(tags,d);
 }
 /* ---------- Factorise It!: q = {terms,H,cv} ---------- */
@@ -4354,10 +5174,18 @@ function tagFactorise(q){
 }
 /* ---------- Quadratic Factoriser: q = {a,b,c,m,p,n,q} ---------- */
 function tagQuad(q){
-  const tags=[q.a===1?'qd-monic':'qd-lead-coef'],dos=q.b===0&&q.c<0;
-  if(dos)tags.push('qd-dos');else{if(q.b>0&&q.c>0)tags.push('qd-all-positive');if(q.b<0&&q.c>0)tags.push('qd-neg-middle');if(q.c<0)tags.push('qd-neg-last');}
-  const big=Math.max(Math.abs(q.p),Math.abs(q.q))>=10||Math.abs(q.c)>=50;if(big)tags.push('big-numbers');
-  const d=(q.a>1?4.5:2)+(!dos&&q.b<0&&q.c>0?1:0)+(!dos&&q.c<0?1.5:0)+(dos?.5:0)+(big?1:0)+(q.a>1&&Math.max(q.m,q.n)>=3?1:0);
+  const kind=q.kind||'std',tags=[];
+  const sq=kind!=='cf'&&q.m===q.n&&q.p===q.q&&q.p!==0,dos=kind!=='cf'&&q.b===0&&q.c<0;
+  if(kind==='cf')tags.push('qd-common-factor');
+  else{tags.push(q.m===1&&q.n===1?'qd-monic':'qd-lead-coef');
+    if(dos)tags.push('qd-dos');else if(sq)tags.push('qd-perfect-square');else{if(q.b>0&&q.c>0)tags.push('qd-all-positive');if(q.b<0&&q.c>0)tags.push('qd-neg-middle');if(q.c<0)tags.push('qd-neg-last');}}
+  if(kind==='cf2')tags.push('qd-factor-first');
+  if(q.solve)tags.push('qd-solve');
+  const big=kind==='cf'?Math.abs(q.b)>=40:(Math.max(Math.abs(q.p),Math.abs(q.q))>=10||Math.abs(q.c)>=50);if(big)tags.push('big-numbers');
+  let d;
+  if(kind==='cf')d=2+(q.k>1?1:0)+(q.m>1?1:0)+(q.n<0?.5:0);
+  else d=(q.a>1?4.5:2)+(!dos&&q.b<0&&q.c>0?1:0)+(!dos&&q.c<0?1.5:0)+(dos?.5:0)+(sq?-.3:0)+(big?1:0)+(q.a>1&&Math.max(q.m,q.n)>=3?1:0)+(kind==='cf2'?1.5:0);
+  if(q.solve)d+=1.2;
   return fin(tags,d);
 }
 /* ---------- Line Hunter: P = {m,c,st,s} ---------- */
@@ -4365,7 +5193,8 @@ function tagLine(P){
   const s=P.s,tags=[s.fixC?'ln-gradient-only':s.fixM?'ln-intercept-only':'ln-both'];
   if(P.m<0)tags.push('ln-neg-gradient');if(P.m%1!==0)tags.push('ln-frac-gradient');if(P.m===0)tags.push('ln-flat');if(Math.abs(P.m)>=3)tags.push('ln-steep');
   if(P.c<0)tags.push('ln-neg-intercept');
-  const d=(s.fixC||s.fixM?2:3.5)+(P.m<0?.8:0)+(P.m%1!==0?1.5:0)+(Math.abs(P.m)>=3?.7:0)+(P.c<0?.5:0)+(s.boss?2:0);
+  const mode=s.mode||'star';if(mode==='read')tags.push('ln-read-graph');if(mode==='par')tags.push('ln-parallel');if(mode==='perp')tags.push('ln-perpendicular');if(mode==='eq')tags.push('ln-rearrange');if(P.form==='xy'||P.form==='std2')tags.push('ln-standard-form');if(P.form==='2y'||P.form==='3y'||P.form==='half')tags.push('ln-fraction-rearrange');
+  const md2=s.mode,d=(md2==='read'?1.5:0)+(md2==='par'?1:0)+(md2==='perp'?3:0)+(md2==='eq'?2.5:0)+(P.form==='2y'||P.form==='3y'||P.form==='std2'||P.form==='half'?1.2:0)+(s.fixC||s.fixM?2:3.5)+(P.m<0?.8:0)+(P.m%1!==0?1.5:0)+(Math.abs(P.m)>=3?.7:0)+(P.c<0?.5:0)+(s.boss?2:0);
   return fin(tags,d,{eq:'y = '+(P.m===0?'':P.m+'x + ')+P.c});
 }
 /* ---------- Ball Factory: N ---------- */
@@ -4378,14 +5207,17 @@ function tagFactors(N){
 }
 /* ---------- Transform Quest: task = {t:instruction}, shape n ---------- */
 function tagTransform(task,n){
-  const t=task.t,tags=[];
+  const t=task.t,tags=task.tags?[...task.tags]:[];
+  if(!task.tags){
   if(/^Translate/.test(t)){tags.push('tf-translation');const v=/\((-?\d+), (-?\d+)\)/.exec(t);if(v&&(+v[1]<0||+v[2]<0))tags.push('tf-neg-vector');}
   else if(/^Reflect/.test(t)){tags.push('tf-reflection');tags.push(/line y = (−)?x/.test(t)?'tf-reflect-diagonal':/line [xy] = /.test(t)?'tf-reflect-line':'tf-reflect-axis');}
   else if(/^Rotate/.test(t)){tags.push('tf-rotation',/180/.test(t)?'tf-rot-180':'tf-rot-90');if(/anticlockwise/.test(t))tags.push('tf-anticlockwise');else if(/clockwise/.test(t))tags.push('tf-clockwise');}
-  else if(/^Enlarge/.test(t)){tags.push('tf-enlargement');const k=/factor (\d+)/.exec(t);if(k)tags.push('tf-sf-'+k[1]);}
+  else if(/^Enlarge/.test(t)){tags.push('tf-enlargement');const k=/factor (\d+)/.exec(t);if(k)tags.push('tf-sf-'+k[1]);}}
   tags.push(n===3?'tf-shape-3':'tf-shape-4');
-  const has=x=>tags.includes(x);
-  const d=(has('tf-translation')?(has('tf-neg-vector')?2.5:1.5):has('tf-reflect-axis')?3:has('tf-reflect-line')?4.5:has('tf-reflect-diagonal')?5.5:has('tf-rotation')?(has('tf-rot-180')?4:5):has('tf-sf-3')?5:4)+(n===4?.5:0);
+  const has=x=>tags.includes(x),dk=[];
+  if(has('tf-translation'))dk.push(has('tf-neg-vector')?2.5:1.5);if(has('tf-reflect-axis'))dk.push(3);if(has('tf-reflect-line'))dk.push(4.5);if(has('tf-reflect-diagonal'))dk.push(5.5);
+  if(has('tf-rotation'))dk.push(has('tf-rot-180')?4:5);if(has('tf-enlargement'))dk.push(has('tf-sf-3')?5:4);
+  const d=Math.max(1,...dk)+(has('tf-rot-centre')?1.5:0)+(has('tf-enl-centre')?1.5:0)+(has('tf-sf-half')?1:0)+(has('tf-sf-neg')?1.5:0)+(has('tf-rot-270')?.5:0)+(has('tf-combined')?2:0)+(has('tf-describe')?1:0)+(has('tf-inverse')?1.5:0)+(n===4?.5:0);
   return fin(tags,d,{eq:t});
 }
 /* ---------- quiz-style games: one table row per question type ---------- */
@@ -4393,9 +5225,19 @@ const Q=(t,d,v)=>({t,d,v:v||[]});   // t = always, v = variants that show up onl
 const QTAGS={
  fraction:{A1:Q(['fr-name-picture'],1),A2:Q(['fr-equivalent'],2),A3:Q(['fr-simplify'],2),A4:Q(['fr-of-amount'],3),A5:Q(['fr-add','fr-same-denom'],2),
   A6:Q(['fr-add','fr-diff-denom'],4),A7:Q(['fr-sub','fr-diff-denom'],4),A8:Q(['fr-mixed','fr-mixed-improper'],3),A9:Q(['fr-mul'],4),A10:Q(['fr-div'],5),
-  A11:Q(['fr-reverse','fr-of-amount'],5),A12:Q(['fr-add','fr-mixed','fr-diff-denom'],6)},
+  A11:Q(['fr-reverse','fr-of-amount'],5),A12:Q(['fr-add','fr-mixed','fr-diff-denom'],6),
+  B1:Q(['fr-compare'],4,['fr-add','fr-sub']),B2:Q(['fr-equivalent'],3,['fr-algebra']),B3:Q(['fr-simplify'],3,['fr-hcf','fr-improper']),B4:Q(['fr-of-amount'],4,['fr-unit','fr-improper','fr-add']),
+  B5:Q(['fr-express','fr-simplify'],4,['fr-unit']),B6:Q(['fr-remaining'],5,['fr-add','fr-mul','fr-of-amount']),B7:Q(['fr-mixed'],6,['fr-add','fr-sub','fr-same-denom','fr-diff-denom']),
+  B8:Q(['fr-mixed','fr-mixed-improper'],3,['fr-decimal','fr-improper']),B9:Q(['fr-mul'],5,['fr-mixed','fr-power']),B10:Q(['fr-div'],6,['fr-mixed']),B11:Q(['fr-brackets'],7,['fr-add','fr-sub','fr-mul','fr-div']),
+  B12:Q(['fr-reciprocal'],4,['fr-mixed','fr-decimal']),B13:Q(['fr-decimal'],4,['fr-simplify','fr-compare']),B14:Q(['fr-percent'],4,['fr-decimal','fr-simplify','fr-improper']),
+  B15:Q(['fr-word'],6,['fr-mul','fr-div','fr-of-amount','fr-remaining','fr-mixed']),B16:Q(['fr-reverse'],7,['fr-remaining','fr-add','fr-of-amount']),B17:Q(['fr-ratio'],5,['fr-remaining','fr-of-amount']),
+  B18:Q(['fr-unit-frac'],5,['fr-add','fr-div']),B19:Q(['fr-algebra'],6,['fr-equivalent'])},
  percent:{P1:Q(['pc-read-grid'],1),P2:Q(['pc-of-amount','pc-easy'],2),P3:Q(['pc-convert'],3,['pc-from-fraction','pc-from-decimal']),P4:Q(['pc-of-amount','pc-any'],3),P5:Q(['pc-sale','pc-decrease'],3),
-  P6:Q(['pc-increase'],4,['pc-vat']),P7:Q(['pc-as-percent'],3),P8:Q(['pc-change'],5),P9:Q(['pc-reverse','pc-increase'],6),P10:Q(['pc-reverse','pc-decrease'],6),P11:Q(['pc-interest'],6,['pc-simple-interest','pc-compound-interest'])},
+  P6:Q(['pc-increase'],4,['pc-vat']),P7:Q(['pc-as-percent'],3),P8:Q(['pc-change'],5),P9:Q(['pc-reverse','pc-increase'],6),P10:Q(['pc-reverse','pc-decrease'],6),P11:Q(['pc-interest'],6,['pc-simple-interest','pc-compound-interest']),
+  P13:Q(['pc-of-amount','pc-mental'],4),P14:Q(['pc-multiplier'],5),P15:Q(['pc-increase','pc-multiplier'],4),P16:Q(['pc-decrease','pc-multiplier'],4),P17:Q(['pc-express'],3,['pc-unit']),
+  P18:Q(['pc-part-total'],4),P19:Q(['pc-find-whole','pc-reverse'],5),P20:Q(['pc-convert'],5,['pc-from-fraction','pc-from-decimal','pc-from-percent']),P21:Q(['pc-points'],4),P22:Q(['pc-profit-loss'],5,['pc-reverse']),
+  P23:Q(['pc-successive','pc-multiplier'],7),P24:Q(['pc-compound-interest'],7),P25:Q(['pc-depreciation','pc-multiplier'],7),P26:Q(['pc-simple-interest'],5,['pc-find-whole']),P27:Q(['pc-reverse','pc-multiplier'],7,['pc-vat']),
+  P28:Q(['pc-ratio'],6,['pc-change']),P29:Q(['pc-offers'],5,['pc-decrease']),P30:Q(['pc-tax'],5,['pc-vat']),P31:Q(['pc-pie'],5,['pc-unit'])},
  chance:{T1:Q(['pr-bag'],1),T2:Q(['pr-bag','pr-not'],2),T3:Q(['pr-bag','pr-or'],3),T4:Q(['pr-spinner'],2),T5:Q(['pr-two-dice','pr-sample-space'],4),
   T6:Q(['pr-two-dice','pr-sample-space','pr-at-least'],4),T7:Q(['pr-two-dice','pr-sample-space'],5),T8:Q(['pr-bag','pr-and','pr-independent','pr-with-replacement'],5),
   T9:Q(['pr-bag','pr-and','pr-without-replacement'],6),T10:Q(['pr-expected'],4),T11:Q(['pr-relative-freq'],3),T12:Q([],5,['pr-not','pr-or','pr-mutually-exclusive','pr-and','pr-independent','pr-ratio']),
@@ -4445,7 +5287,7 @@ window.quizQ=function(game,key,cur){
 };
 /* level meta for a pool of question types: tags in every type = tags; in some types = sometimes */
 function fromPool(game,pool){
-  const ALIAS={percent:{P12:['P6','P8','P9','P10','P11','P7']}};
+  const ALIAS={percent:{P12:['P6','P8','P9','P10','P11','P7'],P32:['P13','P14','P15','P16','P17','P18','P19','P20','P21','P22','P23','P24','P25','P26','P27','P28','P29','P30','P31']},fraction:{B20:['B1','B2','B3','B4','B5','B6','B7','B8','B9','B10','B11','B12','B13','B14','B15','B16','B17','B18','B19']}};
   pool=pool.flatMap(k=>(ALIAS[game]&&ALIAS[game][k])||[k]);
   const ms=[...new Set(pool)].map(k=>QTAGS[game][k]),all=new Set(ms.flatMap(m=>m.t)),tags=[...all].filter(t=>ms.every(m=>m.t.includes(t))).sort();
   const sometimes=[...new Set([...all,...ms.flatMap(m=>m.v)])].filter(t=>!tags.includes(t)).sort(),d=ms.reduce((a,m)=>a+m.d,0)/ms.length;

@@ -1,0 +1,3883 @@
+{
+ "version": 1,
+ "generated": "2026-11-28",
+ "note": "Teaching-level knowledge points grouped under the six content areas of the DfE national GCSE Maths content. Tier: F = Foundation and Higher, H = Higher only, X = extension beyond GCSE (approximate). Point ids are permanent.",
+ "areas": [
+  {
+   "id": "N",
+   "name": "Number",
+   "topics": [
+    {
+     "id": "N-place",
+     "name": "Place value and decimals",
+     "points": [
+      {
+       "id": "n-place-int",
+       "name": "Place value and ordering of integers",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-place-dec",
+       "name": "Place value and ordering of decimals",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-dec-addsub",
+       "name": "Add and subtract decimals",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-dec-mul",
+       "name": "Multiply decimals",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-dec-div",
+       "name": "Divide by decimals",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 5,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "N-mental",
+     "name": "Mental arithmetic and times tables",
+     "points": [
+      {
+       "id": "n-bonds",
+       "name": "Number bonds and pairs to 10, 20, 100",
+       "tier": "F",
+       "games": [
+        {
+         "game": "match",
+         "skills": [
+          "Pairs of 10 · small board",
+          "Pairs of 10",
+          "Pairs of 10 · bigger",
+          "Pairs of 10 · big board",
+          "Sums only · target 10",
+          "Target 12",
+          "Target 12 · up to 11",
+          "Target 15",
+          "Target 20",
+          "Target 20 · sums only",
+          "Target 25",
+          "Boss: target 100"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-tables",
+       "name": "Times tables up to 12 × 12",
+       "tier": "F",
+       "games": [
+        {
+         "game": "times",
+         "skills": [
+          "1× · itself",
+          "2× · units 0,2,4,6,8",
+          "4× · every 2nd of the 2s",
+          "6× · every 3rd of the 2s",
+          "8× · every 2nd of the 4s",
+          "5× · units 5,0 and tens +1",
+          "3× · add 3 between the 6s",
+          "9× · tens up, units down",
+          "7× · flip the table"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-add-sub",
+       "name": "Add and subtract integers (mental and written)",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-mul-div",
+       "name": "Multiply and divide integers (written methods)",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 2,
+     "total": 4,
+     "games": [
+      "match",
+      "times"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "N-neg",
+     "name": "Negative numbers",
+     "points": [
+      {
+       "id": "n-neg-order",
+       "name": "Order and compare negative numbers",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-neg-addsub",
+       "name": "Add and subtract negative numbers",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-neg-muldiv",
+       "name": "Multiply and divide negative numbers",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "N-bidmas",
+     "name": "Order of operations and calculator skills",
+     "points": [
+      {
+       "id": "n-bidmas",
+       "name": "Order of operations (BIDMAS)",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-calc-use",
+       "name": "Use a calculator efficiently (brackets, memory, fraction keys)",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-inverse",
+       "name": "Use inverse operations to check an answer",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "N-pow",
+     "name": "Powers and roots",
+     "points": [
+      {
+       "id": "n-squares",
+       "name": "Square numbers and square roots",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-cubes",
+       "name": "Cube numbers and cube roots",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-powers",
+       "name": "Powers and index notation",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-index-laws",
+       "name": "Laws of indices (multiply, divide, power of a power)",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-index-zeroneg",
+       "name": "Zero and negative indices",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "n-index-frac",
+       "name": "Fractional indices (roots and p/q)",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "n-recip",
+       "name": "Reciprocals",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 7,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "N-fm",
+     "name": "Factors, multiples and primes",
+     "points": [
+      {
+       "id": "n-multiples",
+       "name": "Multiples of a number",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-divisibility",
+       "name": "Tests of divisibility",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-factors",
+       "name": "List all factors of a number",
+       "tier": "F",
+       "games": [
+        {
+         "game": "factors",
+         "skills": [
+          "Factors of 7",
+          "Factors of 9",
+          "Factors of 8",
+          "Factors of 6",
+          "Factors of 13",
+          "Factors of 11",
+          "Factors of 12",
+          "Factors of 10",
+          "Factors of 14",
+          "Factors of 17",
+          "Factors of 16",
+          "Factors of 15",
+          "Factors of 18",
+          "Factors of 19",
+          "Factors of 21",
+          "Factors of 20",
+          "Factors of 23",
+          "Factors of 24",
+          "Factors of 22",
+          "Factors of 25",
+          "Factors of 27",
+          "Factors of 26",
+          "Factors of 29",
+          "Factors of 28",
+          "Factors of 30",
+          "Factors of 33",
+          "Factors of 31",
+          "Factors of 32",
+          "Factors of 36",
+          "Factors of 35",
+          "Factors of 34",
+          "Factors of 37",
+          "Factors of 38",
+          "Factors of 39",
+          "Factors of 40",
+          "Factors of 41",
+          "Factors of 42",
+          "Factors of 43",
+          "Factors of 45",
+          "Factors of 44",
+          "Factors of 46",
+          "Factors of 48",
+          "Factors of 49",
+          "Factors of 47",
+          "Factors of 53",
+          "Factors of 52",
+          "Factors of 50",
+          "Factors of 51",
+          "Factors of 56",
+          "Factors of 57",
+          "Factors of 54",
+          "Factors of 55",
+          "Factors of 58",
+          "Factors of 60",
+          "Factors of 63",
+          "Factors of 62",
+          "Factors of 66",
+          "Factors of 65",
+          "Factors of 68",
+          "Factors of 64",
+          "Factors of 72",
+          "Factors of 69",
+          "Factors of 70",
+          "Factors of 71",
+          "Factors of 75",
+          "Factors of 76",
+          "Factors of 74",
+          "Factors of 77",
+          "Factors of 78",
+          "Factors of 81",
+          "Factors of 82",
+          "Factors of 80",
+          "Factors of 85",
+          "Factors of 87",
+          "Factors of 84",
+          "Factors of 86",
+          "Factors of 91",
+          "Factors of 88",
+          "Factors of 92",
+          "Factors of 90",
+          "Factors of 93",
+          "Factors of 95",
+          "Factors of 96",
+          "Factors of 94",
+          "Factors of 98",
+          "Factors of 100",
+          "Factors of 99",
+          "Factors of 97",
+          "Factors of 102",
+          "Factors of 105",
+          "Factors of 104",
+          "Factors of 106",
+          "Factors of 108",
+          "Factors of 112",
+          "Factors of 110",
+          "Factors of 111",
+          "Factors of 113",
+          "Factors of 115",
+          "Factors of 114",
+          "Factors of 116"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-primes",
+       "name": "Recognise prime numbers",
+       "tier": "F",
+       "games": [
+        {
+         "game": "factors",
+         "skills": [
+          "Factors of 7",
+          "Factors of 13",
+          "Factors of 11",
+          "Factors of 17",
+          "Factors of 19",
+          "Factors of 23"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-factor-pairs",
+       "name": "Factor pairs and composite numbers",
+       "tier": "F",
+       "games": [
+        {
+         "game": "factors",
+         "skills": [
+          "Factors of 7",
+          "Factors of 9",
+          "Factors of 8",
+          "Factors of 6",
+          "Factors of 13",
+          "Factors of 11",
+          "Factors of 12",
+          "Factors of 10",
+          "Factors of 14",
+          "Factors of 17",
+          "Factors of 16",
+          "Factors of 15",
+          "Factors of 18",
+          "Factors of 19",
+          "Factors of 21",
+          "Factors of 20",
+          "Factors of 23",
+          "Factors of 24",
+          "Factors of 22",
+          "Factors of 25",
+          "Factors of 27",
+          "Factors of 26",
+          "Factors of 29",
+          "Factors of 28",
+          "Factors of 30",
+          "Factors of 33",
+          "Factors of 31",
+          "Factors of 32",
+          "Factors of 36",
+          "Factors of 35",
+          "Factors of 34",
+          "Factors of 37",
+          "Factors of 38",
+          "Factors of 39",
+          "Factors of 40",
+          "Factors of 41",
+          "Factors of 42",
+          "Factors of 43",
+          "Factors of 45",
+          "Factors of 44",
+          "Factors of 46",
+          "Factors of 48",
+          "Factors of 49",
+          "Factors of 47",
+          "Factors of 53",
+          "Factors of 52",
+          "Factors of 50",
+          "Factors of 51",
+          "Factors of 56",
+          "Factors of 57",
+          "Factors of 54",
+          "Factors of 55",
+          "Factors of 58",
+          "Factors of 60",
+          "Factors of 63",
+          "Factors of 62",
+          "Factors of 66",
+          "Factors of 65",
+          "Factors of 68",
+          "Factors of 64",
+          "Factors of 72",
+          "Factors of 69",
+          "Factors of 70",
+          "Factors of 71",
+          "Factors of 75",
+          "Factors of 76",
+          "Factors of 74",
+          "Factors of 77",
+          "Factors of 78",
+          "Factors of 81",
+          "Factors of 82",
+          "Factors of 80",
+          "Factors of 85",
+          "Factors of 87",
+          "Factors of 84",
+          "Factors of 86",
+          "Factors of 91",
+          "Factors of 88",
+          "Factors of 92",
+          "Factors of 90",
+          "Factors of 93",
+          "Factors of 95",
+          "Factors of 96",
+          "Factors of 94",
+          "Factors of 98",
+          "Factors of 100",
+          "Factors of 99",
+          "Factors of 97",
+          "Factors of 102",
+          "Factors of 105",
+          "Factors of 104",
+          "Factors of 106",
+          "Factors of 108",
+          "Factors of 112",
+          "Factors of 110",
+          "Factors of 111",
+          "Factors of 113",
+          "Factors of 115",
+          "Factors of 114",
+          "Factors of 116"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 3,
+     "total": 5,
+     "games": [
+      "factors"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "N-pf",
+     "name": "Prime factors, HCF and LCM",
+     "points": [
+      {
+       "id": "n-prime-factors",
+       "name": "Write a number as a product of prime factors",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-hcf",
+       "name": "Highest common factor (HCF)",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-lcm",
+       "name": "Lowest common multiple (LCM)",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-hcf-lcm-venn",
+       "name": "HCF and LCM using prime factors and Venn diagrams",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-hcf-lcm-problems",
+       "name": "Solve problems using HCF and LCM",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 5,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "N-frac-basic",
+     "name": "Fraction basics: naming, equivalent, simplifying, ordering",
+     "points": [
+      {
+       "id": "n-frac-name",
+       "name": "Name and write fractions from diagrams",
+       "tier": "F",
+       "games": [
+        {
+         "game": "fraction",
+         "skills": [
+          "Name the fraction"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-frac-equiv",
+       "name": "Equivalent fractions",
+       "tier": "F",
+       "games": [
+        {
+         "game": "fraction",
+         "skills": [
+          "Equivalent fractions"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-frac-simplify",
+       "name": "Simplify fractions",
+       "tier": "F",
+       "games": [
+        {
+         "game": "fraction",
+         "skills": [
+          "Simplify",
+          "Simplify & HCF"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-frac-order",
+       "name": "Order and compare fractions",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-frac-mixed",
+       "name": "Convert between mixed numbers and improper fractions",
+       "tier": "F",
+       "games": [
+        {
+         "game": "fraction",
+         "skills": [
+          "Mixed → improper",
+          "Mixed numbers + / −",
+          "Mixed & improper"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 4,
+     "total": 5,
+     "games": [
+      "fraction"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "N-frac-addsub",
+     "name": "Adding and subtracting fractions",
+     "points": [
+      {
+       "id": "n-frac-add-same",
+       "name": "Add and subtract fractions with the same denominator",
+       "tier": "F",
+       "games": [
+        {
+         "game": "fraction",
+         "skills": [
+          "Add · same denominator"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-frac-add-diff",
+       "name": "Add and subtract fractions with different denominators",
+       "tier": "F",
+       "games": [
+        {
+         "game": "fraction",
+         "skills": [
+          "Add · different denominators",
+          "Add & subtract"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-frac-mixed-addsub",
+       "name": "Add and subtract mixed numbers",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 2,
+     "total": 3,
+     "games": [
+      "fraction"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "N-frac-muldiv",
+     "name": "Multiplying and dividing fractions",
+     "points": [
+      {
+       "id": "n-frac-mul",
+       "name": "Multiply fractions",
+       "tier": "F",
+       "games": [
+        {
+         "game": "fraction",
+         "skills": [
+          "Multiply fractions"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-frac-div",
+       "name": "Divide fractions",
+       "tier": "F",
+       "games": [
+        {
+         "game": "fraction",
+         "skills": [
+          "Multiply & divide"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-frac-mixed-muldiv",
+       "name": "Multiply and divide mixed numbers",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 2,
+     "total": 3,
+     "games": [
+      "fraction"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "N-frac-of",
+     "name": "Fractions of amounts and worded fraction problems",
+     "points": [
+      {
+       "id": "n-frac-of",
+       "name": "Find a fraction of an amount",
+       "tier": "F",
+       "games": [
+        {
+         "game": "fraction",
+         "skills": [
+          "Fraction of an amount"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-frac-express",
+       "name": "Write one quantity as a fraction of another",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-frac-reverse",
+       "name": "Find the whole from a fraction of it",
+       "tier": "F",
+       "games": [
+        {
+         "game": "fraction",
+         "skills": [
+          "Reverse fractions",
+          "Reverse problems"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-frac-problems",
+       "name": "Solve worded fraction problems",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 2,
+     "total": 4,
+     "games": [
+      "fraction"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "N-frd",
+     "name": "Fractions, decimals and recurring decimals",
+     "points": [
+      {
+       "id": "n-frac-dec",
+       "name": "Convert between fractions and decimals",
+       "tier": "F",
+       "games": [
+        {
+         "game": "percent",
+         "skills": [
+          "Convert fractions & decimals"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-dec-recurring",
+       "name": "Terminating and recurring decimals",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-dec-rec-frac",
+       "name": "Convert recurring decimals to fractions",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 1,
+     "total": 3,
+     "games": [
+      "percent"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "N-pct-basic",
+     "name": "Percentages of amounts",
+     "points": [
+      {
+       "id": "n-pct-meaning",
+       "name": "Percentages as parts of 100 (grids and diagrams)",
+       "tier": "F",
+       "games": [
+        {
+         "game": "percent",
+         "skills": [
+          "Percent of a grid"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-pct-easy",
+       "name": "Find 10%, 25%, 50% and 1% of an amount",
+       "tier": "F",
+       "games": [
+        {
+         "game": "percent",
+         "skills": [
+          "10%, 25%, 50%…"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-pct-any",
+       "name": "Find any percentage of an amount",
+       "tier": "F",
+       "games": [
+        {
+         "game": "percent",
+         "skills": [
+          "Any percentage of an amount"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-pct-convert",
+       "name": "Convert between percentages, fractions and decimals",
+       "tier": "F",
+       "games": [
+        {
+         "game": "percent",
+         "skills": [
+          "Convert fractions & decimals"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-pct-express",
+       "name": "Write one quantity as a percentage of another",
+       "tier": "F",
+       "games": [
+        {
+         "game": "percent",
+         "skills": [
+          "Test scores as %"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 5,
+     "total": 5,
+     "games": [
+      "percent"
+     ],
+     "status": "full"
+    },
+    {
+     "id": "N-pct-change",
+     "name": "Percentage change and reverse percentages",
+     "points": [
+      {
+       "id": "n-pct-incdec",
+       "name": "Increase and decrease an amount by a percentage",
+       "tier": "F",
+       "games": [
+        {
+         "game": "percent",
+         "skills": [
+          "Sale prices",
+          "Increase (VAT, pay rises)",
+          "Increase with a multiplier"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-pct-multiplier",
+       "name": "Percentage multipliers",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-pct-change",
+       "name": "Percentage change (profit, loss, increase, decrease)",
+       "tier": "F",
+       "games": [
+        {
+         "game": "percent",
+         "skills": [
+          "Percentage change"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-pct-reverse",
+       "name": "Reverse percentages (find the original)",
+       "tier": "F",
+       "games": [
+        {
+         "game": "percent",
+         "skills": [
+          "Reverse percentages",
+          "Reverse · sales",
+          "Reverse with multipliers"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 3,
+     "total": 4,
+     "games": [
+      "percent"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "N-pct-interest",
+     "name": "Interest, growth and decay",
+     "points": [
+      {
+       "id": "n-pct-simple-int",
+       "name": "Simple interest",
+       "tier": "F",
+       "games": [
+        {
+         "game": "percent",
+         "skills": [
+          "Interest"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-pct-compound",
+       "name": "Compound interest and repeated percentage change",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "n-pct-growth",
+       "name": "Growth and decay problems",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 1,
+     "total": 3,
+     "games": [
+      "percent"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "N-std",
+     "name": "Standard form",
+     "points": [
+      {
+       "id": "n-std-big",
+       "name": "Write large numbers in standard form",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-std-small",
+       "name": "Write small numbers in standard form",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-std-calc",
+       "name": "Calculate with numbers in standard form",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "N-idx",
+     "name": "Indices",
+     "points": [
+      {
+       "id": "n-idx-laws",
+       "name": "Laws of indices for numbers",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-idx-neg",
+       "name": "Negative indices",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-idx-frac",
+       "name": "Fractional indices",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "N-surd",
+     "name": "Surds and exact values",
+     "points": [
+      {
+       "id": "n-surd-simplify",
+       "name": "Simplify surds",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "n-surd-calc",
+       "name": "Add, subtract and multiply surds",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "n-surd-rat",
+       "name": "Rationalise a denominator",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "n-exact-pi",
+       "name": "Leave answers exactly in terms of π",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "N-round",
+     "name": "Rounding and estimating",
+     "points": [
+      {
+       "id": "n-round-dp",
+       "name": "Round to decimal places",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-round-sf",
+       "name": "Round to significant figures",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-estimate",
+       "name": "Estimate answers by rounding to 1 significant figure",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-trunc",
+       "name": "Truncation",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "N-bounds",
+     "name": "Error intervals and bounds",
+     "points": [
+      {
+       "id": "n-err-int",
+       "name": "Error intervals",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "n-bounds",
+       "name": "Upper and lower bounds",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "n-bounds-calc",
+       "name": "Calculate with bounds",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    }
+   ]
+  },
+  {
+   "id": "A",
+   "name": "Algebra",
+   "topics": [
+    {
+     "id": "A-notation",
+     "name": "Algebraic notation and substitution",
+     "points": [
+      {
+       "id": "a-notation",
+       "name": "Algebraic notation (3x, x², a/b, ab)",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-subst",
+       "name": "Substitute numbers into expressions",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 2,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-collect",
+     "name": "Simplifying expressions",
+     "points": [
+      {
+       "id": "a-collect",
+       "name": "Collect like terms",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-idx-laws",
+       "name": "Simplify using the laws of indices",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 2,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-expand",
+     "name": "Expanding brackets",
+     "points": [
+      {
+       "id": "a-expand-single",
+       "name": "Expand a single bracket",
+       "tier": "F",
+       "games": [
+        {
+         "game": "expand",
+         "skills": [
+          "a(x + b)",
+          "a(x − b)",
+          "a(bx + c)",
+          "a(bx − c)",
+          "Bigger numbers",
+          "Negative outside: −a(x + b)",
+          "Negative outside: −a(x − b)",
+          "Negative outside · mixed",
+          "Variable outside: x(x + b)",
+          "Variable outside: x(x − b)",
+          "ax(x + b)",
+          "−x(bx + c)",
+          "Three terms: a(x² + bx + c)",
+          "Three terms · mixed signs",
+          "Three terms · negative outside",
+          "a(bx² + cx + d)",
+          "−a(bx² ± cx ± d)",
+          "ax(bx + c)",
+          "−ax(bx − c)",
+          "Boss: anything goes!",
+          "Two letters: a(x + y)",
+          "Two letters: a(x − y)",
+          "Two letters: a(bx + cy)",
+          "Two letters · mixed signs",
+          "Letter outside: x(x + y)",
+          "Letter outside: x(y ± b)",
+          "Letter outside: y(x − y)",
+          "Negative letter outside",
+          "ax(y + b)",
+          "xy outside: xy(x + y)",
+          "Three terms: a(x + y + b)",
+          "Three terms: a(bx ± cy ± d)",
+          "Two letters · three terms · negative outside",
+          "x(x + y + b)",
+          "y(bx + cy + d)",
+          "−x(bx − cy + d)",
+          "ax(bx + cy + d)",
+          "Three letters: a(x + y + z)",
+          "Four terms: a(bx ± cy ± dz ± e)",
+          "Boss: four terms, anything goes!",
+          "x²(x + b)",
+          "x²(x − b)",
+          "x³(x + b)",
+          "x²(bx + c)",
+          "x²(x² + b)",
+          "x²(x² − bx)",
+          "x³(x² ± b)",
+          "ax²(x + b)",
+          "ax²(bx − c)",
+          "−x²(x + b)",
+          "−ax²(x − b)",
+          "x²(x² + bx + c)",
+          "x²(ax² − bx + c)",
+          "ax²(bx + c)",
+          "x³(x² − x + b)",
+          "x(x² + bx + c)",
+          "x(x³ − bx² + c)",
+          "−x(x² + bx − c)",
+          "ax³(bx − c)",
+          "ax²(bx² + cx + d)",
+          "x²(x³ + x² + x)",
+          "Four terms: x(x³ + bx² + cx + d)",
+          "Four terms: ax(bx³ ± cx² ± dx ± e)",
+          "Four terms · negative outside",
+          "Five terms: a(bx⁴ ± cx³ ± dx² ± ex ± f)",
+          "x⁴(x ± b)",
+          "ax⁴(x² ± b)",
+          "−x³(x² ± bx)",
+          "Cubes: x³(x³ ± b)",
+          "Large numbers: a(bx − c)",
+          "Large numbers · negative outside",
+          "Large numbers: ax²(bx − c)",
+          "Large numbers · three terms",
+          "Boss: powers of x",
+          "x²(y + b)",
+          "x²(x + y)",
+          "xy(x² + y)",
+          "xy(ax + by)",
+          "x²y(x + y)",
+          "xy²(x − y)",
+          "x²y(ax + by + c)",
+          "y²(x² + xy + y²)",
+          "x(x² + xy + y²)",
+          "−xy(x² ± xy ± y²)",
+          "ax²(y + bx − c)",
+          "x²y²(x + y)",
+          "ax²(by ± cx ± d)",
+          "ax²y(bx + cy)",
+          "−ax²y(bx ± cy ± d)",
+          "Large numbers: ax(by − c)",
+          "Boss: two letters with powers",
+          "xy(x + y + z)",
+          "xyz(x + y + z)",
+          "x²(x + y + z)",
+          "ax(by ± cz ± d)",
+          "xz(xy − z)",
+          "−xyz(ax ± by ± cz)",
+          "Four terms with powers",
+          "Boss: three letters with powers",
+          "x²(−bx − c)",
+          "a(−bx − c)",
+          "−a(−bx − c)",
+          "−x²(−x − b)",
+          "−ax(−bx² − cx − d)",
+          "xyz(xy − yz)",
+          "Mega boss: anything so far"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-expand-neg",
+       "name": "Expand brackets with a negative outside",
+       "tier": "F",
+       "games": [
+        {
+         "game": "expand",
+         "skills": [
+          "Negative outside: −a(x + b)",
+          "Negative outside: −a(x − b)",
+          "Negative outside · mixed",
+          "Negative letter outside",
+          "−x(bx + c)",
+          "−a(bx² ± cx ± d)",
+          "−ax(bx − c)",
+          "−x(bx − cy + d)",
+          "−x²(x + b)",
+          "−ax²(x − b)",
+          "−x(x² + bx − c)",
+          "−x³(x² ± bx)",
+          "−xy(x² ± xy ± y²)",
+          "−ax²y(bx ± cy ± d)",
+          "−xyz(ax ± by ± cz)",
+          "−a(−bx − c)",
+          "−x²(−x − b)",
+          "−ax(−bx² − cx − d)"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-expand-letters",
+       "name": "Expand brackets with letters outside and inside",
+       "tier": "F",
+       "games": [
+        {
+         "game": "expand",
+         "skills": [
+          "Two letters: a(x + y)",
+          "Two letters: a(x − y)",
+          "Two letters: a(bx + cy)",
+          "Two letters · mixed signs",
+          "Two letters · three terms · negative outside",
+          "Letter outside: x(x + y)",
+          "Letter outside: x(y ± b)",
+          "Letter outside: y(x − y)",
+          "Variable outside: x(x + b)",
+          "Variable outside: x(x − b)"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-expand-double",
+       "name": "Expand and simplify two brackets",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-expand-triple",
+       "name": "Expand three brackets",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 3,
+     "total": 5,
+     "games": [
+      "expand"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "A-factor",
+     "name": "Factorising: common factors",
+     "points": [
+      {
+       "id": "a-factorise-common",
+       "name": "Factorise by taking out a common factor",
+       "tier": "F",
+       "games": [
+        {
+         "game": "factorise",
+         "skills": [
+          "Numbers only: 6x + 9",
+          "Numbers only · with minus",
+          "Numbers only · bigger numbers",
+          "Numbers only · two letters",
+          "Take out the letter: x² + 3x",
+          "Number AND letter: 4x² + 6x",
+          "Two letters: 6xy + 9x",
+          "Three terms · numbers only",
+          "Three terms · with a letter",
+          "A squared letter: x²",
+          "Either letter can be taken out",
+          "Take out xy",
+          "Three terms · two letters",
+          "Bigger numbers · up to 12",
+          "Four terms",
+          "Four terms · two letters",
+          "Squares and products",
+          "Boss: anything goes!",
+          "Bigger numbers · up to 20",
+          "Bigger numbers · three terms",
+          "Mostly minus signs · three terms",
+          "Mostly minus signs · four terms",
+          "Five terms",
+          "Cubes and squares",
+          "Challenge: three letters · 2 terms",
+          "Challenge: three letters · 3 terms",
+          "Challenge: three letters with squares",
+          "Boss 2: anything goes!"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-factorise-grouping",
+       "name": "Factorise by grouping four terms",
+       "tier": "H",
+       "games": [
+        {
+         "game": "factorise",
+         "skills": [
+          "Four terms",
+          "Four terms · two letters"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 2,
+     "total": 2,
+     "games": [
+      "factorise"
+     ],
+     "status": "full"
+    },
+    {
+     "id": "A-quadfact",
+     "name": "Factorising quadratics",
+     "points": [
+      {
+       "id": "a-factorise-quad1",
+       "name": "Factorise x² + bx + c",
+       "tier": "F",
+       "games": [
+        {
+         "game": "quad",
+         "skills": [
+          "x² + 5x + 6 · all positive",
+          "All positive · up to 6",
+          "All positive · up to 9",
+          "All positive · up to 12",
+          "Minus in the middle: x² − 5x + 6",
+          "Minus in the middle · up to 8",
+          "Minus in the middle · up to 10",
+          "Minus in the middle · up to 12",
+          "Minus at the end: x² + x − 6",
+          "Minus at the end · up to 8",
+          "Minus at the end · up to 10",
+          "Minus at the end · up to 12",
+          "Mixed signs · all kinds",
+          "Mixed · harder numbers"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-factorise-dots",
+       "name": "Factorise a difference of two squares",
+       "tier": "F",
+       "games": [
+        {
+         "game": "quad",
+         "skills": [
+          "Difference of two squares: x² − 9",
+          "Difference of two squares · up to 12",
+          "Difference of two squares · 9x² − 16",
+          "Difference of two squares · bigger numbers",
+          "Difference of two squares · all kinds"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-factorise-quad2",
+       "name": "Factorise ax² + bx + c",
+       "tier": "H",
+       "games": [
+        {
+         "game": "quad",
+         "skills": [
+          "Number in front: 2x² + 7x + 6",
+          "Number in front · up to 3x²",
+          "Number in front · minus in the middle",
+          "Number in front · mixed signs",
+          "Number in front: 4x² − 9",
+          "Number in front · larger numbers",
+          "Up to 4x² · any signs"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 3,
+     "total": 3,
+     "games": [
+      "quad"
+     ],
+     "status": "full"
+    },
+    {
+     "id": "A-algfrac",
+     "name": "Algebraic fractions",
+     "points": [
+      {
+       "id": "a-fractions-simplify",
+       "name": "Simplify algebraic fractions",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-fractions-addsub",
+       "name": "Add and subtract algebraic fractions",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-fractions-muldiv",
+       "name": "Multiply and divide algebraic fractions",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-formula",
+     "name": "Formulae, changing the subject, identities and proof",
+     "points": [
+      {
+       "id": "a-formula-subst",
+       "name": "Substitute into formulae",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-formula-derive",
+       "name": "Write a formula from a situation",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-subject-simple",
+       "name": "Rearrange a formula (subject appears once)",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-subject-hard",
+       "name": "Rearrange a formula (subject appears twice or in a power)",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-identity",
+       "name": "Show two expressions are identical",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-proof",
+       "name": "Algebraic proof (odd, even, consecutive numbers)",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 6,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-eq-lin",
+     "name": "Solving linear equations",
+     "points": [
+      {
+       "id": "a-eq-onestep",
+       "name": "Solve one-step equations",
+       "tier": "F",
+       "games": [
+        {
+         "game": "balance",
+         "skills": [
+          "x + a = b",
+          "Multiples: 2x = b",
+          "x/a = b"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-eq-twostep",
+       "name": "Solve two-step equations",
+       "tier": "F",
+       "games": [
+        {
+         "game": "balance",
+         "skills": [
+          "Two-step: 2x + a = b",
+          "Two-step: ax + b = c",
+          "x/a + b = c",
+          "x/a − b = c",
+          "x/a + b = x + c"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-eq-neg",
+       "name": "Solve equations with negative numbers and negative answers",
+       "tier": "F",
+       "games": [
+        {
+         "game": "balance",
+         "skills": [
+          "Negatives: x − a = b",
+          "Negatives: ax − b = c",
+          "Negative answers"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-eq-both",
+       "name": "Solve equations with the unknown on both sides",
+       "tier": "F",
+       "games": [
+        {
+         "game": "balance",
+         "skills": [
+          "x on both sides (easy)",
+          "x on both sides",
+          "x on both sides + negatives",
+          "x on both sides · bigger numbers"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-eq-brackets",
+       "name": "Solve equations with brackets",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-eq-frac",
+       "name": "Solve equations with fractions",
+       "tier": "F",
+       "games": [
+        {
+         "game": "balance",
+         "skills": [
+          "Fractions: (p/q)x = c",
+          "Fractions: (p/q)x + b = c",
+          "Fractions on both sides",
+          "Fraction answers: ax = b",
+          "Fraction answers: ax + b = c",
+          "Fraction answers: x on both sides",
+          "x/a = b",
+          "x/a = b · bigger",
+          "x/a + b = c",
+          "x/a − b = c",
+          "x/a + b = x + c"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-eq-flipped",
+       "name": "Solve equations with the unknown on the right",
+       "tier": "F",
+       "games": [
+        {
+         "game": "balance",
+         "skills": [
+          "Flipped: b = x + a",
+          "Flipped: b = ax",
+          "Flipped: b = ax + a",
+          "Flipped: c = ax + b",
+          "Flipped negatives",
+          "Flipped: x on both sides",
+          "Flipped: x/a",
+          "Flipped: (p/q)x"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-eq-algfrac",
+       "name": "Solve equations with algebraic fractions",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 6,
+     "total": 8,
+     "games": [
+      "balance"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "A-eq-form",
+     "name": "Forming equations, trial and improvement, iteration",
+     "points": [
+      {
+       "id": "a-eq-form",
+       "name": "Form and solve equations from a situation",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-eq-trial",
+       "name": "Solve equations by trial and improvement",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-iterate",
+       "name": "Iteration to find approximate solutions",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-sim",
+     "name": "Simultaneous equations",
+     "points": [
+      {
+       "id": "a-sim-graph",
+       "name": "Solve simultaneous equations from graphs",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-sim-linear",
+       "name": "Solve linear simultaneous equations algebraically",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-sim-quad",
+       "name": "Solve simultaneous equations (one linear, one quadratic)",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-quadeq",
+     "name": "Solving quadratic equations",
+     "points": [
+      {
+       "id": "a-quad-factorise",
+       "name": "Solve quadratic equations by factorising",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-quad-square",
+       "name": "Solve quadratic equations by completing the square",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-quad-formula",
+       "name": "Solve quadratic equations using the formula",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-quad-graph",
+       "name": "Solve quadratic equations from a graph",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-quad-form",
+       "name": "Form and solve quadratic equations from a situation",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 5,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-ineq",
+     "name": "Inequalities",
+     "points": [
+      {
+       "id": "a-ineq-notation",
+       "name": "Inequality notation and number lines",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-ineq-solve",
+       "name": "Solve linear inequalities",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-ineq-int",
+       "name": "List the integers that satisfy an inequality",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-ineq-quad",
+       "name": "Solve quadratic inequalities",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-ineq-region",
+       "name": "Show inequalities as regions on a graph",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 5,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-seq",
+     "name": "Sequences: patterns and rules",
+     "points": [
+      {
+       "id": "a-seq-continue",
+       "name": "Continue and describe sequences",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-seq-term",
+       "name": "Term-to-term rules",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-seq-special",
+       "name": "Square, cube, triangular and Fibonacci-type sequences",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-seq-geo",
+       "name": "Geometric sequences",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-nth",
+     "name": "nth term of a sequence",
+     "points": [
+      {
+       "id": "a-seq-nth",
+       "name": "Find the nth term of a linear sequence",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-seq-test",
+       "name": "Decide whether a number is in a sequence",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-seq-quad",
+       "name": "Find the nth term of a quadratic sequence",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-coord",
+     "name": "Coordinates and straight-line graphs",
+     "points": [
+      {
+       "id": "a-coord",
+       "name": "Coordinates in all four quadrants",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-line-plot",
+       "name": "Plot straight-line graphs from a table of values",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-line-grad",
+       "name": "Find and use the gradient of a line",
+       "tier": "F",
+       "games": [
+        {
+         "game": "lines",
+         "skills": [
+          "Gradient only (1 star)",
+          "Gradient only (2 stars)",
+          "Negative gradients",
+          "Fractional gradients",
+          "Fractional gradient · through the origin"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-line-int",
+       "name": "Find and use the y-intercept",
+       "tier": "F",
+       "games": [
+        {
+         "game": "lines",
+         "skills": [
+          "Intercept only",
+          "Intercept only · steeper"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "a-line-eq",
+       "name": "Understand and use y = mx + c",
+       "tier": "F",
+       "games": [
+        {
+         "game": "lines",
+         "skills": [
+          "Both m and c",
+          "Both · steeper & negative",
+          "Three stars",
+          "Three stars · tricky",
+          "Three stars · all gradients",
+          "Boss line",
+          "Boss · read any line",
+          "Boss · parallel lines",
+          "Boss · perpendicular lines",
+          "Boss · rearrange anything",
+          "Horizontal lines"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 3,
+     "total": 5,
+     "games": [
+      "lines"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "A-lines",
+     "name": "Equations of lines, midpoints and lengths",
+     "points": [
+      {
+       "id": "a-line-through",
+       "name": "Find the equation of a line through two points or a point and a gradient",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-line-parallel",
+       "name": "Parallel lines",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-line-perp",
+       "name": "Perpendicular lines",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-line-midpoint",
+       "name": "Midpoint of a line segment",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-line-length",
+       "name": "Length of a line segment",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 5,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-graphs",
+     "name": "Quadratic, cubic, reciprocal and other graphs",
+     "points": [
+      {
+       "id": "a-quad-plot",
+       "name": "Plot and read quadratic graphs",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-quad-features",
+       "name": "Roots, intercepts and turning points of quadratics",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-cubic",
+       "name": "Recognise and sketch cubic and reciprocal graphs",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-exp",
+       "name": "Exponential graphs",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-trig-graph",
+       "name": "Sine, cosine and tangent graphs",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 5,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-gtrans",
+     "name": "Transforming graphs and circle equations",
+     "points": [
+      {
+       "id": "a-graph-trans",
+       "name": "Transformations of graphs",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-circle-eq",
+       "name": "Equation of a circle",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-tangent-eq",
+       "name": "Equation of a tangent to a circle",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-real",
+     "name": "Real-life graphs and rates of change",
+     "points": [
+      {
+       "id": "a-real-graphs",
+       "name": "Interpret real-life graphs",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-dist-time",
+       "name": "Distance-time graphs",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-vel-time",
+       "name": "Velocity-time graphs",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "a-gradient-curve",
+       "name": "Gradient of a curve as a rate of change",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-area-curve",
+       "name": "Area under a graph",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 5,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "A-func",
+     "name": "Functions",
+     "points": [
+      {
+       "id": "a-func-notation",
+       "name": "Function notation",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-func-compose",
+       "name": "Composite functions",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "a-func-inverse",
+       "name": "Inverse functions",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "X-log",
+     "name": "Logarithms (extension beyond GCSE)",
+     "points": [
+      {
+       "id": "x-log-def",
+       "name": "Index form and log form, log values",
+       "tier": "X",
+       "games": []
+      },
+      {
+       "id": "x-log-laws",
+       "name": "Laws of logarithms",
+       "tier": "X",
+       "games": []
+      },
+      {
+       "id": "x-log-eq",
+       "name": "Solve index equations using logs",
+       "tier": "X",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    }
+   ]
+  },
+  {
+   "id": "R",
+   "name": "Ratio, proportion and rates of change",
+   "topics": [
+    {
+     "id": "R-ratio",
+     "name": "Simplifying and comparing ratios",
+     "points": [
+      {
+       "id": "r-simplify",
+       "name": "Simplify a ratio",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-unit",
+       "name": "Write a ratio in the form 1 : n",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-compare",
+       "name": "Compare ratios",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "R-share",
+     "name": "Sharing in a ratio and ratio problems",
+     "points": [
+      {
+       "id": "r-share",
+       "name": "Share an amount in a given ratio",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-from-share",
+       "name": "Find an amount from a ratio when one part is known",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-diff",
+       "name": "Ratio problems using a difference",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-frac",
+       "name": "Link ratios and fractions",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-three",
+       "name": "Ratios with three parts",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 5,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "R-direct",
+     "name": "Direct proportion, recipes and best buys",
+     "points": [
+      {
+       "id": "r-direct",
+       "name": "Direct proportion problems",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-recipe",
+       "name": "Scale recipes and quantities",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-best-buy",
+       "name": "Best buys and unit prices",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "R-inverse",
+     "name": "Inverse proportion and proportion equations",
+     "points": [
+      {
+       "id": "r-inverse",
+       "name": "Inverse proportion problems",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-direct-eq",
+       "name": "Direct proportion equations (y = kx, y = kx²)",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "r-inverse-eq",
+       "name": "Inverse proportion equations (y = k/x)",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "r-prop-graph",
+       "name": "Recognise proportion graphs",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "R-units",
+     "name": "Converting units, time, money and map scales",
+     "points": [
+      {
+       "id": "r-metric",
+       "name": "Convert metric units of length, mass and capacity",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-time",
+       "name": "Time: 12 and 24 hour clock, durations, timetables",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-money",
+       "name": "Money and currency conversion",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-conv-area",
+       "name": "Convert units of area and volume",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-conv-speed",
+       "name": "Convert compound units",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "r-map-scale",
+       "name": "Scale on maps and plans",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 6,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "R-compound",
+     "name": "Speed, density and pressure",
+     "points": [
+      {
+       "id": "r-speed",
+       "name": "Speed, distance and time",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-density",
+       "name": "Density, mass and volume",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-pressure",
+       "name": "Pressure, force and area",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "R-sim",
+     "name": "Scale factors and similar shapes",
+     "points": [
+      {
+       "id": "r-scale-factor",
+       "name": "Scale factors for similar shapes",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "r-scale-area",
+       "name": "Scale factors for area and volume",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 2,
+     "games": [],
+     "status": "none"
+    }
+   ]
+  },
+  {
+   "id": "G",
+   "name": "Geometry and measures",
+   "topics": [
+    {
+     "id": "G-vocab",
+     "name": "Geometry vocabulary, measuring angles, turns and bearings",
+     "points": [
+      {
+       "id": "g-vocab",
+       "name": "Vocabulary of points, lines, angles and shapes",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-measure-angle",
+       "name": "Measure and draw angles with a protractor",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-estimate-angle",
+       "name": "Estimate the size of an angle",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Estimate angles"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-angle-types",
+       "name": "Types of angle (acute, obtuse, reflex)",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Complementary, supplementary & reflex"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-turns",
+       "name": "Turns, clock angles and compass points",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Turns, clocks & compass"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-bearings",
+       "name": "Bearings",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Bearings"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 4,
+     "total": 6,
+     "games": [
+      "angles"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "G-ang-basic",
+     "name": "Basic angle facts",
+     "points": [
+      {
+       "id": "g-ang-line",
+       "name": "Angles on a straight line",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Angles on a straight line"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-ang-point",
+       "name": "Angles around a point and vertically opposite angles",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Straight line & around a point",
+          "Crossing lines & exterior angles"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-ang-tri",
+       "name": "Angles in a triangle",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Angles in a triangle",
+          "Triangles II"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-ang-iso",
+       "name": "Isosceles and equilateral triangles",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Isosceles triangles"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-ang-quad",
+       "name": "Angles in quadrilaterals",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Quadrilaterals"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 5,
+     "total": 5,
+     "games": [
+      "angles"
+     ],
+     "status": "full"
+    },
+    {
+     "id": "G-ang-par",
+     "name": "Parallel lines and polygon angles",
+     "points": [
+      {
+       "id": "g-ang-parallel",
+       "name": "Angles in parallel lines",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Parallel lines",
+          "Parallel lines with algebra",
+          "Parallel lines & triangles"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-ang-polygon",
+       "name": "Interior and exterior angles of polygons",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Polygons",
+          "Polygons II",
+          "How many sides?"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 2,
+     "total": 2,
+     "games": [
+      "angles"
+     ],
+     "status": "full"
+    },
+    {
+     "id": "G-ang-alg",
+     "name": "Angle problems: algebra, ratios and reasoning",
+     "points": [
+      {
+       "id": "g-ang-algebra",
+       "name": "Angle problems using algebra",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Angles with algebra",
+          "Triangles with algebra",
+          "Parallel lines with algebra",
+          "Lines, points & quadrilaterals with algebra"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-ang-ratio",
+       "name": "Angles in a ratio",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Angles in ratios"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-ang-reason",
+       "name": "Give reasons for angle calculations",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-ang-mixed",
+       "name": "Choose the right angle rule in mixed problems",
+       "tier": "F",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Mixed angle rules",
+          "Boss mix",
+          "Boss 2 · GCSE mix",
+          "Angle facts & bisectors"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 3,
+     "total": 4,
+     "games": [
+      "angles"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "G-shapes",
+     "name": "Properties of 2D shapes and symmetry",
+     "points": [
+      {
+       "id": "g-shape-names",
+       "name": "Name and describe polygons",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-tri-types",
+       "name": "Properties of triangles",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-quad-types",
+       "name": "Properties of quadrilaterals",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-symmetry",
+       "name": "Line and rotational symmetry",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-3d",
+     "name": "3D shapes, plans and nets",
+     "points": [
+      {
+       "id": "g-3d-names",
+       "name": "Names and properties of 3D shapes",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-plans",
+       "name": "Plans and elevations",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-nets",
+       "name": "Nets of 3D shapes",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-congr",
+     "name": "Congruence and similarity",
+     "points": [
+      {
+       "id": "g-congruent",
+       "name": "Congruent shapes and congruent triangles",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-congruent-proof",
+       "name": "Prove triangles are congruent",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "g-similar",
+       "name": "Similar shapes and similar triangles",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-similar-ratio",
+       "name": "Area and volume of similar shapes",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-constr",
+     "name": "Constructions and loci",
+     "points": [
+      {
+       "id": "g-constr-tri",
+       "name": "Construct triangles with ruler and compasses",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-constr-bisect",
+       "name": "Bisect an angle or a line",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-constr-perp",
+       "name": "Construct perpendiculars",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-loci",
+       "name": "Loci",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-scale-draw",
+       "name": "Scale drawings",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 5,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-area",
+     "name": "Perimeter and area of 2D shapes",
+     "points": [
+      {
+       "id": "g-perimeter",
+       "name": "Perimeter of 2D shapes",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-area-basic",
+       "name": "Area of rectangles, triangles, parallelograms and trapeziums",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-area-compound",
+       "name": "Area of compound shapes",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-circle",
+     "name": "Circles: circumference, area, arcs and sectors",
+     "points": [
+      {
+       "id": "g-circle-parts",
+       "name": "Parts of a circle",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-circumference",
+       "name": "Circumference of a circle",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-circle-area",
+       "name": "Area of a circle",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-arc",
+       "name": "Arc length",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "g-sector",
+       "name": "Area of a sector",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 5,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-vol",
+     "name": "Volume and surface area of prisms and cylinders",
+     "points": [
+      {
+       "id": "g-prism-vol",
+       "name": "Volume of prisms and cuboids",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-cyl-vol",
+       "name": "Volume of a cylinder",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-sa-prism",
+       "name": "Surface area of prisms",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-sa-cyl",
+       "name": "Surface area of a cylinder",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-solids",
+     "name": "Pyramids, cones, spheres and composite solids",
+     "points": [
+      {
+       "id": "g-pyr-cone-sph",
+       "name": "Volume and surface area of pyramids, cones and spheres",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "g-frustum",
+       "name": "Frustums and composite solids",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 2,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-trans-a",
+     "name": "Translations and reflections",
+     "points": [
+      {
+       "id": "g-trans-translate",
+       "name": "Translate a shape by a vector",
+       "tier": "F",
+       "games": [
+        {
+         "game": "transform",
+         "skills": [
+          "Translations · positive vectors",
+          "Translations · negative vectors",
+          "Translations · bigger vectors"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-trans-reflect",
+       "name": "Reflect a shape in a line",
+       "tier": "F",
+       "games": [
+        {
+         "game": "transform",
+         "skills": [
+          "Reflect in the x-axis",
+          "Reflect in the y-axis",
+          "Reflect in either axis",
+          "Reflect in x = k or y = k",
+          "Reflect in y = x or y = −x",
+          "Reflect in x = k",
+          "Reflect in y = k",
+          "Reflect in any horizontal or vertical line",
+          "Reflect · all mirror lines"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 2,
+     "total": 2,
+     "games": [
+      "transform"
+     ],
+     "status": "full"
+    },
+    {
+     "id": "G-trans-b",
+     "name": "Rotations and enlargements",
+     "points": [
+      {
+       "id": "g-trans-rotate",
+       "name": "Rotate a shape about a point",
+       "tier": "F",
+       "games": [
+        {
+         "game": "transform",
+         "skills": [
+          "Rotate 90° about the origin",
+          "Rotate 90° or 180°",
+          "Rotate 90° clockwise about a point",
+          "Rotate 90° anticlockwise about a point",
+          "Rotate 180° about a point",
+          "Rotate about any point",
+          "Rotate 270° about the origin",
+          "Rotate 90°, 180° or 270° about any point"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-trans-enlarge",
+       "name": "Enlarge a shape by a positive whole-number scale factor",
+       "tier": "F",
+       "games": [
+        {
+         "game": "transform",
+         "skills": [
+          "Enlarge · scale factor 2",
+          "Enlarge · scale factor 2 or 3",
+          "Enlarge · scale factor 2, any centre",
+          "Enlarge · scale factor 3, any centre",
+          "Enlarge · scale factor ½ (origin)",
+          "Enlarge · scale factor ½, any centre",
+          "Enlarge · scale factor −1",
+          "Enlarge · scale factor −2",
+          "Enlarge · negative scale factor, any centre",
+          "Enlarge · any scale factor, any centre"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-trans-enlarge-frac",
+       "name": "Enlarge by a fractional or negative scale factor",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 2,
+     "total": 3,
+     "games": [
+      "transform"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "G-trans-c",
+     "name": "Describing and combining transformations",
+     "points": [
+      {
+       "id": "g-trans-describe",
+       "name": "Describe a single transformation fully",
+       "tier": "F",
+       "games": [
+        {
+         "game": "transform",
+         "skills": [
+          "Boss: any transformation",
+          "Boss: two-step transformations",
+          "Boss: describe it · two steps"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-trans-combine",
+       "name": "Combine transformations",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 1,
+     "total": 2,
+     "games": [
+      "transform"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "G-vec",
+     "name": "Vectors",
+     "points": [
+      {
+       "id": "g-vec-column",
+       "name": "Column vectors",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-vec-arith",
+       "name": "Add, subtract and multiply vectors by a number",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "g-vec-geom",
+       "name": "Vector geometry and proofs",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-pyth",
+     "name": "Pythagoras' theorem",
+     "points": [
+      {
+       "id": "g-pyth-hyp",
+       "name": "Pythagoras: find the hypotenuse",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-pyth-side",
+       "name": "Pythagoras: find a shorter side",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-pyth-problems",
+       "name": "Pythagoras in context and on coordinates",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-trig",
+     "name": "Right-angled trigonometry",
+     "points": [
+      {
+       "id": "g-trig-ratio",
+       "name": "Trigonometric ratios (SOH CAH TOA): find a side",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-trig-angle",
+       "name": "Trigonometric ratios: find an angle",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-trig-exact",
+       "name": "Exact trigonometric values",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "g-trig-elev",
+       "name": "Angles of elevation and depression",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-trig2",
+     "name": "Sine rule, cosine rule and 3D trigonometry",
+     "points": [
+      {
+       "id": "g-sine",
+       "name": "The sine rule",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "g-cosine",
+       "name": "The cosine rule",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "g-area-sin",
+       "name": "Area of a triangle using ½ab sin C",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "g-3d",
+       "name": "Pythagoras and trigonometry in 3D",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "G-circ",
+     "name": "Circle theorems",
+     "points": [
+      {
+       "id": "g-circ-centre",
+       "name": "Angle at the centre is twice the angle at the circumference",
+       "tier": "H",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Circle theorems 1 (H)"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-circ-semi",
+       "name": "Angle in a semicircle",
+       "tier": "H",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Circle theorems 1 (H)"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-circ-seg",
+       "name": "Angles in the same segment",
+       "tier": "H",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Circle theorems 1 (H)",
+          "Circle theorems 2 (H)"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-circ-cyclic",
+       "name": "Opposite angles of a cyclic quadrilateral",
+       "tier": "H",
+       "games": [
+        {
+         "game": "angles",
+         "skills": [
+          "Cyclic quadrilaterals (H)"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "g-circ-tangent",
+       "name": "Tangents and radii",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "g-circ-alt",
+       "name": "Alternate segment theorem",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "g-circ-chord",
+       "name": "Chords and perpendicular bisectors",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "g-circ-proof",
+       "name": "Prove circle theorems",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 4,
+     "total": 8,
+     "games": [
+      "angles"
+     ],
+     "status": "partial"
+    }
+   ]
+  },
+  {
+   "id": "P",
+   "name": "Probability",
+   "topics": [
+    {
+     "id": "P-basic",
+     "name": "Probability basics",
+     "points": [
+      {
+       "id": "p-scale",
+       "name": "The probability scale: impossible, certain, likely, unlikely",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Certain, impossible & one dice"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-single",
+       "name": "Probability of a single event",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Bags · one colour",
+          "Spinners",
+          "Certain, impossible & one dice",
+          "Playing cards",
+          "Letters & number cards"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-not",
+       "name": "Probability that an event does not happen",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Bags · “not” events",
+          "Probability rules"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-sum-one",
+       "name": "Probabilities of all outcomes add up to 1",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Probability rules"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-fmt",
+       "name": "Write probabilities as fractions, decimals and percentages",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Fractions, decimals & %"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 5,
+     "total": 5,
+     "games": [
+      "chance"
+     ],
+     "status": "full"
+    },
+    {
+     "id": "P-exp",
+     "name": "Relative frequency and expected outcomes",
+     "points": [
+      {
+       "id": "p-rel-freq",
+       "name": "Relative frequency",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Expected & relative frequency"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-expected",
+       "name": "Expected number of outcomes",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Expected & relative frequency",
+          "Estimates & expected"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-fairness",
+       "name": "Fair and biased: compare experimental and theoretical probability",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 2,
+     "total": 3,
+     "games": [
+      "chance"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "P-list",
+     "name": "Listing outcomes, sample spaces and counting",
+     "points": [
+      {
+       "id": "p-list",
+       "name": "List outcomes systematically",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Listing outcomes"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-sample",
+       "name": "Sample space diagrams",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Two dice · sums",
+          "Two dice · at least / less than",
+          "Two dice · tricky events"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-product",
+       "name": "The product rule for counting",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Counting · product rule (H)",
+          "Pairs & handshakes",
+          "Counting extras"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-arrange",
+       "name": "Arrangements and permutations",
+       "tier": "H",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Counting · arrangements (H)"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 4,
+     "total": 4,
+     "games": [
+      "chance"
+     ],
+     "status": "full"
+    },
+    {
+     "id": "P-tables",
+     "name": "Two-way tables, Venn diagrams and frequency trees",
+     "points": [
+      {
+       "id": "p-two-way",
+       "name": "Two-way tables",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Two-way tables"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-venn",
+       "name": "Venn diagrams",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Venn diagrams"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-venn-set",
+       "name": "Set notation and Venn diagrams (A ∪ B, A ∩ B, A′)",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "p-freq-tree",
+       "name": "Frequency trees",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Overlapping events & frequency trees"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 3,
+     "total": 4,
+     "games": [
+      "chance"
+     ],
+     "status": "partial"
+    },
+    {
+     "id": "P-comb",
+     "name": "Combined events: and, or, at least one",
+     "points": [
+      {
+       "id": "p-or",
+       "name": "Mutually exclusive events: the “or” rule",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Bags · “or” events"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-and",
+       "name": "Independent events: the “and” rule",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Two spinners",
+          "Combined events",
+          "Probability arithmetic"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-at-least",
+       "name": "“At least one” probabilities",
+       "tier": "H",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Two dice · at least / less than"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 3,
+     "total": 3,
+     "games": [
+      "chance"
+     ],
+     "status": "full"
+    },
+    {
+     "id": "P-tree",
+     "name": "Tree diagrams and conditional probability",
+     "points": [
+      {
+       "id": "p-tree-with",
+       "name": "Tree diagrams with independent events",
+       "tier": "F",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Tree diagrams · with replacement",
+          "Tree diagrams · without replacement (H)",
+          "Two picks · with replacement"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-tree-without",
+       "name": "Tree diagrams with dependent events (without replacement)",
+       "tier": "H",
+       "games": [
+        {
+         "game": "chance",
+         "skills": [
+          "Tree diagrams · without replacement (H)",
+          "Two picks · without replacement",
+          "Dependent trees"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "p-conditional",
+       "name": "Conditional probability",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 2,
+     "total": 3,
+     "games": [
+      "chance"
+     ],
+     "status": "partial"
+    }
+   ]
+  },
+  {
+   "id": "S",
+   "name": "Statistics",
+   "topics": [
+    {
+     "id": "S-data",
+     "name": "Types of data and collecting it",
+     "points": [
+      {
+       "id": "s-types",
+       "name": "Types of data (qualitative, quantitative, discrete, continuous)",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-collect",
+       "name": "Data collection methods and questionnaires",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-tally",
+       "name": "Tally charts and frequency tables",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "S-sample",
+     "name": "Sampling",
+     "points": [
+      {
+       "id": "s-sampling",
+       "name": "Sampling methods and bias",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-stratified",
+       "name": "Stratified sampling",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "s-capture",
+       "name": "Capture–recapture estimates",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "S-charts",
+     "name": "Pictograms, bar charts, pie charts and misleading graphs",
+     "points": [
+      {
+       "id": "s-pictogram",
+       "name": "Pictograms",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-bar",
+       "name": "Bar charts, dual and composite bar charts",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-pie",
+       "name": "Pie charts",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-misleading",
+       "name": "Spot misleading graphs and statistics",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "S-line",
+     "name": "Line graphs, time series and stem-and-leaf diagrams",
+     "points": [
+      {
+       "id": "s-line",
+       "name": "Line graphs and time series",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-stem",
+       "name": "Stem-and-leaf diagrams",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 2,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "S-scatter",
+     "name": "Scatter graphs and lines of best fit",
+     "points": [
+      {
+       "id": "s-scatter",
+       "name": "Scatter graphs and correlation",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-lobf",
+       "name": "Lines of best fit",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 2,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "S-avg",
+     "name": "Averages and spread",
+     "points": [
+      {
+       "id": "s-mean",
+       "name": "Mean, median, mode and range of a list",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-freq-table",
+       "name": "Averages from a frequency table",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-grouped",
+       "name": "Estimate the mean from a grouped frequency table",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-compare",
+       "name": "Compare two distributions using averages and spread",
+       "tier": "F",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 4,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "S-hist",
+     "name": "Frequency polygons and histograms",
+     "points": [
+      {
+       "id": "s-freq-poly",
+       "name": "Frequency polygons",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-hist-equal",
+       "name": "Histograms with equal class widths",
+       "tier": "F",
+       "games": []
+      },
+      {
+       "id": "s-hist-unequal",
+       "name": "Histograms with unequal class widths",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    },
+    {
+     "id": "S-cf",
+     "name": "Cumulative frequency, quartiles and box plots",
+     "points": [
+      {
+       "id": "s-cf",
+       "name": "Cumulative frequency graphs",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "s-quartiles",
+       "name": "Quartiles and the interquartile range",
+       "tier": "H",
+       "games": []
+      },
+      {
+       "id": "s-box",
+       "name": "Box plots",
+       "tier": "H",
+       "games": []
+      }
+     ],
+     "covered": 0,
+     "total": 3,
+     "games": [],
+     "status": "none"
+    }
+   ]
+  }
+ ]
+}
