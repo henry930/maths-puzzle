@@ -23,6 +23,9 @@ bk-multi-outside|xy outside|括號外有多個字母
 fc-terms-2|2 terms|2 項
 fc-terms-3|3 terms|3 項
 fc-terms-4|4 terms|4 項
+fc-terms-5|5 terms|5 項
+fc-three-letters|three letters|三個字母
+fc-cubed|cubed letter|有立方
 fc-number-only|number only|只提數字
 fc-letter-only|letter only|只提字母
 fc-number-and-letter|number and letter|數字同字母
@@ -194,12 +197,12 @@ function tagExpand(q){
 }
 /* ---------- Factorise It!: q = {terms,H,cv} ---------- */
 function tagFactorise(q){
-  const nt=q.terms.length,cvL=Object.keys(q.cv).length,tags=['fc-terms-'+Math.min(4,nt)];
+  const nt=q.terms.length,cvL=Object.keys(q.cv).length,tags=['fc-terms-'+Math.min(5,nt)];
   const num=q.H>1;
   tags.push(!cvL?'fc-number-only':num?'fc-number-and-letter':'fc-letter-only');
   const sqL=Object.values(q.cv).some(e=>e>=2),two=letters(q.terms).size>=2,neg=q.terms.some(t=>t.c<0),big=q.H>=7||q.terms.some(t=>Math.abs(t.c)>=40);
-  if(sqL)tags.push('fc-squared-letter');if(two)tags.push('fc-two-letters');if(neg)tags.push('fc-neg-terms');if(big)tags.push('big-numbers');
-  const d=1+(nt-2)*1.2+(!cvL?0:num?2:1)+(sqL?1:0)+(two?1.2:0)+(neg?.6:0)+(big?.5:0);
+  if(sqL)tags.push('fc-squared-letter');if(two)tags.push('fc-two-letters');if(letters(q.terms).size>=3)tags.push('fc-three-letters');if(q.terms.some(t=>Object.values(t.p).some(e=>e>=3)))tags.push('fc-cubed');if(neg)tags.push('fc-neg-terms');if(big)tags.push('big-numbers');
+  const d=1+(nt-2)*1.2+(!cvL?0:num?2:1)+(sqL?1:0)+(two?1.2:0)+(letters(q.terms).size>=3?1.2:0)+(neg?.6:0)+(big?.5:0);
   return fin(tags,d);
 }
 /* ---------- Quadratic Factoriser: q = {a,b,c,m,p,n,q} ---------- */

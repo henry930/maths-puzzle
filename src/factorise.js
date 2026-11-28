@@ -1,5 +1,5 @@
 (function(){
-const SETS1=['x','y','a','n','m','t'],SETS2=[['x','y'],['a','b'],['m','n'],['p','q']];
+const SETS1=['x','y','a','n','m','t'],SETS2=[['x','y'],['a','b'],['m','n'],['p','q'],['x','z'],['c','d'],['s','t'],['u','v']],SETS3=[['x','y','z'],['a','b','c'],['p','q','r'],['l','m','n']];
 const r=(a,b)=>R(a,b),gcd=(a,b)=>b?gcd(b,a%b):a,gcdAll=a=>a.reduce(gcd);
 const facs=n=>{const o=[];for(let i=1;i<=n;i++)if(n%i===0)o.push(i);return o;};
 const SUP={2:'²',3:'³'},sup=e=>e===1?'':(SUP[e]||'^'+e);
@@ -36,15 +36,27 @@ const LV=[
  {n:'Four terms',nT:4,H:[2,6],cv:['x'],pool:['xx','x','y',''],neg:1,L:2},
  {n:'Four terms · two letters',nT:4,H:[2,8],cv:['x','y','xy'],pool:['x','y','xy','xx','yy',''],neg:1,L:2},
  {n:'Squares and products',nT:3,H:[2,8],cv:['xx','xy','yy'],pool:['x','y','',],neg:1,L:2},
- {n:'Boss: anything goes!',nT:4,H:[2,12],cv:['x','y','xy','xx'],pool:['x','y','xy','xx','yy',''],neg:1,L:2}
+ {n:'Boss: anything goes!',nT:4,H:[2,12],cv:['x','y','xy','xx'],pool:['x','y','xy','xx','yy',''],neg:1,L:2},
+ /* levels 19+: bigger numbers, mostly-negative terms, five terms, three letters */
+ {n:'Bigger numbers · up to 20',nT:2,H:[12,20],cv:['x','y','xy',''],pool:['x','y','xy',''],neg:1,L:2},
+ {n:'Bigger numbers · three terms',nT:3,H:[12,20],cv:['x','y','xy','xx'],pool:['x','y','xy','xx',''],neg:1,L:2},
+ {n:'Mostly minus signs · three terms',nT:3,H:[2,9],cv:['x','y','xy',''],pool:['x','y','xy','xx',''],neg:2,L:2},
+ {n:'Mostly minus signs · four terms',nT:4,H:[2,9],cv:['x','y','xy','xx'],pool:['x','y','xy','xx','yy',''],neg:2,L:2},
+ {n:'Five terms',nT:5,H:[2,6],cv:['x','y','xy'],pool:['x','y','xy','xx','yy',''],neg:1,L:2},
+ {n:'Cubes and squares',nT:4,H:[2,8],cv:[''],pool:['xxx','xx','x',''],neg:1,L:1},
+ {n:'Challenge: three letters · 2 terms',nT:2,H:[2,6],cv:['x','y','z','xy','xz','yz','xyz'],pool:['x','y','z','xy','xz','yz',''],neg:1,L:3},
+ {n:'Challenge: three letters · 3 terms',nT:3,H:[2,6],cv:['x','y','z','xy','xz','yz','xyz'],pool:['x','y','z','xy','xz','yz',''],neg:1,L:3},
+ {n:'Challenge: three letters with squares',nT:3,H:[2,6],cv:['x','y','z','xy','xz','yz','xx'],pool:['x','y','z','xx','yy','zz','xy',''],neg:1,L:3},
+ {n:'Boss 2: anything goes!',nT:[3,5],H:[2,20],cv:['x','y','xy','xx','yy',''],pool:['x','y','xy','xx','yy','xyy','xxy',''],neg:2,L:2}
 ];
 const cnt=s=>{const p={};for(const ch of s)p[ch]=(p[ch]||0)+1;return p;};
 function gen(spec){
   for(let at=0;at<500;at++){
+    const nT=Array.isArray(spec.nT)?r(spec.nT[0],spec.nT[1]):spec.nT;
     const H=r(spec.H[0],spec.H[1]),cvS=spec.cv[r(0,spec.cv.length-1)],cv=cnt(cvS);
     const pool=spec.pool.slice(),shapes=[];
-    while(shapes.length<spec.nT&&pool.length){shapes.push(pool.splice(r(0,pool.length-1),1)[0]);}
-    if(shapes.length<spec.nT)continue;
+    while(shapes.length<nT&&pool.length){shapes.push(pool.splice(r(0,pool.length-1),1)[0]);}
+    if(shapes.length<nT)continue;
     const sh=shapes.map(cnt);
     let ok=true;for(const k in cv){if(!sh.some(s=>!s[k]))ok=false;} // keep the common power exactly what we chose
     // letters shared by every shape beyond cv would increase the common factor
@@ -54,7 +66,7 @@ function gen(spec){
     const terms=shapes.map((s,i)=>{const p={};for(const k in cv)p[k]=(p[k]||0)+cv[k];for(const k in sh[i])p[k]=(p[k]||0)+sh[i][k];return{c:H*ks[i],p};});
     if(terms.some(t=>Object.values(t.p).some(e=>e>3)))continue;
     terms.sort((a,b)=>Object.values(b.p).reduce((x,y)=>x+y,0)-Object.values(a.p).reduce((x,y)=>x+y,0)||vs(a.p).localeCompare(vs(b.p)));
-    terms.forEach((t,i)=>{if(i>0&&spec.neg&&Math.random()<.5)t.c=-t.c;});
+    terms.forEach((t,i)=>{if(i>0&&spec.neg&&Math.random()<(spec.neg===2?.85:.5))t.c=-t.c;});
     return{terms,H,cv};
   }
   return null;
@@ -157,7 +169,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
   const absT=t=>({c:Math.abs(t.c),p:Object.assign({},t.p)});
   function build(){
     let q;do{q=gen(spec);}while(!q);
-    const set=spec.L===1?[pick(SETS1)]:pick(SETS2),mp={x:set[0],y:set[1]||set[0]};
+    const set=spec.L===1?[pick(SETS1)]:spec.L===3?pick(SETS3):pick(SETS2),mp={x:set[0],y:set[1]||set[0],z:set[2]||set[0]};
     terms=q.terms.map(t=>{const p={};for(const k in t.p){const nk=mp[k]||k;p[nk]=(p[nk]||0)+t.p[k];}return{c:t.c,p};});
     L=[...new Set(terms.flatMap(t=>Object.keys(t.p)))].sort();
     orig=cp(terms);ctx.q=tagFactorise(q);ctx.q.eq=fmtExpr(terms);CF={c:1,p:{}};steps=[];ended=false;selI=-1;selJ=-1;msg('');startRound();
