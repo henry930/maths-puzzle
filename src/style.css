@@ -454,3 +454,12 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .px{overflow:hidden}.px .sc-scene{max-width:100%}.px .t.chip.big{white-space:normal;max-width:100%;text-align:center;flex-wrap:wrap}.px .sc-tiles{max-width:100%}
 .px .sc-base:empty{height:26px;padding:0}
 .px .sc-eq{flex-wrap:nowrap}
+
+/* maths typesetting for powers and logs */
+.ch sup,.px sup,.pw-ladder sup,.pw-sub sup{font-size:.7em;line-height:0;vertical-align:baseline;position:relative;top:-.55em;margin-left:.06em;font-style:normal;font-weight:800;letter-spacing:0}
+.ch sub,.px sub,.pw-ladder sub{font-size:.7em;line-height:0;vertical-align:baseline;position:relative;bottom:-.3em;margin-left:.05em;font-style:normal}
+.ch var,.px var{font-style:italic;font-family:"Times New Roman","STIX Two Text",Georgia,serif;font-size:1.12em;font-weight:700}
+.px .t var{font-size:1.1em}.pwr{white-space:nowrap}.pwr sup .fr{font-size:.85em;vertical-align:middle}
+.px sup .fr i,.ch sup .fr i{padding:0 1px}
+.px .sc-eq .el{display:block;white-space:normal}.px .sc-eq .el .otg{margin-right:6px;vertical-align:middle}.px .sc-eq .el.fin{display:block}
+.px .t.chip span{white-space:nowrap}

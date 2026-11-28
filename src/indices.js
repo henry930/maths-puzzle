@@ -20,7 +20,9 @@ const fmtV=v=>{const neg=v<0,a=Math.abs(v);if(Math.abs(a-Math.round(a))<1e-9)ret
   for(let d=2;d<=1000;d++){const n=a*d;if(Math.abs(n-Math.round(n))<1e-7)return(neg?'−':'')+Math.round(n)+'/'+d;}return(neg?'−':'')+a.toFixed(3);};
 const frH=s=>{const m=/^(−?)(\d+)\/(\d+)$/.exec(s);return m?`${m[1]}<span class="fr"><i>${m[2]}</i><i>${m[3]}</i></span>`:s;};
 const H=v=>frH(fmtV(v));
-const pw=(b,e)=>`${b}<sup>${e}</sup>`;
+const bv=b=>/^[a-z]$/i.test(String(b))?`<var>${b}</var>`:b;               /* letters are italic, like printed maths */
+const pw=(b,e)=>`<span class="pwr">${bv(b)}<sup>${e}</sup></span>`;
+const pe=(b,e)=>e===1?bv(b):pw(b,e);              /* x¹ is written x */
 const lg=(b,x)=>`log<sub>${b}</sub> ${x}`;
 const log2=x=>Math.log(x)/Math.LN2;
 const tiles=(b,n)=>Array.from({length:n},()=>`<b class="tile">${b}</b>`).join('<span class="tmul">×</span>');
@@ -35,7 +37,7 @@ const num=s=>{const v=parseT(s);return v==null?null:{v,n:null,d:1};};
    tl(v) = left − right in "steps" for a typed value v, and is 0 exactly when the balance is level. */
 function Q(o){
   const q={k:o.k,q:o.q,ans:o.ans,ex:o.ex,forms:o.forms,form:0,start:o.start,build:o.build,hist:[],nopad:!!o.build};
-  const bs=o.build,eh=e=>e===0?'1':e===1?bs:pw(bs,eT(e));
+  const bs=o.build,eh=e=>e===0?'1':e===1?bv(bs):pw(bs,eT(e));
   /* the scene uses the Balance Scale game's own classes: .sc-top / .sc-box / .sc-wts / .wt (weights), .sc-eq / .el / .otg (working lines),
      .sc-scene / .sc-beam / .sc-pan / .sc-tiles / .t (tiles) / .sc-dish / .sc-post / .sc-base (+ .lv.go buttons) */
   q.visf=function(buf,answered,ok){
@@ -111,18 +113,18 @@ const eT=e=>e<0?'−'+(-e):String(e);
 const bcls=b=>/^\d/.test(String(b))?'tn':'tx';              /* Balance Scale weights: purple italic for letters, yellow for numbers */
 const blk=(b,n)=>Array.from({length:n},()=>`<div class="t chip ${bcls(b)} pb">${b}</div>`).join('');
 const blocksH=(b,e,s)=>{if(e==null)e=s;return e===0?'<div class="t chip tn one">1</div>':e>0?blk(b,e):`<span class="fr"><i>1</i><i class="bi">${blk(b,-e)}</i></span>`;};
-const bq=(k,b,t,s,qt,ex,o)=>Q(Object.assign({k,q:qt,ans:t,start:s,build:b,ex,forms:[{L:()=>(o&&o.L)||pw(b,eT(t)),R:(T,v)=>blocksH(b,v,s),tl:v=>t-v,blocks:true}]},o||{}));
+const bq=(k,b,t,s,qt,ex,o)=>Q(Object.assign({k,q:qt,ans:t,start:s,build:b,ex,forms:[{L:()=>(o&&o.L)||pe(b,t),R:(T,v)=>blocksH(b,v,s),tl:v=>t-v,blocks:true}]},o||{}));
 const BK=()=>pick(['a','x','y','m','n','2','3','5']);
 
 const QT={
 /* ---- build the power from blocks ---- */
-B1(){const b=BK(),n=R(2,5);return bq('B1',b,n,0,`Make ${pw(b,n)}: add ${b}-blocks to the right pan until the balance levels.`,`${tiles(b,n)} = ${pw(b,n)}. ${n} blocks multiplied together.`);},
-B2(){const b=BK(),n=R(1,3),m=n+R(1,3);return bq('B2',b,n,m,`The right pan holds ${pw(b,m)}. Take blocks away so it equals ${pw(b,n)}.`,`${pw(b,m)} ÷ ${pw(b,m-n)} = ${pw(b,n)}. Each block you take away divides by ${b}.`);},
-B3(){const b=BK(),p=R(1,3),q=R(1,3);return bq('B3',b,p+q,0,`Build ${pw(b,p)} × ${pw(b,q)} with ${b}-blocks. How many blocks does it need?`,`${pw(b,p)} × ${pw(b,q)} = ${pw(b,p+q)}: ${p} blocks and ${q} blocks make ${p+q}. Add the indices.`,{L:pw(b,p)+' × '+pw(b,q)});},
-B4(){const b=BK(),m=R(2,4);return bq('B4',b,0,m,`The right pan holds ${pw(b,m)}. Take away every ${b}-block. What is ${pw(b,0)}?`,`${pw(b,m)} ÷ ${pw(b,m)} = ${pw(b,0)} = 1. No blocks left means 1 (not 0).`);},
-B5(){const b=BK(),n=R(1,3);return bq('B5',b,-n,0,`Make ${pw(b,'−'+n)}. Use the ÷${b} block: each one divides by ${b}.`,`${pw(b,'−'+n)} = 1 ÷ ${pw(b,n)}: ${n} divide-block${n>1?'s':''}.`,{neg:true});},
-B6(){const b=BK();let s=R(-2,3),t=R(-3,4);if(t===s)t=s+1;return bq('B6',b,t,s,`Change the right pan from ${pw(b,eT(s))} to ${pw(b,eT(t))}.`,`${b}-blocks multiply, ÷${b}-blocks divide. From ${pw(b,eT(s))} to ${pw(b,eT(t))} is a change of ${t-s>0?'+':'−'}${Math.abs(t-s)} in the index.`,{neg:true});},
-B7(){const b=BK(),p=R(1,4),q=p+R(1,3);return bq('B7',b,p-q,0,`Build ${pw(b,p)} ÷ ${pw(b,q)}. Use ${b}-blocks to multiply and ÷${b}-blocks to divide.`,`${pw(b,p)} ÷ ${pw(b,q)} = ${pw(b,eT(p-q))}: the index is ${p} − ${q} = ${p-q}.`,{neg:true,L:pw(b,p)+' ÷ '+pw(b,q)});},
+B1(){const b=BK(),n=R(2,5);return bq('B1',b,n,0,`Make ${pe(b,n)}: add ${b}-blocks to the right pan until the balance levels.`,`${tiles(b,n)} = ${pe(b,n)}. ${n} blocks multiplied together.`);},
+B2(){const b=BK(),n=R(1,3),m=n+R(1,3);return bq('B2',b,n,m,`The right pan holds ${pe(b,m)}. Take blocks away so it equals ${pe(b,n)}.`,`${pe(b,m)} ÷ ${pe(b,m-n)} = ${pe(b,n)}. Each block you take away divides by ${b}.`);},
+B3(){const b=BK(),p=R(1,3),q=R(1,3);return bq('B3',b,p+q,0,`Build ${pe(b,p)} × ${pe(b,q)} with ${b}-blocks. How many blocks does it need?`,`${pe(b,p)} × ${pe(b,q)} = ${pe(b,p+q)}: ${p} block${p>1?"s":""} and ${q} block${q>1?"s":""} make ${p+q}. Add the indices.`,{L:pe(b,p)+' × '+pe(b,q)});},
+B4(){const b=BK(),m=R(2,4);return bq('B4',b,0,m,`The right pan holds ${pe(b,m)}. Take away every ${b}-block. What is ${pe(b,0)}?`,`${pe(b,m)} ÷ ${pe(b,m)} = ${pe(b,0)} = 1. No blocks left means 1 (not 0).`);},
+B5(){const b=BK(),n=R(1,3);return bq('B5',b,-n,0,`Make ${pe(b,'−'+n)}. Use the ÷${b} block: each one divides by ${b}.`,`${pe(b,'−'+n)} = 1 ÷ ${pe(b,n)}: ${n} divide-block${n>1?'s':''}.`,{neg:true});},
+B6(){const b=BK();let s=R(-2,3),t=R(-3,4);if(t===s)t=s+1;return bq('B6',b,t,s,`Change the right pan from ${pe(b,eT(s))} to ${pe(b,eT(t))}.`,`${b}-blocks multiply, ÷${b}-blocks divide. From ${pe(b,eT(s))} to ${pe(b,eT(t))} is a change of ${t-s>0?'+':'−'}${Math.abs(t-s)} in the index.`,{neg:true});},
+B7(){const b=BK(),p=R(1,4),q=p+R(1,3);return bq('B7',b,p-q,0,`Build ${pe(b,p)} ÷ ${pe(b,q)}. Use ${b}-blocks to multiply and ÷${b}-blocks to divide.`,`${pe(b,p)} ÷ ${pe(b,q)} = ${pe(b,eT(p-q))}: the index is ${p} − ${q} = ${p-q}.`,{neg:true,L:pe(b,p)+' ÷ '+pe(b,q)});},
 
 /* ---- repeated multiplication ---- */
  R1(){const b=pick([2,3,4,5,10]),n=R(2,6);return Q({k:'R1',q:`The right pan holds ${n} copies of ${b} multiplied together. Write that as a power: ${pw(b,'?')}.`,ans:n,
@@ -252,7 +254,7 @@ const LV=[
  ['Build · change the power',['B6']],['Boss · indices',['R2','Z3','N2','F4','L1','L4','L7']],['Boss · logs and laws',['C2','C5','G1','G2','G3','G4','G7']]];
 const POOL=LV.map(l=>l[1]);
 const clamp=d=>Math.max(1,Math.min(10,d));
-const plain=h=>String(h).replace(/<\/i><i>/g,'/').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+const plain=h=>String(h).replace(/<sup>/g,'^(').replace(/<\/sup>/g,')').replace(/<\/i><i>/g,'/').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 const qq=(key,cur)=>{const m=D[cur.k||key];if(!m)return null;return{v:1,tags:[...m[1]].sort(),diff:m[0],score:m[0],qt:cur.k||key,eq:plain(cur.q)};};
 const qmeta=lv=>{const pool=[...new Set(POOL[lv-1])],ms=pool.map(k=>D[k]),all=new Set(ms.flatMap(m=>m[1])),tags=[...all].filter(t=>ms.every(m=>m[1].includes(t))).sort(),
   sometimes=[...all].filter(t=>!tags.includes(t)).sort(),d=ms.reduce((a,m)=>a+m[0],0)/ms.length;
