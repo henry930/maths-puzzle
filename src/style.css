@@ -397,3 +397,10 @@ a.card.news{text-decoration:none;color:inherit}
 .gi-sl{transition:transform 1.2s ease}.gi-sl.go{transform:translate(var(--dx,0),var(--dy,0))}
 .gi-bounce{animation:gib 1s infinite}@keyframes gib{50%{transform:translateY(-8px)}}
 .gi-hid{transform-box:fill-box;transform-origin:center}.gi-card{padding:20px 18px}
+/* live demo */
+.intro.live{background:transparent}.intro.live .in-top{position:absolute;top:0;left:0;right:0;background:linear-gradient(#4b2cae,#5f3dc4);z-index:2}
+.intro.live .in-body{position:absolute;top:calc(52px + env(safe-area-inset-top));left:0;right:0;flex:none;background:#5f3dc4;z-index:2;padding:0 14px 8px;box-shadow:0 6px 12px rgba(0,0,0,.25)}
+.dm-cap{text-align:center;font-weight:800;font-size:clamp(16px,4.6vw,21px);line-height:1.3;min-height:50px;padding:4px 6px 2px;display:flex;align-items:center;justify-content:center}
+.intro.live .fi-dots{margin:2px 0 0}.dm-hand{position:fixed;z-index:6}
+.dm-end{position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:7;background:rgba(60,30,140,.92);padding:12px;border-radius:20px}
+.dm-hl{outline:4px solid #ffd43b!important;outline-offset:3px;border-radius:10px;animation:dmhl 1s infinite}@keyframes dmhl{50%{outline-color:#fff}}
