@@ -411,6 +411,13 @@ a.card.news{text-decoration:none;color:inherit}
 .card.game .art .miniriver{font-size:46px}
 .card.game .art .mininim{transform:scale(1.3)}
 .ch-list{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:320px}.ch-list span{background:#f2efff;border-radius:8px;padding:4px 8px;font-weight:800;font-size:14px;letter-spacing:1px}.ch-list span.hl{background:#ffd23f}.ch-tw td,.ch-tw th{width:auto;padding:4px 10px}
+
+/* profile: skill status per game */
+details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-details-marker{display:none}
+.sk{padding:4px 0 8px 30px}.srow{display:flex;align-items:center;gap:6px;font-size:13px;padding:3px 0;border-bottom:1px dashed #eee}.sn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sbd{font-size:11px;font-weight:700;border-radius:20px;padding:1px 8px}.sbd-0{background:#d3f9d8;color:#2b8a3e}.sbd-1{background:#fff3bf;color:#e67700}.sbd-2{background:#ffe3e3;color:#c92a2a}
+.sdots{display:flex;gap:2px}.sdots i{width:7px;height:7px;border-radius:50%;background:#dee2e6}.sdots i.on{background:#6741d9}
+.sst{width:74px;text-align:right;font-weight:700;color:#868e96}.s-done .sst{color:#2b8a3e}.s-going .sst{color:#6741d9}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><button class="back" id="lvbtn">Levels ▾</button><div class="pills" id="glevels"></div></div>
@@ -837,14 +844,35 @@ function showLogin(first){
 }
 
 /* ---------- profile ---------- */
+/* ---------- skill status: one row per knowledge point (levels of a game grouped by name) ---------- */
+const STAGE_RE=/ · (warm-up|easy|medium|hard|tough)$/;
+const BAND=d=>d==null?-1:d<=3?0:d<=6?1:2;            /* difficulty 1-10 (from the level tags) -> Easy / Medium / Hard */
+const BAND_NAME=['Easy','Medium','Hard'];
+function skillsOf(G){
+  const m=new Map();
+  G.levels.forEach((nm,i)=>{const k=String(nm).replace(STAGE_RE,'');if(!m.has(k))m.set(k,[]);m.get(k).push(i+1);});
+  return [...m].map(([name,lvs])=>{
+    const d=done[G.id]||{},n=lvs.filter(l=>d[l]).length;
+    const ds=lvs.map(l=>{const q=levelMeta(G,l);return q?q.diff:null;}).filter(x=>x!=null);
+    const diff=ds.length?Math.round(ds.reduce((a,b)=>a+b,0)/ds.length):null;
+    return{name,lvs,n,total:lvs.length,band:BAND(diff),state:n===0?'new':n===lvs.length?'done':'going'};
+  });
+}
+function skillHtml(G){
+  const S=skillsOf(G),mastered=S.filter(s=>s.state==='done').length;
+  const row=s=>`<div class="srow s-${s.state}"><span class="sn">${esc(s.name)}</span>${s.band>=0?`<span class="sbd sbd-${s.band}">${BAND_NAME[s.band]}</span>`:''}<span class="sdots">${s.lvs.map(l=>`<i class="${(done[G.id]||{})[l]?'on':''}"></i>`).join('')}</span><span class="sst">${s.state==='done'?'✓ Done':s.state==='going'?s.n+'/'+s.total:'Not started'}</span></div>`;
+  return `<p class="small">${mastered}/${S.length} skills completed</p>${S.map(row).join('')}`;
+}
+
 function syncLabel(){return !CLOUD?'📱 Saved on this device':SYNC==='ok'?'☁ Saved online':SYNC==='pending'?'⏳ Saving…':'⚠ Offline — will sync when you are back online';}
 function showProfile(){
   const u=me();
   const rows=REG.map(G=>{const d=done[G.id]||{};let p=0;for(const l in d){p+=d[l].p||0;}
-    return `<div class="prow"><span class="pe">${G.emoji}</span><span class="pn">${esc(G.name)}</span><span class="pb"><i style="width:${Object.keys(d).length/G.levels.length*100}%;background:${G.color}"></i></span><span class="pv">${Object.keys(d).length}/${G.levels.length}</span><span class="pp">⭐${p}</span></div>`;}).join('');
+    return `<details class="pg" data-g="${G.id}"><summary class="prow"><span class="pe">${G.emoji}</span><span class="pn">${esc(G.name)}</span><span class="pb"><i style="width:${Object.keys(d).length/G.levels.length*100}%;background:${G.color}"></i></span><span class="pv">${Object.keys(d).length}/${G.levels.length}</span><span class="pp">⭐${p}</span></summary><div class="sk"></div></details>`;}).join('');
   const o=ov(`<h2>👤 ${esc(DB.cur)}</h2><p class="pbig">⭐ <b>${ptsOf(u)}</b> points · <b>${lvOf(u)}</b> levels cleared</p><p class="small" id="psync">${syncLabel()}</p><div class="plist">${rows}</div>
    <p class="small">Points: first clear of a level = 50 + 10 × level (up to level 20). Replaying a level gives +5.</p>
    <div class="row"><button class="btn" id="psw">Log out</button><button class="btn alt" id="pcl">🏫 Teacher board</button>${CLOUD?'':'<button class="btn alt" id="psh">📤 Share my progress</button>'}<button class="btn alt" id="prs">Reset my progress</button><button class="btn alt" id="pcx">Close</button></div>`,'big');
+  o.querySelectorAll('details.pg').forEach(dt=>dt.addEventListener('toggle',()=>{if(dt.open&&!dt.dataset.r){dt.dataset.r=1;dt.querySelector('.sk').innerHTML=skillHtml(REG.find(g=>g.id===dt.dataset.g));}}));
   $('#pcx',o).onclick=()=>o.remove();
   $('#psw',o).onclick=()=>{o.remove();logout();};
   const sh=$('#psh',o);if(sh)sh.onclick=()=>copyText(progressCode(),'Progress code copied — send it to your teacher');
