@@ -23,7 +23,7 @@ const H=v=>frH(fmtV(v));
 const bv=b=>/^[a-z]$/i.test(String(b))?`<var>${b}</var>`:b;               /* letters are italic, like printed maths */
 const xfr=e=>String(e).replace(/<span class="fr"><i>(.*?)<\/i><i>(.*?)<\/i><\/span>/g,'<span class="xf"><b>$1</b><b>$2</b></span>');   /* stacked fraction for use in an exponent */
 const pw=(b,e)=>{const x=xfr(e),f=x!==String(e);return `<span class="pwr">${bv(b)}<sup${f?' class="sf"':''}>${x}</sup></span>`;};
-const pe=(b,e)=>e===1?bv(b):pw(b,e);              /* x¹ is written x */
+const pe=(b,e)=>e===1?bv(b):pw(b,typeof e==='number'?eT(e):e);              /* x¹ is written x */
 const lg=(b,x)=>`log<sub>${b}</sub> ${x}`;
 const log2=x=>Math.log(x)/Math.LN2;
 const tiles=(b,n)=>Array.from({length:n},()=>`<b class="btl">${b}</b>`).join('<span class="tmul">×</span>');
@@ -38,30 +38,39 @@ const num=s=>{const v=parseT(s);return v==null?null:{v,n:null,d:1};};
    tl(v) = left − right in "steps" for a typed value v, and is 0 exactly when the balance is level. */
 function Q(o){
   const q={k:o.k,q:o.q,ans:o.ans,ex:o.ex,forms:o.forms,form:0,start:o.start,build:o.build,hist:[],nopad:!!o.build};
-  const bs=o.build,eh=e=>e===0?'1':e===1?bv(bs):pw(bs,eT(e));
+  const bs=o.build;if(o.build){q.st=mkSt(o.start);}
+  const eh=e=>Math.abs(e)<1e-9?'1':Math.abs(e-1)<1e-9?bv(bs):pw(bs,eT(e));
+  const OPS={p2:['pow',2,'( )²'],p3:['pow',3,'( )³'],r2:['root',2,'√'],r3:['root',3,'∛']};
+  const rsym=k=>k===2?'√':k===3?'∛':`<sup>${k}</sup>√`;
+  const hline=h=>{const t=h.kind==='mul'?`${eh(h.from)} × ${bv(bs)}`:h.kind==='div'?`${eh(h.from)} ÷ ${bv(bs)}`:h.kind==='pow'?`(${eh(h.from)})<sup>${h.k}</sup>`:`${rsym(h.k)}(${eh(h.from)})`;
+    const tag=h.kind==='mul'?'×'+bs:h.kind==='div'?'÷'+bs:h.kind==='pow'?'( )'+(h.k===2?'²':'³'):rsym(h.k);
+    return {t:`${t} <b>=</b> ${eh(h.to)}`,tag,cls:h.kind==='mul'||h.kind==='pow'?'ml':'dv'};};
   /* the scene uses the Balance Scale game's own classes: .sc-top / .sc-box / .sc-wts / .wt (weights), .sc-eq / .el / .otg (working lines),
      .sc-scene / .sc-beam / .sc-pan / .sc-tiles / .t (tiles) / .sc-dish / .sc-post / .sc-base (+ .lv.go buttons) */
   q.visf=function(buf,answered,ok){
     const f=q.forms[q.form||0];
-    let v=answered?q.ans:parseT(buf);if(v==null&&q.start!=null&&!answered)v=q.start;
+    let v=answered?q.ans:parseT(buf);
+    if(o.build&&!answered)v=evalSt(q.st);
+    else if(v==null&&q.start!=null&&!answered)v=q.start;
     const T=answered?H(q.ans):(q.start!=null&&v!=null?H(v):typedH(buf));
     const tl=v==null?0:f.tl(v),level=v!=null&&Math.abs(tl)<1e-7;
     const ang=v==null?0:Math.max(-16,Math.min(16,tl*7));   /* same sign as Balance Scale: positive = left pan lower */
     const prev=q._a==null?0:q._a;q._a=ang;
-    const Lh=String(f.L(T,v)),Rh=String(f.R(T,v));
+    const Lh=String(f.L(T,v)),Rh=o.build?stH(bs,q.st,true):String(f.R(T,v));
     const gl=v==null&&Lh.includes('?'),gr=v==null&&Rh.includes('?');   /* dashed outline on the pan that still holds the “?” */
     const chip=(x,g,c)=>`<div class="t chip ${g?'q':c||'tn'} big">${`<span>${x}</span>`}</div>`;
-    const left=chip(Lh,gl,o.build?bcls(bs):'tn'),right=f.blocks?Rh:chip(Rh,gr,'tn');
+    const left=chip(Lh,gl,o.build?bcls(bs):'tn'),right=o.build?Rh:chip(Rh,gr,'tn');
+    const ev=o.build?evalSt(q.st):null;
     let top;
     if(o.build){
-      const lines=q.hist.map((x,i)=>`<div class="el ${i===q.hist.length-1&&!level?'last':'old'}"><span class="otg ${x.d>0?'ml':'dv'}">${x.d>0?'×':'÷'}${bs}</span>${eh(x.from)} ${x.d>0?'×':'÷'} ${bs} <b>=</b> ${eh(x.to)}</div>`).join('');
+      const lines=q.hist.map((x,i)=>{const h=hline(x);return `<div class="el ${i===q.hist.length-1&&!level?'last':'old'}"><span class="otg ${h.cls}">${h.tag}</span>${h.t}</div>`;}).join('');
       top=`<div class="sc-top"><div class="sc-box"><div class="sc-lab">Blocks</div><div class="sc-wts"><div class="wt ${bcls(bs)==='tx'?'xw':'uw'} src" data-d="1">${bs}</div>${o.neg?`<div class="wt ng src" data-d="-1">÷${bs}</div>`:''}</div></div>
         <div class="sc-eq" id="bklog"><div class="el orig">${Lh} <b class="eqn">≠</b> ${eh(q.start)}</div>${lines}${level?`<div class="el fin">✅ ${Lh} = ${eh(v)}</div>`:''}</div></div>`;
     }else top=`<div class="sc-top"><div class="sc-eq one"><div class="el orig">${Lh} <b class="${level?'eqb':'eqn'}">=</b> ${Rh}</div>${level?'<div class="el fin">✅ level</div>':''}</div></div>`;
     let ctl;
-    if(o.build)ctl=answered?'':`<button class="lv go ml" id="bkmul">×${bs}</button>${o.neg?`<button class="lv go dv" id="bkdiv">÷${bs}</button>`:''}<button class="lv go" id="bkun" style="background:#868e96">↶</button><button class="lv go" id="chk" style="background:#2f9e44">Check ✓</button>`;
+    if(o.build)ctl=answered?'':`<div class="opr">${(o.ops||[]).map(k=>`<button class="lv go op" data-op="${k}">${OPS[k][2]}</button>`).join('')}</div><div class="opr"><button class="lv go ml" id="bkmul">×${bs}</button>${o.neg?`<button class="lv go dv" id="bkdiv">÷${bs}</button>`:''}<button class="lv go" id="bkun" style="background:#868e96">↶</button><button class="lv go" id="chk" style="background:#2f9e44">Check ✓</button></div>`;
     else ctl=q.forms.length>1?`<button class="lv go dv" id="ftg">↔ ${f.btn}</button>`:'';
-    return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}<div class="px ${level?'lv':''} ${answered?'done':''}">${top}
+    return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}<div class="px ${level?'lv':''} ${answered?'done':''} ${o.ops&&o.ops.length&&!answered?'ops2':''}">${top}
      <div class="sc-scene" data-a="${ang}" data-p="${prev}"><svg class="sc-svg"></svg><div class="sc-beam"><i></i></div>
       <div class="sc-pan" data-p="L"><div class="sc-tiles">${left}</div><div class="sc-dish"></div></div><div class="sc-pan" data-p="R"><div class="sc-tiles">${right}</div><div class="sc-dish"></div></div>
       <div class="sc-post"></div><div class="sc-base">${ctl}</div></div></div>`;
@@ -79,22 +88,27 @@ function Q(o){
     place();q._raf=requestAnimationFrame(step);
     if(q.build&&api)bindBuild(root,api,pans[1]);
     else if(api&&api.open)root.querySelectorAll('.t.q').forEach(t=>{t.style.cursor='pointer';t.onclick=api.open;});};
-  /* build mode: drag a block onto the right pan (or tap it / press ×a or ÷a) to multiply or divide; each operation adds a line to the working */
+  /* build mode: every operation (×a, ÷a, raise the whole pan to a power, take a root) acts on the right pan and adds a line to the working */
   function bindBuild(root,api,pan){
     const lg=root.querySelector('#bklog');if(lg)lg.scrollTop=1e5;
     if(!root.querySelector('#chk'))return;
-    const now=()=>{const v=parseT(api.buf());return v==null?q.start:v;};
-    const op=d=>{const e=now();q.hist.push({d,from:e,to:e+d});api.set(String(e+d));};
+    const commit=(kind,k,mut)=>{const from=evalSt(q.st),snap=cloneSt(q.st);mut();const to=evalSt(q.st);q.hist.push({kind,k,from,to,snap});api.set(fmtV(to));};
+    const add=d=>commit(d>0?'mul':'div',1,()=>{(d>0?q.st.num:q.st.den).push('a');});
+    const wrap=(kind,k)=>{if(!q.st.num.length&&!q.st.den.length)return;   /* nothing on the pan to raise or root */
+      commit(kind,k,()=>{q.st={num:[{g:kind==='pow'?'p':'r',k,inner:q.st}],den:[]};});};
     const over=(x,y)=>{const p=pan.getBoundingClientRect();return x>p.left-30&&x<p.right+30&&y>p.top-50&&y<p.bottom+30;};
     const drag=(el,onDrop,onTap)=>el.addEventListener('pointerdown',ev=>{ev.preventDefault();const sx=ev.clientX,sy=ev.clientY;let g=null,moved=false;
       const mv=e=>{if(!moved&&Math.hypot(e.clientX-sx,e.clientY-sy)>8){moved=true;g=document.createElement('div');g.className='ghost '+(el.classList.contains('ng')?'ng ':'')+bcls(bs);g.textContent=el.textContent;document.body.appendChild(g);el.classList.add('lifted');}
         if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';pan.classList.toggle('hot',over(e.clientX,e.clientY));}};
       const up=e=>{window.removeEventListener('pointermove',mv);if(g)g.remove();el.classList.remove('lifted');pan.classList.remove('hot');if(!moved)onTap();else onDrop(over(e.clientX,e.clientY));};
       window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up,{once:true});window.addEventListener('pointercancel',up,{once:true});});
-    root.querySelectorAll('.wt.src').forEach(el=>{const d=+el.dataset.d;drag(el,hit=>{if(hit)op(d);},()=>op(d));});
-    pan.querySelectorAll('.t.pb').forEach(el=>{const rm=()=>{const e=now();op(e>0?-1:1);};drag(el,hit=>{if(!hit)rm();},rm);});
-    const m=root.querySelector('#bkmul'),dv=root.querySelector('#bkdiv');if(m)m.onclick=()=>op(1);if(dv)dv.onclick=()=>op(-1);
-    const un=root.querySelector('#bkun');if(un)un.onclick=()=>{const h=q.hist.pop();if(h)api.set(String(h.from));};
+    root.querySelectorAll('.wt.src').forEach(el=>{const d=+el.dataset.d;drag(el,hit=>{if(hit)add(d);},()=>add(d));});
+    /* a block that sits directly on the pan can be tapped (or dragged off) to take it away */
+    pan.querySelectorAll('.t.pb').forEach(el=>{const rm=()=>{const side=el.dataset.side==='d'?'den':'num',i=+el.dataset.i;
+        commit(side==='num'?'div':'mul',1,()=>{q.st[side].splice(i,1);});};drag(el,hit=>{if(!hit)rm();},rm);});
+    const m=root.querySelector('#bkmul'),dv=root.querySelector('#bkdiv');if(m)m.onclick=()=>add(1);if(dv)dv.onclick=()=>add(-1);
+    root.querySelectorAll('.op').forEach(b=>{const [kind,k]=OPS[b.dataset.op];b.onclick=()=>wrap(kind,k);});
+    const un=root.querySelector('#bkun');if(un)un.onclick=()=>{const h=q.hist.pop();if(h){q.st=h.snap;api.set(fmtV(evalSt(q.st)));}};
     root.querySelector('#chk').onclick=()=>{if(api.buf()==='')api.set(String(q.start));api.submit();};
   }
   return q;
@@ -111,11 +125,22 @@ const exp=(b,n)=>Math.pow(b,n);
 const ladder=(b,from,to,last)=>{const a=[];for(let e=from;e>=to;e--){const v=Math.pow(b,e);a.push(`<span class="lp">${pw(b,e<0?'−'+(-e):e)} = ${e===to&&last?'<b>?</b>':H(v)}</span>`);if(e>to)a.push(`<span class="lp d">÷${b}</span>`);}return a.join('');};
 
 /* ---- build mode: blocks on the right pan.  e = net index (a-block = ×a, ÷a-block = ÷a); 0 blocks = 1 ---- */
-const eT=e=>e<0?'−'+(-e):String(e);
+const eT=e=>{const r=Math.round(e);return Math.abs(e-r)<1e-9?(r<0?'−'+(-r):String(r)):H(e);};   /* an exponent, whole or fractional */
 const bcls=b=>/^\d/.test(String(b))?'tn':'tx';              /* Balance Scale weights: purple italic for letters, yellow for numbers */
-const blk=(b,n)=>Array.from({length:n},()=>`<div class="t chip ${bcls(b)} pb">${b}</div>`).join('');
-const blocksH=(b,e,s)=>{if(e==null)e=s;return e===0?'<div class="t chip tn one">1</div>':e>0?blk(b,e):`<span class="fr bf"><i><b class="t chip tn one">1</b></i><i class="bi">${blk(b,-e)}</i></span>`;};
-const bq=(k,b,t,s,qt,ex,o)=>Q(Object.assign({k,q:qt,ans:t,start:s,build:b,ex,forms:[{L:()=>(o&&o.L)||pe(b,t),R:(T,v)=>blocksH(b,v,s),tl:v=>t-v,blocks:true}]},o||{}));
+/* the right pan is a little expression:  {num:[items],den:[items]}  where an item is 'a' (one block) or a group {g:'p'|'r',k,inner} = (inner)^k or the k-th root of inner */
+const mkSt=e=>e>=0?{num:Array(e).fill('a'),den:[]}:{num:[],den:Array(-e).fill('a')};
+const evalIt=it=>it==='a'?1:it.g==='p'?it.k*evalSt(it.inner):evalSt(it.inner)/it.k;
+const evalSt=st=>st.num.reduce((t,i)=>t+evalIt(i),0)-st.den.reduce((t,i)=>t+evalIt(i),0);
+const cloneSt=st=>JSON.parse(JSON.stringify(st));
+const blockH=(b,top,side,i)=>`<div class="t chip ${bcls(b)} ${top?'pb':'pbi'}" ${top?`data-side="${side}" data-i="${i}"`:''}>${b}</div>`;
+const ONE='<div class="t chip tn one">1</div>';
+const stH=(b,st,top)=>{
+  const items=(its,side)=>its.map((it,i)=>it==='a'?blockH(b,top,side,i):grpH(b,it)).join('');
+  const n=items(st.num,'n'),d=items(st.den,'d');
+  return st.den.length?`<span class="fr bf"><i>${n||ONE}</i><i class="bi">${d}</i></span>`:(n||ONE);};
+const grpH=(b,it)=>it.g==='p'?`<span class="gp"><span class="br">(</span>${stH(b,it.inner,false)}<span class="br">)</span><sup>${it.k}</sup></span>`
+  :`<span class="gr">${it.k>2?`<sup class="rk">${it.k}</sup>`:''}<span class="rad">√</span><span class="rin">${stH(b,it.inner,false)}</span></span>`;
+const bq=(k,b,t,s,qt,ex,o)=>Q(Object.assign({k,q:qt,ans:t,start:s,build:b,ex,forms:[{L:()=>(o&&o.L)||pe(b,t),R:()=>'',tl:v=>t-v,blocks:true}]},o||{}));
 const BK=()=>pick(['a','x','y','m','n','2','3','5']);
 
 const QT={
@@ -127,6 +152,9 @@ B4(){const b=BK(),m=R(2,4);return bq('B4',b,0,m,`The right pan holds ${pe(b,m)}.
 B5(){const b=BK(),n=R(1,3);return bq('B5',b,-n,0,`Make ${pe(b,'−'+n)}. Use the ÷${b} block: each one divides by ${b}.`,`${pe(b,'−'+n)} = 1 ÷ ${pe(b,n)}: ${n} divide-block${n>1?'s':''}.`,{neg:true});},
 B6(){const b=BK();let s=R(-2,3),t=R(-3,4);if(t===s)t=s+1;return bq('B6',b,t,s,`Change the right pan from ${pe(b,eT(s))} to ${pe(b,eT(t))}.`,`${b}-blocks multiply, ÷${b}-blocks divide. From ${pe(b,eT(s))} to ${pe(b,eT(t))} is a change of ${t-s>0?'+':'−'}${Math.abs(t-s)} in the index.`,{neg:true});},
 B7(){const b=BK(),p=R(1,4),q=p+R(1,3);return bq('B7',b,p-q,0,`Build ${pe(b,p)} ÷ ${pe(b,q)}. Use ${b}-blocks to multiply and ÷${b}-blocks to divide.`,`${pe(b,p)} ÷ ${pe(b,q)} = ${pe(b,eT(p-q))}: the index is ${p} − ${q} = ${p-q}.`,{neg:true,L:pe(b,p)+' ÷ '+pe(b,q)});},
+B8(){const b=BK(),p=R(2,3),k=R(2,3);return bq('B8',b,p*k,p,`The right pan holds ${pe(b,p)}. Raise the whole pan to the power ${k}: ( )${k===2?'²':'³'}.`,`(${pe(b,p)})<sup>${k}</sup> = ${pe(b,p*k)}: multiply the indices, ${p} × ${k} = ${p*k}.`,{ops:['p2','p3'],L:`(${pe(b,p)})<sup>${k}</sup>`});},
+B9(){const b=BK(),k=pick([2,3]),n=R(1,k===2?3:2);return bq('B9',b,n,k*n,`The right pan holds ${pe(b,k*n)}. Take the ${k===2?'square':'cube'} root of the whole pan.`,`${k===2?'√':'∛'}(${pe(b,k*n)}) = ${pe(b,n)}: divide the index by ${k}.`,{ops:['r2','r3']});},
+B10(){const b=BK(),k=pick([2,3]),p=pick([1,2,3].filter(x=>x!==k));return bq('B10',b,p/k,0,`Make ${pe(b,p/k)}. Put down ${b}-blocks, then use the root and power buttons.`,`${pe(b,p/k)} means the ${k===2?'square':'cube'} root of ${b}${p>1?`, raised to the power ${p}`:''}: the index ${p}/${k} = ${p} × (1/${k}).`,{ops:['r2','r3','p2','p3']});},
 
 /* ---- repeated multiplication ---- */
  R1(){const b=pick([2,3,4,5,10]),n=R(2,6);return Q({k:'R1',q:`The right pan holds ${n} copies of ${b} multiplied together. Write that as a power: ${pw(b,'?')}.`,ans:n,
@@ -238,7 +266,7 @@ function logLaw(k,b,Lh,X,indexH,ex){
 }
 
 /* ---- levels: name, question types, and difficulty / tags per question type ---- */
-const D={B1:[1,['ix-repeat']],B2:[2,['ix-law-div']],B3:[2,['ix-law-mul']],B4:[3,['ix-zero']],B5:[3,['ix-neg']],B6:[4,['ix-law-mul','ix-law-div','ix-neg']],B7:[4,['ix-law-div','ix-neg']],R1:[1,['ix-repeat']],R2:[1,['ix-eval']],R3:[2,['ix-find-index','lg-convert']],R4:[3,['ix-find-base']],
+const D={B8:[3,['ix-law-pow']],B9:[5,['ix-frac']],B10:[6,['ix-frac','ix-frac-pq']],B1:[1,['ix-repeat']],B2:[2,['ix-law-div']],B3:[2,['ix-law-mul']],B4:[3,['ix-zero']],B5:[3,['ix-neg']],B6:[4,['ix-law-mul','ix-law-div','ix-neg']],B7:[4,['ix-law-div','ix-neg']],R1:[1,['ix-repeat']],R2:[1,['ix-eval']],R3:[2,['ix-find-index','lg-convert']],R4:[3,['ix-find-base']],
  Z1:[2,['ix-zero']],Z2:[2,['ix-zero']],Z3:[3,['ix-zero','ix-eval']],
  N1:[3,['ix-neg']],N2:[3,['ix-neg']],N3:[3,['ix-neg']],N4:[4,['ix-neg','ix-find-index']],N5:[5,['ix-neg','ix-neg-frac-base']],
  F1:[4,['ix-frac']],F2:[4,['ix-frac']],F3:[5,['ix-frac']],F4:[6,['ix-frac','ix-frac-pq']],F5:[7,['ix-frac','ix-frac-pq','ix-frac-neg']],F6:[7,['ix-frac','ix-find-index']],
@@ -253,7 +281,7 @@ const LVS=[
  ['Negative index',['N1','N2','N3']],['Negative index',['N4','N5','N2']],['Build negative index',['B5']],
  ['Fractional index',['F1','F2','F3']],['Fractional index',['F5','F4','F6']],
  ['Index law: multiply',['L1']],['Index law: divide',['L2','L8']],['Index law: power of a power',['L3']],['Index laws with negative indices',['L4']],['Index laws with letters',['L5']],['Index laws with a missing index',['L6','L7']],
- ['Build multiplying powers',['B3']],['Build dividing powers',['B7','B2']],['Build change the power',['B6']],
+ ['Build multiplying powers',['B3']],['Build dividing powers',['B7','B2']],['Build change the power',['B6']],['Build power of a power',['B8']],['Build roots',['B9']],['Build fractional index',['B10']],
  ['Index form and log form',['C1']],['Log values',['C2','C3']],['Special logs',['C4']],['Negative and fractional logs',['C5']],['Find the base',['C6','C2']],['Solve index equations with logs',['C8','C1']],
  ['Log law: add',['G1']],['Log law: subtract',['G2','G5']],['Log law: powers',['G3','G8']],['Log laws combined',['G4','G6','G7']],
  ['Mixed indices',['R2','Z3','N2','F4','L1','L4','L7']],['Mixed logs and laws',['C2','C5','G1','G2','G3','G4','G7']]];
@@ -268,7 +296,7 @@ window.__ix={QT,POOL,D,LV};
 REG.push({id:'indices',name:'Power Balance',emoji:'🔋',color:'#0b7285',cat:'Algebra',qmeta,
  desc:'Powers, indices and logs on a balance. See why n⁰ = 1, why negative indices flip, what a fractional index means, and how every index law turns into a log law. Tap the button to swap an equation between index form and log form.',
  skills:['powers and indices','zero, negative and fractional indices','index laws','logarithms','log laws'],levels:LV.map(l=>l[0]),
- how:'Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan, then press Check.',
+ how:'Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan (some levels also have ( )ⁿ and √ buttons that act on the whole pan), then press Check.',
  art:'<div class="minibal">🔋</div>',
  mount(root,lv,ctx){mountQuiz(root,ctx,{single:true,popup:true,game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
 })();

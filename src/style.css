@@ -486,3 +486,11 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 /* "1" is a yellow number block like Balance Scale's 1 weight; a block fraction has a dark bar between 1 and the blocks */
 .px .t.one{background:#fcc419;color:#5c4400;font-style:normal}
 .px .bf{color:#5f3dc4;margin:0 2px}.px .bf i{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;padding:0;border:0}.px .bf i:first-child{border-bottom:3px solid #5f3dc4;padding-bottom:3px}.px .bf .bi{border-top:0;padding-top:3px}
+
+/* build mode: a second row of operation buttons, and bracket / root groups on the pan */
+.px .sc-base{flex-wrap:wrap;align-content:center}.px .opr{display:flex;gap:6px;width:100%}.px.ops2 .sc-scene{height:262px}.px.ops2 .sc-base{height:98px}.px.ops2 .sc-post{height:186px}
+.px .lv.go.op{background:#7048e8;font-size:16px}
+.gp,.gr{display:inline-flex;align-items:center;gap:1px;margin:0 2px}.gp .br{font-size:30px;line-height:1;font-weight:300;color:#5f3dc4}.gp>sup{align-self:flex-start;font-size:.8em;top:0;margin-top:-2px;font-weight:900}
+.gr .rad{font-size:26px;color:#5f3dc4;line-height:1;font-weight:700}.gr .rin{display:inline-flex;align-items:center;gap:2px;border-top:2.5px solid #5f3dc4;padding:2px 3px 0}.gr .rk{align-self:flex-start;font-size:.7em;font-weight:900;color:#5f3dc4}
+.px .t.pbi{min-width:22px;height:24px;font-size:13px;padding:0 3px}
+.ch sup.sf,.px sup.sf,.px .t sup.sf,.px .el sup.sf{font-size:.78em;top:-1.1em}

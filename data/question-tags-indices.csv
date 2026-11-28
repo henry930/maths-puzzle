@@ -19,15 +19,18 @@ level,name,difficulty,score,steps,ops,tags,sometimes
 18,"Build multiplying powers · easy",2,2,,,ix-law-mul,
 19,"Build dividing powers · easy",3,3,,,ix-law-div,ix-neg
 20,"Build change the power · medium",4,4,,,ix-law-div ix-law-mul ix-neg,
-21,"Index form and log form · medium",4,4,,,ix-find-index lg-convert,
-22,"Log values · medium",5,5,,,lg-value,lg-convert lg-neg
-23,"Special logs · medium",5,5,,,lg-special,
-24,"Negative and fractional logs · hard",7,7,,,lg-frac lg-neg lg-value,
-25,"Find the base · medium",6,6,,,,lg-base lg-convert lg-value
-26,"Solve index equations with logs · medium",6,6,,,lg-convert,ix-find-index lg-frac lg-neg
-27,"Log law: add · medium",6,6,,,lg-add,
-28,"Log law: subtract · hard",7,6.5,,,lg-sub,lg-simplify
-29,"Log law: powers · hard",7,7,,,lg-pow,lg-simplify
-30,"Log laws combined · hard",8,7.7,,,,lg-add lg-mix lg-pow lg-simplify
-31,"Mixed indices · medium",4,3.9,,,,ix-combine ix-eval ix-frac ix-frac-pq ix-law-mul ix-law-neg ix-neg ix-zero
-32,"Mixed logs and laws · hard",7,6.7,,,,lg-add lg-convert lg-frac lg-mix lg-neg lg-pow lg-sub lg-value
+21,"Build power of a power · easy",3,3,,,ix-law-pow,
+22,"Build roots · medium",5,5,,,ix-frac,
+23,"Build fractional index · medium",6,6,,,ix-frac ix-frac-pq,
+24,"Index form and log form · medium",4,4,,,ix-find-index lg-convert,
+25,"Log values · medium",5,5,,,lg-value,lg-convert lg-neg
+26,"Special logs · medium",5,5,,,lg-special,
+27,"Negative and fractional logs · hard",7,7,,,lg-frac lg-neg lg-value,
+28,"Find the base · medium",6,6,,,,lg-base lg-convert lg-value
+29,"Solve index equations with logs · medium",6,6,,,lg-convert,ix-find-index lg-frac lg-neg
+30,"Log law: add · medium",6,6,,,lg-add,
+31,"Log law: subtract · hard",7,6.5,,,lg-sub,lg-simplify
+32,"Log law: powers · hard",7,7,,,lg-pow,lg-simplify
+33,"Log laws combined · hard",8,7.7,,,,lg-add lg-mix lg-pow lg-simplify
+34,"Mixed indices · medium",4,3.9,,,,ix-combine ix-eval ix-frac ix-frac-pq ix-law-mul ix-law-neg ix-neg ix-zero
+35,"Mixed logs and laws · hard",7,6.7,,,,lg-add lg-convert lg-frac lg-mix lg-neg lg-pow lg-sub lg-value
