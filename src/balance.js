@@ -179,7 +179,7 @@ REG.push({id:'balance',qmeta:lv=>levelFromSamples(()=>analyse(genL(lv))),qtest:{
     else $('#msg').innerHTML=balanced()?'⚖️ Balanced':'⚠️ Out of balance — do the same to the other pan!';
     if(balanced()&&(solvedSide(E.L,E.Rr)||solvedSide(E.Rr,E.L))){over=true;const v=solvedSide(E.L,E.Rr)?E.Rr.n:E.L.n;
       $('#msg').innerHTML='✅ x = '+ftxt(v);solvedTxt=ftxt(v);try{const u=me();if(u){u.rv=u.rv||{};u.rv['balance_'+lv]={E0:clone(E0),E:clone(E),steps:JSON.parse(JSON.stringify(steps)),solved:solvedTxt};persist();}}catch(e){}
-      $('#eq').innerHTML+=`<div class="el fin">✅ x = ${lab(solvedTxt)}</div>`;$('#eq').scrollTop=1e5;const first=!isDone('balance',lv);const nb=$('#nw');if(first&&lv<ctx.N){nb.textContent='Next level ▶';nb.onclick=()=>openGame('balance',lv+1);}
+      $('#eq').innerHTML+=`<div class="el fin">✅ x = ${lab(solvedTxt)}</div>`;$('#eq').scrollTop=1e5;
       ctx.perf={moves:steps.length,best:ctx.q.steps,undos:nUndo,hints:nHint,restarts:nRestart};ctx.timeout(()=>ctx.win('Balanced!',`x = ${ftxt(v)}. You kept the scale level all the way.`,build,'New equation',{stay:true}),700);}
   }
   function commit(f,anim,msg,info){if(over||busy)return false;snap.push({E:clone(E),st:JSON.stringify(steps)});const ok=f();if(ok===false){snap.pop();return false;}if(info)recordStep(info);update(anim,msg);return true;}

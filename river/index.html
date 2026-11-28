@@ -454,11 +454,79 @@ const lvPts=lv=>50+10*Math.min(lv,20);
 function markDone(id,lv){
   const secs=ctx&&ctx.t0?Math.round((Date.now()-ctx.t0)/1000):null;
   let r=(done[id]=done[id]||{})[lv],gain;
-  if(!r){r=done[id][lv]={n:1,t:secs,p:lvPts(lv)};gain=lvPts(lv);}
-  else{r.n++;gain=r.n<=11?5:0;r.p+=gain;if(secs!=null&&(r.t==null||secs<r.t))r.t=secs;}
+  const sg=struggleOf(ctx&&ctx.perf);
+  if(!r){r=done[id][lv]={n:1,t:secs,p:lvPts(lv),s:sg};gain=lvPts(lv);}
+  else{r.n++;r.s=sg;gain=r.n<=11?5:0;r.p+=gain;if(secs!=null&&(r.t==null||secs<r.t))r.t=secs;}
   logEvent(id,lv,'complete',Object.assign({secs,n:r.n,gain},ctx&&ctx.q?{q:ctx.q}:{},ctx&&ctx.perf?{perf:ctx.perf}:{}));
+  recTry(id,lv,true,ctx&&ctx.q,ctx&&ctx.perf,sg);
   if(ctx)ctx.t0=Date.now();persist();return gain;
 }
+
+/* ---------- adaptive next question (one place decides what comes after every finished question) ----------
+   Only games with level tags (qmeta) are adaptive; the other games keep the old "next level" behaviour.
+   A game can override this with its own `nextRule(info)` (see below); return null to fall back to the default.
+   struggle (stored as done[id][lv].s): 0 clean · 1 shaky · 2 struggled (many hints/undos/wrong answers) */
+
+/* ---------- learning record (summary per player, synced with the progress) ----------
+   u.st[game] = { l:{lv:{a,ok,f,w,h,u}}, k:{tag:{a,ok,clean,w}}, e:{errorType:count} }
+   a = finished attempts (clears + fails) · ok = clears · f = fails · w = wrong answers (mistakes) · h = hints · u = undos
+   k = same idea per knowledge point (tag): clean = clears with no struggle.  The full answer-by-answer detail stays in the event log. */
+function stOf(id){const u=me();if(!u)return null;u.st=u.st||{};return u.st[id]=u.st[id]||{l:{},k:{},e:{}};}
+function recTry(id,lv,ok,q,perf,sg){
+  const S=stOf(id);if(!S)return;
+  const L=S.l[lv]=S.l[lv]||{a:0,ok:0,f:0,w:0,h:0,u:0};
+  L.a++;if(ok)L.ok++;else L.f++;
+  if(perf){L.h+=perf.hints||0;L.u+=perf.undos||0;}
+  ((q&&q.tags)||[]).forEach(t=>{const K=S.k[t]=S.k[t]||{a:0,ok:0,clean:0,w:0};K.a++;if(ok){K.ok++;if(!sg)K.clean++;}});
+}
+function recWrong(id,lv,q,detail){
+  const S=stOf(id);if(!S)return;
+  const L=S.l[lv]=S.l[lv]||{a:0,ok:0,f:0,w:0,h:0,u:0};L.w++;
+  ((q&&q.tags)||[]).forEach(t=>{const K=S.k[t]=S.k[t]||{a:0,ok:0,clean:0,w:0};K.w++;});
+  const e=detail&&(detail.err||detail.type||detail.stage);if(e)S.e[e]=(S.e[e]||0)+1;
+}
+function struggleOf(p){
+  if(!p)return 0;
+  if(p.of!=null)return p.right>=5?0:p.right===4?1:2;                         /* quiz sets: 5/5 clean, 4/5 shaky */
+  let s=0;if(p.hints>=1)s++;if(p.hints>=3||p.undos>=5||p.restarts>=2)s++;if(p.best&&p.moves>p.best+2)s++;
+  return Math.min(2,s);
+}
+let _rep={k:'',n:0};                                                         /* how many times in a row we repeated one level */
+function pickNext(id,lv,again,first){
+  const G=REG.find(x=>x.id===id),N=G.levels.length,d=done[id]||{};
+  const key=id+'#'+lv;
+  if(G.nextRule){const o=G.nextRule({lv,N,done:d,again:!!again,first,score:l=>{const m=levelMeta(G,l);return m?(m.score||m.diff):5;}});if(o)return o;}   /* a game can set its own rule: return {lv|again|none,label} or null for the default */
+  if(!G.qmeta){                                                              /* legacy behaviour */
+    if(first&&lv<N)return{lv:lv+1,label:'Next: level '+(lv+1)+' ▶'};
+    if(again)return{again:true,label:'Next puzzle ▶'};
+    return lv<N?{lv:lv+1,label:'Next: level '+(lv+1)+' ▶'}:{none:true,label:'All done! Tap to close'};
+  }
+  const score=l=>{const m=levelMeta(G,l);return m?(m.score||m.diff):5;};
+  const grp=l=>String(G.levels[l-1]).replace(STAGE_RE,'');
+  const all=G.levels.map((_,i)=>i+1);
+  const r=d[lv]||{},total=all.reduce((a,l)=>a+(d[l]?(d[l].n||1):0),0);
+  const lvl=(l,tag)=>{_rep={k:'',n:0};return{lv:l,label:tag+' level '+l+' ▶',why:tag};};
+  /* 1. struggled: one more question of the same kind (at most twice in a row) */
+  if(r.s===2&&again){_rep=_rep.k===key?{k:key,n:_rep.n+1}:{k:key,n:1};if(_rep.n<=2)return{again:true,label:'One more like this ▶',why:'practice'};}
+  /* 2. every 4th question: revisit the level that went worst */
+  if(total>0&&total%4===0){
+    const weak=all.filter(l=>l!==lv&&d[l]&&d[l].s>=1).sort((a,b)=>d[b].s-d[a].s||score(a)-score(b))[0];
+    if(weak)return lvl(weak,'Quick revisit:');
+  }
+  /* 3. ladder: easiest level not cleared yet, staying in the same skill if it is about as easy */
+  const open=all.filter(l=>!d[l]&&l!==lv).sort((a,b)=>score(a)-score(b)||a-b);
+  if(open.length){
+    const same=open.find(l=>grp(l)===grp(lv));
+    const pickL=same&&score(same)<=score(open[0])+1.5?same:open[0];
+    return lvl(pickL,'Next:');
+  }
+  /* 4. everything cleared: keep practising what went worst, otherwise a fresh question */
+  const worst=all.filter(l=>l!==lv&&d[l]&&d[l].s>=1).sort((a,b)=>d[b].s-d[a].s)[0];
+  if(worst)return lvl(worst,'Practice:');
+  if(again)return{again:true,label:'Next puzzle ▶'};
+  return{none:true,label:'All done! Tap to close'};
+}
+const goNext=(id,nx,again)=>{if(nx.again&&again)again();else if(nx.lv)openGame(id,nx.lv);};
 const REG=[];
 /* Games hidden from students (menu, totals and direct URLs). Teachers can still open them with ?preview=all */
 const STUDENT_HIDDEN=['angles','lines','fraction','quad'];
@@ -541,10 +609,10 @@ function openGame(id,lv,fromRoute){
   {const lm=levelMeta(g,lv);$('#glvname').innerHTML=`<b>Level ${lv}/${N}</b> · ${g.levels[lv-1]}`+(lm?`<div class="qts">${diffBar(lm.diff)}${tagChips(lm.tags)}${lm.tags.length?'':tagChipsSome(lm.sometimes)}</div>`:'');}
   const root=$('#groot');root.innerHTML='';
   ctx={id,lv,N,t0:Date.now(),cleanups:[],keys:null,q:null,perf:null,
-    log(kind,detail){logEvent(id,lv,kind,this.q?Object.assign({q:this.q},detail):detail);},
+    log(kind,detail){if(kind==='wrong'){recWrong(id,lv,this.q,detail);persist();}else if(kind==='fail'){recTry(id,lv,false,this.q,detail,2);persist();}logEvent(id,lv,kind,this.q?Object.assign({q:this.q},detail):detail);},
     interval(fn,ms){const h=setInterval(fn,ms);this.cleanups.push(()=>clearInterval(h));return h},
     timeout(fn,ms){const h=setTimeout(fn,ms);this.cleanups.push(()=>clearTimeout(h));return h},
-    win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===lvPts(lv);const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,againLabel,first,opt&&opt.stay);}};
+    win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===lvPts(lv);const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');const nx=pickNext(id,lv,again,first);if(opt&&opt.stay){const nb=$('#nw');if(nb&&!nx.none){nb.textContent=nx.label;nb.onclick=()=>goNext(id,nx,again);}}showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,nx,opt&&opt.stay);}};
   {const hw=$('#howto'),hb=$('#hbtn');hw.classList.remove('anim');if(g.anim){hw.hidden=true;hb.hidden=false;hb.onclick=()=>showIntro(g);}else{hw.hidden=false;hw.textContent=g.how;hb.hidden=true;}}
   window.scrollTo(0,0);
   try{const base=ROOT+id+'/',hs='#'+lv;if(location.pathname!==base||location.hash!==hs){const u=base+location.search.replace(/[?&]l=\d+/,'')+hs;history[fromRoute?'replaceState':'pushState'](null,'',u);}}catch(e){}
@@ -552,18 +620,15 @@ function openGame(id,lv,fromRoute){
   g.mount(root,lv,ctx);
   if(g.anim){let seen=false;try{seen=localStorage.getItem('pz-intro-'+id)==='1';}catch(e){}if(!seen){try{localStorage.setItem('pz-intro-'+id,'1');}catch(e){}setTimeout(()=>{if(ctx&&ctx.id===id)showIntro(g);},200);}}
 }
-function showWin(title,text,again,againLabel,first,stay){
-  confetti();const id=ctx.id,lv=ctx.lv,N=ctx.N;
+function showWin(title,text,again,nx,stay){
+  confetti();const id=ctx.id;
   const o=el('div','overlay soft');
-  const nextLv=first&&lv<N;
-  o.innerHTML=`<div class="winbar"><div class="wb-t"><span>🎉</span> ${title}</div><div class="wb-x">${text}</div><div class="wb-n">${stay?'Review your steps ✓':nextLv?'Next: level '+(lv+1)+' ▶':again?'Next puzzle ▶':lv<N?'Next: level '+(lv+1)+' ▶':'All done! Tap to close'}</div><i class="wb-bar"></i></div>`;
+  o.innerHTML=`<div class="winbar"><div class="wb-t"><span>🎉</span> ${title}</div><div class="wb-x">${text}</div><div class="wb-n">${esc(nx.label)}</div><i class="wb-bar"></i></div>`;
   document.body.appendChild(o);
   let fin=false;
-  const go=()=>{if(fin||!o.isConnected)return;fin=true;o.remove();
-    if(nextLv)openGame(id,lv+1);else if(again)again();else if(lv<N)openGame(id,lv+1);};
-  if(stay){const rm=()=>o.remove();o.querySelector('.winbar').onclick=rm;setTimeout(rm,2600);return;}
+  const go=()=>{if(fin||!o.isConnected)return;fin=true;o.remove();goNext(id,nx,again);};
   o.querySelector('.winbar').onclick=go;
-  setTimeout(go,2600);
+  setTimeout(go,stay?3500:2600);
 }
 document.addEventListener('keydown',e=>{if(ctx&&ctx.keys&&!e.target.matches('input,textarea'))ctx.keys(e)});
 $('#back').onclick=()=>{goMenu();document.title='Maths Puzzle Arcade';};
@@ -738,7 +803,7 @@ async function rpc(fn,args){
 
 /* ---------- merge two progress blobs ---------- */
 function mergeData(a,b){
-  const out={done:{},rv:{},plays:{}};
+  const out={done:{},rv:{},plays:{},st:{}};
   [a,b].forEach(src=>{if(!src)return;
     for(const id in (src.done||{}))for(const l in src.done[id]){
       const r=src.done[id][l],cur=((out.done[id]=out.done[id]||{})[l]);
@@ -748,10 +813,14 @@ function mergeData(a,b){
     }
     for(const k in (src.rv||{}))if(out.rv[k]==null)out.rv[k]=src.rv[k];
     for(const k in (src.plays||{}))out.plays[k]=Math.max(out.plays[k]||0,src.plays[k]||0);
+    for(const g in (src.st||{})){const o=out.st[g]=out.st[g]||{l:{},k:{},e:{}},s=src.st[g];   /* counters only grow: keep the larger of each */
+      for(const part of['l','k','e'])for(const x in (s[part]||{})){const v=s[part][x];
+        if(typeof v==='number')o[part][x]=Math.max(o[part][x]||0,v);
+        else{const c=o[part][x]=o[part][x]||{};for(const f in v)c[f]=Math.max(c[f]||0,v[f]||0);}}}
   });
   return out;
 }
-const dataOf=u=>({v:2,done:u.done,rv:u.rv||{},plays:u.plays||{}});
+const dataOf=u=>({v:2,done:u.done,rv:u.rv||{},plays:u.plays||{},st:u.st||{}});
 
 /* ---------- session ---------- */
 const getSess=()=>LS.get('pz-sess',null);
@@ -760,8 +829,8 @@ const setSess=s=>{if(s)LS.set('pz-sess',s);else try{localStorage.removeItem('pz-
 function adoptUser(name,remoteData,h,legacyMerge){
   let u=DB.users[name];
   if(!u)u=DB.users[name]={created:Date.now(),done:{},rv:{},ev:[]};
-  const m=mergeData(u,remoteData);u.done=m.done;u.rv=m.rv;u.plays=m.plays;u.h=CLOUD?undefined:h;if(!u.ev)u.ev=[];
-  if(legacyMerge){const g=DB.users.Guest;if(g){const m2=mergeData(u,g);u.done=m2.done;u.rv=m2.rv;u.plays=m2.plays;delete DB.users.Guest;}}
+  const m=mergeData(u,remoteData);u.done=m.done;u.rv=m.rv;u.plays=m.plays;u.st=m.st;u.h=CLOUD?undefined:h;if(!u.ev)u.ev=[];
+  if(legacyMerge){const g=DB.users.Guest;if(g){const m2=mergeData(u,g);u.done=m2.done;u.rv=m2.rv;u.plays=m2.plays;u.st=m2.st;delete DB.users.Guest;}}
   DB.cur=name;done=u.done;
   setSess({name,h});LS.set('pz-last',name);persist();
 }
@@ -878,7 +947,7 @@ function showProfile(gid){
   $('#pcl',o).onclick=()=>{o.remove();showClass();};
   let armed=false;$('#prs',o).onclick=function(){if(!armed){armed=true;this.textContent='Tap again to erase';return;}
     logEvent('account',0,'reset',{points:ptsOf(u),levels:lvOf(u)});
-    u.done={};u.rv={};done=u.done;persist();o.remove();renderMenu();toast('Progress reset');};
+    u.done={};u.rv={};u.st={};done=u.done;persist();o.remove();renderMenu();toast('Progress reset');};
 }
 
 /* ---------- teacher board ---------- */
@@ -947,7 +1016,7 @@ async function bootAccount(){
   if(s&&DB.users[s.name]){DB.cur=s.name;loadUser();
     if(CLOUD){
       const r=await rpc('pz_login',{p_name:s.name,p_hash:s.h});
-      if(r&&r.ok){const u=me(),m=mergeData(u,r.data);u.done=m.done;u.rv=m.rv;u.plays=m.plays;done=u.done;LS.set('pz-v3',DB);dirty=true;pushNow();renderMenu();flushEvents();}
+      if(r&&r.ok){const u=me(),m=mergeData(u,r.data);u.done=m.done;u.rv=m.rv;u.plays=m.plays;u.st=m.st;done=u.done;LS.set('pz-v3',DB);dirty=true;pushNow();renderMenu();flushEvents();}
       else if(r&&(r.error==='bad_pin'||r.error==='no_user')){setSess(null);DB.cur=null;done={};showLogin(true);}
     }
   }else if(s&&CLOUD){ // session but no local cache: pull from the cloud
@@ -2607,7 +2676,7 @@ REG.push({id:'balance',qmeta:lv=>levelFromSamples(()=>analyse(genL(lv))),qtest:{
     else $('#msg').innerHTML=balanced()?'⚖️ Balanced':'⚠️ Out of balance — do the same to the other pan!';
     if(balanced()&&(solvedSide(E.L,E.Rr)||solvedSide(E.Rr,E.L))){over=true;const v=solvedSide(E.L,E.Rr)?E.Rr.n:E.L.n;
       $('#msg').innerHTML='✅ x = '+ftxt(v);solvedTxt=ftxt(v);try{const u=me();if(u){u.rv=u.rv||{};u.rv['balance_'+lv]={E0:clone(E0),E:clone(E),steps:JSON.parse(JSON.stringify(steps)),solved:solvedTxt};persist();}}catch(e){}
-      $('#eq').innerHTML+=`<div class="el fin">✅ x = ${lab(solvedTxt)}</div>`;$('#eq').scrollTop=1e5;const first=!isDone('balance',lv);const nb=$('#nw');if(first&&lv<ctx.N){nb.textContent='Next level ▶';nb.onclick=()=>openGame('balance',lv+1);}
+      $('#eq').innerHTML+=`<div class="el fin">✅ x = ${lab(solvedTxt)}</div>`;$('#eq').scrollTop=1e5;
       ctx.perf={moves:steps.length,best:ctx.q.steps,undos:nUndo,hints:nHint,restarts:nRestart};ctx.timeout(()=>ctx.win('Balanced!',`x = ${ftxt(v)}. You kept the scale level all the way.`,build,'New equation',{stay:true}),700);}
   }
   function commit(f,anim,msg,info){if(over||busy)return false;snap.push({E:clone(E),st:JSON.stringify(steps)});const ok=f();if(ok===false){snap.pop();return false;}if(info)recordStep(info);update(anim,msg);return true;}

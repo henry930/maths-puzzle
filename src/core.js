@@ -20,11 +20,79 @@ const lvPts=lv=>50+10*Math.min(lv,20);
 function markDone(id,lv){
   const secs=ctx&&ctx.t0?Math.round((Date.now()-ctx.t0)/1000):null;
   let r=(done[id]=done[id]||{})[lv],gain;
-  if(!r){r=done[id][lv]={n:1,t:secs,p:lvPts(lv)};gain=lvPts(lv);}
-  else{r.n++;gain=r.n<=11?5:0;r.p+=gain;if(secs!=null&&(r.t==null||secs<r.t))r.t=secs;}
+  const sg=struggleOf(ctx&&ctx.perf);
+  if(!r){r=done[id][lv]={n:1,t:secs,p:lvPts(lv),s:sg};gain=lvPts(lv);}
+  else{r.n++;r.s=sg;gain=r.n<=11?5:0;r.p+=gain;if(secs!=null&&(r.t==null||secs<r.t))r.t=secs;}
   logEvent(id,lv,'complete',Object.assign({secs,n:r.n,gain},ctx&&ctx.q?{q:ctx.q}:{},ctx&&ctx.perf?{perf:ctx.perf}:{}));
+  recTry(id,lv,true,ctx&&ctx.q,ctx&&ctx.perf,sg);
   if(ctx)ctx.t0=Date.now();persist();return gain;
 }
+
+/* ---------- adaptive next question (one place decides what comes after every finished question) ----------
+   Only games with level tags (qmeta) are adaptive; the other games keep the old "next level" behaviour.
+   A game can override this with its own `nextRule(info)` (see below); return null to fall back to the default.
+   struggle (stored as done[id][lv].s): 0 clean · 1 shaky · 2 struggled (many hints/undos/wrong answers) */
+
+/* ---------- learning record (summary per player, synced with the progress) ----------
+   u.st[game] = { l:{lv:{a,ok,f,w,h,u}}, k:{tag:{a,ok,clean,w}}, e:{errorType:count} }
+   a = finished attempts (clears + fails) · ok = clears · f = fails · w = wrong answers (mistakes) · h = hints · u = undos
+   k = same idea per knowledge point (tag): clean = clears with no struggle.  The full answer-by-answer detail stays in the event log. */
+function stOf(id){const u=me();if(!u)return null;u.st=u.st||{};return u.st[id]=u.st[id]||{l:{},k:{},e:{}};}
+function recTry(id,lv,ok,q,perf,sg){
+  const S=stOf(id);if(!S)return;
+  const L=S.l[lv]=S.l[lv]||{a:0,ok:0,f:0,w:0,h:0,u:0};
+  L.a++;if(ok)L.ok++;else L.f++;
+  if(perf){L.h+=perf.hints||0;L.u+=perf.undos||0;}
+  ((q&&q.tags)||[]).forEach(t=>{const K=S.k[t]=S.k[t]||{a:0,ok:0,clean:0,w:0};K.a++;if(ok){K.ok++;if(!sg)K.clean++;}});
+}
+function recWrong(id,lv,q,detail){
+  const S=stOf(id);if(!S)return;
+  const L=S.l[lv]=S.l[lv]||{a:0,ok:0,f:0,w:0,h:0,u:0};L.w++;
+  ((q&&q.tags)||[]).forEach(t=>{const K=S.k[t]=S.k[t]||{a:0,ok:0,clean:0,w:0};K.w++;});
+  const e=detail&&(detail.err||detail.type||detail.stage);if(e)S.e[e]=(S.e[e]||0)+1;
+}
+function struggleOf(p){
+  if(!p)return 0;
+  if(p.of!=null)return p.right>=5?0:p.right===4?1:2;                         /* quiz sets: 5/5 clean, 4/5 shaky */
+  let s=0;if(p.hints>=1)s++;if(p.hints>=3||p.undos>=5||p.restarts>=2)s++;if(p.best&&p.moves>p.best+2)s++;
+  return Math.min(2,s);
+}
+let _rep={k:'',n:0};                                                         /* how many times in a row we repeated one level */
+function pickNext(id,lv,again,first){
+  const G=REG.find(x=>x.id===id),N=G.levels.length,d=done[id]||{};
+  const key=id+'#'+lv;
+  if(G.nextRule){const o=G.nextRule({lv,N,done:d,again:!!again,first,score:l=>{const m=levelMeta(G,l);return m?(m.score||m.diff):5;}});if(o)return o;}   /* a game can set its own rule: return {lv|again|none,label} or null for the default */
+  if(!G.qmeta){                                                              /* legacy behaviour */
+    if(first&&lv<N)return{lv:lv+1,label:'Next: level '+(lv+1)+' ▶'};
+    if(again)return{again:true,label:'Next puzzle ▶'};
+    return lv<N?{lv:lv+1,label:'Next: level '+(lv+1)+' ▶'}:{none:true,label:'All done! Tap to close'};
+  }
+  const score=l=>{const m=levelMeta(G,l);return m?(m.score||m.diff):5;};
+  const grp=l=>String(G.levels[l-1]).replace(STAGE_RE,'');
+  const all=G.levels.map((_,i)=>i+1);
+  const r=d[lv]||{},total=all.reduce((a,l)=>a+(d[l]?(d[l].n||1):0),0);
+  const lvl=(l,tag)=>{_rep={k:'',n:0};return{lv:l,label:tag+' level '+l+' ▶',why:tag};};
+  /* 1. struggled: one more question of the same kind (at most twice in a row) */
+  if(r.s===2&&again){_rep=_rep.k===key?{k:key,n:_rep.n+1}:{k:key,n:1};if(_rep.n<=2)return{again:true,label:'One more like this ▶',why:'practice'};}
+  /* 2. every 4th question: revisit the level that went worst */
+  if(total>0&&total%4===0){
+    const weak=all.filter(l=>l!==lv&&d[l]&&d[l].s>=1).sort((a,b)=>d[b].s-d[a].s||score(a)-score(b))[0];
+    if(weak)return lvl(weak,'Quick revisit:');
+  }
+  /* 3. ladder: easiest level not cleared yet, staying in the same skill if it is about as easy */
+  const open=all.filter(l=>!d[l]&&l!==lv).sort((a,b)=>score(a)-score(b)||a-b);
+  if(open.length){
+    const same=open.find(l=>grp(l)===grp(lv));
+    const pickL=same&&score(same)<=score(open[0])+1.5?same:open[0];
+    return lvl(pickL,'Next:');
+  }
+  /* 4. everything cleared: keep practising what went worst, otherwise a fresh question */
+  const worst=all.filter(l=>l!==lv&&d[l]&&d[l].s>=1).sort((a,b)=>d[b].s-d[a].s)[0];
+  if(worst)return lvl(worst,'Practice:');
+  if(again)return{again:true,label:'Next puzzle ▶'};
+  return{none:true,label:'All done! Tap to close'};
+}
+const goNext=(id,nx,again)=>{if(nx.again&&again)again();else if(nx.lv)openGame(id,nx.lv);};
 const REG=[];
 /* Games hidden from students (menu, totals and direct URLs). Teachers can still open them with ?preview=all */
 const STUDENT_HIDDEN=['angles','lines','fraction','quad'];
@@ -107,10 +175,10 @@ function openGame(id,lv,fromRoute){
   {const lm=levelMeta(g,lv);$('#glvname').innerHTML=`<b>Level ${lv}/${N}</b> · ${g.levels[lv-1]}`+(lm?`<div class="qts">${diffBar(lm.diff)}${tagChips(lm.tags)}${lm.tags.length?'':tagChipsSome(lm.sometimes)}</div>`:'');}
   const root=$('#groot');root.innerHTML='';
   ctx={id,lv,N,t0:Date.now(),cleanups:[],keys:null,q:null,perf:null,
-    log(kind,detail){logEvent(id,lv,kind,this.q?Object.assign({q:this.q},detail):detail);},
+    log(kind,detail){if(kind==='wrong'){recWrong(id,lv,this.q,detail);persist();}else if(kind==='fail'){recTry(id,lv,false,this.q,detail,2);persist();}logEvent(id,lv,kind,this.q?Object.assign({q:this.q},detail):detail);},
     interval(fn,ms){const h=setInterval(fn,ms);this.cleanups.push(()=>clearInterval(h));return h},
     timeout(fn,ms){const h=setTimeout(fn,ms);this.cleanups.push(()=>clearTimeout(h));return h},
-    win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===lvPts(lv);const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,againLabel,first,opt&&opt.stay);}};
+    win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===lvPts(lv);const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');const nx=pickNext(id,lv,again,first);if(opt&&opt.stay){const nb=$('#nw');if(nb&&!nx.none){nb.textContent=nx.label;nb.onclick=()=>goNext(id,nx,again);}}showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,nx,opt&&opt.stay);}};
   {const hw=$('#howto'),hb=$('#hbtn');hw.classList.remove('anim');if(g.anim){hw.hidden=true;hb.hidden=false;hb.onclick=()=>showIntro(g);}else{hw.hidden=false;hw.textContent=g.how;hb.hidden=true;}}
   window.scrollTo(0,0);
   try{const base=ROOT+id+'/',hs='#'+lv;if(location.pathname!==base||location.hash!==hs){const u=base+location.search.replace(/[?&]l=\d+/,'')+hs;history[fromRoute?'replaceState':'pushState'](null,'',u);}}catch(e){}
@@ -118,18 +186,15 @@ function openGame(id,lv,fromRoute){
   g.mount(root,lv,ctx);
   if(g.anim){let seen=false;try{seen=localStorage.getItem('pz-intro-'+id)==='1';}catch(e){}if(!seen){try{localStorage.setItem('pz-intro-'+id,'1');}catch(e){}setTimeout(()=>{if(ctx&&ctx.id===id)showIntro(g);},200);}}
 }
-function showWin(title,text,again,againLabel,first,stay){
-  confetti();const id=ctx.id,lv=ctx.lv,N=ctx.N;
+function showWin(title,text,again,nx,stay){
+  confetti();const id=ctx.id;
   const o=el('div','overlay soft');
-  const nextLv=first&&lv<N;
-  o.innerHTML=`<div class="winbar"><div class="wb-t"><span>🎉</span> ${title}</div><div class="wb-x">${text}</div><div class="wb-n">${stay?'Review your steps ✓':nextLv?'Next: level '+(lv+1)+' ▶':again?'Next puzzle ▶':lv<N?'Next: level '+(lv+1)+' ▶':'All done! Tap to close'}</div><i class="wb-bar"></i></div>`;
+  o.innerHTML=`<div class="winbar"><div class="wb-t"><span>🎉</span> ${title}</div><div class="wb-x">${text}</div><div class="wb-n">${esc(nx.label)}</div><i class="wb-bar"></i></div>`;
   document.body.appendChild(o);
   let fin=false;
-  const go=()=>{if(fin||!o.isConnected)return;fin=true;o.remove();
-    if(nextLv)openGame(id,lv+1);else if(again)again();else if(lv<N)openGame(id,lv+1);};
-  if(stay){const rm=()=>o.remove();o.querySelector('.winbar').onclick=rm;setTimeout(rm,2600);return;}
+  const go=()=>{if(fin||!o.isConnected)return;fin=true;o.remove();goNext(id,nx,again);};
   o.querySelector('.winbar').onclick=go;
-  setTimeout(go,2600);
+  setTimeout(go,stay?3500:2600);
 }
 document.addEventListener('keydown',e=>{if(ctx&&ctx.keys&&!e.target.matches('input,textarea'))ctx.keys(e)});
 $('#back').onclick=()=>{goMenu();document.title='Maths Puzzle Arcade';};
