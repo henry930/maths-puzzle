@@ -67,6 +67,21 @@ fr-mixed-improper|mixed ↔ improper|帶分數轉假分數
 fr-mul|multiply|乘
 fr-div|divide|除
 fr-reverse|find the whole|倒推原數
+fr-compare|compare and order|比較大細
+fr-hcf|highest common factor|最大公因數
+fr-express|one quantity as a fraction of another|化為分數
+fr-remaining|what is left|剩下幾多
+fr-improper|improper fractions|假分數
+fr-unit|units and fractions|單位同分數
+fr-brackets|brackets and order of operations|括號同運算次序
+fr-reciprocal|reciprocals|倒數
+fr-decimal|fractions and decimals|分數同小數
+fr-percent|fractions and percentages|分數同百分比
+fr-word|word problems|文字題
+fr-ratio|ratio and fractions|比同分數
+fr-unit-frac|unit fractions|單位分數
+fr-algebra|fractions in algebra|分數代數
+fr-power|squaring fractions|分數平方
 pc-read-grid|percent of a grid|睇格仔寫百分比
 pc-of-amount|percent of an amount|求某數嘅百分之幾
 pc-easy|10% / 25% / 50%|簡單百分比
@@ -272,7 +287,13 @@ const Q=(t,d,v)=>({t,d,v:v||[]});   // t = always, v = variants that show up onl
 const QTAGS={
  fraction:{A1:Q(['fr-name-picture'],1),A2:Q(['fr-equivalent'],2),A3:Q(['fr-simplify'],2),A4:Q(['fr-of-amount'],3),A5:Q(['fr-add','fr-same-denom'],2),
   A6:Q(['fr-add','fr-diff-denom'],4),A7:Q(['fr-sub','fr-diff-denom'],4),A8:Q(['fr-mixed','fr-mixed-improper'],3),A9:Q(['fr-mul'],4),A10:Q(['fr-div'],5),
-  A11:Q(['fr-reverse','fr-of-amount'],5),A12:Q(['fr-add','fr-mixed','fr-diff-denom'],6)},
+  A11:Q(['fr-reverse','fr-of-amount'],5),A12:Q(['fr-add','fr-mixed','fr-diff-denom'],6),
+  B1:Q(['fr-compare'],4,['fr-add','fr-sub']),B2:Q(['fr-equivalent'],3,['fr-algebra']),B3:Q(['fr-simplify'],3,['fr-hcf','fr-improper']),B4:Q(['fr-of-amount'],4,['fr-unit','fr-improper','fr-add']),
+  B5:Q(['fr-express','fr-simplify'],4,['fr-unit']),B6:Q(['fr-remaining'],5,['fr-add','fr-mul','fr-of-amount']),B7:Q(['fr-mixed'],6,['fr-add','fr-sub','fr-same-denom','fr-diff-denom']),
+  B8:Q(['fr-mixed','fr-mixed-improper'],3,['fr-decimal','fr-improper']),B9:Q(['fr-mul'],5,['fr-mixed','fr-power']),B10:Q(['fr-div'],6,['fr-mixed']),B11:Q(['fr-brackets'],7,['fr-add','fr-sub','fr-mul','fr-div']),
+  B12:Q(['fr-reciprocal'],4,['fr-mixed','fr-decimal']),B13:Q(['fr-decimal'],4,['fr-simplify','fr-compare']),B14:Q(['fr-percent'],4,['fr-decimal','fr-simplify','fr-improper']),
+  B15:Q(['fr-word'],6,['fr-mul','fr-div','fr-of-amount','fr-remaining','fr-mixed']),B16:Q(['fr-reverse'],7,['fr-remaining','fr-add','fr-of-amount']),B17:Q(['fr-ratio'],5,['fr-remaining','fr-of-amount']),
+  B18:Q(['fr-unit-frac'],5,['fr-add','fr-div']),B19:Q(['fr-algebra'],6,['fr-equivalent'])},
  percent:{P1:Q(['pc-read-grid'],1),P2:Q(['pc-of-amount','pc-easy'],2),P3:Q(['pc-convert'],3,['pc-from-fraction','pc-from-decimal']),P4:Q(['pc-of-amount','pc-any'],3),P5:Q(['pc-sale','pc-decrease'],3),
   P6:Q(['pc-increase'],4,['pc-vat']),P7:Q(['pc-as-percent'],3),P8:Q(['pc-change'],5),P9:Q(['pc-reverse','pc-increase'],6),P10:Q(['pc-reverse','pc-decrease'],6),P11:Q(['pc-interest'],6,['pc-simple-interest','pc-compound-interest'])},
  chance:{T1:Q(['pr-bag'],1),T2:Q(['pr-bag','pr-not'],2),T3:Q(['pr-bag','pr-or'],3),T4:Q(['pr-spinner'],2),T5:Q(['pr-two-dice','pr-sample-space'],4),
@@ -324,7 +345,7 @@ window.quizQ=function(game,key,cur){
 };
 /* level meta for a pool of question types: tags in every type = tags; in some types = sometimes */
 function fromPool(game,pool){
-  const ALIAS={percent:{P12:['P6','P8','P9','P10','P11','P7']}};
+  const ALIAS={percent:{P12:['P6','P8','P9','P10','P11','P7']},fraction:{B20:['B1','B2','B3','B4','B5','B6','B7','B8','B9','B10','B11','B12','B13','B14','B15','B16','B17','B18','B19']}};
   pool=pool.flatMap(k=>(ALIAS[game]&&ALIAS[game][k])||[k]);
   const ms=[...new Set(pool)].map(k=>QTAGS[game][k]),all=new Set(ms.flatMap(m=>m.t)),tags=[...all].filter(t=>ms.every(m=>m.t.includes(t))).sort();
   const sometimes=[...new Set([...all,...ms.flatMap(m=>m.v)])].filter(t=>!tags.includes(t)).sort(),d=ms.reduce((a,m)=>a+m.d,0)/ms.length;
