@@ -1,17 +1,19 @@
 // shared 5-question quiz engine (pass 4/5)
 function mountQuiz(root,ctx,o){
-  let qs,qi,right,cur,buf,answered,res;
+  let qs,qi,right,cur,buf,answered,res,padOpen=false;
   const start=()=>{qs=Array.from({length:5},()=>pick(o.pool));qi=0;right=0;res=[];next();};
-  const next=()=>{cur=o.QT[qs[qi]]();buf='';answered=false;ctx.q=o.qq?o.qq(qs[qi],cur):(o.game?quizQ(o.game,qs[qi],cur):null);draw();};
+  const next=()=>{cur=o.QT[qs[qi]]();buf='';answered=false;padOpen=false;ctx.q=o.qq?o.qq(qs[qi],cur):(o.game?quizQ(o.game,qs[qi],cur):null);draw();};
   function draw(msg,ok){
-    root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
+    const pop=!!o.popup&&!answered&&!cur.nopad;   /* popup: the number pad only appears when the player taps to answer */
+    root.innerHTML=`<div class="ch ${pop&&padOpen?'padopen':''}"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.visf?cur.visf(buf,answered,ok):(cur.vis||'')}</div><div class="ch-q">${cur.q}</div>
-     <div class="ch-in ${ok===true?'good':ok===false?'bad':''}" ${cur.nopad?'hidden':''}>${buf||'&nbsp;'}</div>
+     <div class="ch-in ${ok===true?'good':ok===false?'bad':''} ${pop?'tap':''}" id="chin" ${cur.nopad?'hidden':''}>${buf||(pop?'<span class="ph">Tap here to type your answer ⌨</span>':'&nbsp;')}</div>
      <div class="msg">${msg||'&nbsp;'}</div><div id="chp"></div>
      <div class="toolrow">${answered?`<button class="btn" id="nx">${qi<4?'Next question ▶':'See result ▶'}</button>`:''}</div></div>`;
-    if(!answered&&!cur.nopad)$('#chp').appendChild(numpad(press,{slash:!!o.slash,minus:!!o.minus,compact:!!o.compact}));
+    if(!answered&&!cur.nopad&&(!pop||padOpen)){const pd=$('#chp');if(pop){pd.className='padsheet';pd.innerHTML='<div class="padbar"><span>Type your answer</span><button class="padx" id="padx">✕ Close</button></div>';}pd.appendChild(numpad(press,{slash:!!o.slash,minus:!!o.minus,compact:!!o.compact}));if(pop)$('#padx').onclick=()=>{padOpen=false;draw(msg,ok);};}
+    if(pop&&$('#chin'))$('#chin').onclick=()=>{padOpen=!padOpen;draw(msg,ok);};
     {const fb=$('#ftg',root);if(fb)fb.onclick=()=>{cur.form=1-(cur.form||0);draw(msg,ok);};}   /* games can offer a second form of the same equation */
-    if(cur.after)cur.after(root,{set:s=>{if(!answered){buf=String(s);draw();}},submit,buf:()=>buf});   /* games with their own input (drag-and-drop) set the answer and submit through this */
+    if(cur.after)cur.after(root,{open:()=>{if(!answered&&!padOpen){padOpen=true;draw(msg,ok);}},set:s=>{if(!answered){buf=String(s);draw();}},submit,buf:()=>buf});   /* games with their own input (drag-and-drop) set the answer and submit through this */
     if($('#nx'))$('#nx').onclick=advance;
   }
   function press(k){

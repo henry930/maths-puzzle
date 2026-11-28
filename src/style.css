@@ -446,7 +446,7 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .px .t.q{background:#e5dbff;color:#7048e8;border:2px dashed #7048e8;box-shadow:none;font-style:normal}
 .px .fr{font-size:.95em}.px .fr .bi{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;border-top:2px solid #5f3dc4;font-style:normal}.px .fr i:first-child{font-style:normal}
 .px.lv .t:not(.q):not(.one){background:#2f9e44;color:#fff}.px.lv .sc-beam{background:linear-gradient(#51cf66,#2b8a3e)}
-.px .t sup,.px .el sup,.px .sc-eq sup{font-size:.68em;line-height:0}.px .t.chip span{display:inline-block}
+.px .t sup,.px .el sup,.px .sc-eq sup{font-size:.68em;line-height:0}.px .t.chip>span{display:inline-block}
 .px .lv.go{flex:1;padding:8px 4px;font-size:15px}.px .otg{min-width:32px}
 @media(max-width:400px){.px .sc-scene{height:236px}}
 .px .sc-eq .el{font-size:15px;gap:4px}.px .sc-eq .el.orig{font-size:18px}.px .sc-eq .el.last{font-size:16px}.px .sc-eq .el b{margin:0 2px;font-size:16px}
@@ -470,3 +470,15 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .px.done .sc-eq{max-height:110px}
 .px .t.pb{min-width:25px;height:28px;padding:0 4px;font-size:15px;border-radius:8px}.px .sc-tiles{gap:2px}
 .msg .btl{min-width:0;font-size:.85em;padding:0 4px;margin:0}.msg .tmul{margin:0 1px}
+
+/* exponent that is a fraction: a small stacked fraction raised like any superscript */
+.xf{display:inline-flex;flex-direction:column;align-items:center;vertical-align:baseline;line-height:1;margin:0 1px;font-style:normal}.xf b{display:block;font-weight:800;padding:0 1px;font-family:inherit}.xf b:first-child{border-bottom:1.5px solid currentColor}
+.ch sup.sf,.px sup.sf{font-size:.72em;top:-.95em;line-height:0}.ch sup.sf .xf,.px sup.sf .xf{font-size:.95em}
+/* number pad that pops up from the bottom when the answer box is tapped */
+.ch-in.tap{cursor:pointer;border:2px dashed #b197fc;background:#fff;min-height:38px;display:flex;align-items:center;justify-content:center}.ch-in .ph{color:#7048e8;font-size:15px;font-weight:700}
+.padsheet{position:fixed;left:0;right:0;bottom:0;z-index:70;background:#f3f0ff;border-radius:18px 18px 0 0;box-shadow:0 -6px 18px #3b1f8a33;padding:6px 10px calc(10px + env(safe-area-inset-bottom));animation:padup .18s ease-out}
+@keyframes padup{from{transform:translateY(100%)}to{transform:none}}
+.padbar{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;color:#7048e8;margin:2px 4px 4px}.padx{border:0;background:#fff;border-radius:10px;padding:5px 10px;font-weight:800;color:#5f3dc4;box-shadow:0 2px 0 #d8d3f5}
+.padsheet .npad.cp{margin:0 auto;max-width:380px}.padsheet .npad.cp .key{font-size:22px;padding:10px 0}
+.ch.padopen{padding-bottom:150px}
+.ch sup.sf,.px sup.sf{font-size:.8em;top:-.9em}.padsheet .npad.cp .key{color:#2b2160}.padsheet .npad.cp .key.ok{color:#2b8a3e}.padsheet .npad.cp .key.del{color:#c92a2a}

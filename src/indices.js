@@ -21,7 +21,8 @@ const fmtV=v=>{const neg=v<0,a=Math.abs(v);if(Math.abs(a-Math.round(a))<1e-9)ret
 const frH=s=>{const m=/^(−?)(\d+)\/(\d+)$/.exec(s);return m?`${m[1]}<span class="fr"><i>${m[2]}</i><i>${m[3]}</i></span>`:s;};
 const H=v=>frH(fmtV(v));
 const bv=b=>/^[a-z]$/i.test(String(b))?`<var>${b}</var>`:b;               /* letters are italic, like printed maths */
-const pw=(b,e)=>`<span class="pwr">${bv(b)}<sup>${e}</sup></span>`;
+const xfr=e=>String(e).replace(/<span class="fr"><i>(.*?)<\/i><i>(.*?)<\/i><\/span>/g,'<span class="xf"><b>$1</b><b>$2</b></span>');   /* stacked fraction for use in an exponent */
+const pw=(b,e)=>{const x=xfr(e),f=x!==String(e);return `<span class="pwr">${bv(b)}<sup${f?' class="sf"':''}>${x}</sup></span>`;};
 const pe=(b,e)=>e===1?bv(b):pw(b,e);              /* x¹ is written x */
 const lg=(b,x)=>`log<sub>${b}</sub> ${x}`;
 const log2=x=>Math.log(x)/Math.LN2;
@@ -76,7 +77,8 @@ function Q(o){
       svg.setAttribute('viewBox',`0 0 ${w} ${sc.clientHeight||260}`);svg.innerHTML=sv+`<circle cx="${cx}" cy="${fy}" r="9" class="sc-pin big"/>`;};
     const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
     place();q._raf=requestAnimationFrame(step);
-    if(q.build&&api)bindBuild(root,api,pans[1]);};
+    if(q.build&&api)bindBuild(root,api,pans[1]);
+    else if(api&&api.open)root.querySelectorAll('.t.q').forEach(t=>{t.style.cursor='pointer';t.onclick=api.open;});};
   /* build mode: drag a block onto the right pan (or tap it / press ×a or ÷a) to multiply or divide; each operation adds a line to the working */
   function bindBuild(root,api,pan){
     const lg=root.querySelector('#bklog');if(lg)lg.scrollTop=1e5;
@@ -265,5 +267,5 @@ REG.push({id:'indices',name:'Power Balance',emoji:'🔋',color:'#0b7285',cat:'Al
  skills:['powers and indices','zero, negative and fractional indices','index laws','logarithms','log laws'],levels:LV.map(l=>l[0]),
  how:'Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan, then press Check. 4 out of 5 to pass.',
  art:'<div class="minibal">🔋</div>',
- mount(root,lv,ctx){mountQuiz(root,ctx,{game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
+ mount(root,lv,ctx){mountQuiz(root,ctx,{popup:true,game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
 })();

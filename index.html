@@ -448,7 +448,7 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .px .t.q{background:#e5dbff;color:#7048e8;border:2px dashed #7048e8;box-shadow:none;font-style:normal}
 .px .fr{font-size:.95em}.px .fr .bi{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;border-top:2px solid #5f3dc4;font-style:normal}.px .fr i:first-child{font-style:normal}
 .px.lv .t:not(.q):not(.one){background:#2f9e44;color:#fff}.px.lv .sc-beam{background:linear-gradient(#51cf66,#2b8a3e)}
-.px .t sup,.px .el sup,.px .sc-eq sup{font-size:.68em;line-height:0}.px .t.chip span{display:inline-block}
+.px .t sup,.px .el sup,.px .sc-eq sup{font-size:.68em;line-height:0}.px .t.chip>span{display:inline-block}
 .px .lv.go{flex:1;padding:8px 4px;font-size:15px}.px .otg{min-width:32px}
 @media(max-width:400px){.px .sc-scene{height:236px}}
 .px .sc-eq .el{font-size:15px;gap:4px}.px .sc-eq .el.orig{font-size:18px}.px .sc-eq .el.last{font-size:16px}.px .sc-eq .el b{margin:0 2px;font-size:16px}
@@ -472,6 +472,18 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .px.done .sc-eq{max-height:110px}
 .px .t.pb{min-width:25px;height:28px;padding:0 4px;font-size:15px;border-radius:8px}.px .sc-tiles{gap:2px}
 .msg .btl{min-width:0;font-size:.85em;padding:0 4px;margin:0}.msg .tmul{margin:0 1px}
+
+/* exponent that is a fraction: a small stacked fraction raised like any superscript */
+.xf{display:inline-flex;flex-direction:column;align-items:center;vertical-align:baseline;line-height:1;margin:0 1px;font-style:normal}.xf b{display:block;font-weight:800;padding:0 1px;font-family:inherit}.xf b:first-child{border-bottom:1.5px solid currentColor}
+.ch sup.sf,.px sup.sf{font-size:.72em;top:-.95em;line-height:0}.ch sup.sf .xf,.px sup.sf .xf{font-size:.95em}
+/* number pad that pops up from the bottom when the answer box is tapped */
+.ch-in.tap{cursor:pointer;border:2px dashed #b197fc;background:#fff;min-height:38px;display:flex;align-items:center;justify-content:center}.ch-in .ph{color:#7048e8;font-size:15px;font-weight:700}
+.padsheet{position:fixed;left:0;right:0;bottom:0;z-index:70;background:#f3f0ff;border-radius:18px 18px 0 0;box-shadow:0 -6px 18px #3b1f8a33;padding:6px 10px calc(10px + env(safe-area-inset-bottom));animation:padup .18s ease-out}
+@keyframes padup{from{transform:translateY(100%)}to{transform:none}}
+.padbar{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;color:#7048e8;margin:2px 4px 4px}.padx{border:0;background:#fff;border-radius:10px;padding:5px 10px;font-weight:800;color:#5f3dc4;box-shadow:0 2px 0 #d8d3f5}
+.padsheet .npad.cp{margin:0 auto;max-width:380px}.padsheet .npad.cp .key{font-size:22px;padding:10px 0}
+.ch.padopen{padding-bottom:150px}
+.ch sup.sf,.px sup.sf{font-size:.8em;top:-.9em}.padsheet .npad.cp .key{color:#2b2160}.padsheet .npad.cp .key.ok{color:#2b8a3e}.padsheet .npad.cp .key.del{color:#c92a2a}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><button class="back" id="lvbtn">Levels ▾</button><button class="back" id="pbtn">👤</button><div class="pills" id="glevels"></div></div>
@@ -1082,18 +1094,20 @@ async function bootAccount(){
 
 // shared 5-question quiz engine (pass 4/5)
 function mountQuiz(root,ctx,o){
-  let qs,qi,right,cur,buf,answered,res;
+  let qs,qi,right,cur,buf,answered,res,padOpen=false;
   const start=()=>{qs=Array.from({length:5},()=>pick(o.pool));qi=0;right=0;res=[];next();};
-  const next=()=>{cur=o.QT[qs[qi]]();buf='';answered=false;ctx.q=o.qq?o.qq(qs[qi],cur):(o.game?quizQ(o.game,qs[qi],cur):null);draw();};
+  const next=()=>{cur=o.QT[qs[qi]]();buf='';answered=false;padOpen=false;ctx.q=o.qq?o.qq(qs[qi],cur):(o.game?quizQ(o.game,qs[qi],cur):null);draw();};
   function draw(msg,ok){
-    root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
+    const pop=!!o.popup&&!answered&&!cur.nopad;   /* popup: the number pad only appears when the player taps to answer */
+    root.innerHTML=`<div class="ch ${pop&&padOpen?'padopen':''}"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.visf?cur.visf(buf,answered,ok):(cur.vis||'')}</div><div class="ch-q">${cur.q}</div>
-     <div class="ch-in ${ok===true?'good':ok===false?'bad':''}" ${cur.nopad?'hidden':''}>${buf||'&nbsp;'}</div>
+     <div class="ch-in ${ok===true?'good':ok===false?'bad':''} ${pop?'tap':''}" id="chin" ${cur.nopad?'hidden':''}>${buf||(pop?'<span class="ph">Tap here to type your answer ⌨</span>':'&nbsp;')}</div>
      <div class="msg">${msg||'&nbsp;'}</div><div id="chp"></div>
      <div class="toolrow">${answered?`<button class="btn" id="nx">${qi<4?'Next question ▶':'See result ▶'}</button>`:''}</div></div>`;
-    if(!answered&&!cur.nopad)$('#chp').appendChild(numpad(press,{slash:!!o.slash,minus:!!o.minus,compact:!!o.compact}));
+    if(!answered&&!cur.nopad&&(!pop||padOpen)){const pd=$('#chp');if(pop){pd.className='padsheet';pd.innerHTML='<div class="padbar"><span>Type your answer</span><button class="padx" id="padx">✕ Close</button></div>';}pd.appendChild(numpad(press,{slash:!!o.slash,minus:!!o.minus,compact:!!o.compact}));if(pop)$('#padx').onclick=()=>{padOpen=false;draw(msg,ok);};}
+    if(pop&&$('#chin'))$('#chin').onclick=()=>{padOpen=!padOpen;draw(msg,ok);};
     {const fb=$('#ftg',root);if(fb)fb.onclick=()=>{cur.form=1-(cur.form||0);draw(msg,ok);};}   /* games can offer a second form of the same equation */
-    if(cur.after)cur.after(root,{set:s=>{if(!answered){buf=String(s);draw();}},submit,buf:()=>buf});   /* games with their own input (drag-and-drop) set the answer and submit through this */
+    if(cur.after)cur.after(root,{open:()=>{if(!answered&&!padOpen){padOpen=true;draw(msg,ok);}},set:s=>{if(!answered){buf=String(s);draw();}},submit,buf:()=>buf});   /* games with their own input (drag-and-drop) set the answer and submit through this */
     if($('#nx'))$('#nx').onclick=advance;
   }
   function press(k){
@@ -4727,7 +4741,8 @@ const fmtV=v=>{const neg=v<0,a=Math.abs(v);if(Math.abs(a-Math.round(a))<1e-9)ret
 const frH=s=>{const m=/^(−?)(\d+)\/(\d+)$/.exec(s);return m?`${m[1]}<span class="fr"><i>${m[2]}</i><i>${m[3]}</i></span>`:s;};
 const H=v=>frH(fmtV(v));
 const bv=b=>/^[a-z]$/i.test(String(b))?`<var>${b}</var>`:b;               /* letters are italic, like printed maths */
-const pw=(b,e)=>`<span class="pwr">${bv(b)}<sup>${e}</sup></span>`;
+const xfr=e=>String(e).replace(/<span class="fr"><i>(.*?)<\/i><i>(.*?)<\/i><\/span>/g,'<span class="xf"><b>$1</b><b>$2</b></span>');   /* stacked fraction for use in an exponent */
+const pw=(b,e)=>{const x=xfr(e),f=x!==String(e);return `<span class="pwr">${bv(b)}<sup${f?' class="sf"':''}>${x}</sup></span>`;};
 const pe=(b,e)=>e===1?bv(b):pw(b,e);              /* x¹ is written x */
 const lg=(b,x)=>`log<sub>${b}</sub> ${x}`;
 const log2=x=>Math.log(x)/Math.LN2;
@@ -4782,7 +4797,8 @@ function Q(o){
       svg.setAttribute('viewBox',`0 0 ${w} ${sc.clientHeight||260}`);svg.innerHTML=sv+`<circle cx="${cx}" cy="${fy}" r="9" class="sc-pin big"/>`;};
     const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
     place();q._raf=requestAnimationFrame(step);
-    if(q.build&&api)bindBuild(root,api,pans[1]);};
+    if(q.build&&api)bindBuild(root,api,pans[1]);
+    else if(api&&api.open)root.querySelectorAll('.t.q').forEach(t=>{t.style.cursor='pointer';t.onclick=api.open;});};
   /* build mode: drag a block onto the right pan (or tap it / press ×a or ÷a) to multiply or divide; each operation adds a line to the working */
   function bindBuild(root,api,pan){
     const lg=root.querySelector('#bklog');if(lg)lg.scrollTop=1e5;
@@ -4971,7 +4987,7 @@ REG.push({id:'indices',name:'Power Balance',emoji:'🔋',color:'#0b7285',cat:'Al
  skills:['powers and indices','zero, negative and fractional indices','index laws','logarithms','log laws'],levels:LV.map(l=>l[0]),
  how:'Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan, then press Check. 4 out of 5 to pass.',
  art:'<div class="minibal">🔋</div>',
- mount(root,lv,ctx){mountQuiz(root,ctx,{game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
+ mount(root,lv,ctx){mountQuiz(root,ctx,{popup:true,game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
 })();
 
 /* ---------- question tags for the GCSE games (everything except Balance Scale, which tags itself) ----------
