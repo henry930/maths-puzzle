@@ -36,7 +36,7 @@ async function rpc(fn,args){
 
 /* ---------- merge two progress blobs ---------- */
 function mergeData(a,b){
-  const out={done:{},rv:{},plays:{}};
+  const out={done:{},rv:{},plays:{},st:{}};
   [a,b].forEach(src=>{if(!src)return;
     for(const id in (src.done||{}))for(const l in src.done[id]){
       const r=src.done[id][l],cur=((out.done[id]=out.done[id]||{})[l]);
@@ -46,10 +46,14 @@ function mergeData(a,b){
     }
     for(const k in (src.rv||{}))if(out.rv[k]==null)out.rv[k]=src.rv[k];
     for(const k in (src.plays||{}))out.plays[k]=Math.max(out.plays[k]||0,src.plays[k]||0);
+    for(const g in (src.st||{})){const o=out.st[g]=out.st[g]||{l:{},k:{},e:{}},s=src.st[g];   /* counters only grow: keep the larger of each */
+      for(const part of['l','k','e'])for(const x in (s[part]||{})){const v=s[part][x];
+        if(typeof v==='number')o[part][x]=Math.max(o[part][x]||0,v);
+        else{const c=o[part][x]=o[part][x]||{};for(const f in v)c[f]=Math.max(c[f]||0,v[f]||0);}}}
   });
   return out;
 }
-const dataOf=u=>({v:2,done:u.done,rv:u.rv||{},plays:u.plays||{}});
+const dataOf=u=>({v:2,done:u.done,rv:u.rv||{},plays:u.plays||{},st:u.st||{}});
 
 /* ---------- session ---------- */
 const getSess=()=>LS.get('pz-sess',null);
@@ -58,8 +62,8 @@ const setSess=s=>{if(s)LS.set('pz-sess',s);else try{localStorage.removeItem('pz-
 function adoptUser(name,remoteData,h,legacyMerge){
   let u=DB.users[name];
   if(!u)u=DB.users[name]={created:Date.now(),done:{},rv:{},ev:[]};
-  const m=mergeData(u,remoteData);u.done=m.done;u.rv=m.rv;u.plays=m.plays;u.h=CLOUD?undefined:h;if(!u.ev)u.ev=[];
-  if(legacyMerge){const g=DB.users.Guest;if(g){const m2=mergeData(u,g);u.done=m2.done;u.rv=m2.rv;u.plays=m2.plays;delete DB.users.Guest;}}
+  const m=mergeData(u,remoteData);u.done=m.done;u.rv=m.rv;u.plays=m.plays;u.st=m.st;u.h=CLOUD?undefined:h;if(!u.ev)u.ev=[];
+  if(legacyMerge){const g=DB.users.Guest;if(g){const m2=mergeData(u,g);u.done=m2.done;u.rv=m2.rv;u.plays=m2.plays;u.st=m2.st;delete DB.users.Guest;}}
   DB.cur=name;done=u.done;
   setSess({name,h});LS.set('pz-last',name);persist();
 }
@@ -176,7 +180,7 @@ function showProfile(gid){
   $('#pcl',o).onclick=()=>{o.remove();showClass();};
   let armed=false;$('#prs',o).onclick=function(){if(!armed){armed=true;this.textContent='Tap again to erase';return;}
     logEvent('account',0,'reset',{points:ptsOf(u),levels:lvOf(u)});
-    u.done={};u.rv={};done=u.done;persist();o.remove();renderMenu();toast('Progress reset');};
+    u.done={};u.rv={};u.st={};done=u.done;persist();o.remove();renderMenu();toast('Progress reset');};
 }
 
 /* ---------- teacher board ---------- */
@@ -245,7 +249,7 @@ async function bootAccount(){
   if(s&&DB.users[s.name]){DB.cur=s.name;loadUser();
     if(CLOUD){
       const r=await rpc('pz_login',{p_name:s.name,p_hash:s.h});
-      if(r&&r.ok){const u=me(),m=mergeData(u,r.data);u.done=m.done;u.rv=m.rv;u.plays=m.plays;done=u.done;LS.set('pz-v3',DB);dirty=true;pushNow();renderMenu();flushEvents();}
+      if(r&&r.ok){const u=me(),m=mergeData(u,r.data);u.done=m.done;u.rv=m.rv;u.plays=m.plays;u.st=m.st;done=u.done;LS.set('pz-v3',DB);dirty=true;pushNow();renderMenu();flushEvents();}
       else if(r&&(r.error==='bad_pin'||r.error==='no_user')){setSess(null);DB.cur=null;done={};showLogin(true);}
     }
   }else if(s&&CLOUD){ // session but no local cache: pull from the cloud
