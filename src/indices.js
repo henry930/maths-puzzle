@@ -136,10 +136,23 @@ const blockH=(b,top,side,i)=>`<div class="t chip ${bcls(b)} ${top?'pb':'pbi'}" $
 const ONE='<div class="t chip tn one">1</div>';
 /* tap-to-dissolve: an index-law expression becomes coloured blocks of the base (colour 1 / colour 2) */
 const dbk=(b,n,c,x)=>Array.from({length:n},()=>`<i class="db c${c}${x?' cx':''}">${bv(b)}</i>`).join('');
-const dsH=d=>{const{op,b,m,n}=d;
+const dB=(b,c,x)=>`<i class="db c${c}${x?' cx':''}">${bv(b)}</i>`;
+const dFr=(t,u)=>`<span class="dz dfr"><span class="dg">${t}</span><span class="dg">${u}</span></span>`;
+const dGp=(b,m,n)=>Array.from({length:n},(_,i)=>`<span class="dg gg">${dbk(b,m,i%2?2:1)}</span>`).join('<span class="tmul">×</span>');
+const dDiv=(b,m,n,c)=>{const c2=c===1?2:1;return dFr(dbk(b,m-n,c)+dbk(b,n,c2,1),dbk(b,n,c2,1));};   /* n blocks cancel top against bottom */
+const ONEB='<i class="db one">1</i>';
+const dsH=d=>{const{op,b,m,n,k}=d;
   if(op==='mul')return `<span class="dz"><span class="dg">${dbk(b,m,1)}</span><span class="dg">${dbk(b,n,2)}</span></span>`;
-  if(op==='div')return `<span class="dz dfr"><span class="dg">${dbk(b,m-n,1)}${dbk(b,n,2,1)}</span><span class="dg">${dbk(b,n,2,1)}</span></span>`;
-  return Array.from({length:n},(_,i)=>`<span class="dg gg">${dbk(b,m,i%2?2:1)}</span>`).join('<span class="tmul">×</span>');};
+  if(op==='div')return `<span class="dz">${dDiv(b,m,n,1)}</span>`;
+  if(op==='pow')return `<span class="dz">${dGp(b,m,n)}</span>`;
+  if(op==='mix1')return `<span class="dz">${dGp(b,m,n)}<span class="tmul">×</span><span class="dg">${dbk(b,k,3)}</span></span>`;
+  if(op==='mix2'){const cs=[...Array(m).fill(1),...Array(n).fill(2)],keep=cs.slice(0,m+n-k),gone=cs.slice(m+n-k);
+    const h=a=>a.map(c=>`<i class="db c${c}">${bv(b)}</i>`).join(''),x=a=>a.map(c=>`<i class="db c${c} cx">${bv(b)}</i>`).join('');
+    return `<span class="dz">${dFr(h(keep)+x(gone),x(gone))}</span>`;}
+  if(op==='mix3')return `<span class="dz">${Array.from({length:k},(_,i)=>dDiv(b,m,n,i%2?2:1)).join('<span class="tmul">×</span>')}</span>`;
+  if(op==='neg2')return `<span class="dz">${dFr(ONEB,dbk(b,m,1)+dbk(b,n,2))}</span>`;
+  if(op==='neg3')return `<span class="dz">${dFr(ONEB,dGp(b,m,n))}</span>`;
+  return '';};
 const stH=(b,st,top)=>{
   const items=(its,side)=>its.map((it,i)=>it==='a'?blockH(b,top,side,i):grpH(b,it)).join('');
   const n=items(st.num,'n'),d=items(st.den,'d');
@@ -207,26 +220,26 @@ B10(){const b=BK(),k=pick([2,3]),p=pick([1,2,3].filter(x=>x!==k));return bq('B10
  L1(){const b=pick([2,3,5,7,10]),m=R(2,6),n=R(2,6),s=m+n;return lawQ('L1',b,`${pw(b,m)} × ${pw(b,n)}`,s,`log<sub>${b}</sub> ${pw(b,m)} + log<sub>${b}</sub> ${pw(b,n)}`,`${m} + ${n}`,`When you multiply powers of the same base you add the indices: ${m} + ${n} = ${s}.`,{op:'mul',b,m,n});},
  L2(){const b=pick([2,3,5,7,10]),n=R(2,5),m=n+R(1,5),s=m-n;return lawQ('L2',b,`${pw(b,m)} ÷ ${pw(b,n)}`,s,`log<sub>${b}</sub> ${pw(b,m)} − log<sub>${b}</sub> ${pw(b,n)}`,`${m} − ${n}`,`When you divide powers of the same base you subtract the indices: ${m} − ${n} = ${s}.`,{op:'div',b,m,n});},
  L3(){const b=pick([2,3,5,10]),m=R(2,5),n=R(2,4),s=m*n;return lawQ('L3',b,`${par(pw(b,m))}<sup>${n}</sup>`,s,`${n} × log<sub>${b}</sub> ${pw(b,m)}`,`${n} × ${m}`,`A power of a power: multiply the indices: ${m} × ${n} = ${s}.`,{op:'pow',b,m,n});},
- L4(){const b=pick([2,3,5]),t=R(0,2);let L,s,w;
-  if(t===0){const m=R(3,7),n=R(1,m-1)+0,k=n;L=`${pw(b,m)} × ${pw(b,'−'+k)}`;s=m-k;w=`${m} + (−${k}) = ${s}`;}
-  else if(t===1){const m=R(1,4),n=R(2,6);L=`${pw(b,'−'+m)} ÷ ${pw(b,n)}`;s=-m-n;w=`−${m} − ${n} = ${s}`;}
-  else{const m=R(1,4),n=R(2,3);L=`${par(pw(b,'−'+m))}<sup>${n}</sup>`;s=-m*n;w=`−${m} × ${n} = ${s}`;}
-  return lawQ('L4',b,L,s,null,null,`Use the index laws with the negative sign: ${w}.`);},
- L5(){const v=pick(['x','y','a','p','t']),t=R(0,2);let L,s,w;
-  if(t===0){const m=R(2,9),n=R(2,9);L=`${pw(v,m)} × ${pw(v,n)}`;s=m+n;w=`${m} + ${n}`;}
-  else if(t===1){const n=R(2,6),m=n+R(1,6);L=`${pw(v,m)} ÷ ${pw(v,n)}`;s=m-n;w=`${m} − ${n}`;}
-  else{const m=R(2,6),n=R(2,5);L=`${par(pw(v,m))}<sup>${n}</sup>`;s=m*n;w=`${m} × ${n}`;}
-  return Q({k:'L5',q:`${L} = ${pw(v,'?')}. Find the missing index.`,ans:s,forms:[{L:()=>L,R:T=>pw(v,T),tl:x=>s-x,btn:''}],ex:`Same letter, so use the index law: ${w} = ${s}.`});},
+ L4(){const b=pick([2,3,5]),t=R(0,2);let L,s,w,M4,k4;
+  if(t===0){const m=R(3,7),n=R(1,m-1)+0,k=n;M4=m;k4=k;L=`${pw(b,m)} × ${pw(b,'−'+k)}`;s=m-k;w=`${m} + (−${k}) = ${s}`;}
+  else if(t===1){const m=R(1,4),n=R(2,6);M4=m;k4=n;L=`${pw(b,'−'+m)} ÷ ${pw(b,n)}`;s=-m-n;w=`−${m} − ${n} = ${s}`;}
+  else{const m=R(1,4),n=R(2,3);M4=m;k4=n;L=`${par(pw(b,'−'+m))}<sup>${n}</sup>`;s=-m*n;w=`−${m} × ${n} = ${s}`;}
+  return lawQ('L4',b,L,s,null,null,`Use the index laws with the negative sign: ${w}.`,t===0?{op:'div',b,m:M4,n:k4}:t===1?{op:'neg2',b,m:M4,n:k4}:{op:'neg3',b,m:M4,n:k4});},
+ L5(){const v=pick(['x','y','a','p','t']),t=R(0,2);let L,s,w,DS5;
+  if(t===0){const m=R(2,9),n=R(2,9);L=`${pw(v,m)} × ${pw(v,n)}`;DS5={op:'mul',b:v,m,n};s=m+n;w=`${m} + ${n}`;}
+  else if(t===1){const n=R(2,6),m=n+R(1,6);L=`${pw(v,m)} ÷ ${pw(v,n)}`;DS5={op:'div',b:v,m,n};s=m-n;w=`${m} − ${n}`;}
+  else{const m=R(2,6),n=R(2,5);L=`${par(pw(v,m))}<sup>${n}</sup>`;DS5={op:'pow',b:v,m,n};s=m*n;w=`${m} × ${n}`;}
+  return Q({k:'L5',q:`${L} = ${pw(v,'?')}. Find the missing index.`,ans:s,forms:[{dis:DS5,L:()=>L,R:T=>pw(v,T),tl:x=>s-x,btn:''}],ex:`Same letter, so use the index law: ${w} = ${s}.`});},
  L6(){const b=pick([2,3,5,10]),t=R(0,2);let L,e,N,s;
   if(t===0){const n=R(2,5),N0=n+R(2,5);L=T=>`${pw(b,T)} × ${pw(b,n)}`;N=N0;s=N0-n;e=x=>x+n;}
   else if(t===1){const m=R(6,10),N0=R(2,m-2);L=T=>`${pw(b,m)} ÷ ${pw(b,T)}`;N=N0;s=m-N0;e=x=>m-x;}
   else{const n=R(2,4),k=R(2,5);L=T=>`${par(pw(b,T))}<sup>${n}</sup>`;N=n*k;s=k;e=x=>x*n;}
   return Q({k:'L6',q:`${L('?')} = ${pw(b,N)}. Find the missing index.`,ans:s,forms:[{L:T=>L(T),R:()=>pw(b,N),tl:x=>e(x)-N,btn:''}],ex:`Use the index law backwards: the missing index is ${s}.`});},
- L7(){const b=pick([2,3,5]),t=R(0,2);let L,s,w;
-  if(t===0){const m=R(2,3),n=R(2,3),k=R(1,4);L=`${par(pw(b,m))}<sup>${n}</sup> × ${pw(b,k)}`;s=m*n+k;w=`${m}×${n} + ${k}`;}
-  else if(t===1){const m=R(3,6),n=R(2,5),k=R(1,m+n-1);L=`${pw(b,m)} × ${pw(b,n)} ÷ ${pw(b,k)}`;s=m+n-k;w=`${m} + ${n} − ${k}`;}
-  else{const m=R(4,9),n=R(1,3),k=R(2,3);L=`${par(pw(b,m)+' ÷ '+pw(b,n))}<sup>${k}</sup>`;s=(m-n)*k;w=`(${m} − ${n}) × ${k}`;}
-  return lawQ('L7',b,L,s,null,null,`Use the laws one at a time: ${w} = ${s}.`);},
+ L7(){const b=pick([2,3,5]),t=R(0,2);let L,s,w,D7;
+  if(t===0){const m=R(2,3),n=R(2,3),k=R(1,4);L=`${par(pw(b,m))}<sup>${n}</sup> × ${pw(b,k)}`;D7={op:'mix1',b,m,n,k};s=m*n+k;w=`${m}×${n} + ${k}`;}
+  else if(t===1){const m=R(3,6),n=R(2,5),k=R(1,m+n-1);L=`${pw(b,m)} × ${pw(b,n)} ÷ ${pw(b,k)}`;D7={op:'mix2',b,m,n,k};s=m+n-k;w=`${m} + ${n} − ${k}`;}
+  else{const m=R(4,9),n=R(1,3),k=R(2,3);L=`${par(pw(b,m)+' ÷ '+pw(b,n))}<sup>${k}</sup>`;D7={op:'mix3',b,m,n,k};s=(m-n)*k;w=`(${m} − ${n}) × ${k}`;}
+  return lawQ('L7',b,L,s,null,null,`Use the laws one at a time: ${w} = ${s}.`,D7);},
  L8(){const b=pick([2,3,5]),n=R(2,4),m=n+R(1,3),X=exp(b,m-n);return valQ(X,`${pw(b,m)} ÷ ${pw(b,n)}`,{k:'L8',q:`Work out ${pw(b,m)} ÷ ${pw(b,n)}.`,ans:X,ex:`Subtract the indices: ${pw(b,m-n)} = ${X}.`},{op:'div',b,m,n});},
 /* ---- index ↔ log ---- */
  C1(){const b=pick(BASES),n=R(2,b===10?5:b===2?6:4),N=exp(b,n);return idx(b,n,N,'idx',{k:'C1',q:`${pw(b,'x')} = ${N}. Find x. (Tap the button to see it as a log equation.)`,ans:n,ex:`${pw(b,n)} = ${N}, so x = ${n}. In log form: x = log<sub>${b}</sub> ${N}.`});},
