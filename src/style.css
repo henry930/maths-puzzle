@@ -365,3 +365,14 @@ a.card.news{text-decoration:none;color:inherit}
 .fi-scene{padding-top:16vh}
 
 #glevels{display:none;flex-basis:100%;background:rgba(0,0,0,.18);border-radius:14px;padding:8px}#glevels.open{display:flex}#lvbtn{white-space:nowrap}
+
+/* square game thumbnails: 2 per row */
+#cards:not(.newsgrid){grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card.game{aspect-ratio:1;padding:0;gap:0;border-radius:20px}
+.card.game .art{flex:1;min-height:0;height:auto;overflow:hidden;font-size:38px}
+.card.game h3{margin:0;padding:8px 10px 10px;font-size:15px;line-height:1.2;text-align:center;min-height:2.6em;display:flex;align-items:center;justify-content:center;background:#fff}
+.sentinel{grid-column:1/-1;height:1px}
+.card.game .art>*{max-width:100%}
+.card.game .art .minigrid{transform:scale(.7)}
+.card.game .art .miniriver{font-size:34px;letter-spacing:0;white-space:nowrap}
+.card.game .art .mini24{transform:scale(.85)}

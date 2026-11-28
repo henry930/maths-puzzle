@@ -124,7 +124,7 @@ function numpad(onKey,opts={}){
 function renderMenu(){
   const bar=$('#cats');bar.innerHTML='';
   CATS.forEach(c=>{const b=el('button','cat'+(c===curCat?' on':''),(CAT_EMO[c]?CAT_EMO[c]+' ':'')+c);b.onclick=()=>{curCat=c;curTag='All';renderMenu()};bar.appendChild(b);});
-  const g=$('#cards');g.innerHTML='';
+  const g=$('#cards');g.innerHTML='';g.classList.toggle('newsgrid',curCat==='News and Video');
   const total=REG.reduce((a,G)=>a+doneCount(G.id),0),all=REG.reduce((a,G)=>a+G.levels.length,0);
   const u=me()||{done:{}};$('#overall').innerHTML=`<button class="who" id="who">👤 ${esc(DB.cur||'Player')} ▾</button><span class="pts">⭐ ${ptsOf(u)} pts</span><span>${total} / ${all} levels</span>`;$('#who').onclick=()=>me()?showProfile():showLogin(true);
   const tb=$('#tagbar');tb.innerHTML='';
@@ -135,12 +135,18 @@ function renderMenu(){
   mk('All',inCat.length);TAGS.forEach(t=>mk(t,inCat.filter(G=>tagsOf(G).includes(t)).length));
   const list=inCat.filter(G=>curTag==='All'||tagsOf(G).includes(curTag));
   if(!list.length){g.innerHTML=`<div class="empty">🚧<b>No games here yet</b><span>${curTag==='Calculus'?'Calculus games are coming soon!':'Pick another topic.'}</span></div>`;return;}
-  list.forEach(G=>{
-    const c=el('button','card');c.style.setProperty('--c',G.color);const d=doneCount(G.id);
-    c.innerHTML=`<div class="art">${G.art}<span class="tag">${CAT_EMO[catOf(G)]||''} ${catOf(G)}</span></div><h3>${G.name}</h3><p>${G.desc}</p><div class="tagrow">${tagsOf(G).map(t=>`<span>${t}</span>`).join('')}</div><div class="skills">${G.skills.map(s=>`<span>${s}</span>`).join('')}</div>
-    <div class="solved"><div class="pbar"><i style="width:${d/G.levels.length*100}%"></i></div>${d}/${G.levels.length} levels</div>`;
-    c.onclick=()=>openGame(G.id,Math.min(G.levels.length,d+1));g.appendChild(c);
-  });
+  const mkCard=G=>{const c=el('button','card game');c.style.setProperty('--c',G.color);const d=doneCount(G.id);
+    c.innerHTML=`<div class="art">${G.art}</div><h3>${G.name}</h3>`;
+    c.onclick=()=>openGame(G.id,Math.min(G.levels.length,d+1));return c;};
+  if(window.__menuIO){window.__menuIO.disconnect();window.__menuIO=null;}
+  const BATCH=6;let shown=0;const sent=el('div','sentinel');g.appendChild(sent);
+  const more=()=>{list.slice(shown,shown+BATCH).forEach(G=>g.insertBefore(mkCard(G),sent));shown=Math.min(list.length,shown+BATCH);
+    if(shown>=list.length){sent.remove();if(window.__menuIO){window.__menuIO.disconnect();window.__menuIO=null;}}};
+  more();
+  if(shown<list.length){
+    if('IntersectionObserver' in window){window.__menuIO=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting))more();},{rootMargin:'300px'});window.__menuIO.observe(sent);}
+    else while(shown<list.length)more();
+  }
 }
 function renderNews(g){
   if(!NEWS.length){g.innerHTML='<div class="empty">📰<b>News and Video — coming soon</b><span>Maths news, short explainer videos and study tips will appear here.</span></div>';return;}
