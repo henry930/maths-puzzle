@@ -12,7 +12,7 @@ html=f'''<!DOCTYPE html>
 renderMenu();bootAccount();if(window.__GAME_PAGE)routeNow();</script></body></html>'''
 open('index.html','w').write(html)
 import os
-ids=re.findall(r"id:'([a-z0-9_]+)',name:",js)
+ids=re.findall(r"REG\.push\(\{id:'([a-z0-9_]+)'",js)
 for i in ids:
     os.makedirs(i,exist_ok=True)
     open(i+'/index.html','w').write(html.replace('<script>'+js[:0],'<script>window.__GAME_PAGE=1;',1).replace('<title>Maths Puzzle Arcade</title>','<title>Maths Puzzle Arcade</title><base href="../">') if False else html.replace('<script>','<script>window.__GAME_PAGE=1;',1))
