@@ -502,3 +502,4 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .px .t.dsb,.px .t.dsv{position:relative}.px .t.dsb::after,.px .t.dsv::after{content:'✨';position:absolute;right:-5px;top:-8px;font-size:13px}.px .t.dsv::after{content:'↩'}
 .px .t.dsv{background:#fff;border:2px solid #b197fc;padding:4px 5px;box-shadow:0 2px 0 rgba(0,0,0,.12)}.px .t.dsv .db{min-width:15px;height:17px;line-height:17px;font-size:11px;padding:0 2px}.px .dg{max-width:128px}.px .db.cx{opacity:.5}
 .px .db.one{background:#fff;border:1.5px solid #adb5bd;color:#495057}.px .db.c3{background:#ff8787;color:#4a0a0a}
+.px .dg.gx{opacity:.5;border-style:dotted}.px .dg.gg:not(.gx){border:2px solid #5f3dc4;background:#f3f0ff}

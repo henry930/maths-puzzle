@@ -152,9 +152,10 @@ const dsH=d=>{const{op,b,m,n,k}=d;
     return `<span class="dz">${dFr(h(keep)+x(gone),x(gone))}</span>`;}
   if(op==='mix3')return `<span class="dz">${Array.from({length:k},(_,i)=>dDiv(b,m,n,i%2?2:1)).join('<span class="tmul">×</span>')}</span>`;
   if(op==='blk')return `<span class="dz">${n<0?dFr(ONEB,dbk(b,-n,1)):n===0?ONEB:`<span class="dg">${dbk(b,n,1)}</span>`}</span>`;
-  if(op==='root'){const nb=(r,c)=>`<i class="db c${c}">${r}</i>`,row=(cnt)=>Array.from({length:cnt},(_,i)=>nb(d.r,i%3+1)).join('<span class="tmul">×</span>');
-    const a=`<span class="dz">${row(d.q)}</span>`;if(d.p===1&&!d.neg)return a;
-    const bb=`<span class="dz">${row(d.p)}</span>`;return `<span class="dz">${a}<span class="tmul">→</span>${d.neg?dFr(ONEB,bb):bb}</span>`;}
+  if(op==='root'){const nb=(c)=>`<i class="db c${c}">${d.r}</i>`,gp=(i,x)=>`<span class="dg gg${x?'':' gx'}">${Array.from({length:d.p},()=>nb(i%3+1)).join('')}</span>`;
+    /* N = r^q is p·q blocks of r, split into q equal groups of p blocks: one group is the answer */
+    const all=Array.from({length:d.q},(_,i)=>gp(i,i===0)).join('');
+    return `<span class="dz">${all}${d.neg?`<span class="tmul">→</span>${dFr(ONEB,gp(0,1))}`:''}</span>`;}
   if(op==='fcan')return `<span class="dz">${dFr(`<i class="db c3 cx">${d.c}</i>`+dbk(b,d.k,1),`<i class="db c3 cx">${d.c}</i>`)}</span>`;
   if(op==='lgs'){const seq=[],bounds=[];d.add.forEach((c,gi)=>{for(let i=0;i<c;i++)seq.push([gi%3+1,gi]);});const tot=seq.length,gone=d.sub||0;let html='',last=-1;
     seq.forEach((x,i)=>{if(x[1]!==last){if(last>=0)html+='<span class="tmul">+</span>';html+=last>=0?'':'';last=x[1];}html+=`<i class="db c${x[0]}${i>=tot-gone?' cx':''}">${bv(b)}</i>`;});
