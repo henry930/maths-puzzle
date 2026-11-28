@@ -61,19 +61,20 @@ REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probab
  how:'Read the picture, then tap a box and type your answer: the top box is the numerator and the bottom box is the denominator, like 3 over 10 (any equivalent fraction is accepted). If the question asks for a decimal, just fill in the top box. You can use the keypad or your keyboard (Tab switches boxes).',
  art:'<div class="minich">🎲🎲</div>',
  mount(root,lv,ctx){
-  const pool=POOL[lv-1];let qs,qi,right,cur,num,den,fld,answered,res;
+  const pool=POOL[lv-1];let qs,qi,right,cur,num,den,fld,answered,res,tries;
   function start(){qs=Array.from({length:5},()=>pick(pool));qi=0;right=0;res=[];next();}
-  function next(){cur=QT[qs[qi]]();num='';den='';fld='n';answered=false;ctx.q=quizQ('chance',qs[qi],cur);draw();}
+  function next(){cur=QT[qs[qi]]();num='';den='';fld='n';answered=false;tries=0;ctx.q=quizQ('chance',qs[qi],cur);draw();}
   function draw(msg,ok){
     root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.vis}</div><div class="ch-q">${cur.q}</div>
      <div class="ch-frac ${ok===true?'good':ok===false?'bad':''}"><button class="fbox${fld==='n'&&!answered?' act':''}" id="fn" aria-label="numerator">${num||'&nbsp;'}</button><div class="fbar"></div><button class="fbox${fld==='d'&&!answered?' act':''}" id="fd" aria-label="denominator">${den||'&nbsp;'}</button></div>
      <div class="msg">${msg||'&nbsp;'}</div><div id="chp"></div>
-     <div class="toolrow">${answered?`<button class="btn" id="nx">${qi<4?'Next question ▶':'See result ▶'}</button>`:''}</div></div>`;
+     <div class="toolrow">${answered?`<button class="btn" id="nx">${qi<4?'Next question ▶':'See result ▶'}</button>`:tries?`<button class="btn alt" id="sa">Show answer</button>`:''}</div></div>`;
     if(!answered){$('#fn').onclick=()=>{fld='n';draw();};$('#fd').onclick=()=>{fld='d';draw();};
       const p=el('div','npad');['7','8','9','4','5','6','1','2','3','.','0','del'].forEach(k=>{const b=el('button','key'+(k==='del'?' del':''),k==='del'?'⌫':k);b.onclick=()=>press(k);p.appendChild(b);});
       const b=el('button','key ok','Enter ✓');b.style.gridColumn='span 3';b.onclick=()=>press('ok');p.appendChild(b);$('#chp').appendChild(p);}
     if($('#nx'))$('#nx').onclick=advance;
+    if($('#sa'))$('#sa').onclick=()=>{answered=true;reveal();draw('💡 '+cur.ex,false);};
   }
   function press(k){
     if(answered)return;
@@ -86,10 +87,13 @@ REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probab
   function submit(){
     const buf=den?num+'/'+den:num;if(!num){draw('Fill in the top box (numerator) first');return;}
     const v=den?parseFloat(num)/parseFloat(den):parseFloat(num);if(isNaN(v)||!isFinite(v)){draw('Check your numbers');return;}
-    answered=true;const ok=Math.abs(v-cur.ans)<1e-6;if(ok)right++;res.push({qt:qs[qi],ok});ctx.log(ok?'right':'wrong',ok?{}:{typed:buf,expect:cur.ans,err:'wrong_value'});
-    if(cur.vis.includes('ch-grid')||cur.hl){const hl=cur.hl;if(hl)cur.vis=grid(hl);}
-    draw((ok?'✅ Correct! ':'❌ Not quite. ')+cur.ex,ok);
+    const ok=Math.abs(v-cur.ans)<1e-6;
+    if(!ok){if(!tries){res.push({qt:qs[qi],ok:false});}tries++;ctx.log('wrong',{typed:buf,expect:cur.ans,err:'wrong_value'});draw('❌ Not quite — change your answer and try again!',false);return;}
+    answered=true;if(!tries){right++;res.push({qt:qs[qi],ok:true});}ctx.log('right',{retry:tries});
+    reveal();
+    draw((tries?'✅ Correct this time! (only first-try answers count towards passing) ':'✅ Correct! ')+cur.ex,true);
   }
+  function reveal(){if(cur.vis.includes('ch-grid')||cur.hl){const hl=cur.hl;if(hl)cur.vis=grid(hl);}}
   function advance(){
     if(qi<4){qi++;next();return;}
     {ctx.q=levelQ(ctx.id,ctx.lv);ctx.perf={right,of:5,wrong:res.filter(r=>!r.ok).map(r=>r.qt)};}
