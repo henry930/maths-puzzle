@@ -114,7 +114,7 @@ const ladder=(b,from,to,last)=>{const a=[];for(let e=from;e>=to;e--){const v=Mat
 const eT=e=>e<0?'−'+(-e):String(e);
 const bcls=b=>/^\d/.test(String(b))?'tn':'tx';              /* Balance Scale weights: purple italic for letters, yellow for numbers */
 const blk=(b,n)=>Array.from({length:n},()=>`<div class="t chip ${bcls(b)} pb">${b}</div>`).join('');
-const blocksH=(b,e,s)=>{if(e==null)e=s;return e===0?'<div class="t chip tn one">1</div>':e>0?blk(b,e):`<span class="fr"><i>1</i><i class="bi">${blk(b,-e)}</i></span>`;};
+const blocksH=(b,e,s)=>{if(e==null)e=s;return e===0?'<div class="t chip tn one">1</div>':e>0?blk(b,e):`<span class="fr bf"><i><b class="t chip tn one">1</b></i><i class="bi">${blk(b,-e)}</i></span>`;};
 const bq=(k,b,t,s,qt,ex,o)=>Q(Object.assign({k,q:qt,ans:t,start:s,build:b,ex,forms:[{L:()=>(o&&o.L)||pe(b,t),R:(T,v)=>blocksH(b,v,s),tl:v=>t-v,blocks:true}]},o||{}));
 const BK=()=>pick(['a','x','y','m','n','2','3','5']);
 

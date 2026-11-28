@@ -484,6 +484,10 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .padsheet .npad.cp{margin:0 auto;max-width:380px}.padsheet .npad.cp .key{font-size:22px;padding:10px 0}
 .ch.padopen{padding-bottom:150px}
 .ch sup.sf,.px sup.sf{font-size:.8em;top:-.9em}.padsheet .npad.cp .key{color:#2b2160}.padsheet .npad.cp .key.ok{color:#2b8a3e}.padsheet .npad.cp .key.del{color:#c92a2a}
+
+/* "1" is a yellow number block like Balance Scale's 1 weight; a block fraction has a dark bar between 1 and the blocks */
+.px .t.one{background:#fcc419;color:#5c4400;font-style:normal}
+.px .bf{color:#5f3dc4;margin:0 2px}.px .bf i{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;padding:0;border:0}.px .bf i:first-child{border-bottom:3px solid #5f3dc4;padding-bottom:3px}.px .bf .bi{border-top:0;padding-top:3px}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><button class="back" id="lvbtn">Levels ▾</button><button class="back" id="pbtn">👤</button><div class="pills" id="glevels"></div></div>
@@ -4834,7 +4838,7 @@ const ladder=(b,from,to,last)=>{const a=[];for(let e=from;e>=to;e--){const v=Mat
 const eT=e=>e<0?'−'+(-e):String(e);
 const bcls=b=>/^\d/.test(String(b))?'tn':'tx';              /* Balance Scale weights: purple italic for letters, yellow for numbers */
 const blk=(b,n)=>Array.from({length:n},()=>`<div class="t chip ${bcls(b)} pb">${b}</div>`).join('');
-const blocksH=(b,e,s)=>{if(e==null)e=s;return e===0?'<div class="t chip tn one">1</div>':e>0?blk(b,e):`<span class="fr"><i>1</i><i class="bi">${blk(b,-e)}</i></span>`;};
+const blocksH=(b,e,s)=>{if(e==null)e=s;return e===0?'<div class="t chip tn one">1</div>':e>0?blk(b,e):`<span class="fr bf"><i><b class="t chip tn one">1</b></i><i class="bi">${blk(b,-e)}</i></span>`;};
 const bq=(k,b,t,s,qt,ex,o)=>Q(Object.assign({k,q:qt,ans:t,start:s,build:b,ex,forms:[{L:()=>(o&&o.L)||pe(b,t),R:(T,v)=>blocksH(b,v,s),tl:v=>t-v,blocks:true}]},o||{}));
 const BK=()=>pick(['a','x','y','m','n','2','3','5']);
 

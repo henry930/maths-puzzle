@@ -482,3 +482,7 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .padsheet .npad.cp{margin:0 auto;max-width:380px}.padsheet .npad.cp .key{font-size:22px;padding:10px 0}
 .ch.padopen{padding-bottom:150px}
 .ch sup.sf,.px sup.sf{font-size:.8em;top:-.9em}.padsheet .npad.cp .key{color:#2b2160}.padsheet .npad.cp .key.ok{color:#2b8a3e}.padsheet .npad.cp .key.del{color:#c92a2a}
+
+/* "1" is a yellow number block like Balance Scale's 1 weight; a block fraction has a dark bar between 1 and the blocks */
+.px .t.one{background:#fcc419;color:#5c4400;font-style:normal}
+.px .bf{color:#5f3dc4;margin:0 2px}.px .bf i{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;padding:0;border:0}.px .bf i:first-child{border-bottom:3px solid #5f3dc4;padding-bottom:3px}.px .bf .bi{border-top:0;padding-top:3px}
