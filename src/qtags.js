@@ -84,6 +84,21 @@ pc-reverse|reverse percentage|逆向百分比
 pc-interest|interest|利息
 pc-simple-interest|simple interest|單利息
 pc-compound-interest|compound interest|複利息
+pc-mental|mental percentages|心算百分比
+pc-multiplier|multipliers|乘數
+pc-express|one amount as a percentage of another|求百分比
+pc-unit|units and percentages|單位同百分比
+pc-part-total|parts of a total|整體嘅部分
+pc-find-whole|find the whole|求原數
+pc-from-percent|from a percentage|百分比轉換
+pc-points|percentage points|百分點
+pc-profit-loss|profit and loss|盈虧
+pc-successive|successive changes|連續變化
+pc-depreciation|depreciation|貶值
+pc-ratio|ratio and percentage|比同百分比
+pc-offers|comparing offers|比較優惠
+pc-tax|tax, tips and commission|稅、貼士同佣金
+pc-pie|pie charts|圓形圖
 pr-bag|bag of balls|袋入面揀波
 pr-not|not event|「唔係」事件
 pr-or|or event|「或者」事件
@@ -274,7 +289,11 @@ const QTAGS={
   A6:Q(['fr-add','fr-diff-denom'],4),A7:Q(['fr-sub','fr-diff-denom'],4),A8:Q(['fr-mixed','fr-mixed-improper'],3),A9:Q(['fr-mul'],4),A10:Q(['fr-div'],5),
   A11:Q(['fr-reverse','fr-of-amount'],5),A12:Q(['fr-add','fr-mixed','fr-diff-denom'],6)},
  percent:{P1:Q(['pc-read-grid'],1),P2:Q(['pc-of-amount','pc-easy'],2),P3:Q(['pc-convert'],3,['pc-from-fraction','pc-from-decimal']),P4:Q(['pc-of-amount','pc-any'],3),P5:Q(['pc-sale','pc-decrease'],3),
-  P6:Q(['pc-increase'],4,['pc-vat']),P7:Q(['pc-as-percent'],3),P8:Q(['pc-change'],5),P9:Q(['pc-reverse','pc-increase'],6),P10:Q(['pc-reverse','pc-decrease'],6),P11:Q(['pc-interest'],6,['pc-simple-interest','pc-compound-interest'])},
+  P6:Q(['pc-increase'],4,['pc-vat']),P7:Q(['pc-as-percent'],3),P8:Q(['pc-change'],5),P9:Q(['pc-reverse','pc-increase'],6),P10:Q(['pc-reverse','pc-decrease'],6),P11:Q(['pc-interest'],6,['pc-simple-interest','pc-compound-interest']),
+  P13:Q(['pc-of-amount','pc-mental'],4),P14:Q(['pc-multiplier'],5),P15:Q(['pc-increase','pc-multiplier'],4),P16:Q(['pc-decrease','pc-multiplier'],4),P17:Q(['pc-express'],3,['pc-unit']),
+  P18:Q(['pc-part-total'],4),P19:Q(['pc-find-whole','pc-reverse'],5),P20:Q(['pc-convert'],5,['pc-from-fraction','pc-from-decimal','pc-from-percent']),P21:Q(['pc-points'],4),P22:Q(['pc-profit-loss'],5,['pc-reverse']),
+  P23:Q(['pc-successive','pc-multiplier'],7),P24:Q(['pc-compound-interest'],7),P25:Q(['pc-depreciation','pc-multiplier'],7),P26:Q(['pc-simple-interest'],5,['pc-find-whole']),P27:Q(['pc-reverse','pc-multiplier'],7,['pc-vat']),
+  P28:Q(['pc-ratio'],6,['pc-change']),P29:Q(['pc-offers'],5,['pc-decrease']),P30:Q(['pc-tax'],5,['pc-vat']),P31:Q(['pc-pie'],5,['pc-unit'])},
  chance:{T1:Q(['pr-bag'],1),T2:Q(['pr-bag','pr-not'],2),T3:Q(['pr-bag','pr-or'],3),T4:Q(['pr-spinner'],2),T5:Q(['pr-two-dice','pr-sample-space'],4),
   T6:Q(['pr-two-dice','pr-sample-space','pr-at-least'],4),T7:Q(['pr-two-dice','pr-sample-space'],5),T8:Q(['pr-bag','pr-and','pr-independent','pr-with-replacement'],5),
   T9:Q(['pr-bag','pr-and','pr-without-replacement'],6),T10:Q(['pr-expected'],4),T11:Q(['pr-relative-freq'],3),T12:Q([],5,['pr-not','pr-or','pr-mutually-exclusive','pr-and','pr-independent','pr-ratio']),
@@ -324,7 +343,7 @@ window.quizQ=function(game,key,cur){
 };
 /* level meta for a pool of question types: tags in every type = tags; in some types = sometimes */
 function fromPool(game,pool){
-  const ALIAS={percent:{P12:['P6','P8','P9','P10','P11','P7']}};
+  const ALIAS={percent:{P12:['P6','P8','P9','P10','P11','P7'],P32:['P13','P14','P15','P16','P17','P18','P19','P20','P21','P22','P23','P24','P25','P26','P27','P28','P29','P30','P31']}};
   pool=pool.flatMap(k=>(ALIAS[game]&&ALIAS[game][k])||[k]);
   const ms=[...new Set(pool)].map(k=>QTAGS[game][k]),all=new Set(ms.flatMap(m=>m.t)),tags=[...all].filter(t=>ms.every(m=>m.t.includes(t))).sort();
   const sometimes=[...new Set([...all,...ms.flatMap(m=>m.v)])].filter(t=>!tags.includes(t)).sort(),d=ms.reduce((a,m)=>a+m.d,0)/ms.length;
