@@ -104,7 +104,7 @@ const TAGS=['Algebra','Geometry','Number and Arithmetic','Probability / Statisti
 const CAT_EMO={'GCSE Maths':'🎓','General Puzzles':'🧩','Basic Skills Practice':'✏️','News and Video':'📰'};
 /* every game belongs to ONE category and can carry several tags */
 const CATALOG={
- balance:['GCSE Maths',['Algebra']],expand:['GCSE Maths',['Algebra']],lines:['GCSE Maths',['Algebra','Geometry']],
+ balance:['GCSE Maths',['Algebra']],indices:['GCSE Maths',['Algebra','Number and Arithmetic']],expand:['GCSE Maths',['Algebra']],lines:['GCSE Maths',['Algebra','Geometry']],
  angles:['GCSE Maths',['Geometry']],transform:['GCSE Maths',['Geometry']],
  fraction:['GCSE Maths',['Number and Arithmetic']],percent:['GCSE Maths',['Number and Arithmetic']],factors:['GCSE Maths',['Number and Arithmetic']],
  chance:['GCSE Maths',['Probability / Statistics']],
@@ -204,9 +204,11 @@ window.addEventListener('popstate',routeNow);
 /* reusable number pad: returns element; onKey gets '0'-'9','-','.','del','ok' */
 function numpad(onKey,opts={}){
   const p=el('div','npad');
-  const keys=['7','8','9','4','5','6','1','2','3',opts.minus?'-':(opts.slash?'/':'del'),'0',opts.minus||opts.slash?'del':'ok'];
+  const both=opts.minus&&opts.slash;                                   /* minus and slash: 3 columns of digits + − 0 / and a bottom row */
+  const keys=both?['7','8','9','4','5','6','1','2','3','-','0','/']:['7','8','9','4','5','6','1','2','3',opts.minus?'-':(opts.slash?'/':'del'),'0',opts.minus||opts.slash?'del':'ok'];
   keys.forEach(k=>{const b=el('button','key'+(k==='del'?' del':''),k==='del'?'⌫':k==='-'?'−':k==='ok'?'✓':k);b.onclick=()=>onKey(k);p.appendChild(b);});
-  if(opts.minus||opts.slash){const b=el('button','key ok','Enter ✓');b.style.gridColumn='span 3';b.onclick=()=>onKey('ok');p.appendChild(b);}
+  if(both){const d=el('button','key del','⌫');d.onclick=()=>onKey('del');p.appendChild(d);}
+  if(opts.minus||opts.slash){const b=el('button','key ok','Enter ✓');b.style.gridColumn=both?'span 2':'span 3';b.onclick=()=>onKey('ok');p.appendChild(b);}
   return p;
 }
 

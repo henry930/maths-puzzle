@@ -1,0 +1,37 @@
+level,name,difficulty,score,steps,ops,tags,sometimes
+1,"Repeated multiplication → power",1,1,,,ix-repeat,
+2,"Repeated multiplication · find the index",2,1.5,,,,ix-find-index ix-repeat lg-convert
+3,"Evaluate powers",1,1,,,ix-eval,
+4,"Find the missing base",3,2.5,,,,ix-find-base ix-find-index lg-convert
+5,"Zero index · the halving ladder",2,2,,,ix-zero,
+6,"Zero index",2,2,,,ix-zero,
+7,"Zero index · mixed",3,2.5,,,ix-zero,ix-eval
+8,"Negative index · keep dividing",3,3,,,ix-neg,
+9,"Negative index · fractions",3,3,,,ix-neg,
+10,"Negative index · decimals",3,3,,,ix-neg,
+11,"Powers as negative indices",4,3.5,,,ix-neg,ix-find-index
+12,"Negative index · fraction base",4,4,,,ix-neg,ix-neg-frac-base
+13,"Fractional index · square roots",4,4,,,ix-frac,
+14,"Fractional index · cube roots and more",4,4.3,,,ix-frac,
+15,"Fractional index · p/q",5,5,,,ix-frac,ix-frac-pq
+16,"Negative fractional index",7,6.5,,,ix-frac ix-frac-pq,ix-frac-neg
+17,"Find the fractional index",7,7,,,ix-find-index ix-frac,
+18,"Index law · multiply",3,3,,,ix-law-mul,
+19,"Index law · divide",3,3,,,ix-law-div,ix-eval
+20,"Index law · power of a power",4,4,,,ix-law-pow,
+21,"Index laws · all three",3,3.3,,,,ix-law-div ix-law-mul ix-law-pow
+22,"Index laws · negative indices",5,5,,,ix-law-neg,
+23,"Index laws · with letters",4,4,,,ix-letters,
+24,"Index laws · missing index",6,5.5,,,,ix-combine ix-missing
+25,"Index → log · 2ˣ = 8",4,4,,,ix-find-index lg-convert,
+26,"Log values",5,5,,,lg-value,lg-convert lg-neg
+27,"Special logs · log 1 and log a",5,5,,,lg-special,
+28,"Negative and fractional logs",7,7,,,lg-frac lg-neg lg-value,
+29,"Find the base",6,6,,,,lg-base lg-convert lg-value
+30,"Solve index equations with logs",6,6,,,lg-convert,ix-find-index lg-frac lg-neg
+31,"Log law · add",6,6,,,lg-add,
+32,"Log law · subtract",7,6.5,,,lg-sub,lg-simplify
+33,"Log law · powers",7,7,,,lg-pow,lg-simplify
+34,"Log laws · combine",8,7.7,,,,lg-add lg-mix lg-pow lg-simplify
+35,"Boss · indices",4,3.9,,,,ix-combine ix-eval ix-frac ix-frac-pq ix-law-mul ix-law-neg ix-neg ix-zero
+36,"Boss · logs and laws",7,6.7,,,,lg-add lg-convert lg-frac lg-mix lg-neg lg-pow lg-sub lg-value

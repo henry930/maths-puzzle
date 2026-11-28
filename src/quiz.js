@@ -2,14 +2,16 @@
 function mountQuiz(root,ctx,o){
   let qs,qi,right,cur,buf,answered,res;
   const start=()=>{qs=Array.from({length:5},()=>pick(o.pool));qi=0;right=0;res=[];next();};
-  const next=()=>{cur=o.QT[qs[qi]]();buf='';answered=false;ctx.q=o.game?quizQ(o.game,qs[qi],cur):null;draw();};
+  const next=()=>{cur=o.QT[qs[qi]]();buf='';answered=false;ctx.q=o.qq?o.qq(qs[qi],cur):(o.game?quizQ(o.game,qs[qi],cur):null);draw();};
   function draw(msg,ok){
     root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
-     <div class="ch-vis">${cur.vis||''}</div><div class="ch-q">${cur.q}</div>
+     <div class="ch-vis">${cur.visf?cur.visf(buf,answered,ok):(cur.vis||'')}</div><div class="ch-q">${cur.q}</div>
      <div class="ch-in ${ok===true?'good':ok===false?'bad':''}">${buf||'&nbsp;'}</div>
      <div class="msg">${msg||'&nbsp;'}</div><div id="chp"></div>
      <div class="toolrow">${answered?`<button class="btn" id="nx">${qi<4?'Next question ▶':'See result ▶'}</button>`:''}</div></div>`;
-    if(!answered)$('#chp').appendChild(numpad(press,{slash:!!o.slash}));
+    if(!answered)$('#chp').appendChild(numpad(press,{slash:!!o.slash,minus:!!o.minus}));
+    {const fb=$('#ftg',root);if(fb)fb.onclick=()=>{cur.form=1-(cur.form||0);draw(msg,ok);};}   /* games can offer a second form of the same equation */
+    if(cur.after)cur.after(root);
     if($('#nx'))$('#nx').onclick=advance;
   }
   function press(k){
@@ -32,7 +34,7 @@ function mountQuiz(root,ctx,o){
     if(right>=4)ctx.win(o.winTitle||'Well done!',`You got ${right}/5 right.`,start,'Play again');
     else{ctx.log('fail',ctx.perf);root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — have another go!</div><div class="toolrow"><button class="btn" id="rt">Try again</button></div></div>`;$('#rt').onclick=start;}
   }
-  ctx.keys=e=>{if(/^[0-9.]$/.test(e.key)||(o.slash&&e.key==='/'))press(e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter')press('ok');};
+  ctx.keys=e=>{if(/^[0-9.]$/.test(e.key)||(o.slash&&e.key==='/')||(o.minus&&e.key==='-'))press(e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter')press('ok');};
   start();
   return{QT:o.QT};
 }
