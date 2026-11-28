@@ -852,19 +852,16 @@ function skillsOf(G){
   const m=new Map();
   G.levels.forEach((nm,i)=>{const k=String(nm).replace(STAGE_RE,'');if(!m.has(k))m.set(k,[]);m.get(k).push(i+1);});
   return [...m].map(([name,lvs])=>{
-    const d=done[G.id]||{},n=lvs.filter(l=>d[l]).length;
-    const ds=lvs.map(l=>{const q=levelMeta(G,l);return q?q.diff:null;}).filter(x=>x!=null);
-    const diff=ds.length?Math.round(ds.reduce((a,b)=>a+b,0)/ds.length):null;
-    return{name,lvs,n,total:lvs.length,band:BAND(diff),state:n===0?'new':n===lvs.length?'done':'going'};
+    const d=done[G.id]||{};
+    let best=-1,any=false;                                   /* best = hardest difficulty band among the cleared levels */
+    lvs.forEach(l=>{if(!d[l])return;any=true;const q=levelMeta(G,l);best=Math.max(best,q?BAND(q.diff):0);});
+    return{name,achieved:any?Math.max(best,0):-1};
   });
 }
 function skillHtml(G){
-  const S=skillsOf(G),mastered=S.filter(s=>s.state==='done').length;
-  const row=s=>`<div class="srow s-${s.state}"><span class="sn">${esc(s.name)}</span>${s.band>=0?`<span class="sbd sbd-${s.band}">${BAND_NAME[s.band]}</span>`:''}<span class="sdots">${s.lvs.map(l=>`<i class="${(done[G.id]||{})[l]?'on':''}"></i>`).join('')}</span><span class="sst">${s.state==='done'?'✓ Done':s.state==='going'?s.n+'/'+s.total:'Not started'}</span></div>`;
-  return `<p class="small">${mastered}/${S.length} skills completed</p>${S.map(row).join('')}`;
+  return skillsOf(G).map(s=>`<div class="srow"><span class="sn">${esc(s.name)}</span>${s.achieved>=0?`<span class="sbd sbd-${s.achieved}">${BAND_NAME[s.achieved]}</span>`:'<span class="sst">–</span>'}</div>`).join('');
 }
 
-function syncLabel(){return !CLOUD?'📱 Saved on this device':SYNC==='ok'?'☁ Saved online':SYNC==='pending'?'⏳ Saving…':'⚠ Offline — will sync when you are back online';}
 function showProfile(){
   const u=me();
   const rows=REG.map(G=>{const d=done[G.id]||{};let p=0;for(const l in d){p+=d[l].p||0;}
