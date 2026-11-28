@@ -66,61 +66,66 @@ const reqOf=t=>{const o=facs(Math.abs(t.c)).filter(n=>n>1).map(String);for(const
 const divides=(b,t)=>Math.abs(t.c)%b.c===0&&Object.keys(b.p).every(k=>(t.p[k]||0)>=b.p[k]);
 const common=ts=>{const c=gcdAll(ts.map(t=>Math.abs(t.c))),p={};Object.keys(ts[0].p).forEach(k=>{const e=Math.min(...ts.map(t=>t.p[k]||0));if(e>0)p[k]=e;});return{c,p};};
 
-function factAnim(hw,g){
-  hw.innerHTML=`<div class="fa"><div class="fa-card" id="fac"><div class="fa-l1"><span class="fa-t" id="fa1"></span><span class="fa-pl">+</span><span class="fa-t" id="fa2"></span></div><div class="fa-l2" id="fal2"></div><div class="fa-bub" id="fab"></div><span class="fa-hand" id="fah">👆</span></div><div class="fa-cap" id="facap"></div><div class="fa-foot"><span class="fa-dots" id="fad"></span><span><button class="fa-rp" id="fav"></button> <button class="fa-rp" id="farp">↻ Replay</button> <button class="fa-tx" id="fatx">📖 Steps</button></span></div><div class="fa-how" id="fahow" hidden></div></div>`;
-  const q=id=>hw.querySelector('#'+id),card=q('fac'),t1=q('fa1'),t2=q('fa2'),l2=q('fal2'),bub=q('fab'),hand=q('fah'),cap=q('facap'),dots=q('fad'),vb=q('fav');
-  q('fahow').textContent=g.how;let tm=[],stopped=false,gen=0;
+function factAnim(box,api){
+  box.innerHTML=`<div class="fi"><div class="fi-scene" id="fis"><div class="fi-l1"><span class="fi-t" id="fi1"></span><span class="fi-pl">+</span><span class="fi-t" id="fi2"></span></div><div class="fi-l2" id="fil2"></div>
+   <div class="fi-padw" id="fip"><div class="fi-ttl">Factors of <b>30x</b> <span class="fi-ty" id="fity"></span></div><div class="fi-pad"><i>7</i><i>8</i><i>9</i><i>4</i><i>5</i><i>6</i><i>1</i><i>2</i><i>3</i><i>⌫</i><i>0</i><i>✓</i></div></div><span class="fi-hand" id="fih">👆</span>
+   <div class="fi-start" id="fist" hidden><button id="fisb">🔊 Tap to start</button></div></div>
+   <div class="fi-cap" id="fic"></div><div class="fi-dots" id="fid"></div>
+   <div class="fi-end" id="fie" hidden><button class="fi-go" id="figo">▶ Let's play!</button><button class="fi-rp" id="firp">↻ Watch again</button></div></div>`;
+  const q=id=>box.querySelector('#'+id),scene=q('fis'),t1=q('fi1'),t2=q('fi2'),l2=q('fil2'),pad=q('fip'),hand=q('fih'),cap=q('fic'),dots=q('fid'),end=q('fie'),st=q('fist'),vb=api.voiceBtn,ty=q('fity');
+  let tm=[],stopped=false,gen=0;
   const SS=window.speechSynthesis,CAN=!!(SS&&window.SpeechSynthesisUtterance);
   let voiceOn=CAN;try{if(localStorage.getItem('pz-voice')==='0')voiceOn=false;}catch(e){}
   let blocked=false;
-  dots.innerHTML='<i></i><i></i><i></i><i></i><i></i><i></i>';
+  dots.innerHTML='<i></i><i></i><i></i><i></i><i></i><i></i><i></i>';
   const dot=n=>[...dots.children].forEach((d,i)=>d.classList.toggle('on',i<=n));
   const pop=e=>{e.classList.remove('pop');void e.offsetWidth;e.classList.add('pop');};
-  const go=(el,dx)=>{const r=el.getBoundingClientRect(),c=card.getBoundingClientRect();hand.style.left=(r.left-c.left+r.width/2-10+(dx||0))+'px';hand.style.top=(r.top-c.top+r.height-6)+'px';};
+  const go=(el,dx,dy)=>{const r=el.getBoundingClientRect(),c=scene.getBoundingClientRect();hand.style.left=(r.left-c.left+r.width/2-16+(dx||0))+'px';hand.style.top=(r.top-c.top+r.height*.6+(dy||0))+'px';};
   const tap=()=>{hand.classList.remove('tap');void hand.offsetWidth;hand.classList.add('tap');};
-  const vbLabel=()=>{if(!CAN){vb.style.display='none';return;}vb.textContent=!voiceOn?'🔇 Voice off':blocked?'🔊 Tap to hear':'🔊 Voice on';};
+  const vbLabel=()=>{if(!CAN){vb.style.display='none';return;}vb.textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';};
   function pickVoice(){const vs=SS.getVoices().filter(v=>/^en/i.test(v.lang));if(!vs.length)return null;
-    const score=v=>(/en-GB/i.test(v.lang)?4:/en-US|en-AU|en-IE/i.test(v.lang)?2:0)+(/natural|neural|premium|enhanced|google|samantha|serena|daniel|karen|libby|sonia|aria|jenny/i.test(v.name)?3:0)+(/female|libby|sonia|serena|samantha|karen|aria|jenny/i.test(v.name)?1:0);
+    const score=v=>(/en-GB/i.test(v.lang)?4:/en-US|en-AU|en-IE|en-IN/i.test(v.lang)?2:0)
+      +(/natural|neural|online|premium|enhanced|siri/i.test(v.name)?6:0)
+      +(/google|samantha|serena|daniel|karen|libby|sonia|aria|jenny|ava|allison|moira|tessa|kate|stephanie/i.test(v.name)?3:0)
+      -(/espeak|compact|novelty|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|pipe organ|trinoids|whisper|zarvox|albert|fred|junior|kathy|ralph/i.test(v.name)?8:0)
+      +(v.localService===false?1:0);
     return vs.slice().sort((a,b)=>score(b)-score(a))[0];}
   const at=(ms,fn)=>tm.push(setTimeout(()=>{if(!stopped)fn();},ms));
-  // steps: do() runs when the step starts (it can schedule sub-actions with at()); say is spoken; min = least time (ms) in silent mode
   const STEPS=[
-   {say:"Let's factorise thirty x plus twenty five.",cap:'Factorise 30x + 25',min:3800,d:0,do(){t1.className='fa-t';t2.className='fa-t';t1.innerHTML='30x';t2.innerHTML='25';l2.className='fa-l2';l2.innerHTML='';bub.className='fa-bub';hand.style.left='72%';hand.style.top='72%';}},
-   {say:"First, tap a term.",cap:'① Tap a term',min:3600,d:1,do(){at(500,()=>go(t1));at(1800,()=>{tap();t1.classList.add('sel');});}},
-   {say:"Type one of its factors. Five divides thirty, so type five.",cap:'② Type a factor: 5',min:5200,d:2,do(){bub.innerHTML='Factors of 30x <span class="fa-ty"></span>';bub.classList.add('on');at(2200,()=>{bub.querySelector('.fa-ty').textContent='5';});}},
-   {say:"Thirty x becomes five times six x.",cap:'30x = 5 × 6x',min:4000,d:3,do(){bub.classList.remove('on');t1.classList.remove('sel');t1.innerHTML='5 × 6x';pop(t1);}},
-   {say:"Now tap the other term.",cap:'③ Tap the other term',min:3400,d:3,do(){at(400,()=>go(t2));at(1700,()=>tap());}},
-   {say:"Five divides twenty five too, so it splits by itself.",cap:'5 fits here too — it splits by itself!',min:4800,d:4,do(){t2.innerHTML='5 × 5';pop(t2);}},
-   {say:"When every term has the same factor, that factor turns green.",cap:'④ Same factor in every term turns green',min:5200,d:4,do(){t1.innerHTML='<i class="fa-g">5</i> × 6x';t2.innerHTML='<i class="fa-g">5</i> × 5';}},
-   {say:"Tap the green factor.",cap:'⑤ Tap the green factor',min:3600,d:5,do(){at(500,()=>go(t1.querySelector('.fa-g'),-2));at(1900,()=>tap());}},
-   {say:"And that's it. Thirty x plus twenty five equals five times, six x plus five.",cap:'30x + 25 = 5(6x + 5)',min:5600,d:5,do(){l2.innerHTML='= <b>5</b>(6x + 5)';l2.classList.add('on');pop(l2);}}
+   {say:"Hi! Let's learn how to factorise. We'll factorise thirty x plus twenty five.",cap:'Factorise 30x + 25',min:4200,d:0,do(){end.hidden=true;st.hidden=true;t1.className='fi-t';t2.className='fi-t';t1.innerHTML='30x';t2.innerHTML='25';l2.className='fi-l2';l2.innerHTML='';pad.className='fi-padw';ty.textContent='';hand.style.left='62%';hand.style.top='58%';hand.style.opacity=0;}},
+   {say:"First, tap a term.",cap:'① Tap a term',min:3600,d:1,do(){hand.style.opacity=1;at(500,()=>go(t1));at(1800,()=>{tap();t1.classList.add('sel');});}},
+   {say:"A number pad pops up. Type one of its factors. Five divides thirty, so tap five.",cap:'② Type a factor: 5',min:6000,d:2,do(){at(300,()=>pad.classList.add('on'));at(2600,()=>go(q('fip').querySelectorAll('.fi-pad i')[4]));at(4000,()=>{tap();q('fip').querySelectorAll('.fi-pad i')[4].classList.add('hit');ty.textContent='5';});}},
+   {say:"Then tap the tick. Now thirty x becomes five times six x.",cap:'30x = 5 × 6x',min:5000,d:3,do(){at(900,()=>go(q('fip').querySelectorAll('.fi-pad i')[11]));at(2000,()=>{tap();pad.className='fi-padw';t1.classList.remove('sel');t1.innerHTML='5 × 6x';pop(t1);hand.style.opacity=0;});}},
+   {say:"Now tap the other term.",cap:'③ Tap the other term',min:3400,d:3,do(){hand.style.opacity=1;at(400,()=>go(t2));at(1700,()=>tap());}},
+   {say:"Five divides twenty five too, so it splits by itself. You don't even need the number pad!",cap:'5 fits here too — it splits by itself!',min:5600,d:4,do(){t2.innerHTML='5 × 5';pop(t2);}},
+   {say:"When every term has the same factor, that factor glows green.",cap:'④ The same factor in every term turns green',min:5000,d:5,do(){t1.innerHTML='<i class="fi-g">5</i> × 6x';t2.innerHTML='<i class="fi-g">5</i> × 5';}},
+   {say:"Tap a green factor.",cap:'⑤ Tap the green factor',min:3600,d:5,do(){at(500,()=>go(t1.querySelector('.fi-g')));at(1900,()=>tap());}},
+   {say:"And the expression is factorised: five times, six x plus five.",cap:'30x + 25 = 5(6x + 5)',min:5000,d:6,do(){l2.innerHTML='= <b>5</b>(6x + 5)';l2.classList.add('on');pop(l2);hand.style.opacity=0;}},
+   {say:"That's it! Keep going until nothing more can be taken out. Good luck!",cap:'Keep going until nothing more can be taken out',min:4200,d:6,do(){end.hidden=false;}}
   ];
   function speak(text,onDone){
     let done=false;const fin=()=>{if(!done){done=true;onDone();}};
-    try{SS.cancel();const u=new SpeechSynthesisUtterance(text);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang;}else u.lang='en-GB';u.rate=.88;u.pitch=1;
-      let started=false;u.onstart=()=>{started=true;if(blocked){blocked=false;vbLabel();}};u.onend=fin;u.onerror=()=>{if(!started){blocked=true;vbLabel();}fin();};
+    try{SS.cancel();const u=new SpeechSynthesisUtterance(text);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang;}else u.lang='en-GB';u.rate=.95;u.pitch=1.02;u.volume=1;
+      let started=false;u.onstart=()=>{started=true;};u.onend=fin;u.onerror=()=>{if(!started){blocked=true;}fin();};
       SS.speak(u);
-      at(1500,()=>{if(!started&&!done){blocked=true;vbLabel();try{SS.cancel();}catch(e){}fin();}});
-      at(Math.max(6000,text.length*160),fin); // safety
-    }catch(e){blocked=true;vbLabel();fin();}
+      at(1800,()=>{if(!started&&!done){blocked=true;try{SS.cancel();}catch(e){}fin();}});
+      at(Math.max(7000,text.length*170),fin);
+    }catch(e){blocked=true;fin();}
   }
   function runFrom(i,myGen){
     if(stopped||myGen!==gen)return;
-    if(i>=STEPS.length){at(3500,()=>run());return;}
+    if(i>=STEPS.length)return;
     const s=STEPS[i];s.do();cap.textContent=s.cap;dot(s.d);
-    const start=Date.now();let proceed=false;
-    const next=()=>{if(proceed||myGen!==gen)return;proceed=true;const wait=Math.max(0,s.min-(Date.now()-start))*(voiceOn&&!blocked?0:1);at(wait+(voiceOn&&!blocked?900:0),()=>runFrom(i+1,myGen));};
-    if(voiceOn&&CAN&&!blocked)speak(s.say,next);else at(s.min,next);
+    let proceed=false;const useV=voiceOn&&CAN&&!blocked;
+    const next=()=>{if(proceed||myGen!==gen)return;proceed=true;at(useV?900:0,()=>runFrom(i+1,myGen));};
+    if(useV)speak(s.say,()=>{if(blocked){st.hidden=false;gen++;tm.forEach(clearTimeout);tm=[];return;}next();});else at(s.min,next);
   }
-  function run(){
-    gen++;tm.forEach(clearTimeout);tm=[];if(CAN){try{SS.cancel();}catch(e){}}
-    vbLabel();runFrom(0,gen);
-  }
-  vb.onclick=()=>{if(blocked&&voiceOn){blocked=false;}else voiceOn=!voiceOn;try{localStorage.setItem('pz-voice',voiceOn?'1':'0');}catch(e){}vbLabel();run();};
-  q('farp').onclick=()=>{blocked=false;run();};
-  q('fatx').onclick=()=>{const h=q('fahow');h.hidden=!h.hidden;};
-  if(CAN&&SS.onvoiceschanged!==undefined)SS.onvoiceschanged=()=>{};
-  vbLabel();setTimeout(()=>{if(!stopped)run();},50);
+  function run(){gen++;tm.forEach(clearTimeout);tm=[];if(CAN){try{SS.cancel();}catch(e){}}vbLabel();q('fis').querySelectorAll('.fi-pad i').forEach(k=>k.classList.remove('hit'));runFrom(0,gen);}
+  vb.onclick=()=>{voiceOn=!voiceOn;blocked=false;try{localStorage.setItem('pz-voice',voiceOn?'1':'0');}catch(e){}vbLabel();run();};
+  q('fisb').onclick=()=>{blocked=false;st.hidden=true;voiceOn=true;vbLabel();run();};
+  q('figo').onclick=()=>api.close();
+  q('firp').onclick=()=>{blocked=false;run();};
+  vbLabel();setTimeout(()=>{if(!stopped)run();},300);
   return()=>{stopped=true;gen++;tm.forEach(clearTimeout);if(CAN){try{SS.cancel();}catch(e){}}};
 }
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',

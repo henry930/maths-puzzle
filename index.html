@@ -347,9 +347,27 @@ a.card.news{text-decoration:none;color:inherit}
 .fa-dots i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#d0bfff;margin-right:5px}.fa-dots i.on{background:#7048e8}
 .fa-rp,.fa-tx{border:none;background:#f1ecff;color:#5f3dc4;font-weight:800;border-radius:10px;padding:5px 10px;cursor:pointer;font-size:13px}.fa-how{font-size:14px;margin-top:8px;color:#495057;line-height:1.4}
 .pop{animation:fapop .35s}@keyframes fapop{0%{transform:scale(.7);opacity:.3}100%{transform:scale(1);opacity:1}}
+
+.intro{position:fixed;inset:0;height:100dvh;z-index:200;background:linear-gradient(160deg,#5f3dc4,#7048e8 55%,#9775fa);color:#fff;display:flex;flex-direction:column;font-family:inherit}
+.in-top{display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top)) 12px 6px}.in-v,.in-x{border:none;background:rgba(255,255,255,.2);color:#fff;font-weight:800;font-size:15px;border-radius:14px;padding:9px 14px;cursor:pointer}
+.in-body{flex:1;display:flex;flex-direction:column;min-height:0}.fi{flex:1;display:flex;flex-direction:column;min-height:0;padding:0 14px calc(14px + env(safe-area-inset-bottom))}
+.fi-scene{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;padding-top:8vh}
+.fi-l1{font-size:clamp(34px,10vw,52px);font-weight:900;text-align:center;line-height:1.3}.fi-t{display:inline-block;padding:2px 8px;border-radius:12px}.fi-t.sel{color:#ffd43b}.fi-pl{margin:0 10px}
+.fi-l2{font-size:clamp(30px,9vw,46px);font-weight:900;margin-top:18px;min-height:56px;opacity:0;transition:opacity .4s}.fi-l2.on{opacity:1}
+.fi-g{font-style:normal;color:#69db7c;background:rgba(105,219,124,.2);box-shadow:0 0 0 3px #69db7c;border-radius:10px;padding:0 6px;animation:fig 1s infinite}@keyframes fig{50%{box-shadow:0 0 0 8px rgba(105,219,124,.45)}}
+.fi-padw{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:22px;padding:12px 14px 14px;color:#5f3dc4;transform:translateY(115%);transition:transform .5s ease}.fi-padw.on{transform:none}
+.fi-ttl{font-weight:800;font-size:18px;text-align:center;margin-bottom:10px}.fi-ty{display:inline-block;min-width:26px;margin-left:8px;border-bottom:3px solid #7048e8;color:#7048e8;font-size:24px}
+.fi-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.fi-pad i{font-style:normal;background:#f1ecff;color:#343a40;border-radius:14px;text-align:center;font-size:26px;font-weight:800;padding:12px 0}.fi-pad i:last-child{background:#2f9e44;color:#fff}.fi-pad i.hit{background:#ffd43b}
+.fi-hand{position:absolute;font-size:44px;transition:left .8s ease,top .8s ease,opacity .3s;pointer-events:none;filter:drop-shadow(0 3px 3px rgba(0,0,0,.45));z-index:3}.fi-hand.tap{animation:fit .35s}@keyframes fit{50%{transform:scale(.7)}}
+.fi-cap{text-align:center;font-weight:800;font-size:clamp(18px,5.2vw,24px);line-height:1.3;min-height:64px;padding:10px 6px 4px}.fi-dots{text-align:center;margin-bottom:10px}.fi-dots i{display:inline-block;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.35);margin:0 4px}.fi-dots i.on{background:#fff}
+.fi-end{display:flex;flex-direction:column;gap:10px}.fi-go{border:none;background:#ffd43b;color:#343a40;font-weight:900;font-size:20px;border-radius:18px;padding:15px;cursor:pointer;box-shadow:0 4px 0 #b8960a}.fi-rp{border:none;background:rgba(255,255,255,.2);color:#fff;font-weight:800;font-size:16px;border-radius:14px;padding:11px;cursor:pointer}
+.fi-start{position:absolute;inset:0;background:rgba(60,30,140,.85);display:flex;align-items:center;justify-content:center;z-index:5;border-radius:18px}.fi-start button{border:none;background:#ffd43b;color:#343a40;font-weight:900;font-size:22px;border-radius:18px;padding:16px 26px;cursor:pointer}
+.pop{animation:fapop .35s}@keyframes fapop{0%{transform:scale(.7);opacity:.3}100%{transform:scale(1);opacity:1}}
+.fi-scene{overflow:hidden}.fi-padw{pointer-events:none}
+.fi-scene{padding-top:16vh}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
-<section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><h2 id="gtitle"></h2><div class="pills" id="glevels"></div></div>
+<section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><div class="pills" id="glevels"></div></div>
 <div class="glv" id="glvname"></div><div class="howto" id="howto"></div><div id="groot"></div></section>
 </div><script>/* Cloud database settings (Supabase project). Leave url/key empty to keep everything on each device only. */
 window.PZ_CFG=window.PZ_CFG||{url:'https://usyrhqpymveqgvjrmfbv.supabase.co',key:'sb_publishable_aW4QYAtcc982G9FPdVlj8g_X52CbKbe'};
@@ -419,7 +437,16 @@ function toast(msg){
 }
 function shake(e){if(!e)return;e.classList.remove('shake');void e.offsetWidth;e.classList.add('shake');}
 
-function cleanup(){if(!ctx)return;ctx.cleanups.forEach(f=>{try{f()}catch(e){}});ctx=null;document.querySelectorAll('.overlay').forEach(o=>o.remove());}
+let introStop=null;
+function closeIntro(){if(introStop){try{introStop()}catch(e){}introStop=null;}document.querySelectorAll('.intro').forEach(o=>o.remove());document.body.style.overflow='';}
+function showIntro(g){
+  closeIntro();const o=el('div','intro');
+  o.innerHTML='<div class="in-top"><button class="in-v" id="inv"></button><button class="in-x" id="inx">Skip ✕</button></div><div class="in-body" id="inb"></div>';
+  document.body.appendChild(o);document.body.style.overflow='hidden';
+  $('#inx').onclick=closeIntro;
+  introStop=g.anim(o.querySelector('#inb'),{close:closeIntro,voiceBtn:o.querySelector('#inv')});
+}
+function cleanup(){closeIntro();if(!ctx)return;ctx.cleanups.forEach(f=>{try{f()}catch(e){}});ctx=null;document.querySelectorAll('.overlay').forEach(o=>o.remove());}
 const ROOT=(()=>{let p=location.pathname.replace(/index\.html$/,'');const sg=p.split('/').filter(Boolean);if(sg.length&&/^[a-z0-9_-]+$/.test(sg[sg.length-1])&&window.__GAME_PAGE){sg.pop();}return '/'+sg.join('/')+(sg.length?'/':'');})();
 function pushUrl(path,rep){try{if(location.pathname!==path){history[rep?'replaceState':'pushState'](null,'',path+location.search.replace(/[?&]l=\d+/,''));}}catch(e){}}
 function goMenu(nopush){cleanup();if(nopush!==true)pushUrl(ROOT);$('#game').hidden=true;$('#menu').hidden=false;renderMenu();window.scrollTo(0,0);}
@@ -439,11 +466,12 @@ function openGame(id,lv,fromRoute){
     interval(fn,ms){const h=setInterval(fn,ms);this.cleanups.push(()=>clearInterval(h));return h},
     timeout(fn,ms){const h=setTimeout(fn,ms);this.cleanups.push(()=>clearTimeout(h));return h},
     win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===lvPts(lv);const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,againLabel,first,opt&&opt.stay);}};
-  {const hw=$('#howto');if(g.anim){hw.innerHTML='';hw.classList.add('anim');const stop=g.anim(hw,g);ctx.cleanups.push(()=>{try{stop&&stop()}catch(e){}});}else{hw.classList.remove('anim');hw.textContent=g.how;}}
+  {const hw=$('#howto'),hb=$('#hbtn');hw.classList.remove('anim');if(g.anim){hw.hidden=true;hb.hidden=false;hb.onclick=()=>showIntro(g);}else{hw.hidden=false;hw.textContent=g.how;hb.hidden=true;}}
   window.scrollTo(0,0);
   try{const base=ROOT+id+'/',hs='#'+lv;if(location.pathname!==base||location.hash!==hs){const u=base+location.search.replace(/[?&]l=\d+/,'')+hs;history[fromRoute?'replaceState':'pushState'](null,'',u);}}catch(e){}
   document.title=g.name+' · Level '+lv+' · Maths Puzzle Arcade';
   g.mount(root,lv,ctx);
+  if(g.anim){let seen=false;try{seen=localStorage.getItem('pz-intro-'+id)==='1';}catch(e){}if(!seen){try{localStorage.setItem('pz-intro-'+id,'1');}catch(e){}setTimeout(()=>{if(ctx&&ctx.id===id)showIntro(g);},200);}}
 }
 function showWin(title,text,again,againLabel,first,stay){
   confetti();const id=ctx.id,lv=ctx.lv,N=ctx.N;
@@ -2908,61 +2936,66 @@ const reqOf=t=>{const o=facs(Math.abs(t.c)).filter(n=>n>1).map(String);for(const
 const divides=(b,t)=>Math.abs(t.c)%b.c===0&&Object.keys(b.p).every(k=>(t.p[k]||0)>=b.p[k]);
 const common=ts=>{const c=gcdAll(ts.map(t=>Math.abs(t.c))),p={};Object.keys(ts[0].p).forEach(k=>{const e=Math.min(...ts.map(t=>t.p[k]||0));if(e>0)p[k]=e;});return{c,p};};
 
-function factAnim(hw,g){
-  hw.innerHTML=`<div class="fa"><div class="fa-card" id="fac"><div class="fa-l1"><span class="fa-t" id="fa1"></span><span class="fa-pl">+</span><span class="fa-t" id="fa2"></span></div><div class="fa-l2" id="fal2"></div><div class="fa-bub" id="fab"></div><span class="fa-hand" id="fah">👆</span></div><div class="fa-cap" id="facap"></div><div class="fa-foot"><span class="fa-dots" id="fad"></span><span><button class="fa-rp" id="fav"></button> <button class="fa-rp" id="farp">↻ Replay</button> <button class="fa-tx" id="fatx">📖 Steps</button></span></div><div class="fa-how" id="fahow" hidden></div></div>`;
-  const q=id=>hw.querySelector('#'+id),card=q('fac'),t1=q('fa1'),t2=q('fa2'),l2=q('fal2'),bub=q('fab'),hand=q('fah'),cap=q('facap'),dots=q('fad'),vb=q('fav');
-  q('fahow').textContent=g.how;let tm=[],stopped=false,gen=0;
+function factAnim(box,api){
+  box.innerHTML=`<div class="fi"><div class="fi-scene" id="fis"><div class="fi-l1"><span class="fi-t" id="fi1"></span><span class="fi-pl">+</span><span class="fi-t" id="fi2"></span></div><div class="fi-l2" id="fil2"></div>
+   <div class="fi-padw" id="fip"><div class="fi-ttl">Factors of <b>30x</b> <span class="fi-ty" id="fity"></span></div><div class="fi-pad"><i>7</i><i>8</i><i>9</i><i>4</i><i>5</i><i>6</i><i>1</i><i>2</i><i>3</i><i>⌫</i><i>0</i><i>✓</i></div></div><span class="fi-hand" id="fih">👆</span>
+   <div class="fi-start" id="fist" hidden><button id="fisb">🔊 Tap to start</button></div></div>
+   <div class="fi-cap" id="fic"></div><div class="fi-dots" id="fid"></div>
+   <div class="fi-end" id="fie" hidden><button class="fi-go" id="figo">▶ Let's play!</button><button class="fi-rp" id="firp">↻ Watch again</button></div></div>`;
+  const q=id=>box.querySelector('#'+id),scene=q('fis'),t1=q('fi1'),t2=q('fi2'),l2=q('fil2'),pad=q('fip'),hand=q('fih'),cap=q('fic'),dots=q('fid'),end=q('fie'),st=q('fist'),vb=api.voiceBtn,ty=q('fity');
+  let tm=[],stopped=false,gen=0;
   const SS=window.speechSynthesis,CAN=!!(SS&&window.SpeechSynthesisUtterance);
   let voiceOn=CAN;try{if(localStorage.getItem('pz-voice')==='0')voiceOn=false;}catch(e){}
   let blocked=false;
-  dots.innerHTML='<i></i><i></i><i></i><i></i><i></i><i></i>';
+  dots.innerHTML='<i></i><i></i><i></i><i></i><i></i><i></i><i></i>';
   const dot=n=>[...dots.children].forEach((d,i)=>d.classList.toggle('on',i<=n));
   const pop=e=>{e.classList.remove('pop');void e.offsetWidth;e.classList.add('pop');};
-  const go=(el,dx)=>{const r=el.getBoundingClientRect(),c=card.getBoundingClientRect();hand.style.left=(r.left-c.left+r.width/2-10+(dx||0))+'px';hand.style.top=(r.top-c.top+r.height-6)+'px';};
+  const go=(el,dx,dy)=>{const r=el.getBoundingClientRect(),c=scene.getBoundingClientRect();hand.style.left=(r.left-c.left+r.width/2-16+(dx||0))+'px';hand.style.top=(r.top-c.top+r.height*.6+(dy||0))+'px';};
   const tap=()=>{hand.classList.remove('tap');void hand.offsetWidth;hand.classList.add('tap');};
-  const vbLabel=()=>{if(!CAN){vb.style.display='none';return;}vb.textContent=!voiceOn?'🔇 Voice off':blocked?'🔊 Tap to hear':'🔊 Voice on';};
+  const vbLabel=()=>{if(!CAN){vb.style.display='none';return;}vb.textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';};
   function pickVoice(){const vs=SS.getVoices().filter(v=>/^en/i.test(v.lang));if(!vs.length)return null;
-    const score=v=>(/en-GB/i.test(v.lang)?4:/en-US|en-AU|en-IE/i.test(v.lang)?2:0)+(/natural|neural|premium|enhanced|google|samantha|serena|daniel|karen|libby|sonia|aria|jenny/i.test(v.name)?3:0)+(/female|libby|sonia|serena|samantha|karen|aria|jenny/i.test(v.name)?1:0);
+    const score=v=>(/en-GB/i.test(v.lang)?4:/en-US|en-AU|en-IE|en-IN/i.test(v.lang)?2:0)
+      +(/natural|neural|online|premium|enhanced|siri/i.test(v.name)?6:0)
+      +(/google|samantha|serena|daniel|karen|libby|sonia|aria|jenny|ava|allison|moira|tessa|kate|stephanie/i.test(v.name)?3:0)
+      -(/espeak|compact|novelty|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|pipe organ|trinoids|whisper|zarvox|albert|fred|junior|kathy|ralph/i.test(v.name)?8:0)
+      +(v.localService===false?1:0);
     return vs.slice().sort((a,b)=>score(b)-score(a))[0];}
   const at=(ms,fn)=>tm.push(setTimeout(()=>{if(!stopped)fn();},ms));
-  // steps: do() runs when the step starts (it can schedule sub-actions with at()); say is spoken; min = least time (ms) in silent mode
   const STEPS=[
-   {say:"Let's factorise thirty x plus twenty five.",cap:'Factorise 30x + 25',min:3800,d:0,do(){t1.className='fa-t';t2.className='fa-t';t1.innerHTML='30x';t2.innerHTML='25';l2.className='fa-l2';l2.innerHTML='';bub.className='fa-bub';hand.style.left='72%';hand.style.top='72%';}},
-   {say:"First, tap a term.",cap:'① Tap a term',min:3600,d:1,do(){at(500,()=>go(t1));at(1800,()=>{tap();t1.classList.add('sel');});}},
-   {say:"Type one of its factors. Five divides thirty, so type five.",cap:'② Type a factor: 5',min:5200,d:2,do(){bub.innerHTML='Factors of 30x <span class="fa-ty"></span>';bub.classList.add('on');at(2200,()=>{bub.querySelector('.fa-ty').textContent='5';});}},
-   {say:"Thirty x becomes five times six x.",cap:'30x = 5 × 6x',min:4000,d:3,do(){bub.classList.remove('on');t1.classList.remove('sel');t1.innerHTML='5 × 6x';pop(t1);}},
-   {say:"Now tap the other term.",cap:'③ Tap the other term',min:3400,d:3,do(){at(400,()=>go(t2));at(1700,()=>tap());}},
-   {say:"Five divides twenty five too, so it splits by itself.",cap:'5 fits here too — it splits by itself!',min:4800,d:4,do(){t2.innerHTML='5 × 5';pop(t2);}},
-   {say:"When every term has the same factor, that factor turns green.",cap:'④ Same factor in every term turns green',min:5200,d:4,do(){t1.innerHTML='<i class="fa-g">5</i> × 6x';t2.innerHTML='<i class="fa-g">5</i> × 5';}},
-   {say:"Tap the green factor.",cap:'⑤ Tap the green factor',min:3600,d:5,do(){at(500,()=>go(t1.querySelector('.fa-g'),-2));at(1900,()=>tap());}},
-   {say:"And that's it. Thirty x plus twenty five equals five times, six x plus five.",cap:'30x + 25 = 5(6x + 5)',min:5600,d:5,do(){l2.innerHTML='= <b>5</b>(6x + 5)';l2.classList.add('on');pop(l2);}}
+   {say:"Hi! Let's learn how to factorise. We'll factorise thirty x plus twenty five.",cap:'Factorise 30x + 25',min:4200,d:0,do(){end.hidden=true;st.hidden=true;t1.className='fi-t';t2.className='fi-t';t1.innerHTML='30x';t2.innerHTML='25';l2.className='fi-l2';l2.innerHTML='';pad.className='fi-padw';ty.textContent='';hand.style.left='62%';hand.style.top='58%';hand.style.opacity=0;}},
+   {say:"First, tap a term.",cap:'① Tap a term',min:3600,d:1,do(){hand.style.opacity=1;at(500,()=>go(t1));at(1800,()=>{tap();t1.classList.add('sel');});}},
+   {say:"A number pad pops up. Type one of its factors. Five divides thirty, so tap five.",cap:'② Type a factor: 5',min:6000,d:2,do(){at(300,()=>pad.classList.add('on'));at(2600,()=>go(q('fip').querySelectorAll('.fi-pad i')[4]));at(4000,()=>{tap();q('fip').querySelectorAll('.fi-pad i')[4].classList.add('hit');ty.textContent='5';});}},
+   {say:"Then tap the tick. Now thirty x becomes five times six x.",cap:'30x = 5 × 6x',min:5000,d:3,do(){at(900,()=>go(q('fip').querySelectorAll('.fi-pad i')[11]));at(2000,()=>{tap();pad.className='fi-padw';t1.classList.remove('sel');t1.innerHTML='5 × 6x';pop(t1);hand.style.opacity=0;});}},
+   {say:"Now tap the other term.",cap:'③ Tap the other term',min:3400,d:3,do(){hand.style.opacity=1;at(400,()=>go(t2));at(1700,()=>tap());}},
+   {say:"Five divides twenty five too, so it splits by itself. You don't even need the number pad!",cap:'5 fits here too — it splits by itself!',min:5600,d:4,do(){t2.innerHTML='5 × 5';pop(t2);}},
+   {say:"When every term has the same factor, that factor glows green.",cap:'④ The same factor in every term turns green',min:5000,d:5,do(){t1.innerHTML='<i class="fi-g">5</i> × 6x';t2.innerHTML='<i class="fi-g">5</i> × 5';}},
+   {say:"Tap a green factor.",cap:'⑤ Tap the green factor',min:3600,d:5,do(){at(500,()=>go(t1.querySelector('.fi-g')));at(1900,()=>tap());}},
+   {say:"And the expression is factorised: five times, six x plus five.",cap:'30x + 25 = 5(6x + 5)',min:5000,d:6,do(){l2.innerHTML='= <b>5</b>(6x + 5)';l2.classList.add('on');pop(l2);hand.style.opacity=0;}},
+   {say:"That's it! Keep going until nothing more can be taken out. Good luck!",cap:'Keep going until nothing more can be taken out',min:4200,d:6,do(){end.hidden=false;}}
   ];
   function speak(text,onDone){
     let done=false;const fin=()=>{if(!done){done=true;onDone();}};
-    try{SS.cancel();const u=new SpeechSynthesisUtterance(text);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang;}else u.lang='en-GB';u.rate=.88;u.pitch=1;
-      let started=false;u.onstart=()=>{started=true;if(blocked){blocked=false;vbLabel();}};u.onend=fin;u.onerror=()=>{if(!started){blocked=true;vbLabel();}fin();};
+    try{SS.cancel();const u=new SpeechSynthesisUtterance(text);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang;}else u.lang='en-GB';u.rate=.95;u.pitch=1.02;u.volume=1;
+      let started=false;u.onstart=()=>{started=true;};u.onend=fin;u.onerror=()=>{if(!started){blocked=true;}fin();};
       SS.speak(u);
-      at(1500,()=>{if(!started&&!done){blocked=true;vbLabel();try{SS.cancel();}catch(e){}fin();}});
-      at(Math.max(6000,text.length*160),fin); // safety
-    }catch(e){blocked=true;vbLabel();fin();}
+      at(1800,()=>{if(!started&&!done){blocked=true;try{SS.cancel();}catch(e){}fin();}});
+      at(Math.max(7000,text.length*170),fin);
+    }catch(e){blocked=true;fin();}
   }
   function runFrom(i,myGen){
     if(stopped||myGen!==gen)return;
-    if(i>=STEPS.length){at(3500,()=>run());return;}
+    if(i>=STEPS.length)return;
     const s=STEPS[i];s.do();cap.textContent=s.cap;dot(s.d);
-    const start=Date.now();let proceed=false;
-    const next=()=>{if(proceed||myGen!==gen)return;proceed=true;const wait=Math.max(0,s.min-(Date.now()-start))*(voiceOn&&!blocked?0:1);at(wait+(voiceOn&&!blocked?900:0),()=>runFrom(i+1,myGen));};
-    if(voiceOn&&CAN&&!blocked)speak(s.say,next);else at(s.min,next);
+    let proceed=false;const useV=voiceOn&&CAN&&!blocked;
+    const next=()=>{if(proceed||myGen!==gen)return;proceed=true;at(useV?900:0,()=>runFrom(i+1,myGen));};
+    if(useV)speak(s.say,()=>{if(blocked){st.hidden=false;gen++;tm.forEach(clearTimeout);tm=[];return;}next();});else at(s.min,next);
   }
-  function run(){
-    gen++;tm.forEach(clearTimeout);tm=[];if(CAN){try{SS.cancel();}catch(e){}}
-    vbLabel();runFrom(0,gen);
-  }
-  vb.onclick=()=>{if(blocked&&voiceOn){blocked=false;}else voiceOn=!voiceOn;try{localStorage.setItem('pz-voice',voiceOn?'1':'0');}catch(e){}vbLabel();run();};
-  q('farp').onclick=()=>{blocked=false;run();};
-  q('fatx').onclick=()=>{const h=q('fahow');h.hidden=!h.hidden;};
-  if(CAN&&SS.onvoiceschanged!==undefined)SS.onvoiceschanged=()=>{};
-  vbLabel();setTimeout(()=>{if(!stopped)run();},50);
+  function run(){gen++;tm.forEach(clearTimeout);tm=[];if(CAN){try{SS.cancel();}catch(e){}}vbLabel();q('fis').querySelectorAll('.fi-pad i').forEach(k=>k.classList.remove('hit'));runFrom(0,gen);}
+  vb.onclick=()=>{voiceOn=!voiceOn;blocked=false;try{localStorage.setItem('pz-voice',voiceOn?'1':'0');}catch(e){}vbLabel();run();};
+  q('fisb').onclick=()=>{blocked=false;st.hidden=true;voiceOn=true;vbLabel();run();};
+  q('figo').onclick=()=>api.close();
+  q('firp').onclick=()=>{blocked=false;run();};
+  vbLabel();setTimeout(()=>{if(!stopped)run();},300);
   return()=>{stopped=true;gen++;tm.forEach(clearTimeout);if(CAN){try{SS.cancel();}catch(e){}}};
 }
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',

@@ -58,7 +58,16 @@ function toast(msg){
 }
 function shake(e){if(!e)return;e.classList.remove('shake');void e.offsetWidth;e.classList.add('shake');}
 
-function cleanup(){if(!ctx)return;ctx.cleanups.forEach(f=>{try{f()}catch(e){}});ctx=null;document.querySelectorAll('.overlay').forEach(o=>o.remove());}
+let introStop=null;
+function closeIntro(){if(introStop){try{introStop()}catch(e){}introStop=null;}document.querySelectorAll('.intro').forEach(o=>o.remove());document.body.style.overflow='';}
+function showIntro(g){
+  closeIntro();const o=el('div','intro');
+  o.innerHTML='<div class="in-top"><button class="in-v" id="inv"></button><button class="in-x" id="inx">Skip ✕</button></div><div class="in-body" id="inb"></div>';
+  document.body.appendChild(o);document.body.style.overflow='hidden';
+  $('#inx').onclick=closeIntro;
+  introStop=g.anim(o.querySelector('#inb'),{close:closeIntro,voiceBtn:o.querySelector('#inv')});
+}
+function cleanup(){closeIntro();if(!ctx)return;ctx.cleanups.forEach(f=>{try{f()}catch(e){}});ctx=null;document.querySelectorAll('.overlay').forEach(o=>o.remove());}
 const ROOT=(()=>{let p=location.pathname.replace(/index\.html$/,'');const sg=p.split('/').filter(Boolean);if(sg.length&&/^[a-z0-9_-]+$/.test(sg[sg.length-1])&&window.__GAME_PAGE){sg.pop();}return '/'+sg.join('/')+(sg.length?'/':'');})();
 function pushUrl(path,rep){try{if(location.pathname!==path){history[rep?'replaceState':'pushState'](null,'',path+location.search.replace(/[?&]l=\d+/,''));}}catch(e){}}
 function goMenu(nopush){cleanup();if(nopush!==true)pushUrl(ROOT);$('#game').hidden=true;$('#menu').hidden=false;renderMenu();window.scrollTo(0,0);}
@@ -78,11 +87,12 @@ function openGame(id,lv,fromRoute){
     interval(fn,ms){const h=setInterval(fn,ms);this.cleanups.push(()=>clearInterval(h));return h},
     timeout(fn,ms){const h=setTimeout(fn,ms);this.cleanups.push(()=>clearTimeout(h));return h},
     win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===lvPts(lv);const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,againLabel,first,opt&&opt.stay);}};
-  {const hw=$('#howto');if(g.anim){hw.innerHTML='';hw.classList.add('anim');const stop=g.anim(hw,g);ctx.cleanups.push(()=>{try{stop&&stop()}catch(e){}});}else{hw.classList.remove('anim');hw.textContent=g.how;}}
+  {const hw=$('#howto'),hb=$('#hbtn');hw.classList.remove('anim');if(g.anim){hw.hidden=true;hb.hidden=false;hb.onclick=()=>showIntro(g);}else{hw.hidden=false;hw.textContent=g.how;hb.hidden=true;}}
   window.scrollTo(0,0);
   try{const base=ROOT+id+'/',hs='#'+lv;if(location.pathname!==base||location.hash!==hs){const u=base+location.search.replace(/[?&]l=\d+/,'')+hs;history[fromRoute?'replaceState':'pushState'](null,'',u);}}catch(e){}
   document.title=g.name+' · Level '+lv+' · Maths Puzzle Arcade';
   g.mount(root,lv,ctx);
+  if(g.anim){let seen=false;try{seen=localStorage.getItem('pz-intro-'+id)==='1';}catch(e){}if(!seen){try{localStorage.setItem('pz-intro-'+id,'1');}catch(e){}setTimeout(()=>{if(ctx&&ctx.id===id)showIntro(g);},200);}}
 }
 function showWin(title,text,again,againLabel,first,stay){
   confetti();const id=ctx.id,lv=ctx.lv,N=ctx.N;
