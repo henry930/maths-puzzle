@@ -66,6 +66,11 @@
    "en": "x on both sides",
    "zh": "兩邊都有 x"
   },
+  "x-on-right": {
+   "g": "shape",
+   "en": "x on the right",
+   "zh": "x 喺右邊"
+  },
   "neg-const": {
    "g": "num",
    "en": "negative numbers",
@@ -75,6 +80,11 @@
    "g": "num",
    "en": "negative answer",
    "zh": "答案係負數"
+  },
+  "frac-answer": {
+   "g": "num",
+   "en": "fraction answer",
+   "zh": "答案係分數"
   },
   "fractions": {
    "g": "num",
@@ -109,6 +119,146 @@
    "g": "num",
    "en": "bigger numbers",
    "zh": "數字較大"
+  },
+  "ix-repeat": {
+   "g": "num",
+   "en": "repeated multiplication",
+   "zh": "repeated multiplication"
+  },
+  "ix-eval": {
+   "g": "num",
+   "en": "evaluate a power",
+   "zh": "evaluate a power"
+  },
+  "ix-find-index": {
+   "g": "num",
+   "en": "find the index",
+   "zh": "find the index"
+  },
+  "ix-find-base": {
+   "g": "num",
+   "en": "find the base",
+   "zh": "find the base"
+  },
+  "ix-zero": {
+   "g": "num",
+   "en": "zero index",
+   "zh": "zero index"
+  },
+  "ix-neg": {
+   "g": "num",
+   "en": "negative index",
+   "zh": "negative index"
+  },
+  "ix-neg-frac-base": {
+   "g": "num",
+   "en": "negative index, fraction base",
+   "zh": "negative index, fraction base"
+  },
+  "ix-frac": {
+   "g": "num",
+   "en": "fractional index",
+   "zh": "fractional index"
+  },
+  "ix-frac-pq": {
+   "g": "num",
+   "en": "index p/q",
+   "zh": "index p/q"
+  },
+  "ix-frac-neg": {
+   "g": "num",
+   "en": "negative fractional index",
+   "zh": "negative fractional index"
+  },
+  "ix-law-mul": {
+   "g": "num",
+   "en": "index law: multiply",
+   "zh": "index law: multiply"
+  },
+  "ix-law-div": {
+   "g": "num",
+   "en": "index law: divide",
+   "zh": "index law: divide"
+  },
+  "ix-law-pow": {
+   "g": "num",
+   "en": "index law: power of a power",
+   "zh": "index law: power of a power"
+  },
+  "ix-law-neg": {
+   "g": "num",
+   "en": "laws with negative indices",
+   "zh": "laws with negative indices"
+  },
+  "ix-letters": {
+   "g": "num",
+   "en": "laws with letters",
+   "zh": "laws with letters"
+  },
+  "ix-missing": {
+   "g": "num",
+   "en": "missing index",
+   "zh": "missing index"
+  },
+  "ix-combine": {
+   "g": "num",
+   "en": "combine index laws",
+   "zh": "combine index laws"
+  },
+  "lg-convert": {
+   "g": "num",
+   "en": "index ↔ log form",
+   "zh": "index ↔ log form"
+  },
+  "lg-value": {
+   "g": "num",
+   "en": "find a log",
+   "zh": "find a log"
+  },
+  "lg-special": {
+   "g": "num",
+   "en": "log 1 and log a",
+   "zh": "log 1 and log a"
+  },
+  "lg-neg": {
+   "g": "num",
+   "en": "negative log",
+   "zh": "negative log"
+  },
+  "lg-frac": {
+   "g": "num",
+   "en": "fractional log",
+   "zh": "fractional log"
+  },
+  "lg-base": {
+   "g": "num",
+   "en": "find the base",
+   "zh": "find the base"
+  },
+  "lg-add": {
+   "g": "num",
+   "en": "log law: add",
+   "zh": "log law: add"
+  },
+  "lg-sub": {
+   "g": "num",
+   "en": "log law: subtract",
+   "zh": "log law: subtract"
+  },
+  "lg-pow": {
+   "g": "num",
+   "en": "log law: power",
+   "zh": "log law: power"
+  },
+  "lg-mix": {
+   "g": "num",
+   "en": "combine log laws",
+   "zh": "combine log laws"
+  },
+  "lg-simplify": {
+   "g": "num",
+   "en": "log laws to a number",
+   "zh": "log laws to a number"
   },
   "simplest-form": {
    "g": "num",
@@ -204,6 +354,21 @@
    "g": "skill",
    "en": "4 terms",
    "zh": "4 項"
+  },
+  "fc-terms-5": {
+   "g": "skill",
+   "en": "5 terms",
+   "zh": "5 項"
+  },
+  "fc-three-letters": {
+   "g": "skill",
+   "en": "three letters",
+   "zh": "三個字母"
+  },
+  "fc-cubed": {
+   "g": "skill",
+   "en": "cubed letter",
+   "zh": "有立方"
   },
   "fc-number-only": {
    "g": "skill",
@@ -570,6 +735,171 @@
    "en": "from a ratio",
    "zh": "由比例"
   },
+  "pr-listing": {
+   "g": "skill",
+   "en": "systematic listing",
+   "zh": "有系統列出"
+  },
+  "pr-two-way": {
+   "g": "skill",
+   "en": "two-way table",
+   "zh": "雙向表"
+  },
+  "pr-venn": {
+   "g": "skill",
+   "en": "Venn diagram",
+   "zh": "文氏圖"
+  },
+  "pr-conditional": {
+   "g": "skill",
+   "en": "given that (conditional)",
+   "zh": "已知條件概率"
+  },
+  "pr-product-rule": {
+   "g": "skill",
+   "en": "product rule",
+   "zh": "乘法原理"
+  },
+  "pr-codes": {
+   "g": "skill",
+   "en": "codes and PINs",
+   "zh": "密碼"
+  },
+  "pr-repeats": {
+   "g": "skill",
+   "en": "repeats allowed",
+   "zh": "可重複"
+  },
+  "pr-no-repeats": {
+   "g": "skill",
+   "en": "no repeats",
+   "zh": "不可重複"
+  },
+  "pr-arrangements": {
+   "g": "skill",
+   "en": "arrangements (orders)",
+   "zh": "排列次序"
+  },
+  "pr-restricted": {
+   "g": "skill",
+   "en": "with a restriction",
+   "zh": "有限制"
+  },
+  "pr-pairs": {
+   "g": "skill",
+   "en": "pairs and handshakes",
+   "zh": "配對／握手"
+  },
+  "pr-fractions": {
+   "g": "skill",
+   "en": "fraction arithmetic",
+   "zh": "分數運算"
+  },
+  "pr-decimals": {
+   "g": "skill",
+   "en": "decimal arithmetic",
+   "zh": "小數運算"
+  },
+  "pr-missing": {
+   "g": "skill",
+   "en": "find a missing probability",
+   "zh": "求缺失概率"
+  },
+  "pr-sum-to-1": {
+   "g": "skill",
+   "en": "probabilities sum to 1",
+   "zh": "概率總和為 1"
+  },
+  "pr-algebra": {
+   "g": "skill",
+   "en": "with algebra",
+   "zh": "加代數"
+  },
+  "pr-tree": {
+   "g": "skill",
+   "en": "tree diagram",
+   "zh": "樹形圖"
+  },
+  "pr-different": {
+   "g": "skill",
+   "en": "different colours",
+   "zh": "唔同顏色"
+  },
+  "pr-at-least-one": {
+   "g": "skill",
+   "en": "at least one",
+   "zh": "至少一個"
+  },
+  "pr-exactly-one": {
+   "g": "skill",
+   "en": "exactly one",
+   "zh": "剛好一個"
+  },
+  "pr-certain-impossible": {
+   "g": "skill",
+   "en": "certain and impossible",
+   "zh": "必然同不可能"
+  },
+  "pr-single-dice": {
+   "g": "skill",
+   "en": "one dice",
+   "zh": "1 粒骰"
+  },
+  "pr-cards": {
+   "g": "skill",
+   "en": "playing cards",
+   "zh": "撲克牌"
+  },
+  "pr-overlap": {
+   "g": "skill",
+   "en": "overlapping events",
+   "zh": "重疊事件"
+  },
+  "pr-addition-rule": {
+   "g": "skill",
+   "en": "addition rule (overlap)",
+   "zh": "加法定律（重疊）"
+  },
+  "pr-letters": {
+   "g": "skill",
+   "en": "letters of a word",
+   "zh": "字母"
+  },
+  "pr-number-cards": {
+   "g": "skill",
+   "en": "number cards",
+   "zh": "數字卡"
+  },
+  "pr-estimate": {
+   "g": "skill",
+   "en": "estimate from data",
+   "zh": "由數據估計"
+  },
+  "pr-frequency-table": {
+   "g": "skill",
+   "en": "frequency table",
+   "zh": "頻數表"
+  },
+  "pr-two-spinners": {
+   "g": "skill",
+   "en": "two spinners",
+   "zh": "兩個轉盤"
+  },
+  "pr-frequency-tree": {
+   "g": "skill",
+   "en": "frequency tree",
+   "zh": "頻數樹"
+  },
+  "pr-dependent": {
+   "g": "skill",
+   "en": "dependent events",
+   "zh": "相依事件"
+  },
+  "pr-forms": {
+   "g": "skill",
+   "en": "fractions, decimals, percentages",
+   "zh": "分數、小數、百分比"
+  },
   "an-estimate": {
    "g": "skill",
    "en": "estimate an angle",
@@ -654,6 +984,136 @@
    "g": "skill",
    "en": "angles with algebra",
    "zh": "角度加代數"
+  },
+  "an-complement-supplement": {
+   "g": "skill",
+   "en": "complementary / supplementary",
+   "zh": "餘角／補角"
+  },
+  "an-right-angle": {
+   "g": "skill",
+   "en": "angles in a right angle",
+   "zh": "直角內嘅角"
+  },
+  "an-reflex": {
+   "g": "skill",
+   "en": "reflex angle",
+   "zh": "優角"
+  },
+  "an-turns": {
+   "g": "skill",
+   "en": "fractions of a turn",
+   "zh": "旋轉角度"
+  },
+  "an-clock": {
+   "g": "skill",
+   "en": "clock angles",
+   "zh": "時鐘角度"
+  },
+  "an-compass": {
+   "g": "skill",
+   "en": "compass directions",
+   "zh": "方向"
+  },
+  "an-bearing": {
+   "g": "skill",
+   "en": "bearings",
+   "zh": "方位角"
+  },
+  "an-bearing-back": {
+   "g": "skill",
+   "en": "back bearing",
+   "zh": "回程方位角"
+  },
+  "an-facts": {
+   "g": "skill",
+   "en": "angle facts",
+   "zh": "角度常識"
+  },
+  "an-bisector": {
+   "g": "skill",
+   "en": "angle bisector",
+   "zh": "角平分線"
+  },
+  "an-right-triangle": {
+   "g": "skill",
+   "en": "right-angled triangle",
+   "zh": "直角三角形"
+  },
+  "an-parallelogram": {
+   "g": "skill",
+   "en": "parallelogram",
+   "zh": "平行四邊形"
+  },
+  "an-kite": {
+   "g": "skill",
+   "en": "kite",
+   "zh": "箏形"
+  },
+  "an-trapezium": {
+   "g": "skill",
+   "en": "trapezium",
+   "zh": "梯形"
+  },
+  "an-rhombus": {
+   "g": "skill",
+   "en": "rhombus",
+   "zh": "菱形"
+  },
+  "an-cyclic-quad": {
+   "g": "skill",
+   "en": "cyclic quadrilateral",
+   "zh": "圓內接四邊形"
+  },
+  "an-polygon-sides": {
+   "g": "skill",
+   "en": "how many sides",
+   "zh": "邊數"
+  },
+  "an-regular-diagonal": {
+   "g": "skill",
+   "en": "diagonal in a regular polygon",
+   "zh": "正多邊形對角線"
+  },
+  "an-ratio": {
+   "g": "skill",
+   "en": "angles in a ratio",
+   "zh": "角度比例"
+  },
+  "an-circle-centre": {
+   "g": "skill",
+   "en": "angle at the centre",
+   "zh": "圓心角"
+  },
+  "an-semicircle": {
+   "g": "skill",
+   "en": "angle in a semicircle",
+   "zh": "半圓上嘅角"
+  },
+  "an-radius-isosceles": {
+   "g": "skill",
+   "en": "radii make an isosceles triangle",
+   "zh": "半徑等腰三角形"
+  },
+  "an-same-segment": {
+   "g": "skill",
+   "en": "angles in the same segment",
+   "zh": "同弓形角"
+  },
+  "an-tangent": {
+   "g": "skill",
+   "en": "tangent and radius",
+   "zh": "切線同半徑"
+  },
+  "an-tangents-point": {
+   "g": "skill",
+   "en": "tangents from a point",
+   "zh": "外點切線"
+  },
+  "an-alternate-segment": {
+   "g": "skill",
+   "en": "alternate segment theorem",
+   "zh": "交錯弓形定理"
   },
   "tf-translation": {
    "g": "skill",
@@ -800,7 +1260,7 @@
      ],
      "steps": 1,
      "diff": 1,
-     "score": 1.4
+     "score": 1.5
     },
     {
      "level": 2,
@@ -834,7 +1294,7 @@
      ],
      "steps": 1,
      "diff": 2,
-     "score": 1.7
+     "score": 1.8
     },
     {
      "level": 4,
@@ -853,7 +1313,7 @@
      ],
      "steps": 1,
      "diff": 2,
-     "score": 1.9
+     "score": 1.8
     },
     {
      "level": 5,
@@ -891,7 +1351,7 @@
      ],
      "steps": 1,
      "diff": 2,
-     "score": 1.7
+     "score": 1.8
     },
     {
      "level": 7,
@@ -1005,7 +1465,7 @@
      ],
      "steps": 2,
      "diff": 3,
-     "score": 2.9
+     "score": 3
     },
     {
      "level": 13,
@@ -1025,7 +1485,7 @@
      ],
      "steps": 2,
      "diff": 3,
-     "score": 3.1
+     "score": 3.2
     },
     {
      "level": 14,
@@ -1064,8 +1524,8 @@
       "sub"
      ],
      "steps": 2,
-     "diff": 3,
-     "score": 3.4
+     "diff": 4,
+     "score": 3.5
     },
     {
      "level": 16,
@@ -1104,7 +1564,7 @@
       "sub"
      ],
      "steps": 2,
-     "diff": 4,
+     "diff": 3,
      "score": 3.5
     },
     {
@@ -1125,7 +1585,7 @@
      ],
      "steps": 2,
      "diff": 4,
-     "score": 3.6
+     "score": 3.7
     },
     {
      "level": 19,
@@ -1236,7 +1696,7 @@
       "add"
      ],
      "steps": 1,
-     "diff": 2,
+     "diff": 3,
      "score": 2.5
     },
     {
@@ -1295,7 +1755,7 @@
      ],
      "steps": 2,
      "diff": 4,
-     "score": 4.1
+     "score": 4
     },
     {
      "level": 28,
@@ -1316,7 +1776,7 @@
      ],
      "steps": 2,
      "diff": 4,
-     "score": 4.3
+     "score": 4.4
     },
     {
      "level": 29,
@@ -1337,7 +1797,7 @@
      ],
      "steps": 2,
      "diff": 5,
-     "score": 4.5
+     "score": 4.6
     },
     {
      "level": 30,
@@ -1397,7 +1857,7 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 5.2
+     "score": 5.1
     },
     {
      "level": 33,
@@ -1409,14 +1869,15 @@
      "sometimes": [
       "big-numbers",
       "op-div",
+      "steps-2",
       "steps-3"
      ],
      "ops": [
       "sub"
      ],
      "steps": 3,
-     "diff": 6,
-     "score": 5.6
+     "diff": 5,
+     "score": 5.5
     },
     {
      "level": 34,
@@ -1435,27 +1896,26 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 5.9
+     "score": 6
     },
     {
      "level": 35,
      "name": "x on both sides (easy) · tough",
      "tags": [
-      "op-div",
       "op-sub",
-      "steps-3",
       "x-both-sides"
      ],
      "sometimes": [
-      "big-numbers"
+      "big-numbers",
+      "op-div",
+      "steps-3"
      ],
      "ops": [
-      "div",
       "sub"
      ],
      "steps": 3,
      "diff": 6,
-     "score": 6.1
+     "score": 5.9
     },
     {
      "level": 36,
@@ -1474,7 +1934,7 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 4.8
+     "score": 4.7
     },
     {
      "level": 37,
@@ -1486,7 +1946,6 @@
      "sometimes": [
       "big-numbers",
       "op-div",
-      "steps-2",
       "steps-3"
      ],
      "ops": [
@@ -1494,7 +1953,7 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 5.2
+     "score": 5.3
     },
     {
      "level": 38,
@@ -1512,8 +1971,8 @@
       "sub"
      ],
      "steps": 3,
-     "diff": 5,
-     "score": 5.5
+     "diff": 6,
+     "score": 5.6
     },
     {
      "level": 39,
@@ -1525,7 +1984,6 @@
      "sometimes": [
       "big-numbers",
       "op-div",
-      "steps-2",
       "steps-3"
      ],
      "ops": [
@@ -1552,7 +2010,7 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 5.9
+     "score": 6
     },
     {
      "level": 41,
@@ -1574,7 +2032,7 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 5.3
+     "score": 5.2
     },
     {
      "level": 42,
@@ -1640,7 +2098,7 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 6.5
+     "score": 6.4
     },
     {
      "level": 45,
@@ -1681,7 +2139,7 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 4.8
+     "score": 4.7
     },
     {
      "level": 47,
@@ -1700,7 +2158,7 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 5.4
+     "score": 5.5
     },
     {
      "level": 48,
@@ -1712,6 +2170,7 @@
      "sometimes": [
       "big-numbers",
       "op-div",
+      "steps-2",
       "steps-3"
      ],
      "ops": [
@@ -1719,7 +2178,7 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 5.7
+     "score": 5.5
     },
     {
      "level": 49,
@@ -1738,7 +2197,7 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 6
+     "score": 5.9
     },
     {
      "level": 50,
@@ -1789,6 +2248,7 @@
       "op-sub"
      ],
      "sometimes": [
+      "big-numbers",
       "neg-const",
       "op-div",
       "steps-2",
@@ -1800,8 +2260,8 @@
       "sub"
      ],
      "steps": 2,
-     "diff": 5,
-     "score": 5.4
+     "diff": 6,
+     "score": 5.6
     },
     {
      "level": 53,
@@ -1847,7 +2307,7 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 6.2
+     "score": 6.1
     },
     {
      "level": 55,
@@ -1868,16 +2328,17 @@
      "ops": [
       "sub"
      ],
-     "steps": 2,
+     "steps": 3,
      "diff": 6,
-     "score": 6.2
+     "score": 6.4
     },
     {
      "level": 56,
      "name": "Boss equations · warm-up",
      "tags": [
       "op-sub",
-      "x-both-sides"
+      "x-both-sides",
+      "x-on-right"
      ],
      "sometimes": [
       "neg-const",
@@ -1889,19 +2350,19 @@
      "ops": [
       "sub"
      ],
-     "steps": 3,
+     "steps": 2,
      "diff": 5,
-     "score": 4.7
+     "score": 4.8
     },
     {
      "level": 57,
      "name": "Boss equations · easy",
      "tags": [
       "op-sub",
-      "x-both-sides"
+      "x-both-sides",
+      "x-on-right"
      ],
      "sometimes": [
-      "big-numbers",
       "neg-const",
       "op-add",
       "op-div",
@@ -1913,21 +2374,21 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 5.5
+     "score": 5.7
     },
     {
      "level": 58,
      "name": "Boss equations · medium",
      "tags": [
       "op-sub",
-      "x-both-sides"
+      "x-both-sides",
+      "x-on-right"
      ],
      "sometimes": [
       "big-numbers",
       "neg-const",
       "op-add",
       "op-div",
-      "steps-2",
       "steps-3"
      ],
      "ops": [
@@ -1935,35 +2396,15 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 5.9
+     "score": 6.2
     },
     {
      "level": 59,
      "name": "Boss equations · hard",
      "tags": [
       "op-sub",
-      "x-both-sides"
-     ],
-     "sometimes": [
-      "big-numbers",
-      "neg-const",
-      "op-add",
-      "op-div",
-      "steps-3"
-     ],
-     "ops": [
-      "sub"
-     ],
-     "steps": 3,
-     "diff": 6,
-     "score": 6.3
-    },
-    {
-     "level": 60,
-     "name": "Boss equations · tough",
-     "tags": [
-      "op-sub",
-      "x-both-sides"
+      "x-both-sides",
+      "x-on-right"
      ],
      "sometimes": [
       "big-numbers",
@@ -1978,6 +2419,28 @@
      "steps": 3,
      "diff": 6,
      "score": 6.4
+    },
+    {
+     "level": 60,
+     "name": "Boss equations · tough",
+     "tags": [
+      "op-sub",
+      "x-both-sides",
+      "x-on-right"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 6.8
     },
     {
      "level": 61,
@@ -2017,7 +2480,7 @@
      ],
      "steps": 1,
      "diff": 4,
-     "score": 3.9
+     "score": 3.8
     },
     {
      "level": 63,
@@ -2059,7 +2522,7 @@
      ],
      "steps": 1,
      "diff": 4,
-     "score": 4
+     "score": 4.1
     },
     {
      "level": 65,
@@ -2101,7 +2564,7 @@
      ],
      "steps": 1,
      "diff": 4,
-     "score": 3.9
+     "score": 3.8
     },
     {
      "level": 67,
@@ -2122,7 +2585,7 @@
      ],
      "steps": 1,
      "diff": 4,
-     "score": 4.1
+     "score": 4
     },
     {
      "level": 68,
@@ -2143,7 +2606,7 @@
      ],
      "steps": 1,
      "diff": 4,
-     "score": 4.1
+     "score": 4.2
     },
     {
      "level": 69,
@@ -2205,7 +2668,7 @@
      ],
      "steps": 2,
      "diff": 4,
-     "score": 4.4
+     "score": 4.5
     },
     {
      "level": 72,
@@ -2227,7 +2690,7 @@
      ],
      "steps": 2,
      "diff": 5,
-     "score": 4.9
+     "score": 4.8
     },
     {
      "level": 73,
@@ -2271,7 +2734,7 @@
      ],
      "steps": 2,
      "diff": 5,
-     "score": 5.1
+     "score": 5.2
     },
     {
      "level": 75,
@@ -2293,7 +2756,7 @@
      ],
      "steps": 2,
      "diff": 5,
-     "score": 5.3
+     "score": 5.2
     },
     {
      "level": 76,
@@ -2339,7 +2802,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 6.1
+     "score": 6
     },
     {
      "level": 78,
@@ -2362,7 +2825,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 6.2
+     "score": 6.3
     },
     {
      "level": 79,
@@ -2385,7 +2848,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 6.3
+     "score": 6.2
     },
     {
      "level": 80,
@@ -2408,7 +2871,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 6.4
+     "score": 6.3
     },
     {
      "level": 81,
@@ -2441,14 +2904,16 @@
       "steps-2",
       "x-one-side"
      ],
-     "sometimes": [],
+     "sometimes": [
+      "big-numbers"
+     ],
      "ops": [
       "div",
       "mul"
      ],
      "steps": 2,
      "diff": 5,
-     "score": 5.4
+     "score": 5.5
     },
     {
      "level": 83,
@@ -2470,7 +2935,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 5.7
+     "score": 5.6
     },
     {
      "level": 84,
@@ -2492,7 +2957,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 5.9
+     "score": 5.8
     },
     {
      "level": 85,
@@ -2535,7 +3000,7 @@
       "sub"
      ],
      "steps": 3,
-     "diff": 6,
+     "diff": 7,
      "score": 6.5
     },
     {
@@ -2584,7 +3049,7 @@
      ],
      "steps": 3,
      "diff": 7,
-     "score": 6.8
+     "score": 6.9
     },
     {
      "level": 89,
@@ -2608,7 +3073,7 @@
      ],
      "steps": 3,
      "diff": 7,
-     "score": 7.2
+     "score": 7.1
     },
     {
      "level": 90,
@@ -2632,7 +3097,7 @@
      ],
      "steps": 3,
      "diff": 7,
-     "score": 7.3
+     "score": 7.2
     },
     {
      "level": 91,
@@ -2642,7 +3107,8 @@
       "fractions",
       "op-mul",
       "op-sub",
-      "x-both-sides"
+      "x-both-sides",
+      "x-on-right"
      ],
      "sometimes": [
       "neg-const",
@@ -2656,7 +3122,7 @@
      ],
      "steps": 4,
      "diff": 8,
-     "score": 7.6
+     "score": 8
     },
     {
      "level": 92,
@@ -2666,7 +3132,8 @@
       "fractions",
       "op-mul",
       "op-sub",
-      "x-both-sides"
+      "x-both-sides",
+      "x-on-right"
      ],
      "sometimes": [
       "neg-const",
@@ -2680,7 +3147,7 @@
      ],
      "steps": 4,
      "diff": 8,
-     "score": 8
+     "score": 8.3
     },
     {
      "level": 93,
@@ -2690,7 +3157,8 @@
       "fractions",
       "op-mul",
       "op-sub",
-      "x-both-sides"
+      "x-both-sides",
+      "x-on-right"
      ],
      "sometimes": [
       "big-numbers",
@@ -2705,7 +3173,7 @@
      ],
      "steps": 4,
      "diff": 8,
-     "score": 8
+     "score": 8.4
     },
     {
      "level": 94,
@@ -2715,7 +3183,8 @@
       "fractions",
       "op-mul",
       "op-sub",
-      "x-both-sides"
+      "x-both-sides",
+      "x-on-right"
      ],
      "sometimes": [
       "big-numbers",
@@ -2729,8 +3198,8 @@
       "sub"
      ],
      "steps": 4,
-     "diff": 8,
-     "score": 8.2
+     "diff": 9,
+     "score": 8.5
     },
     {
      "level": 95,
@@ -2740,22 +3209,23 @@
       "fractions",
       "op-mul",
       "op-sub",
-      "steps-3",
-      "x-both-sides"
+      "x-both-sides",
+      "x-on-right"
      ],
      "sometimes": [
       "big-numbers",
       "neg-const",
       "op-add",
-      "op-div"
+      "op-div",
+      "steps-3"
      ],
      "ops": [
       "mul",
       "sub"
      ],
      "steps": 4,
-     "diff": 8,
-     "score": 8.3
+     "diff": 9,
+     "score": 8.7
     },
     {
      "level": 96,
@@ -2791,10 +3261,8 @@
       "x-both-sides"
      ],
      "sometimes": [
-      "big-numbers",
       "frac-both",
-      "frac-nonunit",
-      "frac-unit"
+      "frac-nonunit"
      ],
      "ops": [
       "mul",
@@ -2825,7 +3293,7 @@
      ],
      "steps": 3,
      "diff": 8,
-     "score": 8.3
+     "score": 8.2
     },
     {
      "level": 99,
@@ -2848,7 +3316,7 @@
      ],
      "steps": 3,
      "diff": 8,
-     "score": 8.3
+     "score": 8.2
     },
     {
      "level": 100,
@@ -2872,6 +3340,1864 @@
      "steps": 3,
      "diff": 9,
      "score": 8.5
+    },
+    {
+     "level": 101,
+     "name": "Flipped: b = x + a · warm-up",
+     "tags": [
+      "only-sub",
+      "op-sub",
+      "steps-1",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "sub"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 1.7
+    },
+    {
+     "level": 102,
+     "name": "Flipped: b = x + a · easy",
+     "tags": [
+      "only-sub",
+      "op-sub",
+      "steps-1",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "sub"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 1.9
+    },
+    {
+     "level": 103,
+     "name": "Flipped: b = x + a · medium",
+     "tags": [
+      "only-sub",
+      "op-sub",
+      "steps-1",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "sub"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 104,
+     "name": "Flipped: b = x + a · hard",
+     "tags": [
+      "only-sub",
+      "op-sub",
+      "steps-1",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2.1
+    },
+    {
+     "level": 105,
+     "name": "Flipped: b = x + a · tough",
+     "tags": [
+      "only-sub",
+      "op-sub",
+      "steps-1",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2.3
+    },
+    {
+     "level": 106,
+     "name": "Flipped: b = ax · warm-up",
+     "tags": [
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 107,
+     "name": "Flipped: b = ax · easy",
+     "tags": [
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2.4
+    },
+    {
+     "level": 108,
+     "name": "Flipped: b = ax · medium",
+     "tags": [
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 2.8
+    },
+    {
+     "level": 109,
+     "name": "Flipped: b = ax · hard",
+     "tags": [
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 2.8
+    },
+    {
+     "level": 110,
+     "name": "Flipped: b = ax · tough",
+     "tags": [
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 2.9
+    },
+    {
+     "level": 111,
+     "name": "Flipped: b = ax + a · warm-up",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 3,
+     "score": 3.1
+    },
+    {
+     "level": 112,
+     "name": "Flipped: b = ax + a · easy",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 3,
+     "score": 3.2
+    },
+    {
+     "level": 113,
+     "name": "Flipped: b = ax + a · medium",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 3,
+     "score": 3.4
+    },
+    {
+     "level": 114,
+     "name": "Flipped: b = ax + a · hard",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 3.7
+    },
+    {
+     "level": 115,
+     "name": "Flipped: b = ax + a · tough",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 3.8
+    },
+    {
+     "level": 116,
+     "name": "Flipped: c = ax + b · warm-up",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 3,
+     "score": 3.3
+    },
+    {
+     "level": 117,
+     "name": "Flipped: c = ax + b · easy",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 3.8
+    },
+    {
+     "level": 118,
+     "name": "Flipped: c = ax + b · medium",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 119,
+     "name": "Flipped: c = ax + b · hard",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 4.1
+    },
+    {
+     "level": 120,
+     "name": "Flipped: c = ax + b · tough",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 4.2
+    },
+    {
+     "level": 121,
+     "name": "Flipped negatives · warm-up",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "only-add",
+      "op-div",
+      "steps-1",
+      "steps-2"
+     ],
+     "ops": [
+      "add"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 3.2
+    },
+    {
+     "level": 122,
+     "name": "Flipped negatives · easy",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "only-add",
+      "op-div",
+      "steps-1",
+      "steps-2"
+     ],
+     "ops": [
+      "add"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 3.3
+    },
+    {
+     "level": 123,
+     "name": "Flipped negatives · medium",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "only-add",
+      "op-div",
+      "steps-1",
+      "steps-2"
+     ],
+     "ops": [
+      "add"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 3.5
+    },
+    {
+     "level": 124,
+     "name": "Flipped negatives · hard",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "only-add",
+      "op-div",
+      "steps-1",
+      "steps-2"
+     ],
+     "ops": [
+      "add"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 3.7
+    },
+    {
+     "level": 125,
+     "name": "Flipped negatives · tough",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "only-add",
+      "op-div",
+      "steps-1",
+      "steps-2"
+     ],
+     "ops": [
+      "add"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 126,
+     "name": "Flipped: x on both sides · warm-up",
+     "tags": [
+      "op-sub",
+      "x-both-sides",
+      "x-on-right"
+     ],
+     "sometimes": [
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 5,
+     "score": 5.1
+    },
+    {
+     "level": 127,
+     "name": "Flipped: x on both sides · easy",
+     "tags": [
+      "op-sub",
+      "x-both-sides",
+      "x-on-right"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.7
+    },
+    {
+     "level": 128,
+     "name": "Flipped: x on both sides · medium",
+     "tags": [
+      "op-sub",
+      "x-both-sides",
+      "x-on-right"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.9
+    },
+    {
+     "level": 129,
+     "name": "Flipped: x on both sides · hard",
+     "tags": [
+      "op-sub",
+      "x-both-sides",
+      "x-on-right"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 6.2
+    },
+    {
+     "level": 130,
+     "name": "Flipped: x on both sides · tough",
+     "tags": [
+      "op-sub",
+      "x-both-sides",
+      "x-on-right"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 6.4
+    },
+    {
+     "level": 131,
+     "name": "Flipped: x/a · warm-up",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "only-mul",
+      "op-sub",
+      "steps-1",
+      "steps-2"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 4.5
+    },
+    {
+     "level": 132,
+     "name": "Flipped: x/a · easy",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "only-mul",
+      "op-add",
+      "op-sub",
+      "steps-1",
+      "steps-2"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 5,
+     "score": 4.9
+    },
+    {
+     "level": 133,
+     "name": "Flipped: x/a · medium",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "only-mul",
+      "op-add",
+      "op-sub",
+      "steps-1",
+      "steps-2"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 5.1
+    },
+    {
+     "level": 134,
+     "name": "Flipped: x/a · hard",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "only-mul",
+      "op-add",
+      "op-sub",
+      "steps-1",
+      "steps-2"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 5,
+     "score": 5.2
+    },
+    {
+     "level": 135,
+     "name": "Flipped: x/a · tough",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "only-mul",
+      "op-sub",
+      "steps-1",
+      "steps-2"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 5.2
+    },
+    {
+     "level": 136,
+     "name": "Flipped: (p/q)x · warm-up",
+     "tags": [
+      "fractions",
+      "op-mul"
+     ],
+     "sometimes": [
+      "frac-nonunit",
+      "frac-unit",
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 137,
+     "name": "Flipped: (p/q)x · easy",
+     "tags": [
+      "fractions",
+      "op-mul"
+     ],
+     "sometimes": [
+      "frac-nonunit",
+      "frac-unit",
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 7.1
+    },
+    {
+     "level": 138,
+     "name": "Flipped: (p/q)x · medium",
+     "tags": [
+      "fractions",
+      "op-mul"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "frac-nonunit",
+      "frac-unit",
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 7.3
+    },
+    {
+     "level": 139,
+     "name": "Flipped: (p/q)x · hard",
+     "tags": [
+      "fractions",
+      "op-mul"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "frac-nonunit",
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 7.3
+    },
+    {
+     "level": 140,
+     "name": "Flipped: (p/q)x · tough",
+     "tags": [
+      "fractions",
+      "op-mul"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "frac-nonunit",
+      "frac-unit",
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 3,
+     "diff": 8,
+     "score": 7.8
+    },
+    {
+     "level": 141,
+     "name": "Fraction answers: ax = b · warm-up",
+     "tags": [
+      "frac-answer",
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 2.8
+    },
+    {
+     "level": 142,
+     "name": "Fraction answers: ax = b · easy",
+     "tags": [
+      "frac-answer",
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 3.1
+    },
+    {
+     "level": 143,
+     "name": "Fraction answers: ax = b · medium",
+     "tags": [
+      "frac-answer",
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 3.3
+    },
+    {
+     "level": 144,
+     "name": "Fraction answers: ax = b · hard",
+     "tags": [
+      "frac-answer",
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 145,
+     "name": "Fraction answers: ax = b · tough",
+     "tags": [
+      "frac-answer",
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 3.9
+    },
+    {
+     "level": 146,
+     "name": "Fraction answers: ax + b = c · warm-up",
+     "tags": [
+      "frac-answer",
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 4.1
+    },
+    {
+     "level": 147,
+     "name": "Fraction answers: ax + b = c · easy",
+     "tags": [
+      "frac-answer",
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 4.4
+    },
+    {
+     "level": 148,
+     "name": "Fraction answers: ax + b = c · medium",
+     "tags": [
+      "frac-answer",
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 149,
+     "name": "Fraction answers: ax + b = c · hard",
+     "tags": [
+      "frac-answer",
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 4.8
+    },
+    {
+     "level": 150,
+     "name": "Fraction answers: ax + b = c · tough",
+     "tags": [
+      "frac-answer",
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 151,
+     "name": "Fraction answers: x on both sides · warm-up",
+     "tags": [
+      "frac-answer",
+      "op-div",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 6.4
+    },
+    {
+     "level": 152,
+     "name": "Fraction answers: x on both sides · easy",
+     "tags": [
+      "frac-answer",
+      "op-div",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 6.6
+    },
+    {
+     "level": 153,
+     "name": "Fraction answers: x on both sides · medium",
+     "tags": [
+      "frac-answer",
+      "op-div",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 6.8
+    },
+    {
+     "level": 154,
+     "name": "Fraction answers: x on both sides · hard",
+     "tags": [
+      "frac-answer",
+      "op-div",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 7.1
+    },
+    {
+     "level": 155,
+     "name": "Fraction answers: x on both sides · tough",
+     "tags": [
+      "frac-answer",
+      "op-div",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 7.3
+    },
+    {
+     "level": 156,
+     "name": "Boss 2: all equation types · warm-up",
+     "tags": [],
+     "sometimes": [
+      "fractions",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "op-mul",
+      "op-sub",
+      "steps-1",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "ops": [],
+     "steps": 2,
+     "diff": 4,
+     "score": 4.3
+    },
+    {
+     "level": 157,
+     "name": "Boss 2: all equation types · easy",
+     "tags": [],
+     "sometimes": [
+      "big-numbers",
+      "fractions",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "op-mul",
+      "op-sub",
+      "steps-1",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "ops": [],
+     "steps": 2,
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 158,
+     "name": "Boss 2: all equation types · medium",
+     "tags": [],
+     "sometimes": [
+      "big-numbers",
+      "fractions",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "op-mul",
+      "op-sub",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "ops": [],
+     "steps": 2,
+     "diff": 5,
+     "score": 4.8
+    },
+    {
+     "level": 159,
+     "name": "Boss 2: all equation types · hard",
+     "tags": [],
+     "sometimes": [
+      "big-numbers",
+      "fractions",
+      "neg-const",
+      "op-div",
+      "op-mul",
+      "op-sub",
+      "steps-1",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "ops": [],
+     "steps": 2,
+     "diff": 4,
+     "score": 4.4
+    },
+    {
+     "level": 160,
+     "name": "Boss 2: all equation types · tough",
+     "tags": [],
+     "sometimes": [
+      "big-numbers",
+      "frac-unit",
+      "fractions",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "op-mul",
+      "op-sub",
+      "steps-1",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-on-right",
+      "x-one-side"
+     ],
+     "ops": [],
+     "steps": 2,
+     "diff": 5,
+     "score": 5.2
+    }
+   ]
+  },
+  "indices": {
+   "name": "Power Balance",
+   "levels": [
+    {
+     "level": 1,
+     "name": "Repeated multiplication → power",
+     "tags": [
+      "ix-repeat"
+     ],
+     "sometimes": [],
+     "types": [
+      "R1"
+     ],
+     "diff": 1,
+     "score": 1
+    },
+    {
+     "level": 2,
+     "name": "Repeated multiplication · find the index",
+     "tags": [],
+     "sometimes": [
+      "ix-find-index",
+      "ix-repeat",
+      "lg-convert"
+     ],
+     "types": [
+      "R1",
+      "R3"
+     ],
+     "diff": 2,
+     "score": 1.5
+    },
+    {
+     "level": 3,
+     "name": "Evaluate powers",
+     "tags": [
+      "ix-eval"
+     ],
+     "sometimes": [],
+     "types": [
+      "R2"
+     ],
+     "diff": 1,
+     "score": 1
+    },
+    {
+     "level": 4,
+     "name": "Find the missing base",
+     "tags": [],
+     "sometimes": [
+      "ix-find-base",
+      "ix-find-index",
+      "lg-convert"
+     ],
+     "types": [
+      "R4",
+      "R3"
+     ],
+     "diff": 3,
+     "score": 2.5
+    },
+    {
+     "level": 5,
+     "name": "Zero index · the halving ladder",
+     "tags": [
+      "ix-zero"
+     ],
+     "sometimes": [],
+     "types": [
+      "Z1"
+     ],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 6,
+     "name": "Zero index",
+     "tags": [
+      "ix-zero"
+     ],
+     "sometimes": [],
+     "types": [
+      "Z1",
+      "Z2"
+     ],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 7,
+     "name": "Zero index · mixed",
+     "tags": [
+      "ix-zero"
+     ],
+     "sometimes": [
+      "ix-eval"
+     ],
+     "types": [
+      "Z2",
+      "Z3"
+     ],
+     "diff": 3,
+     "score": 2.5
+    },
+    {
+     "level": 8,
+     "name": "Negative index · keep dividing",
+     "tags": [
+      "ix-neg"
+     ],
+     "sometimes": [],
+     "types": [
+      "N1"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 9,
+     "name": "Negative index · fractions",
+     "tags": [
+      "ix-neg"
+     ],
+     "sometimes": [],
+     "types": [
+      "N1",
+      "N2"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 10,
+     "name": "Negative index · decimals",
+     "tags": [
+      "ix-neg"
+     ],
+     "sometimes": [],
+     "types": [
+      "N2",
+      "N3"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 11,
+     "name": "Powers as negative indices",
+     "tags": [
+      "ix-neg"
+     ],
+     "sometimes": [
+      "ix-find-index"
+     ],
+     "types": [
+      "N4",
+      "N2"
+     ],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 12,
+     "name": "Negative index · fraction base",
+     "tags": [
+      "ix-neg"
+     ],
+     "sometimes": [
+      "ix-neg-frac-base"
+     ],
+     "types": [
+      "N5",
+      "N2"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 13,
+     "name": "Fractional index · square roots",
+     "tags": [
+      "ix-frac"
+     ],
+     "sometimes": [],
+     "types": [
+      "F1"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 14,
+     "name": "Fractional index · cube roots and more",
+     "tags": [
+      "ix-frac"
+     ],
+     "sometimes": [],
+     "types": [
+      "F1",
+      "F2",
+      "F3"
+     ],
+     "diff": 4,
+     "score": 4.3
+    },
+    {
+     "level": 15,
+     "name": "Fractional index · p/q",
+     "tags": [
+      "ix-frac"
+     ],
+     "sometimes": [
+      "ix-frac-pq"
+     ],
+     "types": [
+      "F4",
+      "F2"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 16,
+     "name": "Negative fractional index",
+     "tags": [
+      "ix-frac",
+      "ix-frac-pq"
+     ],
+     "sometimes": [
+      "ix-frac-neg"
+     ],
+     "types": [
+      "F5",
+      "F4"
+     ],
+     "diff": 7,
+     "score": 6.5
+    },
+    {
+     "level": 17,
+     "name": "Find the fractional index",
+     "tags": [
+      "ix-find-index",
+      "ix-frac"
+     ],
+     "sometimes": [],
+     "types": [
+      "F6"
+     ],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 18,
+     "name": "Index law · multiply",
+     "tags": [
+      "ix-law-mul"
+     ],
+     "sometimes": [],
+     "types": [
+      "L1"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 19,
+     "name": "Index law · divide",
+     "tags": [
+      "ix-law-div"
+     ],
+     "sometimes": [
+      "ix-eval"
+     ],
+     "types": [
+      "L2",
+      "L8"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 20,
+     "name": "Index law · power of a power",
+     "tags": [
+      "ix-law-pow"
+     ],
+     "sometimes": [],
+     "types": [
+      "L3"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 21,
+     "name": "Index laws · all three",
+     "tags": [],
+     "sometimes": [
+      "ix-law-div",
+      "ix-law-mul",
+      "ix-law-pow"
+     ],
+     "types": [
+      "L1",
+      "L2",
+      "L3"
+     ],
+     "diff": 3,
+     "score": 3.3
+    },
+    {
+     "level": 22,
+     "name": "Index laws · negative indices",
+     "tags": [
+      "ix-law-neg"
+     ],
+     "sometimes": [],
+     "types": [
+      "L4"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 23,
+     "name": "Index laws · with letters",
+     "tags": [
+      "ix-letters"
+     ],
+     "sometimes": [],
+     "types": [
+      "L5"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 24,
+     "name": "Index laws · missing index",
+     "tags": [],
+     "sometimes": [
+      "ix-combine",
+      "ix-missing"
+     ],
+     "types": [
+      "L6",
+      "L7"
+     ],
+     "diff": 6,
+     "score": 5.5
+    },
+    {
+     "level": 25,
+     "name": "Index → log · 2ˣ = 8",
+     "tags": [
+      "ix-find-index",
+      "lg-convert"
+     ],
+     "sometimes": [],
+     "types": [
+      "C1"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 26,
+     "name": "Log values",
+     "tags": [
+      "lg-value"
+     ],
+     "sometimes": [
+      "lg-convert",
+      "lg-neg"
+     ],
+     "types": [
+      "C2",
+      "C3"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 27,
+     "name": "Special logs · log 1 and log a",
+     "tags": [
+      "lg-special"
+     ],
+     "sometimes": [],
+     "types": [
+      "C4"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 28,
+     "name": "Negative and fractional logs",
+     "tags": [
+      "lg-frac",
+      "lg-neg",
+      "lg-value"
+     ],
+     "sometimes": [],
+     "types": [
+      "C5"
+     ],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 29,
+     "name": "Find the base",
+     "tags": [],
+     "sometimes": [
+      "lg-base",
+      "lg-convert",
+      "lg-value"
+     ],
+     "types": [
+      "C6",
+      "C2"
+     ],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 30,
+     "name": "Solve index equations with logs",
+     "tags": [
+      "lg-convert"
+     ],
+     "sometimes": [
+      "ix-find-index",
+      "lg-frac",
+      "lg-neg"
+     ],
+     "types": [
+      "C8",
+      "C1"
+     ],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 31,
+     "name": "Log law · add",
+     "tags": [
+      "lg-add"
+     ],
+     "sometimes": [],
+     "types": [
+      "G1"
+     ],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 32,
+     "name": "Log law · subtract",
+     "tags": [
+      "lg-sub"
+     ],
+     "sometimes": [
+      "lg-simplify"
+     ],
+     "types": [
+      "G2",
+      "G5"
+     ],
+     "diff": 7,
+     "score": 6.5
+    },
+    {
+     "level": 33,
+     "name": "Log law · powers",
+     "tags": [
+      "lg-pow"
+     ],
+     "sometimes": [
+      "lg-simplify"
+     ],
+     "types": [
+      "G3",
+      "G8"
+     ],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 34,
+     "name": "Log laws · combine",
+     "tags": [],
+     "sometimes": [
+      "lg-add",
+      "lg-mix",
+      "lg-pow",
+      "lg-simplify"
+     ],
+     "types": [
+      "G4",
+      "G6",
+      "G7"
+     ],
+     "diff": 8,
+     "score": 7.7
+    },
+    {
+     "level": 35,
+     "name": "Boss · indices",
+     "tags": [],
+     "sometimes": [
+      "ix-combine",
+      "ix-eval",
+      "ix-frac",
+      "ix-frac-pq",
+      "ix-law-mul",
+      "ix-law-neg",
+      "ix-neg",
+      "ix-zero"
+     ],
+     "types": [
+      "R2",
+      "Z3",
+      "N2",
+      "F4",
+      "L1",
+      "L4",
+      "L7"
+     ],
+     "diff": 4,
+     "score": 3.9
+    },
+    {
+     "level": 36,
+     "name": "Boss · logs and laws",
+     "tags": [],
+     "sometimes": [
+      "lg-add",
+      "lg-convert",
+      "lg-frac",
+      "lg-mix",
+      "lg-neg",
+      "lg-pow",
+      "lg-sub",
+      "lg-value"
+     ],
+     "types": [
+      "C2",
+      "C5",
+      "G1",
+      "G2",
+      "G3",
+      "G4",
+      "G7"
+     ],
+     "diff": 7,
+     "score": 6.7
     }
    ]
   },
@@ -2959,7 +5285,7 @@
      ],
      "ops": [],
      "diff": 3,
-     "score": 3.2
+     "score": 3
     },
     {
      "level": 6,
@@ -2976,7 +5302,7 @@
      ],
      "ops": [],
      "diff": 4,
-     "score": 3.5
+     "score": 3.6
     },
     {
      "level": 7,
@@ -2995,7 +5321,7 @@
      ],
      "ops": [],
      "diff": 5,
-     "score": 4.8
+     "score": 4.9
     },
     {
      "level": 8,
@@ -3014,7 +5340,7 @@
      ],
      "ops": [],
      "diff": 4,
-     "score": 4.5
+     "score": 4.4
     },
     {
      "level": 9,
@@ -3030,7 +5356,7 @@
      ],
      "ops": [],
      "diff": 4,
-     "score": 3.7
+     "score": 3.8
     },
     {
      "level": 10,
@@ -3065,7 +5391,7 @@
      ],
      "ops": [],
      "diff": 4,
-     "score": 4.2
+     "score": 4.1
     },
     {
      "level": 12,
@@ -3084,13 +5410,12 @@
      ],
      "ops": [],
      "diff": 5,
-     "score": 5.4
+     "score": 5.5
     },
     {
      "level": 13,
      "name": "Three terms: a(x² + bx + c)",
      "tags": [
-      "bk-coef-inside",
       "bk-gives-square",
       "bk-letters-1",
       "bk-num-outside",
@@ -3098,7 +5423,8 @@
       "bk-terms-3"
      ],
      "sometimes": [
-      "big-numbers"
+      "big-numbers",
+      "bk-coef-inside"
      ],
      "ops": [],
      "diff": 4,
@@ -3142,7 +5468,7 @@
      ],
      "ops": [],
      "diff": 6,
-     "score": 6.3
+     "score": 6.4
     },
     {
      "level": 16,
@@ -3161,7 +5487,7 @@
      ],
      "ops": [],
      "diff": 5,
-     "score": 4.7
+     "score": 4.8
     },
     {
      "level": 17,
@@ -3182,7 +5508,7 @@
      ],
      "ops": [],
      "diff": 6,
-     "score": 6.3
+     "score": 6.2
     },
     {
      "level": 18,
@@ -3220,7 +5546,7 @@
      ],
      "ops": [],
      "diff": 6,
-     "score": 5.6
+     "score": 5.5
     },
     {
      "level": 20,
@@ -3286,7 +5612,7 @@
      ],
      "ops": [],
      "diff": 3,
-     "score": 3.3
+     "score": 3.4
     },
     {
      "level": 24,
@@ -3305,7 +5631,7 @@
      ],
      "ops": [],
      "diff": 4,
-     "score": 4.2
+     "score": 4.4
     },
     {
      "level": 25,
@@ -3335,7 +5661,7 @@
      ],
      "ops": [],
      "diff": 5,
-     "score": 4.7
+     "score": 4.8
     },
     {
      "level": 27,
@@ -3376,18 +5702,18 @@
      "level": 29,
      "name": "ax(y + b)",
      "tags": [
+      "bk-coef-inside",
       "bk-letters-2",
       "bk-terms-2",
       "bk-var-outside"
      ],
      "sometimes": [
       "big-numbers",
-      "bk-coef-inside",
       "bk-neg-inside"
      ],
      "ops": [],
      "diff": 5,
-     "score": 5.1
+     "score": 5.2
     },
     {
      "level": 30,
@@ -3420,19 +5746,19 @@
      ],
      "ops": [],
      "diff": 4,
-     "score": 4.2
+     "score": 4.3
     },
     {
      "level": 32,
      "name": "Three terms: a(bx ± cy ± d)",
      "tags": [
-      "bk-coef-inside",
       "bk-letters-2",
       "bk-num-outside",
       "bk-terms-3"
      ],
      "sometimes": [
       "big-numbers",
+      "bk-coef-inside",
       "bk-neg-inside"
      ],
      "ops": [],
@@ -3456,7 +5782,7 @@
      ],
      "ops": [],
      "diff": 6,
-     "score": 6.4
+     "score": 6.2
     },
     {
      "level": 34,
@@ -3492,7 +5818,7 @@
      ],
      "ops": [],
      "diff": 7,
-     "score": 6.7
+     "score": 6.6
     },
     {
      "level": 36,
@@ -3511,7 +5837,7 @@
      ],
      "ops": [],
      "diff": 7,
-     "score": 7.5
+     "score": 7.4
     },
     {
      "level": 37,
@@ -3560,8 +5886,8 @@
       "bk-neg-times-neg"
      ],
      "ops": [],
-     "diff": 8,
-     "score": 7.5
+     "diff": 7,
+     "score": 7.4
     },
     {
      "level": 40,
@@ -3572,6 +5898,7 @@
       "bk-terms-4"
      ],
      "sometimes": [
+      "big-numbers",
       "bk-gives-square",
       "bk-multi-outside",
       "bk-neg-inside",
@@ -3581,8 +5908,8 @@
       "bk-var-outside"
      ],
      "ops": [],
-     "diff": 8,
-     "score": 8.4
+     "diff": 9,
+     "score": 8.7
     }
    ]
   },
@@ -3684,7 +6011,7 @@
       "fc-neg-terms"
      ],
      "ops": [],
-     "diff": 5,
+     "diff": 4,
      "score": 4.5
     },
     {
@@ -3705,6 +6032,7 @@
      "level": 9,
      "name": "Three terms · with a letter",
      "tags": [
+      "fc-cubed",
       "fc-number-and-letter",
       "fc-terms-3"
      ],
@@ -3723,13 +6051,14 @@
       "fc-terms-2"
      ],
      "sometimes": [
+      "fc-cubed",
       "fc-neg-terms",
       "fc-number-and-letter",
       "fc-two-letters"
      ],
      "ops": [],
      "diff": 5,
-     "score": 4.9
+     "score": 5.1
     },
     {
      "level": 11,
@@ -3745,7 +6074,7 @@
      ],
      "ops": [],
      "diff": 4,
-     "score": 4.4
+     "score": 4.3
     },
     {
      "level": 12,
@@ -3760,8 +6089,8 @@
       "fc-number-and-letter"
      ],
      "ops": [],
-     "diff": 5,
-     "score": 4.5
+     "diff": 4,
+     "score": 4.4
     },
     {
      "level": 13,
@@ -3787,17 +6116,19 @@
      ],
      "sometimes": [
       "big-numbers",
+      "fc-cubed",
       "fc-neg-terms",
       "fc-two-letters"
      ],
      "ops": [],
      "diff": 6,
-     "score": 6.3
+     "score": 6.2
     },
     {
      "level": 15,
      "name": "Four terms",
      "tags": [
+      "fc-cubed",
       "fc-number-and-letter",
       "fc-terms-4",
       "fc-two-letters"
@@ -3819,6 +6150,7 @@
      ],
      "sometimes": [
       "big-numbers",
+      "fc-cubed",
       "fc-neg-terms"
      ],
      "ops": [],
@@ -3835,6 +6167,7 @@
      ],
      "sometimes": [
       "big-numbers",
+      "fc-cubed",
       "fc-neg-terms",
       "fc-squared-letter"
      ],
@@ -3852,11 +6185,181 @@
      ],
      "sometimes": [
       "big-numbers",
+      "fc-cubed",
       "fc-neg-terms"
      ],
      "ops": [],
      "diff": 8,
      "score": 7.6
+    },
+    {
+     "level": 19,
+     "name": "Bigger numbers · up to 20",
+     "tags": [
+      "big-numbers",
+      "fc-terms-2"
+     ],
+     "sometimes": [
+      "fc-neg-terms",
+      "fc-number-and-letter",
+      "fc-number-only",
+      "fc-two-letters"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.2
+    },
+    {
+     "level": 20,
+     "name": "Bigger numbers · three terms",
+     "tags": [
+      "big-numbers",
+      "fc-number-and-letter",
+      "fc-terms-3"
+     ],
+     "sometimes": [
+      "fc-cubed",
+      "fc-neg-terms",
+      "fc-two-letters"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 6.5
+    },
+    {
+     "level": 21,
+     "name": "Mostly minus signs · three terms",
+     "tags": [
+      "fc-terms-3"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-cubed",
+      "fc-neg-terms",
+      "fc-number-and-letter",
+      "fc-number-only",
+      "fc-two-letters"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 5.6
+    },
+    {
+     "level": 22,
+     "name": "Mostly minus signs · four terms",
+     "tags": [
+      "fc-neg-terms",
+      "fc-number-and-letter",
+      "fc-terms-4",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-cubed"
+     ],
+     "ops": [],
+     "diff": 7,
+     "score": 7.4
+    },
+    {
+     "level": 23,
+     "name": "Five terms",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-5",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "fc-cubed",
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 8,
+     "score": 8.4
+    },
+    {
+     "level": 24,
+     "name": "Cubes and squares",
+     "tags": [
+      "fc-cubed",
+      "fc-number-only",
+      "fc-terms-4"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.1
+    },
+    {
+     "level": 25,
+     "name": "Challenge: three letters · 2 terms",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-2"
+     ],
+     "sometimes": [
+      "fc-neg-terms",
+      "fc-three-letters",
+      "fc-two-letters"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 5.2
+    },
+    {
+     "level": 26,
+     "name": "Challenge: three letters · 3 terms",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-3",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "fc-neg-terms",
+      "fc-three-letters"
+     ],
+     "ops": [],
+     "diff": 7,
+     "score": 6.9
+    },
+    {
+     "level": 27,
+     "name": "Challenge: three letters with squares",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-3",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "fc-cubed",
+      "fc-neg-terms",
+      "fc-three-letters"
+     ],
+     "ops": [],
+     "diff": 7,
+     "score": 6.8
+    },
+    {
+     "level": 28,
+     "name": "Boss 2: anything goes!",
+     "tags": [
+      "fc-neg-terms",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-cubed",
+      "fc-number-and-letter",
+      "fc-terms-3",
+      "fc-terms-4",
+      "fc-terms-5"
+     ],
+     "ops": [],
+     "diff": 8,
+     "score": 7.5
     }
    ]
   },
@@ -3935,7 +6438,7 @@
      "sometimes": [],
      "ops": [],
      "diff": 3,
-     "score": 3
+     "score": 3.1
     },
     {
      "level": 7,
@@ -3949,7 +6452,7 @@
      ],
      "ops": [],
      "diff": 3,
-     "score": 3.4
+     "score": 3.2
     },
     {
      "level": 8,
@@ -3963,7 +6466,7 @@
      ],
      "ops": [],
      "diff": 4,
-     "score": 3.5
+     "score": 3.6
     },
     {
      "level": 9,
@@ -4024,12 +6527,10 @@
       "qd-dos",
       "qd-monic"
      ],
-     "sometimes": [
-      "big-numbers"
-     ],
+     "sometimes": [],
      "ops": [],
      "diff": 3,
-     "score": 2.8
+     "score": 2.6
     },
     {
      "level": 14,
@@ -4058,8 +6559,8 @@
       "qd-neg-middle"
      ],
      "ops": [],
-     "diff": 3,
-     "score": 3.5
+     "diff": 4,
+     "score": 3.6
     },
     {
      "level": 16,
@@ -4075,7 +6576,7 @@
      ],
      "ops": [],
      "diff": 4,
-     "score": 3.7
+     "score": 3.6
     },
     {
      "level": 17,
@@ -4099,7 +6600,7 @@
      "sometimes": [],
      "ops": [],
      "diff": 5,
-     "score": 5.3
+     "score": 5.2
     },
     {
      "level": 19,
@@ -4111,7 +6612,7 @@
      "sometimes": [],
      "ops": [],
      "diff": 6,
-     "score": 6.4
+     "score": 6.1
     },
     {
      "level": 20,
@@ -4138,7 +6639,7 @@
      ],
      "ops": [],
      "diff": 6,
-     "score": 6.4
+     "score": 6.2
     },
     {
      "level": 22,
@@ -4159,13 +6660,13 @@
       "qd-lead-coef"
      ],
      "sometimes": [
-      "big-numbers",
       "qd-all-positive",
-      "qd-neg-last"
+      "qd-neg-last",
+      "qd-neg-middle"
      ],
      "ops": [],
-     "diff": 6,
-     "score": 6.5
+     "diff": 7,
+     "score": 6.6
     },
     {
      "level": 24,
@@ -4199,7 +6700,7 @@
      ],
      "ops": [],
      "diff": 2,
-     "score": 2.2
+     "score": 2.3
     },
     {
      "level": 2,
@@ -4239,8 +6740,8 @@
       "ln-neg-intercept"
      ],
      "ops": [],
-     "diff": 2,
-     "score": 2.4
+     "diff": 3,
+     "score": 2.6
     },
     {
      "level": 5,
@@ -4284,7 +6785,7 @@
      ],
      "ops": [],
      "diff": 4,
-     "score": 4.3
+     "score": 4.5
     },
     {
      "level": 8,
@@ -4299,7 +6800,7 @@
      ],
      "ops": [],
      "diff": 6,
-     "score": 5.5
+     "score": 5.6
     },
     {
      "level": 9,
@@ -4313,8 +6814,8 @@
       "ln-neg-intercept"
      ],
      "ops": [],
-     "diff": 5,
-     "score": 4.7
+     "diff": 4,
+     "score": 4.4
     },
     {
      "level": 10,
@@ -4358,7 +6859,7 @@
      ],
      "ops": [],
      "diff": 7,
-     "score": 7.2
+     "score": 7.1
     }
    ]
   },
@@ -6266,6 +8767,416 @@
      ],
      "diff": 4,
      "score": 4
+    },
+    {
+     "level": 13,
+     "name": "Listing outcomes",
+     "tags": [
+      "pr-listing"
+     ],
+     "sometimes": [
+      "pr-product-rule"
+     ],
+     "types": [
+      "N1",
+      "N2"
+     ],
+     "diff": 3,
+     "score": 2.5
+    },
+    {
+     "level": 14,
+     "name": "Two-way tables",
+     "tags": [
+      "pr-two-way"
+     ],
+     "sometimes": [
+      "pr-conditional"
+     ],
+     "types": [
+      "N3"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 15,
+     "name": "Venn diagrams",
+     "tags": [
+      "pr-venn"
+     ],
+     "sometimes": [
+      "pr-conditional"
+     ],
+     "types": [
+      "N4"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 16,
+     "name": "Counting · product rule (H)",
+     "tags": [
+      "pr-product-rule"
+     ],
+     "sometimes": [
+      "pr-codes",
+      "pr-no-repeats",
+      "pr-repeats"
+     ],
+     "types": [
+      "N5",
+      "N6"
+     ],
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 17,
+     "name": "Counting · arrangements (H)",
+     "tags": [
+      "pr-arrangements"
+     ],
+     "sometimes": [
+      "pr-restricted"
+     ],
+     "types": [
+      "N7"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 18,
+     "name": "Pairs & handshakes",
+     "tags": [
+      "pr-listing"
+     ],
+     "sometimes": [
+      "pr-pairs"
+     ],
+     "types": [
+      "N8",
+      "N2"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 19,
+     "name": "Probability arithmetic",
+     "tags": [],
+     "sometimes": [
+      "pr-algebra",
+      "pr-and",
+      "pr-fractions",
+      "pr-independent",
+      "pr-missing",
+      "pr-mutually-exclusive",
+      "pr-not",
+      "pr-or",
+      "pr-sum-to-1"
+     ],
+     "types": [
+      "N9",
+      "N10"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 20,
+     "name": "Tree diagrams · with replacement",
+     "tags": [
+      "pr-decimals",
+      "pr-independent",
+      "pr-tree"
+     ],
+     "sometimes": [
+      "pr-and",
+      "pr-at-least-one",
+      "pr-exactly-one"
+     ],
+     "types": [
+      "N11"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 21,
+     "name": "Tree diagrams · without replacement (H)",
+     "tags": [
+      "pr-tree",
+      "pr-without-replacement"
+     ],
+     "sometimes": [
+      "pr-and",
+      "pr-at-least-one",
+      "pr-different"
+     ],
+     "types": [
+      "N12"
+     ],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 22,
+     "name": "Boss 2 · GCSE mix",
+     "tags": [],
+     "sometimes": [
+      "pr-algebra",
+      "pr-and",
+      "pr-arrangements",
+      "pr-at-least-one",
+      "pr-codes",
+      "pr-conditional",
+      "pr-decimals",
+      "pr-different",
+      "pr-exactly-one",
+      "pr-fractions",
+      "pr-independent",
+      "pr-missing",
+      "pr-mutually-exclusive",
+      "pr-no-repeats",
+      "pr-not",
+      "pr-or",
+      "pr-product-rule",
+      "pr-repeats",
+      "pr-restricted",
+      "pr-sum-to-1",
+      "pr-tree",
+      "pr-two-way",
+      "pr-venn",
+      "pr-without-replacement"
+     ],
+     "types": [
+      "N3",
+      "N4",
+      "N6",
+      "N7",
+      "N9",
+      "N10",
+      "N11",
+      "N12"
+     ],
+     "diff": 4,
+     "score": 4.4
+    },
+    {
+     "level": 23,
+     "name": "Certain, impossible & one dice",
+     "tags": [],
+     "sometimes": [
+      "pr-certain-impossible",
+      "pr-single-dice"
+     ],
+     "types": [
+      "M1",
+      "M2"
+     ],
+     "diff": 2,
+     "score": 1.5
+    },
+    {
+     "level": 24,
+     "name": "Playing cards",
+     "tags": [
+      "pr-cards"
+     ],
+     "sometimes": [
+      "pr-or",
+      "pr-overlap"
+     ],
+     "types": [
+      "M3"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 25,
+     "name": "Letters & number cards",
+     "tags": [],
+     "sometimes": [
+      "pr-letters",
+      "pr-number-cards"
+     ],
+     "types": [
+      "M4",
+      "M5"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 26,
+     "name": "Two spinners",
+     "tags": [
+      "pr-sample-space",
+      "pr-two-spinners"
+     ],
+     "sometimes": [],
+     "types": [
+      "M8"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 27,
+     "name": "Estimates & expected",
+     "tags": [],
+     "sometimes": [
+      "pr-estimate",
+      "pr-expected",
+      "pr-frequency-table",
+      "pr-relative-freq"
+     ],
+     "types": [
+      "M6",
+      "M7"
+     ],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 28,
+     "name": "Fractions, decimals & %",
+     "tags": [
+      "pr-forms"
+     ],
+     "sometimes": [
+      "pr-not"
+     ],
+     "types": [
+      "M13"
+     ],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 29,
+     "name": "Combined events",
+     "tags": [],
+     "sometimes": [
+      "pr-and",
+      "pr-at-least-one",
+      "pr-independent",
+      "pr-with-replacement"
+     ],
+     "types": [
+      "M12"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 30,
+     "name": "Overlapping events & frequency trees",
+     "tags": [],
+     "sometimes": [
+      "pr-addition-rule",
+      "pr-and",
+      "pr-frequency-tree",
+      "pr-or",
+      "pr-overlap"
+     ],
+     "types": [
+      "M9",
+      "M10"
+     ],
+     "diff": 6,
+     "score": 5.5
+    },
+    {
+     "level": 31,
+     "name": "Dependent trees",
+     "tags": [
+      "pr-decimals",
+      "pr-dependent",
+      "pr-tree"
+     ],
+     "sometimes": [],
+     "types": [
+      "M11"
+     ],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 32,
+     "name": "Counting extras",
+     "tags": [
+      "pr-product-rule"
+     ],
+     "sometimes": [
+      "pr-codes",
+      "pr-listing",
+      "pr-no-repeats",
+      "pr-repeats"
+     ],
+     "types": [
+      "M14"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 33,
+     "name": "Boss 3 · GCSE mix",
+     "tags": [],
+     "sometimes": [
+      "pr-addition-rule",
+      "pr-and",
+      "pr-at-least-one",
+      "pr-cards",
+      "pr-certain-impossible",
+      "pr-codes",
+      "pr-decimals",
+      "pr-dependent",
+      "pr-estimate",
+      "pr-expected",
+      "pr-forms",
+      "pr-frequency-table",
+      "pr-frequency-tree",
+      "pr-independent",
+      "pr-letters",
+      "pr-listing",
+      "pr-no-repeats",
+      "pr-not",
+      "pr-number-cards",
+      "pr-or",
+      "pr-overlap",
+      "pr-product-rule",
+      "pr-relative-freq",
+      "pr-repeats",
+      "pr-sample-space",
+      "pr-single-dice",
+      "pr-tree",
+      "pr-two-spinners",
+      "pr-with-replacement"
+     ],
+     "types": [
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5",
+      "M6",
+      "M7",
+      "M8",
+      "M9",
+      "M10",
+      "M11",
+      "M12",
+      "M13",
+      "M14"
+     ],
+     "diff": 4,
+     "score": 3.7
     }
    ]
   },
@@ -6480,6 +9391,392 @@
      ],
      "diff": 4,
      "score": 4.2
+    },
+    {
+     "level": 13,
+     "name": "Complementary, supplementary & reflex",
+     "tags": [],
+     "sometimes": [
+      "an-around-point",
+      "an-complement-supplement",
+      "an-reflex",
+      "an-right-angle"
+     ],
+     "types": [
+      "Q1",
+      "Q2",
+      "Q3"
+     ],
+     "diff": 1,
+     "score": 1.3
+    },
+    {
+     "level": 14,
+     "name": "Turns, clocks & compass",
+     "tags": [],
+     "sometimes": [
+      "an-bearing",
+      "an-clock",
+      "an-compass",
+      "an-turns"
+     ],
+     "types": [
+      "Q4",
+      "Q5",
+      "Q6"
+     ],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 15,
+     "name": "Angle facts & bisectors",
+     "tags": [],
+     "sometimes": [
+      "an-bisector",
+      "an-facts",
+      "an-polygon-exterior"
+     ],
+     "types": [
+      "Q7",
+      "Q8",
+      "Q9"
+     ],
+     "diff": 2,
+     "score": 1.7
+    },
+    {
+     "level": 16,
+     "name": "Triangles II",
+     "tags": [
+      "an-triangle"
+     ],
+     "sometimes": [
+      "an-exterior",
+      "an-isosceles",
+      "an-right-triangle"
+     ],
+     "types": [
+      "Q10",
+      "Q11",
+      "Q12"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 17,
+     "name": "Triangles with algebra",
+     "tags": [
+      "an-algebra",
+      "an-triangle"
+     ],
+     "sometimes": [
+      "an-exterior",
+      "an-isosceles"
+     ],
+     "types": [
+      "Q13",
+      "Q14",
+      "Q15"
+     ],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 18,
+     "name": "Quadrilaterals",
+     "tags": [
+      "an-quadrilateral"
+     ],
+     "sometimes": [
+      "an-algebra",
+      "an-kite",
+      "an-parallelogram",
+      "an-rhombus",
+      "an-trapezium"
+     ],
+     "types": [
+      "Q16",
+      "Q17",
+      "Q18",
+      "Q19"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 19,
+     "name": "Lines, points & quadrilaterals with algebra",
+     "tags": [
+      "an-algebra"
+     ],
+     "sometimes": [
+      "an-around-point",
+      "an-crossing-lines",
+      "an-quadrilateral",
+      "an-straight-line",
+      "an-vertically-opposite"
+     ],
+     "types": [
+      "Q20",
+      "Q22",
+      "Q23",
+      "Q24"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 20,
+     "name": "Parallel lines with algebra",
+     "tags": [
+      "an-algebra",
+      "an-parallel"
+     ],
+     "sometimes": [
+      "an-alternate",
+      "an-co-interior",
+      "an-corresponding"
+     ],
+     "types": [
+      "Q25"
+     ],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 21,
+     "name": "Parallel lines & triangles",
+     "tags": [
+      "an-parallel",
+      "an-triangle"
+     ],
+     "sometimes": [],
+     "types": [
+      "Q26"
+     ],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 22,
+     "name": "Polygons II",
+     "tags": [],
+     "sometimes": [
+      "an-isosceles",
+      "an-polygon-exterior",
+      "an-polygon-sum",
+      "an-regular-diagonal"
+     ],
+     "types": [
+      "Q27",
+      "Q29",
+      "Q30"
+     ],
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 23,
+     "name": "How many sides?",
+     "tags": [
+      "an-polygon-sides"
+     ],
+     "sometimes": [
+      "an-polygon-exterior",
+      "an-polygon-interior",
+      "an-polygon-sum"
+     ],
+     "types": [
+      "Q28"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 24,
+     "name": "Angles in ratios",
+     "tags": [
+      "an-ratio"
+     ],
+     "sometimes": [
+      "an-around-point",
+      "an-quadrilateral",
+      "an-straight-line",
+      "an-triangle"
+     ],
+     "types": [
+      "Q31"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 25,
+     "name": "Circle theorems 1 (H)",
+     "tags": [],
+     "sometimes": [
+      "an-algebra",
+      "an-circle-centre",
+      "an-radius-isosceles",
+      "an-same-segment",
+      "an-semicircle"
+     ],
+     "types": [
+      "Q32",
+      "Q33",
+      "Q34",
+      "Q35"
+     ],
+     "diff": 6,
+     "score": 5.5
+    },
+    {
+     "level": 26,
+     "name": "Circle theorems 2 (H)",
+     "tags": [],
+     "sometimes": [
+      "an-algebra",
+      "an-alternate-segment",
+      "an-circle-centre",
+      "an-tangent",
+      "an-tangents-point"
+     ],
+     "types": [
+      "Q36",
+      "Q37",
+      "Q38",
+      "Q39"
+     ],
+     "diff": 8,
+     "score": 8
+    },
+    {
+     "level": 27,
+     "name": "Cyclic quadrilaterals (H)",
+     "tags": [],
+     "sometimes": [
+      "an-algebra",
+      "an-alternate-segment",
+      "an-circle-centre",
+      "an-cyclic-quad",
+      "an-quadrilateral"
+     ],
+     "types": [
+      "Q21",
+      "Q39"
+     ],
+     "diff": 8,
+     "score": 7.5
+    },
+    {
+     "level": 28,
+     "name": "Bearings",
+     "tags": [
+      "an-bearing"
+     ],
+     "sometimes": [
+      "an-bearing-back"
+     ],
+     "types": [
+      "Q40",
+      "Q41"
+     ],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 29,
+     "name": "Boss 2 · GCSE mix",
+     "tags": [],
+     "sometimes": [
+      "an-algebra",
+      "an-alternate",
+      "an-alternate-segment",
+      "an-around-point",
+      "an-bearing",
+      "an-bearing-back",
+      "an-bisector",
+      "an-circle-centre",
+      "an-clock",
+      "an-co-interior",
+      "an-compass",
+      "an-complement-supplement",
+      "an-corresponding",
+      "an-crossing-lines",
+      "an-cyclic-quad",
+      "an-exterior",
+      "an-facts",
+      "an-isosceles",
+      "an-kite",
+      "an-parallel",
+      "an-parallelogram",
+      "an-polygon-exterior",
+      "an-polygon-interior",
+      "an-polygon-sides",
+      "an-polygon-sum",
+      "an-quadrilateral",
+      "an-radius-isosceles",
+      "an-ratio",
+      "an-reflex",
+      "an-regular-diagonal",
+      "an-rhombus",
+      "an-right-triangle",
+      "an-same-segment",
+      "an-semicircle",
+      "an-straight-line",
+      "an-tangent",
+      "an-tangents-point",
+      "an-trapezium",
+      "an-triangle",
+      "an-turns",
+      "an-vertically-opposite"
+     ],
+     "types": [
+      "Q1",
+      "Q3",
+      "Q4",
+      "Q5",
+      "Q6",
+      "Q7",
+      "Q8",
+      "Q9",
+      "Q10",
+      "Q11",
+      "Q12",
+      "Q13",
+      "Q14",
+      "Q15",
+      "Q16",
+      "Q17",
+      "Q18",
+      "Q19",
+      "Q20",
+      "Q21",
+      "Q22",
+      "Q23",
+      "Q24",
+      "Q25",
+      "Q26",
+      "Q27",
+      "Q28",
+      "Q29",
+      "Q30",
+      "Q31",
+      "Q32",
+      "Q33",
+      "Q34",
+      "Q35",
+      "Q36",
+      "Q37",
+      "Q38",
+      "Q39",
+      "Q40",
+      "Q41"
+     ],
+     "diff": 5,
+     "score": 4.7
     }
    ]
   },
@@ -6510,7 +9807,7 @@
      ],
      "ops": [],
      "diff": 2,
-     "score": 2.4
+     "score": 2.2
     },
     {
      "level": 3,
@@ -6645,8 +9942,8 @@
       "tf-shape-4"
      ],
      "sometimes": [
+      "tf-reflect-diagonal",
       "tf-reflection",
-      "tf-rot-90",
       "tf-rotation"
      ],
      "ops": [],
