@@ -408,3 +408,4 @@ a.card.news{text-decoration:none;color:inherit}
 .card.game .art .minibal.sm{font-size:46px}
 .card.game .art .miniriver{font-size:46px}
 .card.game .art .mininim{transform:scale(1.3)}
+.ch-list{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:320px}.ch-list span{background:#f2efff;border-radius:8px;padding:4px 8px;font-weight:800;font-size:14px;letter-spacing:1px}.ch-list span.hl{background:#ffd23f}.ch-tw td,.ch-tw th{width:auto;padding:4px 10px}

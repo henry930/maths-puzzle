@@ -52,13 +52,161 @@ const QT={
   if(t===2){const a=pick([.2,.3,.4,.5,.6]),b=pick([.1,.5,.2,.3,.8]);return{vis:'<div class="ch-big">⚖️</div>',q:`A and B are <b>independent</b> events. P(A) = ${a} and P(B) = ${b}. Find P(A and B). (decimal)`,ans:+(a*b).toFixed(3),ex:`Multiply: ${a} × ${b} = ${+(a*b).toFixed(3)}`};}
   const w=pick([[3,5,2],[2,3,5],[4,3,3]]);const t2=w[0]+w[1]+w[2];return{vis:'<div class="ch-big">🍬</div>',q:`In a sweet jar the ratio of red : green : yellow is <b>${w.join(' : ')}</b>. What is the probability a random sweet is green?`,ans:w[1]/t2,ex:`${w[1]} parts out of ${w[0]}+${w[1]}+${w[2]} = ${t2} parts → ${fr(w[1],t2)}`};}
 };
-const POOL=[['T1'],['T1','T2'],['T1','T2','T3'],['T4'],['T5'],['T5','T6'],['T6','T7'],['T8'],['T8','T9'],['T10','T11'],['T12'],['T3','T4','T6','T7','T9','T10','T11','T12']];
+/* ===== Levels 13+ : GCSE listing / two-way / Venn / product rule (H) / tree diagrams ===== */
+const dec=x=>+x.toFixed(4);
+function chips(items,hl){return '<div class="ch-list">'+items.map(s=>`<span class="${hl&&hl(s)?'hl':''}">${s}</span>`).join('')+'</div>';}
+function twt(rows,cols,m){
+  const rt=m.map(r=>r[0]+r[1]),ct=[m[0][0]+m[1][0],m[0][1]+m[1][1]],T=rt[0]+rt[1];
+  return `<table class="ch-grid ch-tw"><tr><th></th><th>${cols[0]}</th><th>${cols[1]}</th><th>Total</th></tr>`+
+   [0,1].map(i=>`<tr><th>${rows[i]}</th><td>${m[i][0]}</td><td>${m[i][1]}</td><td><b>${rt[i]}</b></td></tr>`).join('')+
+   `<tr><th>Total</th><td><b>${ct[0]}</b></td><td><b>${ct[1]}</b></td><td><b>${T}</b></td></tr></table>`;
+}
+function venn(nA,nB,a,b,c,d){
+  return `<svg viewBox="0 0 280 170" class="ch-svg"><rect x="4" y="4" width="272" height="162" rx="10" fill="#fff" stroke="#1f1a3d" stroke-width="2"/>
+  <circle cx="105" cy="88" r="58" fill="#ffd23f55" stroke="#1f1a3d" stroke-width="2"/><circle cx="175" cy="88" r="58" fill="#5aa9ff55" stroke="#1f1a3d" stroke-width="2"/>
+  <text x="80" y="24" text-anchor="middle" font-size="13" font-weight="800" fill="#1f1a3d">${nA}</text><text x="200" y="24" text-anchor="middle" font-size="13" font-weight="800" fill="#1f1a3d">${nB}</text>
+  <g font-size="20" font-weight="900" fill="#1f1a3d" text-anchor="middle"><text x="75" y="95">${a}</text><text x="140" y="95">${b}</text><text x="205" y="95">${c}</text><text x="252" y="152">${d}</text></g></svg>`;
+}
+function tree(p,qn,nm){
+  const q=dec(1-p),L=(x,y,t,an)=>`<text x="${x}" y="${y}" font-size="12" font-weight="800" fill="#c2255c" text-anchor="${an||'middle'}">${t}</text>`;
+  const ln=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#1f1a3d" stroke-width="2"/>`;
+  return `<svg viewBox="0 0 340 176" class="ch-svg">${ln(20,88,130,44)}${ln(20,88,130,132)}${ln(130,44,250,18)}${ln(130,44,250,66)}${ln(130,132,250,110)}${ln(130,132,250,158)}`+
+   L(62,56,p)+L(62,128,q)+L(184,22,p)+L(184,70,q)+L(184,114,p)+L(184,162,q)+
+   [['A A',18],['A B',66],['B A',110],['B B',158]].map(([t,y])=>L(256,y+4,t.replace(/A/g,nm[0]).replace(/B/g,nm[1]),'start')).join('')+
+   `<text x="130" y="36" font-size="12" font-weight="900" text-anchor="middle" fill="#1f1a3d">Day 1</text></svg>`;
+}
+Object.assign(QT,{
+ N1(){const S=[['a fair coin is flipped',2,'🪙'],['a fair dice is rolled',6,'🎲'],['a fair spinner with 3 equal sections is spun',3,'🎡'],['a fair spinner with 4 equal sections is spun',4,'🎡']];
+  const a=pick(S),b=pick(S.filter(x=>x!==a&&x[2]!==a[2]));
+  return{vis:`<div class="ch-big">${a[2]}${b[2]}</div>`,q:`${a[0][0].toUpperCase()+a[0].slice(1)} <b>and</b> ${b[0]}. Using a systematic list, how many different outcomes are there altogether? (whole number)`,ans:a[1]*b[1],extra:['pr-listing','pr-product-rule'],
+   ex:`List them in order: each of the ${a[1]} outcomes of the first goes with ${b[1]} outcomes of the second → ${a[1]} × ${b[1]} = ${a[1]*b[1]}`};},
+ N2(){const O=['HHH','HHT','HTH','HTT','THH','THT','TTH','TTT'];
+  const V=pick([['exactly 2 heads',s=>(s.match(/H/g)||[]).length===2],['exactly 1 head',s=>(s.match(/H/g)||[]).length===1],['at least 2 heads',s=>(s.match(/H/g)||[]).length>=2],['at least one tail',s=>s.includes('T')],['all three the same',s=>/^(HHH|TTT)$/.test(s)]]);
+  const f=O.filter(V[1]).length;
+  return{vis:chips(O),rev:()=>chips(O,V[1]),q:`A fair coin is flipped <b>3 times</b>. The 8 possible outcomes are listed. What is the probability of getting <b>${V[0]}</b>?`,ans:f/8,extra:['pr-listing'],
+   ex:`${f} of the 8 outcomes (${O.filter(V[1]).join(', ')}) → ${f}/8 = ${fr(f,8)}`};},
+ N3(){const R_=pick([['Boys','Girls']]),C=pick([['Walk','Bus'],['French','Spanish'],['Tea','Coffee']]);
+  let m;do{m=[[R(3,12),R(3,12)],[R(3,12),R(3,12)]];}while(0);const T=m[0][0]+m[0][1]+m[1][0]+m[1][1];
+  const row=m.map(r=>r[0]+r[1]),col=[m[0][0]+m[1][0],m[0][1]+m[1][1]];
+  const v=R(0,3),nm=['boy','girl'];let q,ans,ex,extra=['pr-two-way'];
+  if(v===0){q=`One student is chosen at random. What is the probability the student is a <b>boy</b>?`;ans=row[0]/T;ex=`${row[0]} boys out of ${T} students → ${fr(row[0],T)}`;}
+  else if(v===1){q=`One student is chosen at random. What is the probability the student is a <b>girl who chose ${C[1].toLowerCase()}</b>?`;ans=m[1][1]/T;ex=`${m[1][1]} girls chose ${C[1].toLowerCase()} out of ${T} students → ${fr(m[1][1],T)}`;}
+  else if(v===2){q=`A <b>girl</b> is chosen at random. What is the probability she chose <b>${C[0].toLowerCase()}</b>?`;ans=m[1][0]/row[1];extra.push('pr-conditional');ex=`Only look at the girls: ${m[1][0]} of the ${row[1]} girls → ${fr(m[1][0],row[1])}`;}
+  else{q=`A student who chose <b>${C[1].toLowerCase()}</b> is picked at random. What is the probability the student is a <b>boy</b>?`;ans=m[0][1]/col[1];extra.push('pr-conditional');ex=`Only look at the ${C[1].toLowerCase()} column: ${m[0][1]} of the ${col[1]} are boys → ${fr(m[0][1],col[1])}`;}
+  return{vis:twt(R_,C,m),q,ans,ex,extra,k:'N3'};},
+ N4(){const N=pick([['Cats','Dogs'],['Tea','Coffee'],['Maths','Physics']]),a=R(2,9),b=R(2,7),c=R(2,9),d=R(1,6),n=a+b+c+d;
+  const v=R(0,4);let q,ans,ex,extra=['pr-venn'];
+  if(v===0){q=`A student is chosen at random. What is P(<b>${N[0]}</b>)?`;ans=(a+b)/n;ex=`${a} + ${b} = ${a+b} in the ${N[0]} circle, out of ${n} → ${fr(a+b,n)}`;}
+  else if(v===1){q=`What is the probability the student likes <b>both</b> ${N[0]} and ${N[1]}?`;ans=b/n;ex=`${b} in the overlap out of ${n} → ${fr(b,n)}`;}
+  else if(v===2){q=`What is the probability the student likes <b>${N[0]} or ${N[1]}</b> (or both)?`;ans=(a+b+c)/n;ex=`${a} + ${b} + ${c} = ${a+b+c} inside the circles, out of ${n} → ${fr(a+b+c,n)}`;}
+  else if(v===3){q=`What is the probability the student likes <b>neither</b>?`;ans=d/n;ex=`${d} outside both circles out of ${n} → ${fr(d,n)}`;}
+  else{q=`A student who likes <b>${N[1]}</b> is chosen at random. What is the probability they also like <b>${N[0]}</b>?`;ans=b/(b+c);extra.push('pr-conditional');ex=`Only look inside the ${N[1]} circle: ${b} of the ${b+c} also like ${N[0]} → ${fr(b,b+c)}`;}
+  return{vis:venn(N[0],N[1],a,b,c,d),q:`${n} students were asked which they like. ${q}`,ans,ex,extra,k:'N4'};},
+ N5(){const t=pick([0,1,2]);let s,x,y,z,w;
+  if(t===0){x=R(2,4);y=R(2,5);z=R(2,3);return{vis:'<div class="ch-big">🍽️</div>',q:`A café menu has <b>${x}</b> starters, <b>${y}</b> main courses and <b>${z}</b> desserts. A meal is one starter, one main and one dessert. How many different meals are possible? (whole number)`,ans:x*y*z,extra:['pr-product-rule'],ex:`${x} × ${y} × ${z} = ${x*y*z}`};}
+  if(t===1){x=R(3,6);y=R(2,4);z=R(2,4);return{vis:'<div class="ch-big">👕</div>',q:`Sam has <b>${x}</b> T-shirts, <b>${y}</b> pairs of jeans and <b>${z}</b> hats. An outfit is one of each. How many different outfits can Sam make? (whole number)`,ans:x*y*z,extra:['pr-product-rule'],ex:`${x} × ${y} × ${z} = ${x*y*z}`};}
+  x=R(2,5);y=R(2,5);return{vis:'<div class="ch-big">🛣️</div>',q:`There are <b>${x}</b> routes from town A to town B, and <b>${y}</b> routes from town B to town C. How many different routes are there from A to C via B? (whole number)`,ans:x*y,extra:['pr-product-rule'],ex:`${x} × ${y} = ${x*y}`};},
+ N6(){const t=R(0,4);
+  if(t===0){const k=pick([3,4]);return{vis:'<div class="ch-big">🔢</div>',q:`A PIN has <b>${k}</b> digits, each from 0 to 9. Digits <b>can be repeated</b>. How many different PINs are there? (whole number)`,ans:Math.pow(10,k),extra:['pr-codes','pr-product-rule','pr-repeats'],ex:`${Array(k).fill(10).join(' × ')} = ${Math.pow(10,k)}`};}
+  if(t===1){const k=pick([3,4]),p=[10,9,8,7].slice(0,k);return{vis:'<div class="ch-big">🔢</div>',q:`A PIN has <b>${k}</b> digits, each from 0 to 9. All the digits must be <b>different</b>. How many different PINs are there? (whole number)`,ans:p.reduce((a,b)=>a*b,1),extra:['pr-codes','pr-product-rule','pr-no-repeats'],ex:`${p.join(' × ')} = ${p.reduce((a,b)=>a*b,1)} (one fewer choice each time)`};}
+  if(t===2){const k=pick([2,3]);return{vis:'<div class="ch-big">🔐</div>',q:`A password is <b>one capital letter</b> (26 choices) followed by <b>${k} digits</b> (0–9). How many different passwords are there? (whole number)`,ans:26*Math.pow(10,k),extra:['pr-codes','pr-product-rule','pr-repeats'],ex:`26 × ${Array(k).fill(10).join(' × ')} = ${26*Math.pow(10,k)}`};}
+  const n=pick([4,5]),k=pick([2,3]),rep=pick([0,1]),L='ABCDE'.slice(0,n),p=Array.from({length:k},(_,i)=>rep?n:n-i);
+  return{vis:'<div class="ch-big">🔒</div>',q:`A lock code uses <b>${k}</b> letters chosen from <b>${L.split('').join(', ')}</b>. Letters ${rep?'<b>can</b> be used more than once':'<b>cannot</b> be repeated'}. How many different codes are there? (whole number)`,ans:p.reduce((a,b)=>a*b,1),extra:['pr-codes','pr-product-rule',rep?'pr-repeats':'pr-no-repeats'],ex:`${p.join(' × ')} = ${p.reduce((a,b)=>a*b,1)}`};},
+ N7(){const t=R(0,2);const f=n=>{let r=1;for(let i=2;i<=n;i++)r*=i;return r;},ch=n=>Array.from({length:n},(_,i)=>n-i).join(' × ');
+  if(t===0){const n=pick([3,4,5]);return{vis:'<div class="ch-big">🧍🧍🧍</div>',q:`<b>${n}</b> friends stand in a queue. In how many different orders can they stand? (whole number)`,ans:f(n),extra:['pr-arrangements'],ex:`${n} choices for first place, then ${n-1}, … → ${ch(n)} = ${f(n)}`};}
+  if(t===1){const n=pick([4,5]);return{vis:'<div class="ch-big">📚</div>',q:`<b>${n}</b> different books are put on a shelf. The <b>maths book must be first</b> (on the left). In how many different ways can the books be arranged? (whole number)`,ans:f(n-1),extra:['pr-arrangements','pr-restricted'],ex:`The first place is fixed, so arrange the other ${n-1}: ${ch(n-1)} = ${f(n-1)}`};}
+  const w=pick(['CAT','MATH','SHAPE']);return{vis:`<div class="ch-big" style="letter-spacing:6px">${w}</div>`,q:`How many different arrangements are there of all the letters in the word <b>${w}</b>? (All its letters are different.) (whole number)`,ans:f(w.length),extra:['pr-arrangements'],ex:`${w.length} letters: ${ch(w.length)} = ${f(w.length)}`};},
+ N8(){const n=pick([4,5,6,7]),ans=n*(n-1)/2,t=R(0,2);
+  const q=t===0?`<b>${n}</b> people meet at a party and every person shakes hands with every other person once. How many handshakes are there? (whole number)`:t===1?`In a league, each of <b>${n}</b> teams plays every other team <b>once</b>. How many matches are played? (whole number)`:`How many different pairs can be chosen from a group of <b>${n}</b> students? (whole number)`;
+  return{vis:`<div class="ch-big">${t===0?'🤝':t===1?'⚽':'👫'}</div>`,q,ans,extra:['pr-pairs','pr-listing'],ex:`Each of the ${n} people pairs with ${n-1} others: ${n} × ${n-1} = ${n*(n-1)}, but each pair is counted twice → ${n*(n-1)} ÷ 2 = ${ans}`};},
+ N9(){const t=R(0,2),P=[[1,2],[1,3],[2,3],[1,4],[3,4],[1,5],[2,5],[3,5],[1,6],[5,6]];
+  if(t===0){const a=pick(P),b=pick(P);return{vis:'<div class="ch-big">⚖️</div>',q:`A and B are <b>independent</b> events. P(A) = ${a[0]}/${a[1]} and P(B) = ${b[0]}/${b[1]}. Find P(A and B). (fraction)`,ans:a[0]*b[0]/(a[1]*b[1]),extra:['pr-and','pr-independent','pr-fractions'],ex:`Multiply: ${a[0]}/${a[1]} × ${b[0]}/${b[1]} = ${a[0]*b[0]}/${a[1]*b[1]} = ${fr(a[0]*b[0],a[1]*b[1])}`};}
+  if(t===1){const pr=[[1,4,1,6],[1,3,1,6],[1,2,1,5],[1,6,1,4],[2,5,1,3],[1,3,1,4],[1,5,1,4]],a=pick(pr);const n=a[0]*a[3]+a[2]*a[1],d=a[1]*a[3];
+   return{vis:'<div class="ch-big">🎯</div>',q:`A and B are <b>mutually exclusive</b> events. P(A) = ${a[0]}/${a[1]} and P(B) = ${a[2]}/${a[3]}. Find P(A or B). (fraction)`,ans:n/d,extra:['pr-or','pr-mutually-exclusive','pr-fractions'],ex:`Add: ${a[0]}/${a[1]} + ${a[2]}/${a[3]} = ${n}/${d} = ${fr(n,d)}`};}
+  const a=pick(P);return{vis:'<div class="ch-big">🌦️</div>',q:`The probability that a bus is late is ${a[0]}/${a[1]}. What is the probability that it is <b>not</b> late? (fraction)`,ans:(a[1]-a[0])/a[1],extra:['pr-not','pr-fractions'],ex:`1 − ${a[0]}/${a[1]} = ${a[1]-a[0]}/${a[1]} = ${fr(a[1]-a[0],a[1])}`};},
+ N10(){const t=R(0,2),X=['red','blue','green','yellow'];
+  if(t===0){const p=pick([.1,.15,.2,.25,.3]),q=pick([.1,.2,.25,.3,.35]);return{vis:spinner(['','',''],['red','blue','green']),q:`A biased spinner lands on red, blue or green. P(red) = ${p} and P(blue) = ${q}. Find P(green). (decimal)`,ans:dec(1-p-q),extra:['pr-missing','pr-sum-to-1'],ex:`Probabilities add to 1: 1 − ${p} − ${q} = ${dec(1-p-q)}`};}
+  if(t===1){const p=pick([.1,.2,.3,.4]),q=pick([.1,.2,.3]);return{vis:spinner(['','','',''],['red','blue','green','yellow']),q:`A spinner has 4 colours. P(red) = ${p} and P(blue) = ${q}. Green and yellow are <b>equally likely</b>. Find P(green). (decimal)`,ans:dec((1-p-q)/2),extra:['pr-missing','pr-sum-to-1'],ex:`1 − ${p} − ${q} = ${dec(1-p-q)} is shared equally between green and yellow → ${dec((1-p-q)/2)}`};}
+  const r=pick([.1,.25,.4,.7]);return{vis:'<div class="ch-big">🎲</div>',q:`A biased dice-game has three outcomes with probabilities <b>x</b>, <b>2x</b> and <b>${r}</b>. Find the value of x. (decimal)`,ans:dec((1-r)/3),extra:['pr-missing','pr-sum-to-1','pr-algebra'],ex:`x + 2x + ${r} = 1 → 3x = ${dec(1-r)} → x = ${dec((1-r)/3)}`};},
+ N11(){const p=pick([.1,.2,.3,.4,.6,.7,.8]),q=dec(1-p),v=R(0,3),nm=['L','N'];
+  const V=[['is late <b>both</b> days',dec(p*p),`${p} × ${p} = ${dec(p*p)}`,['pr-and']],['is late on <b>exactly one</b> day',dec(2*p*q),`L then N (${p} × ${q}) plus N then L (${q} × ${p}) = ${dec(2*p*q)}`,['pr-exactly-one']],['is late on <b>at least one</b> day',dec(1-q*q),`1 − P(never late) = 1 − ${q} × ${q} = ${dec(1-q*q)}`,['pr-at-least-one']],['is <b>not late on either</b> day',dec(q*q),`${q} × ${q} = ${dec(q*q)}`,['pr-and']]][v];
+  return{vis:tree(p,q,nm),q:`The probability that Mia is late (L) for school is <b>${p}</b> each day, independently. N means not late. What is the probability she ${V[0]}? (decimal)`,ans:V[1],extra:['pr-tree','pr-independent','pr-decimals',...V[3]],ex:V[2]};},
+ N12(){const t=R(6,10),r=R(2,t-2),b=t-r,v=R(0,2),den=t*(t-1);
+  const V=[['the two balls are <b>different colours</b>',2*r*b,`red then blue (${r}/${t} × ${b}/${t-1}) + blue then red (${b}/${t} × ${r}/${t-1}) = ${2*r*b}/${den} = ${fr(2*r*b,den)}`,['pr-different']],
+   ['the two balls are <b>the same colour</b>',r*(r-1)+b*(b-1),`both red (${r}/${t} × ${r-1}/${t-1}) + both blue (${b}/${t} × ${b-1}/${t-1}) = ${r*(r-1)+b*(b-1)}/${den} = ${fr(r*(r-1)+b*(b-1),den)}`,['pr-and']],
+   ['<b>at least one</b> ball is red',den-b*(b-1),`1 − P(both blue) = 1 − ${b}/${t} × ${b-1}/${t-1} = ${den-b*(b-1)}/${den} = ${fr(den-b*(b-1),den)}`,['pr-at-least-one']]][v];
+  return{vis:bag({red:r,blue:b}),q:`A bag has the balls shown. Two are picked <b>without replacement</b>. What is the probability that ${V[0]}? (fraction)`,ans:V[1]/den,extra:['pr-tree','pr-without-replacement',...V[3]],ex:V[2]};}
+});
+const POOL=[['T1'],['T1','T2'],['T1','T2','T3'],['T4'],['T5'],['T5','T6'],['T6','T7'],['T8'],['T8','T9'],['T10','T11'],['T12'],['T3','T4','T6','T7','T9','T10','T11','T12'],
+ ['N1','N2'],['N3'],['N4'],['N5','N6'],['N7'],['N8','N2'],['N9','N10'],['N11'],['N12'],['N3','N4','N6','N7','N9','N10','N11','N12']];
 function parseAns(s){s=s.trim();if(!s)return NaN;if(s.endsWith('%'))return parseFloat(s)/100;if(s.includes('/')){const[a,b]=s.split('/');return parseFloat(a)/parseFloat(b);}return parseFloat(s);}
+/* ===== Levels 23+ : extra GCSE probability variety ===== */
+const fracQ=' (fraction)';
+Object.assign(QT,{
+ M1(){const v=R(0,3);
+  if(v===0){const n=R(7,9);return{vis:'<div class="ch-big">🎲</div>',q:`A fair 6-sided dice is rolled. What is the probability of rolling a <b>${n}</b>?`,ans:0,extra:['pr-certain-impossible'],ex:`There is no ${n} on the dice, so it is impossible → 0`};}
+  if(v===1){return{vis:'<div class="ch-big">🎲</div>',q:`A fair 6-sided dice is rolled. What is the probability the score is <b>less than 7</b>?`,ans:1,extra:['pr-certain-impossible'],ex:`Every score is less than 7, so it is certain → 1`};}
+  if(v===2){const n=R(4,9);return{vis:bag({red:n}),q:`A bag contains only red balls. What is the probability of picking a <b>blue</b> ball?`,ans:0,extra:['pr-certain-impossible'],ex:`There are no blue balls, so it is impossible → 0`};}
+  const n=R(4,9);return{vis:bag({green:n}),q:`A bag contains only green balls. What is the probability of picking a <b>green</b> ball?`,ans:1,extra:['pr-certain-impossible'],ex:`Every ball is green, so it is certain → 1`};},
+ M2(){const o=pick([['a prime number',x=>[2,3,5].includes(x)],['a factor of 12',x=>12%x===0],['a square number',x=>x===1||x===4],['greater than 4',x=>x>4],['a 2 or a multiple of 3',x=>x===2||x%3===0],['not a 6',x=>x!==6]]);
+  const f=[1,2,3,4,5,6].filter(o[1]);return{vis:'<div class="ch-big">🎲</div>',q:`A fair 6-sided dice is rolled. What is the probability the score is <b>${o[0]}</b>?${fracQ}`,ans:f.length/6,extra:['pr-single-dice'],ex:`Scores that work: ${f.join(', ')} → ${f.length}/6 = ${fr(f.length,6)}`};},
+ M3(){const o=pick([['a <b>heart</b>',13,'13 hearts'],['a <b>king</b>',4,'4 kings'],['a <b>red</b> card',26,'26 red cards (13 hearts + 13 diamonds)'],['a <b>picture card</b> (J, Q or K)',12,'3 picture cards in each of 4 suits = 12'],['the <b>ace of spades</b>',1,'only 1 ace of spades'],['a <b>king or a heart</b>',16,'13 hearts + 3 other kings (the king of hearts is already counted) = 16'],['<b>not</b> a heart',39,'52 − 13 hearts = 39'],['a <b>5 or a 6</b>',8,'4 fives + 4 sixes = 8']]);
+  return{vis:'<div class="ch-big">🃏</div><div class="ch-cap">A standard pack: 52 cards, 4 suits (♠ ♣ ♥ ♦) of 13 cards — A, 2–10, J, Q, K</div>',q:`One card is taken at random from a standard pack of 52 cards. What is the probability it is ${o[0]}?${fracQ}`,ans:o[1]/52,extra:['pr-cards',...(o[1]===16?['pr-or','pr-overlap']:[])],ex:`${o[2]} out of 52 → ${o[1]}/52 = ${fr(o[1],52)}`};},
+ M4(){const w=pick(['MATHEMATICS','PROBABILITY','STATISTICS','ALGEBRA']),L=w.split(''),v=R(0,2);let q,f,ex;
+  if(v===0){const l=pick(L);f=L.filter(x=>x===l).length;q=`A letter is chosen at random from the word <b>${w}</b>. What is the probability it is the letter <b>${l}</b>?`;ex=`${f} of the ${L.length} letters are ${l} → ${f}/${L.length} = ${fr(f,L.length)}`;}
+  else if(v===1){f=L.filter(x=>'AEIOU'.includes(x)).length;q=`A letter is chosen at random from the word <b>${w}</b>. What is the probability it is a <b>vowel</b>?`;ex=`${f} vowels out of ${L.length} letters → ${f}/${L.length} = ${fr(f,L.length)}`;}
+  else{const s=pick(['AT','MS','AI','RT']);f=L.filter(x=>s.includes(x)).length;q=`A letter is chosen at random from the word <b>${w}</b>. What is the probability it is <b>${s[0]} or ${s[1]}</b>?`;ex=`${f} letters (${L.filter(x=>s.includes(x)).join(', ')}) out of ${L.length} → ${f}/${L.length} = ${fr(f,L.length)}`;}
+  return{vis:`<div class="ch-big" style="letter-spacing:4px;font-size:44px">${w}</div>`,q:q+fracQ,ans:f/L.length,extra:['pr-letters'],ex};},
+ M5(){const N=pick([20,24,30]),C=Array.from({length:N},(_,i)=>i+1);const o=pick([['a multiple of 4',x=>x%4===0],['a prime number',x=>x>1&&!Array.from({length:x},(_,i)=>i).some(i=>i>1&&x%i===0)],['a square number',x=>Math.sqrt(x)%1===0],[`a factor of ${N}`,x=>N%x===0],['a multiple of 3 or 5',x=>x%3===0||x%5===0],['an odd number greater than 10',x=>x%2===1&&x>10]]);
+  const f=C.filter(o[1]).length;return{vis:`<div class="ch-big">🔢</div><div class="ch-cap">Cards numbered 1 to ${N}</div>`,q:`${N} cards are numbered 1 to ${N}. One card is picked at random. What is the probability it is <b>${o[0]}</b>?${fracQ}`,ans:f/N,extra:['pr-number-cards'],ex:`${f} cards: ${C.filter(o[1]).join(', ')} → ${f}/${N} = ${fr(f,N)}`};},
+ M6(){const v=R(0,3);
+  if(v===0){const n=pick([50,100,200]),k=R(Math.round(n*.2),Math.round(n*.45));return{vis:'<div class="ch-big">🎡</div>',q:`A biased spinner is spun <b>${n}</b> times and lands on red <b>${k}</b> times. Use the results to estimate the probability of red.`,ans:k/n,extra:['pr-relative-freq','pr-estimate'],ex:`Relative frequency = ${k}/${n} = ${fr(k,n)} = ${+(k/n).toFixed(3)}`};}
+  if(v===1){let p,N;do{p=pick([.03,.05,.15,.2,.35,.45]);N=pick([40,60,100,200,500,2000]);}while(Math.abs(p*N-Math.round(p*N))>1e-9);
+   return{vis:'<div class="ch-big">🔮</div>',q:`The probability that a day is rainy is <b>${p}</b>. Out of <b>${N}</b> days, how many rainy days would you expect? (whole number)`,ans:Math.round(p*N),extra:['pr-expected'],ex:`${p} × ${N} = ${Math.round(p*N)}`};}
+  if(v===2){const n=pick([40,50,80]),k=pick([8,10,12,14,16,20].filter(x=>x<n/2)),N=pick([400,600,1000,1200,2000]);
+   return{vis:'<div class="ch-big">📋</div>',q:`In a survey of ${n} people, ${k} said they cycle to work. Estimate how many of <b>${N}</b> people would cycle to work. (whole number)`,ans:Math.round(k/n*N),extra:['pr-estimate','pr-expected'],ex:`${k}/${n} × ${N} = ${Math.round(k/n*N)}`};}
+  const N=pick([60,120,180,300]);return{vis:'<div class="ch-big">🎲</div>',q:`A fair dice is rolled <b>${N}</b> times. How many times would you expect to get a <b>six</b>? (whole number)`,ans:N/6,extra:['pr-expected'],ex:`1/6 × ${N} = ${N/6}`};},
+ M7(){let f,T;do{f=Array.from({length:6},()=>R(4,20));T=f.reduce((a,b)=>a+b,0);}while(T<40);const s=R(1,6);
+  const t=`<table class="ch-grid ch-tw"><tr><th>Score</th>${[1,2,3,4,5,6].map(x=>`<th>${x}</th>`).join('')}</tr><tr><th>Freq.</th>${f.map(x=>`<td>${x}</td>`).join('')}</tr></table>`;
+  return{vis:t,q:`A dice was thrown ${T} times. The results are in the table. What is the <b>relative frequency</b> of getting a <b>${s}</b>?${fracQ}`,ans:f[s-1]/T,extra:['pr-relative-freq','pr-frequency-table'],ex:`${f[s-1]} out of ${T} throws → ${f[s-1]}/${T} = ${fr(f[s-1],T)}`};},
+ M8(){const a=pick([3,4]),b=pick([4,5]),v=R(0,2);let f=0,q;const t=(x,y)=>v===0?x+y===K:v===1?(x*y)%2===0:x===y;let K=R(3,a+b-1);
+  for(let x=1;x<=a;x++)for(let y=1;y<=b;y++)if(t(x,y))f++;
+  q=v===0?`the total is <b>${K}</b>`:v===1?`the <b>product</b> of the two scores is <b>even</b>`:`both spinners show the <b>same</b> number`;
+  return{vis:`<div class="ch-big">🎡🎡</div><div class="ch-cap">Spinner A: 1–${a} · Spinner B: 1–${b}</div>`,q:`Spinner A has numbers 1 to ${a} and spinner B has numbers 1 to ${b}, all equally likely. Both are spun. What is the probability that ${q}?${fracQ}`,ans:f/(a*b),extra:['pr-sample-space','pr-two-spinners'],ex:`${f} favourable outcomes out of ${a} × ${b} = ${a*b} → ${f}/${a*b} = ${fr(f,a*b)}`};},
+ M9(){const a=pick([.3,.4,.5,.6]),b=pick([.2,.3,.4,.5]),c=pick([.1,.15,.2]);const v=R(0,1);
+  if(v===0)return{vis:'<div class="ch-big">⭕⭕</div>',q:`P(A) = ${a}, P(B) = ${b} and P(A and B) = ${c}. Find P(A or B). (decimal)`,ans:dec(a+b-c),extra:['pr-or','pr-overlap','pr-addition-rule'],ex:`P(A or B) = P(A) + P(B) − P(A and B) = ${a} + ${b} − ${c} = ${dec(a+b-c)}`};
+  return{vis:'<div class="ch-big">⭕⭕</div>',q:`P(A) = ${a}, P(B) = ${b} and P(A or B) = ${dec(a+b-c)}. Find P(A and B). (decimal)`,ans:c,extra:['pr-and','pr-overlap','pr-addition-rule'],ex:`P(A and B) = P(A) + P(B) − P(A or B) = ${a} + ${b} − ${dec(a+b-c)} = ${c}`};},
+ M10(){let N,x,y;do{N=pick([100,200,400,500]);x=pick([20,25,40,60,75]);y=pick([20,25,40,50,60]);}while((N*x/100*y/100)%1!==0||(N*x/100*(100-y)/100)%1!==0);
+  const v=R(0,1);return{vis:'<div class="ch-big">🌳</div>',q:`${N} students were asked about sport. <b>${x}%</b> play football. Of the football players, <b>${y}%</b> also play cricket. How many students play football ${v?'<b>but not</b> cricket':'<b>and</b> cricket'}? (whole number)`,ans:v?N*x/100*(100-y)/100:N*x/100*y/100,extra:['pr-frequency-tree'],ex:`${N} × ${x}% = ${N*x/100} play football; ${v?(100-y):y}% of ${N*x/100} = ${v?N*x/100*(100-y)/100:N*x/100*y/100}`};},
+ M11(){const r=pick([.2,.3,.4]),a=pick([.5,.6,.8]),b=pick([.1,.2,.3]),v=R(0,1);
+  return{vis:'<div class="ch-big">🌧️</div>',q:`The probability of rain is <b>${r}</b>. If it rains, the probability Tom is late is <b>${a}</b>. If it does not rain, the probability he is late is <b>${b}</b>. Find the probability that ${v?'Tom is <b>late</b>':'it rains <b>and</b> Tom is late'}. (decimal)`,ans:v?dec(r*a+(1-r)*b):dec(r*a),extra:['pr-tree','pr-dependent','pr-decimals'],ex:v?`Rain and late: ${r} × ${a} = ${dec(r*a)}; no rain and late: ${dec(1-r)} × ${b} = ${dec((1-r)*b)}; add → ${dec(r*a+(1-r)*b)}`:`${r} × ${a} = ${dec(r*a)}`};},
+ M12(){const v=R(0,5);
+  if(v===0)return{vis:'<div class="ch-big">🎲🎲</div>',q:`A fair dice is rolled twice. What is the probability of a <b>six</b> then an <b>even</b> number?${fracQ}`,ans:1/12,extra:['pr-and','pr-independent'],ex:`1/6 × 3/6 = 3/36 = 1/12`};
+  if(v===1)return{vis:'<div class="ch-big">🎲🎲</div>',q:`A fair dice is rolled twice. What is the probability of getting <b>two sixes</b>?${fracQ}`,ans:1/36,extra:['pr-and','pr-independent'],ex:`1/6 × 1/6 = 1/36`};
+  if(v===2)return{vis:'<div class="ch-big">🎲🎲</div>',q:`A fair dice is rolled twice. What is the probability of getting <b>at least one six</b>?${fracQ}`,ans:11/36,extra:['pr-at-least-one'],ex:`1 − P(no sixes) = 1 − 5/6 × 5/6 = 1 − 25/36 = 11/36`};
+  if(v===3)return{vis:'<div class="ch-big">🪙🎲</div>',q:`A fair coin is flipped and a fair dice is rolled. What is the probability of a <b>head</b> and an <b>even</b> number?${fracQ}`,ans:1/4,extra:['pr-and','pr-independent'],ex:`1/2 × 1/2 = 1/4`};
+  if(v===4){const[c,t]=bagCounts(6,10,['red','blue']);return{vis:bag(c),q:`A ball is picked, its colour noted, and it is put back. This is done <b>3 times</b>. What is the probability all three are <b>red</b>?${fracQ}`,ans:Math.pow(c.red/t,3),extra:['pr-and','pr-independent','pr-with-replacement'],ex:`(${c.red}/${t})³ = ${Math.pow(c.red,3)}/${Math.pow(t,3)} = ${fr(Math.pow(c.red,3),Math.pow(t,3))}`};}
+  return{vis:'<div class="ch-big">🎲</div>',q:`A fair dice is rolled <b>3 times</b>. What is the probability of <b>no sixes</b>?${fracQ}`,ans:125/216,extra:['pr-and','pr-independent'],ex:`5/6 × 5/6 × 5/6 = 125/216`};},
+ M13(){const v=R(0,3);
+  if(v===0){const d=pick([[7,20],[3,4],[2,5],[9,10],[1,8],[13,20]]);return{vis:'<div class="ch-big">🔁</div>',q:`A probability is ${d[0]}/${d[1]}. Write it as a <b>percentage</b> (just the number, without %). (number)`,ans:d[0]/d[1]*100,extra:['pr-forms'],ex:`${d[0]} ÷ ${d[1]} = ${d[0]/d[1]} → × 100 = ${d[0]/d[1]*100}%`};}
+  if(v===1){const p=pick([35,65,8,45,72,15]);return{vis:'<div class="ch-big">🔁</div>',q:`A probability is <b>${p}%</b>. Write it as a <b>decimal</b>.`,ans:p/100,extra:['pr-forms'],ex:`${p} ÷ 100 = ${p/100}`};}
+  if(v===2){const d=pick([[2,25],[3,20],[1,4],[7,50],[3,5]]);return{vis:'<div class="ch-big">🔁</div>',q:`Write the decimal <b>${dec(d[0]/d[1])}</b> as a fraction.${fracQ}`,ans:d[0]/d[1],extra:['pr-forms'],ex:`${dec(d[0]/d[1])} = ${d[0]}/${d[1]}`};}
+  const p=pick([20,35,40,65,80]);return{vis:'<div class="ch-big">🌦️</div>',q:`The probability of rain is <b>${p}%</b>. Write the probability it does <b>not</b> rain as a <b>decimal</b>.`,ans:(100-p)/100,extra:['pr-forms','pr-not'],ex:`100% − ${p}% = ${100-p}% = ${(100-p)/100}`};},
+ M14(){const v=R(0,4);
+  if(v===0)return{vis:'<div class="ch-big">🔢</div>',q:`How many different <b>3-digit numbers</b> can be made using the digits 1, 2, 3 and 4 if <b>no digit is repeated</b>? (whole number)`,ans:24,extra:['pr-product-rule','pr-no-repeats'],ex:`4 × 3 × 2 = 24`};
+  if(v===1)return{vis:'<div class="ch-big">🔢</div>',q:`How many different <b>3-digit numbers</b> can be made using the digits 1 to 5 if digits <b>can be repeated</b>? (whole number)`,ans:125,extra:['pr-product-rule','pr-repeats'],ex:`5 × 5 × 5 = 125`};
+  if(v===2){const n=R(5,9);return{vis:'<div class="ch-big">🏅</div>',q:`A team has <b>${n}</b> players. A captain and a vice-captain are chosen (different players). In how many ways can this be done? (whole number)`,ans:n*(n-1),extra:['pr-product-rule','pr-no-repeats'],ex:`${n} choices for captain, then ${n-1} for vice-captain → ${n} × ${n-1} = ${n*(n-1)}`};}
+  if(v===3)return{vis:'<div class="ch-big">🚗</div>',q:`A number plate has <b>2 letters</b> (26 choices each) followed by <b>2 digits</b> (0–9). How many different plates are possible? (whole number)`,ans:67600,extra:['pr-product-rule','pr-codes','pr-repeats'],ex:`26 × 26 × 10 × 10 = 67 600`};
+  return{vis:'<div class="ch-big">🪙🪙🪙🪙</div>',q:`A fair coin is flipped <b>4 times</b>. How many different outcomes are there? (whole number)`,ans:16,extra:['pr-product-rule','pr-listing'],ex:`2 × 2 × 2 × 2 = 16`};}
+});
+POOL.push(['M1','M2'],['M3'],['M4','M5'],['M8'],['M6','M7'],['M13'],['M12'],['M9','M10'],['M11'],['M14'],['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12','M13','M14']);
 window.__ch={QT,parseAns,POOL};
 REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probability',
- desc:'Probability puzzles with bags of balls, spinners and two-dice grids. Answer 5 questions per level — get 4 right to pass!',skills:['probability','fractions','sample space'],
- levels:['Bags · one colour','Bags · “not” events','Bags · “or” events','Spinners','Two dice · sums','Two dice · at least / less than','Two dice · tricky events','Two picks · with replacement','Two picks · without replacement','Expected & relative frequency','Probability rules','Boss mix'],
- how:'Read the picture, then tap a box and type your answer: the top box is the numerator and the bottom box is the denominator, like 3 over 10 (any equivalent fraction is accepted). If the question asks for a decimal, just fill in the top box. You can use the keypad or your keyboard (Tab switches boxes).',
+ desc:'GCSE probability and counting: bags, spinners, dice grids, listing outcomes, two-way tables, Venn diagrams, product rule, tree diagrams. Answer 5 questions per level — get 4 right to pass!',skills:['probability','fractions','sample space','counting','tree diagrams','Venn diagrams'],
+ levels:['Bags · one colour','Bags · “not” events','Bags · “or” events','Spinners','Two dice · sums','Two dice · at least / less than','Two dice · tricky events','Two picks · with replacement','Two picks · without replacement','Expected & relative frequency','Probability rules','Boss mix',
+  'Listing outcomes','Two-way tables','Venn diagrams','Counting · product rule (H)','Counting · arrangements (H)','Pairs & handshakes','Probability arithmetic','Tree diagrams · with replacement','Tree diagrams · without replacement (H)','Boss 2 · GCSE mix',
+  'Certain, impossible & one dice','Playing cards','Letters & number cards','Two spinners','Estimates & expected','Fractions, decimals & %','Combined events','Overlapping events & frequency trees','Dependent trees','Counting extras','Boss 3 · GCSE mix'],
+ how:'Read the picture, then tap a box and type your answer: the top box is the numerator and the bottom box is the denominator, like 3 over 10 (any equivalent fraction is accepted). If the question asks for a decimal or a whole number, just fill in the top box. You can use the keypad or your keyboard (Tab switches boxes).',
  art:'<div class="minich">🎲🎲</div>',
  mount(root,lv,ctx){
   const pool=POOL[lv-1];let qs,qi,right,cur,num,den,fld,answered,res,tries;
@@ -93,7 +241,7 @@ REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probab
     reveal();
     draw((tries?'✅ Correct this time! (only first-try answers count towards passing) ':'✅ Correct! ')+cur.ex,true);
   }
-  function reveal(){if(cur.vis.includes('ch-grid')||cur.hl){const hl=cur.hl;if(hl)cur.vis=grid(hl);}}
+  function reveal(){if(cur.rev){cur.vis=cur.rev();return;}if(cur.vis.includes('ch-grid')||cur.hl){const hl=cur.hl;if(hl)cur.vis=grid(hl);}}
   function advance(){
     if(qi<4){qi++;next();return;}
     {ctx.q=levelQ(ctx.id,ctx.lv);ctx.perf={right,of:5,wrong:res.filter(r=>!r.ok).map(r=>r.qt)};}

@@ -96,6 +96,39 @@ pr-mutually-exclusive|mutually exclusive|互斥事件
 pr-expected|expected number|期望次數
 pr-relative-freq|relative frequency|相對頻率
 pr-ratio|from a ratio|由比例
+pr-listing|systematic listing|有系統列出
+pr-two-way|two-way table|雙向表
+pr-venn|Venn diagram|文氏圖
+pr-conditional|given that (conditional)|已知條件概率
+pr-product-rule|product rule|乘法原理
+pr-codes|codes and PINs|密碼
+pr-repeats|repeats allowed|可重複
+pr-no-repeats|no repeats|不可重複
+pr-arrangements|arrangements (orders)|排列次序
+pr-restricted|with a restriction|有限制
+pr-pairs|pairs and handshakes|配對／握手
+pr-fractions|fraction arithmetic|分數運算
+pr-decimals|decimal arithmetic|小數運算
+pr-missing|find a missing probability|求缺失概率
+pr-sum-to-1|probabilities sum to 1|概率總和為 1
+pr-algebra|with algebra|加代數
+pr-tree|tree diagram|樹形圖
+pr-different|different colours|唔同顏色
+pr-at-least-one|at least one|至少一個
+pr-exactly-one|exactly one|剛好一個
+pr-certain-impossible|certain and impossible|必然同不可能
+pr-single-dice|one dice|1 粒骰
+pr-cards|playing cards|撲克牌
+pr-overlap|overlapping events|重疊事件
+pr-addition-rule|addition rule (overlap)|加法定律（重疊）
+pr-letters|letters of a word|字母
+pr-number-cards|number cards|數字卡
+pr-estimate|estimate from data|由數據估計
+pr-frequency-table|frequency table|頻數表
+pr-two-spinners|two spinners|兩個轉盤
+pr-frequency-tree|frequency tree|頻數樹
+pr-dependent|dependent events|相依事件
+pr-forms|fractions, decimals, percentages|分數、小數、百分比
 an-estimate|estimate an angle|估計角度
 an-straight-line|angles on a line|直線上嘅角
 an-around-point|angles around a point|一點周圍嘅角
@@ -215,7 +248,15 @@ const QTAGS={
   P6:Q(['pc-increase'],4,['pc-vat']),P7:Q(['pc-as-percent'],3),P8:Q(['pc-change'],5),P9:Q(['pc-reverse','pc-increase'],6),P10:Q(['pc-reverse','pc-decrease'],6),P11:Q(['pc-interest'],6,['pc-simple-interest','pc-compound-interest'])},
  chance:{T1:Q(['pr-bag'],1),T2:Q(['pr-bag','pr-not'],2),T3:Q(['pr-bag','pr-or'],3),T4:Q(['pr-spinner'],2),T5:Q(['pr-two-dice','pr-sample-space'],4),
   T6:Q(['pr-two-dice','pr-sample-space','pr-at-least'],4),T7:Q(['pr-two-dice','pr-sample-space'],5),T8:Q(['pr-bag','pr-and','pr-independent','pr-with-replacement'],5),
-  T9:Q(['pr-bag','pr-and','pr-without-replacement'],6),T10:Q(['pr-expected'],4),T11:Q(['pr-relative-freq'],3),T12:Q([],5,['pr-not','pr-or','pr-mutually-exclusive','pr-and','pr-independent','pr-ratio'])},
+  T9:Q(['pr-bag','pr-and','pr-without-replacement'],6),T10:Q(['pr-expected'],4),T11:Q(['pr-relative-freq'],3),T12:Q([],5,['pr-not','pr-or','pr-mutually-exclusive','pr-and','pr-independent','pr-ratio']),
+  N1:Q(['pr-listing','pr-product-rule'],2),N2:Q(['pr-listing'],3),N3:Q(['pr-two-way'],3,['pr-conditional']),N4:Q(['pr-venn'],4,['pr-conditional']),
+  N5:Q(['pr-product-rule'],4),N6:Q(['pr-product-rule','pr-codes'],5,['pr-repeats','pr-no-repeats']),N7:Q(['pr-arrangements'],5,['pr-restricted']),N8:Q(['pr-pairs','pr-listing'],5),
+  N9:Q(['pr-fractions'],3,['pr-and','pr-independent','pr-or','pr-mutually-exclusive','pr-not']),N10:Q(['pr-missing','pr-sum-to-1'],3,['pr-algebra']),
+  N11:Q(['pr-tree','pr-independent','pr-decimals'],5,['pr-and','pr-exactly-one','pr-at-least-one']),N12:Q(['pr-tree','pr-without-replacement'],7,['pr-different','pr-and','pr-at-least-one']),
+  M1:Q(['pr-certain-impossible'],1),M2:Q(['pr-single-dice'],2),M3:Q(['pr-cards'],3,['pr-or','pr-overlap']),M4:Q(['pr-letters'],3),M5:Q(['pr-number-cards'],3),
+  M6:Q([],4,['pr-relative-freq','pr-estimate','pr-expected']),M7:Q(['pr-relative-freq','pr-frequency-table'],3),M8:Q(['pr-sample-space','pr-two-spinners'],4),
+  M9:Q(['pr-overlap','pr-addition-rule'],6,['pr-or','pr-and']),M10:Q(['pr-frequency-tree'],5),M11:Q(['pr-tree','pr-dependent','pr-decimals'],7),
+  M12:Q([],5,['pr-and','pr-independent','pr-at-least-one','pr-with-replacement']),M13:Q(['pr-forms'],2,['pr-not']),M14:Q(['pr-product-rule'],4,['pr-codes','pr-repeats','pr-no-repeats','pr-listing'])},
  angles:{A1:Q(['an-estimate'],2),A2:Q(['an-straight-line'],1),A3:Q(['an-around-point'],2),A4:Q(['an-triangle'],2),A5:Q(['an-triangle','an-isosceles'],3),
   A6:Q(['an-quadrilateral'],3),A7:Q(['an-crossing-lines'],3,['an-vertically-opposite','an-straight-line']),A8:Q(['an-parallel'],5,['an-corresponding','an-alternate','an-co-interior']),A9:Q(['an-triangle','an-exterior'],4),A10:Q([],5,['an-polygon-sum','an-polygon-exterior','an-polygon-interior']),
   A11:Q(['an-straight-line','an-algebra'],7),A12:Q(['an-triangle','an-algebra'],6)}
@@ -238,7 +279,7 @@ const RULE={
 /* per-question meta for quiz games (called when each question is shown) */
 window.quizQ=function(game,key,cur){
   const k=cur.k||key,m=(QTAGS[game]||{})[k];if(!m)return null;
-  const tags=[...m.t],r=RULE[game]&&RULE[game](k,cur);if(r)tags.push(...r);if(cur.simplest)tags.push('simplest-form');
+  const tags=[...m.t],r=RULE[game]&&RULE[game](k,cur);if(r)tags.push(...r);if(cur.extra)tags.push(...cur.extra);if(cur.simplest)tags.push('simplest-form');
   return fin(tags,m.d,{qt:k,eq:plain(cur.q)});
 };
 /* level meta for a pool of question types: tags in every type = tags; in some types = sometimes */
