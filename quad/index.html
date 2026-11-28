@@ -439,6 +439,10 @@ function markDone(id,lv){
   if(ctx)ctx.t0=Date.now();persist();return gain;
 }
 const REG=[];
+/* Games hidden from students (menu, totals and direct URLs). Teachers can still open them with ?preview=all */
+const STUDENT_HIDDEN=['derby','angles','lines','fraction','quad'];
+const SHOW_ALL=/[?&]preview=all\b/.test(location.search);
+const visibleGame=G=>SHOW_ALL||!STUDENT_HIDDEN.includes(G.id);
 let ctx=null;
 const CATS=['All','GCSE Maths','General Puzzles','Basic Skills Practice','News and Video'];let curCat='All',curTag='All';
 const TAGS=['Algebra','Geometry','Number and Arithmetic','Probability / Statistics','Strategies and planning','Calculus'];
@@ -522,7 +526,7 @@ function showWin(title,text,again,againLabel,first,stay){
 }
 document.addEventListener('keydown',e=>{if(ctx&&ctx.keys&&!e.target.matches('input,textarea'))ctx.keys(e)});
 $('#back').onclick=()=>{goMenu();document.title='Maths Puzzle Arcade';};
-function routeNow(){const sg=location.pathname.split('/').filter(Boolean);const gid=sg[sg.length-1];if(REG.some(x=>x.id===gid)){const m=/^#(\d+)$/.exec(location.hash);const g=REG.find(x=>x.id===gid);const n=m?+m[1]:0;openGame(gid,n>=1&&n<=g.levels.length?n:undefined,true);}else goMenu(true);}
+function routeNow(){const sg=location.pathname.split('/').filter(Boolean);const gid=sg[sg.length-1];if(REG.some(x=>x.id===gid&&visibleGame(x))){const m=/^#(\d+)$/.exec(location.hash);const g=REG.find(x=>x.id===gid);const n=m?+m[1]:0;openGame(gid,n>=1&&n<=g.levels.length?n:undefined,true);}else goMenu(true);}
 window.addEventListener('popstate',routeNow);
 
 /* reusable number pad: returns element; onKey gets '0'-'9','-','.','del','ok' */
@@ -538,12 +542,12 @@ function renderMenu(){
   const bar=$('#cats');bar.innerHTML='';
   CATS.forEach(c=>{const b=el('button','cat'+(c===curCat?' on':''),(CAT_EMO[c]?CAT_EMO[c]+' ':'')+c);b.onclick=()=>{curCat=c;curTag='All';renderMenu()};bar.appendChild(b);});
   const g=$('#cards');g.innerHTML='';g.classList.toggle('newsgrid',curCat==='News and Video');
-  const total=REG.reduce((a,G)=>a+doneCount(G.id),0),all=REG.reduce((a,G)=>a+G.levels.length,0);
+  const VIS=REG.filter(visibleGame);const total=VIS.reduce((a,G)=>a+doneCount(G.id),0),all=VIS.reduce((a,G)=>a+G.levels.length,0);
   const u=me()||{done:{}};$('#overall').innerHTML=`<button class="who" id="who">👤 ${esc(DB.cur||'Player')} ▾</button><span class="pts">⭐ ${ptsOf(u)} pts</span><span>${total} / ${all} levels</span>`;$('#who').onclick=()=>me()?showProfile():showLogin(true);
   const tb=$('#tagbar');tb.innerHTML='';
   if(curCat==='News and Video'){tb.hidden=true;renderNews(g);return;}
   tb.hidden=false;
-  const inCat=REG.filter(G=>curCat==='All'||catOf(G)===curCat);
+  const inCat=VIS.filter(G=>curCat==='All'||catOf(G)===curCat);
   const mk=(t,n)=>{const b=el('button','tagc'+(t===curTag?' on':''),`${t==='All'?'All topics':t} <small>${n}</small>`);b.onclick=()=>{curTag=t;renderMenu()};tb.appendChild(b);};
   mk('All',inCat.length);TAGS.forEach(t=>mk(t,inCat.filter(G=>tagsOf(G).includes(t)).length));
   const list=inCat.filter(G=>curTag==='All'||tagsOf(G).includes(curTag));
