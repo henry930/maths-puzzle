@@ -363,3 +363,5 @@ a.card.news{text-decoration:none;color:inherit}
 .pop{animation:fapop .35s}@keyframes fapop{0%{transform:scale(.7);opacity:.3}100%{transform:scale(1);opacity:1}}
 .fi-scene{overflow:hidden}.fi-padw{pointer-events:none}
 .fi-scene{padding-top:16vh}
+
+#glevels{display:none;flex-basis:100%;background:rgba(0,0,0,.18);border-radius:14px;padding:8px}#glevels.open{display:flex}#lvbtn{white-space:nowrap}
