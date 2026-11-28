@@ -1871,11 +1871,72 @@ Object.assign(QT,{
 const POOL=[['T1'],['T1','T2'],['T1','T2','T3'],['T4'],['T5'],['T5','T6'],['T6','T7'],['T8'],['T8','T9'],['T10','T11'],['T12'],['T3','T4','T6','T7','T9','T10','T11','T12'],
  ['N1','N2'],['N3'],['N4'],['N5','N6'],['N7'],['N8','N2'],['N9','N10'],['N11'],['N12'],['N3','N4','N6','N7','N9','N10','N11','N12']];
 function parseAns(s){s=s.trim();if(!s)return NaN;if(s.endsWith('%'))return parseFloat(s)/100;if(s.includes('/')){const[a,b]=s.split('/');return parseFloat(a)/parseFloat(b);}return parseFloat(s);}
+/* ===== Levels 23+ : extra GCSE probability variety ===== */
+const fracQ=' (fraction)';
+Object.assign(QT,{
+ M1(){const v=R(0,3);
+  if(v===0){const n=R(7,9);return{vis:'<div class="ch-big">🎲</div>',q:`A fair 6-sided dice is rolled. What is the probability of rolling a <b>${n}</b>?`,ans:0,extra:['pr-certain-impossible'],ex:`There is no ${n} on the dice, so it is impossible → 0`};}
+  if(v===1){return{vis:'<div class="ch-big">🎲</div>',q:`A fair 6-sided dice is rolled. What is the probability the score is <b>less than 7</b>?`,ans:1,extra:['pr-certain-impossible'],ex:`Every score is less than 7, so it is certain → 1`};}
+  if(v===2){const n=R(4,9);return{vis:bag({red:n}),q:`A bag contains only red balls. What is the probability of picking a <b>blue</b> ball?`,ans:0,extra:['pr-certain-impossible'],ex:`There are no blue balls, so it is impossible → 0`};}
+  const n=R(4,9);return{vis:bag({green:n}),q:`A bag contains only green balls. What is the probability of picking a <b>green</b> ball?`,ans:1,extra:['pr-certain-impossible'],ex:`Every ball is green, so it is certain → 1`};},
+ M2(){const o=pick([['a prime number',x=>[2,3,5].includes(x)],['a factor of 12',x=>12%x===0],['a square number',x=>x===1||x===4],['greater than 4',x=>x>4],['a 2 or a multiple of 3',x=>x===2||x%3===0],['not a 6',x=>x!==6]]);
+  const f=[1,2,3,4,5,6].filter(o[1]);return{vis:'<div class="ch-big">🎲</div>',q:`A fair 6-sided dice is rolled. What is the probability the score is <b>${o[0]}</b>?${fracQ}`,ans:f.length/6,extra:['pr-single-dice'],ex:`Scores that work: ${f.join(', ')} → ${f.length}/6 = ${fr(f.length,6)}`};},
+ M3(){const o=pick([['a <b>heart</b>',13,'13 hearts'],['a <b>king</b>',4,'4 kings'],['a <b>red</b> card',26,'26 red cards (13 hearts + 13 diamonds)'],['a <b>picture card</b> (J, Q or K)',12,'3 picture cards in each of 4 suits = 12'],['the <b>ace of spades</b>',1,'only 1 ace of spades'],['a <b>king or a heart</b>',16,'13 hearts + 3 other kings (the king of hearts is already counted) = 16'],['<b>not</b> a heart',39,'52 − 13 hearts = 39'],['a <b>5 or a 6</b>',8,'4 fives + 4 sixes = 8']]);
+  return{vis:'<div class="ch-big">🃏</div><div class="ch-cap">A standard pack: 52 cards, 4 suits (♠ ♣ ♥ ♦) of 13 cards — A, 2–10, J, Q, K</div>',q:`One card is taken at random from a standard pack of 52 cards. What is the probability it is ${o[0]}?${fracQ}`,ans:o[1]/52,extra:['pr-cards',...(o[1]===16?['pr-or','pr-overlap']:[])],ex:`${o[2]} out of 52 → ${o[1]}/52 = ${fr(o[1],52)}`};},
+ M4(){const w=pick(['MATHEMATICS','PROBABILITY','STATISTICS','ALGEBRA']),L=w.split(''),v=R(0,2);let q,f,ex;
+  if(v===0){const l=pick(L);f=L.filter(x=>x===l).length;q=`A letter is chosen at random from the word <b>${w}</b>. What is the probability it is the letter <b>${l}</b>?`;ex=`${f} of the ${L.length} letters are ${l} → ${f}/${L.length} = ${fr(f,L.length)}`;}
+  else if(v===1){f=L.filter(x=>'AEIOU'.includes(x)).length;q=`A letter is chosen at random from the word <b>${w}</b>. What is the probability it is a <b>vowel</b>?`;ex=`${f} vowels out of ${L.length} letters → ${f}/${L.length} = ${fr(f,L.length)}`;}
+  else{const s=pick(['AT','MS','AI','RT']);f=L.filter(x=>s.includes(x)).length;q=`A letter is chosen at random from the word <b>${w}</b>. What is the probability it is <b>${s[0]} or ${s[1]}</b>?`;ex=`${f} letters (${L.filter(x=>s.includes(x)).join(', ')}) out of ${L.length} → ${f}/${L.length} = ${fr(f,L.length)}`;}
+  return{vis:`<div class="ch-big" style="letter-spacing:4px;font-size:44px">${w}</div>`,q:q+fracQ,ans:f/L.length,extra:['pr-letters'],ex};},
+ M5(){const N=pick([20,24,30]),C=Array.from({length:N},(_,i)=>i+1);const o=pick([['a multiple of 4',x=>x%4===0],['a prime number',x=>x>1&&!Array.from({length:x},(_,i)=>i).some(i=>i>1&&x%i===0)],['a square number',x=>Math.sqrt(x)%1===0],[`a factor of ${N}`,x=>N%x===0],['a multiple of 3 or 5',x=>x%3===0||x%5===0],['an odd number greater than 10',x=>x%2===1&&x>10]]);
+  const f=C.filter(o[1]).length;return{vis:`<div class="ch-big">🔢</div><div class="ch-cap">Cards numbered 1 to ${N}</div>`,q:`${N} cards are numbered 1 to ${N}. One card is picked at random. What is the probability it is <b>${o[0]}</b>?${fracQ}`,ans:f/N,extra:['pr-number-cards'],ex:`${f} cards: ${C.filter(o[1]).join(', ')} → ${f}/${N} = ${fr(f,N)}`};},
+ M6(){const v=R(0,3);
+  if(v===0){const n=pick([50,100,200]),k=R(Math.round(n*.2),Math.round(n*.45));return{vis:'<div class="ch-big">🎡</div>',q:`A biased spinner is spun <b>${n}</b> times and lands on red <b>${k}</b> times. Use the results to estimate the probability of red.`,ans:k/n,extra:['pr-relative-freq','pr-estimate'],ex:`Relative frequency = ${k}/${n} = ${fr(k,n)} = ${+(k/n).toFixed(3)}`};}
+  if(v===1){let p,N;do{p=pick([.03,.05,.15,.2,.35,.45]);N=pick([40,60,100,200,500,2000]);}while(Math.abs(p*N-Math.round(p*N))>1e-9);
+   return{vis:'<div class="ch-big">🔮</div>',q:`The probability that a day is rainy is <b>${p}</b>. Out of <b>${N}</b> days, how many rainy days would you expect? (whole number)`,ans:Math.round(p*N),extra:['pr-expected'],ex:`${p} × ${N} = ${Math.round(p*N)}`};}
+  if(v===2){const n=pick([40,50,80]),k=pick([8,10,12,14,16,20].filter(x=>x<n/2)),N=pick([400,600,1000,1200,2000]);
+   return{vis:'<div class="ch-big">📋</div>',q:`In a survey of ${n} people, ${k} said they cycle to work. Estimate how many of <b>${N}</b> people would cycle to work. (whole number)`,ans:Math.round(k/n*N),extra:['pr-estimate','pr-expected'],ex:`${k}/${n} × ${N} = ${Math.round(k/n*N)}`};}
+  const N=pick([60,120,180,300]);return{vis:'<div class="ch-big">🎲</div>',q:`A fair dice is rolled <b>${N}</b> times. How many times would you expect to get a <b>six</b>? (whole number)`,ans:N/6,extra:['pr-expected'],ex:`1/6 × ${N} = ${N/6}`};},
+ M7(){let f,T;do{f=Array.from({length:6},()=>R(4,20));T=f.reduce((a,b)=>a+b,0);}while(T<40);const s=R(1,6);
+  const t=`<table class="ch-grid ch-tw"><tr><th>Score</th>${[1,2,3,4,5,6].map(x=>`<th>${x}</th>`).join('')}</tr><tr><th>Freq.</th>${f.map(x=>`<td>${x}</td>`).join('')}</tr></table>`;
+  return{vis:t,q:`A dice was thrown ${T} times. The results are in the table. What is the <b>relative frequency</b> of getting a <b>${s}</b>?${fracQ}`,ans:f[s-1]/T,extra:['pr-relative-freq','pr-frequency-table'],ex:`${f[s-1]} out of ${T} throws → ${f[s-1]}/${T} = ${fr(f[s-1],T)}`};},
+ M8(){const a=pick([3,4]),b=pick([4,5]),v=R(0,2);let f=0,q;const t=(x,y)=>v===0?x+y===K:v===1?(x*y)%2===0:x===y;let K=R(3,a+b-1);
+  for(let x=1;x<=a;x++)for(let y=1;y<=b;y++)if(t(x,y))f++;
+  q=v===0?`the total is <b>${K}</b>`:v===1?`the <b>product</b> of the two scores is <b>even</b>`:`both spinners show the <b>same</b> number`;
+  return{vis:`<div class="ch-big">🎡🎡</div><div class="ch-cap">Spinner A: 1–${a} · Spinner B: 1–${b}</div>`,q:`Spinner A has numbers 1 to ${a} and spinner B has numbers 1 to ${b}, all equally likely. Both are spun. What is the probability that ${q}?${fracQ}`,ans:f/(a*b),extra:['pr-sample-space','pr-two-spinners'],ex:`${f} favourable outcomes out of ${a} × ${b} = ${a*b} → ${f}/${a*b} = ${fr(f,a*b)}`};},
+ M9(){const a=pick([.3,.4,.5,.6]),b=pick([.2,.3,.4,.5]),c=pick([.1,.15,.2]);const v=R(0,1);
+  if(v===0)return{vis:'<div class="ch-big">⭕⭕</div>',q:`P(A) = ${a}, P(B) = ${b} and P(A and B) = ${c}. Find P(A or B). (decimal)`,ans:dec(a+b-c),extra:['pr-or','pr-overlap','pr-addition-rule'],ex:`P(A or B) = P(A) + P(B) − P(A and B) = ${a} + ${b} − ${c} = ${dec(a+b-c)}`};
+  return{vis:'<div class="ch-big">⭕⭕</div>',q:`P(A) = ${a}, P(B) = ${b} and P(A or B) = ${dec(a+b-c)}. Find P(A and B). (decimal)`,ans:c,extra:['pr-and','pr-overlap','pr-addition-rule'],ex:`P(A and B) = P(A) + P(B) − P(A or B) = ${a} + ${b} − ${dec(a+b-c)} = ${c}`};},
+ M10(){let N,x,y;do{N=pick([100,200,400,500]);x=pick([20,25,40,60,75]);y=pick([20,25,40,50,60]);}while((N*x/100*y/100)%1!==0||(N*x/100*(100-y)/100)%1!==0);
+  const v=R(0,1);return{vis:'<div class="ch-big">🌳</div>',q:`${N} students were asked about sport. <b>${x}%</b> play football. Of the football players, <b>${y}%</b> also play cricket. How many students play football ${v?'<b>but not</b> cricket':'<b>and</b> cricket'}? (whole number)`,ans:v?N*x/100*(100-y)/100:N*x/100*y/100,extra:['pr-frequency-tree'],ex:`${N} × ${x}% = ${N*x/100} play football; ${v?(100-y):y}% of ${N*x/100} = ${v?N*x/100*(100-y)/100:N*x/100*y/100}`};},
+ M11(){const r=pick([.2,.3,.4]),a=pick([.5,.6,.8]),b=pick([.1,.2,.3]),v=R(0,1);
+  return{vis:'<div class="ch-big">🌧️</div>',q:`The probability of rain is <b>${r}</b>. If it rains, the probability Tom is late is <b>${a}</b>. If it does not rain, the probability he is late is <b>${b}</b>. Find the probability that ${v?'Tom is <b>late</b>':'it rains <b>and</b> Tom is late'}. (decimal)`,ans:v?dec(r*a+(1-r)*b):dec(r*a),extra:['pr-tree','pr-dependent','pr-decimals'],ex:v?`Rain and late: ${r} × ${a} = ${dec(r*a)}; no rain and late: ${dec(1-r)} × ${b} = ${dec((1-r)*b)}; add → ${dec(r*a+(1-r)*b)}`:`${r} × ${a} = ${dec(r*a)}`};},
+ M12(){const v=R(0,5);
+  if(v===0)return{vis:'<div class="ch-big">🎲🎲</div>',q:`A fair dice is rolled twice. What is the probability of a <b>six</b> then an <b>even</b> number?${fracQ}`,ans:1/12,extra:['pr-and','pr-independent'],ex:`1/6 × 3/6 = 3/36 = 1/12`};
+  if(v===1)return{vis:'<div class="ch-big">🎲🎲</div>',q:`A fair dice is rolled twice. What is the probability of getting <b>two sixes</b>?${fracQ}`,ans:1/36,extra:['pr-and','pr-independent'],ex:`1/6 × 1/6 = 1/36`};
+  if(v===2)return{vis:'<div class="ch-big">🎲🎲</div>',q:`A fair dice is rolled twice. What is the probability of getting <b>at least one six</b>?${fracQ}`,ans:11/36,extra:['pr-at-least-one'],ex:`1 − P(no sixes) = 1 − 5/6 × 5/6 = 1 − 25/36 = 11/36`};
+  if(v===3)return{vis:'<div class="ch-big">🪙🎲</div>',q:`A fair coin is flipped and a fair dice is rolled. What is the probability of a <b>head</b> and an <b>even</b> number?${fracQ}`,ans:1/4,extra:['pr-and','pr-independent'],ex:`1/2 × 1/2 = 1/4`};
+  if(v===4){const[c,t]=bagCounts(6,10,['red','blue']);return{vis:bag(c),q:`A ball is picked, its colour noted, and it is put back. This is done <b>3 times</b>. What is the probability all three are <b>red</b>?${fracQ}`,ans:Math.pow(c.red/t,3),extra:['pr-and','pr-independent','pr-with-replacement'],ex:`(${c.red}/${t})³ = ${Math.pow(c.red,3)}/${Math.pow(t,3)} = ${fr(Math.pow(c.red,3),Math.pow(t,3))}`};}
+  return{vis:'<div class="ch-big">🎲</div>',q:`A fair dice is rolled <b>3 times</b>. What is the probability of <b>no sixes</b>?${fracQ}`,ans:125/216,extra:['pr-and','pr-independent'],ex:`5/6 × 5/6 × 5/6 = 125/216`};},
+ M13(){const v=R(0,3);
+  if(v===0){const d=pick([[7,20],[3,4],[2,5],[9,10],[1,8],[13,20]]);return{vis:'<div class="ch-big">🔁</div>',q:`A probability is ${d[0]}/${d[1]}. Write it as a <b>percentage</b> (just the number, without %). (number)`,ans:d[0]/d[1]*100,extra:['pr-forms'],ex:`${d[0]} ÷ ${d[1]} = ${d[0]/d[1]} → × 100 = ${d[0]/d[1]*100}%`};}
+  if(v===1){const p=pick([35,65,8,45,72,15]);return{vis:'<div class="ch-big">🔁</div>',q:`A probability is <b>${p}%</b>. Write it as a <b>decimal</b>.`,ans:p/100,extra:['pr-forms'],ex:`${p} ÷ 100 = ${p/100}`};}
+  if(v===2){const d=pick([[2,25],[3,20],[1,4],[7,50],[3,5]]);return{vis:'<div class="ch-big">🔁</div>',q:`Write the decimal <b>${dec(d[0]/d[1])}</b> as a fraction.${fracQ}`,ans:d[0]/d[1],extra:['pr-forms'],ex:`${dec(d[0]/d[1])} = ${d[0]}/${d[1]}`};}
+  const p=pick([20,35,40,65,80]);return{vis:'<div class="ch-big">🌦️</div>',q:`The probability of rain is <b>${p}%</b>. Write the probability it does <b>not</b> rain as a <b>decimal</b>.`,ans:(100-p)/100,extra:['pr-forms','pr-not'],ex:`100% − ${p}% = ${100-p}% = ${(100-p)/100}`};},
+ M14(){const v=R(0,4);
+  if(v===0)return{vis:'<div class="ch-big">🔢</div>',q:`How many different <b>3-digit numbers</b> can be made using the digits 1, 2, 3 and 4 if <b>no digit is repeated</b>? (whole number)`,ans:24,extra:['pr-product-rule','pr-no-repeats'],ex:`4 × 3 × 2 = 24`};
+  if(v===1)return{vis:'<div class="ch-big">🔢</div>',q:`How many different <b>3-digit numbers</b> can be made using the digits 1 to 5 if digits <b>can be repeated</b>? (whole number)`,ans:125,extra:['pr-product-rule','pr-repeats'],ex:`5 × 5 × 5 = 125`};
+  if(v===2){const n=R(5,9);return{vis:'<div class="ch-big">🏅</div>',q:`A team has <b>${n}</b> players. A captain and a vice-captain are chosen (different players). In how many ways can this be done? (whole number)`,ans:n*(n-1),extra:['pr-product-rule','pr-no-repeats'],ex:`${n} choices for captain, then ${n-1} for vice-captain → ${n} × ${n-1} = ${n*(n-1)}`};}
+  if(v===3)return{vis:'<div class="ch-big">🚗</div>',q:`A number plate has <b>2 letters</b> (26 choices each) followed by <b>2 digits</b> (0–9). How many different plates are possible? (whole number)`,ans:67600,extra:['pr-product-rule','pr-codes','pr-repeats'],ex:`26 × 26 × 10 × 10 = 67 600`};
+  return{vis:'<div class="ch-big">🪙🪙🪙🪙</div>',q:`A fair coin is flipped <b>4 times</b>. How many different outcomes are there? (whole number)`,ans:16,extra:['pr-product-rule','pr-listing'],ex:`2 × 2 × 2 × 2 = 16`};}
+});
+POOL.push(['M1','M2'],['M3'],['M4','M5'],['M8'],['M6','M7'],['M13'],['M12'],['M9','M10'],['M11'],['M14'],['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12','M13','M14']);
 window.__ch={QT,parseAns,POOL};
 REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probability',
  desc:'GCSE probability and counting: bags, spinners, dice grids, listing outcomes, two-way tables, Venn diagrams, product rule, tree diagrams. Answer 5 questions per level — get 4 right to pass!',skills:['probability','fractions','sample space','counting','tree diagrams','Venn diagrams'],
  levels:['Bags · one colour','Bags · “not” events','Bags · “or” events','Spinners','Two dice · sums','Two dice · at least / less than','Two dice · tricky events','Two picks · with replacement','Two picks · without replacement','Expected & relative frequency','Probability rules','Boss mix',
-  'Listing outcomes','Two-way tables','Venn diagrams','Counting · product rule (H)','Counting · arrangements (H)','Pairs & handshakes','Probability arithmetic','Tree diagrams · with replacement','Tree diagrams · without replacement (H)','Boss 2 · GCSE mix'],
+  'Listing outcomes','Two-way tables','Venn diagrams','Counting · product rule (H)','Counting · arrangements (H)','Pairs & handshakes','Probability arithmetic','Tree diagrams · with replacement','Tree diagrams · without replacement (H)','Boss 2 · GCSE mix',
+  'Certain, impossible & one dice','Playing cards','Letters & number cards','Two spinners','Estimates & expected','Fractions, decimals & %','Combined events','Overlapping events & frequency trees','Dependent trees','Counting extras','Boss 3 · GCSE mix'],
  how:'Read the picture, then tap a box and type your answer: the top box is the numerator and the bottom box is the denominator, like 3 over 10 (any equivalent fraction is accepted). If the question asks for a decimal or a whole number, just fill in the top box. You can use the keypad or your keyboard (Tab switches boxes).',
  art:'<div class="minich">🎲🎲</div>',
  mount(root,lv,ctx){
@@ -3651,6 +3712,19 @@ pr-tree|tree diagram|樹形圖
 pr-different|different colours|唔同顏色
 pr-at-least-one|at least one|至少一個
 pr-exactly-one|exactly one|剛好一個
+pr-certain-impossible|certain and impossible|必然同不可能
+pr-single-dice|one dice|1 粒骰
+pr-cards|playing cards|撲克牌
+pr-overlap|overlapping events|重疊事件
+pr-addition-rule|addition rule (overlap)|加法定律（重疊）
+pr-letters|letters of a word|字母
+pr-number-cards|number cards|數字卡
+pr-estimate|estimate from data|由數據估計
+pr-frequency-table|frequency table|頻數表
+pr-two-spinners|two spinners|兩個轉盤
+pr-frequency-tree|frequency tree|頻數樹
+pr-dependent|dependent events|相依事件
+pr-forms|fractions, decimals, percentages|分數、小數、百分比
 an-estimate|estimate an angle|估計角度
 an-straight-line|angles on a line|直線上嘅角
 an-around-point|angles around a point|一點周圍嘅角
@@ -3783,7 +3857,11 @@ const QTAGS={
   N1:Q(['pr-listing','pr-product-rule'],2),N2:Q(['pr-listing'],3),N3:Q(['pr-two-way'],3,['pr-conditional']),N4:Q(['pr-venn'],4,['pr-conditional']),
   N5:Q(['pr-product-rule'],4),N6:Q(['pr-product-rule','pr-codes'],5,['pr-repeats','pr-no-repeats']),N7:Q(['pr-arrangements'],5,['pr-restricted']),N8:Q(['pr-pairs','pr-listing'],5),
   N9:Q(['pr-fractions'],3,['pr-and','pr-independent','pr-or','pr-mutually-exclusive','pr-not']),N10:Q(['pr-missing','pr-sum-to-1'],3,['pr-algebra']),
-  N11:Q(['pr-tree','pr-independent','pr-decimals'],5,['pr-and','pr-exactly-one','pr-at-least-one']),N12:Q(['pr-tree','pr-without-replacement'],7,['pr-different','pr-and','pr-at-least-one'])},
+  N11:Q(['pr-tree','pr-independent','pr-decimals'],5,['pr-and','pr-exactly-one','pr-at-least-one']),N12:Q(['pr-tree','pr-without-replacement'],7,['pr-different','pr-and','pr-at-least-one']),
+  M1:Q(['pr-certain-impossible'],1),M2:Q(['pr-single-dice'],2),M3:Q(['pr-cards'],3,['pr-or','pr-overlap']),M4:Q(['pr-letters'],3),M5:Q(['pr-number-cards'],3),
+  M6:Q([],4,['pr-relative-freq','pr-estimate','pr-expected']),M7:Q(['pr-relative-freq','pr-frequency-table'],3),M8:Q(['pr-sample-space','pr-two-spinners'],4),
+  M9:Q(['pr-overlap','pr-addition-rule'],6,['pr-or','pr-and']),M10:Q(['pr-frequency-tree'],5),M11:Q(['pr-tree','pr-dependent','pr-decimals'],7),
+  M12:Q([],5,['pr-and','pr-independent','pr-at-least-one','pr-with-replacement']),M13:Q(['pr-forms'],2,['pr-not']),M14:Q(['pr-product-rule'],4,['pr-codes','pr-repeats','pr-no-repeats','pr-listing'])},
  angles:{A1:Q(['an-estimate'],2),A2:Q(['an-straight-line'],1),A3:Q(['an-around-point'],2),A4:Q(['an-triangle'],2),A5:Q(['an-triangle','an-isosceles'],3),
   A6:Q(['an-quadrilateral'],3),A7:Q(['an-crossing-lines'],3,['an-vertically-opposite','an-straight-line']),A8:Q(['an-parallel'],5,['an-corresponding','an-alternate','an-co-interior']),A9:Q(['an-triangle','an-exterior'],4),A10:Q([],5,['an-polygon-sum','an-polygon-exterior','an-polygon-interior']),
   A11:Q(['an-straight-line','an-algebra'],7),A12:Q(['an-triangle','an-algebra'],6)}
