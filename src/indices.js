@@ -55,10 +55,10 @@ function Q(o){
   q.after=root=>{const sc=root.querySelector(".bw");if(!sc)return;cancelAnimationFrame(q._raf);
     const beam=sc.querySelector('.bw-beam'),svg=sc.querySelector('.bw-svg'),pans=[...sc.querySelectorAll('.bw-pan')];
     const tgt=+sc.dataset.a;let ang=+sc.dataset.p,vel=0;
-    const place=()=>{const w=sc.clientWidth||320,pw=Math.max(112,Math.round(w*.42)),h=(w-pw)/2,cx=w/2,fy=34,r=ang*Math.PI/180,c=Math.cos(r),sn=Math.sin(r);
+    const place=()=>{const w=sc.clientWidth||320,pw=Math.max(100,Math.round(w*.40)),h=(w-pw)/2,cx=w/2,fy=24,r=ang*Math.PI/180,c=Math.cos(r),sn=Math.sin(r);
       const ex=[[cx-h*c,fy-h*sn],[cx+h*c,fy+h*sn]];
       beam.style.width=(2*h+22)+'px';beam.style.left=(cx-h-11)+'px';beam.style.top=(fy-6)+'px';beam.style.transform=`rotate(${ang}deg)`;
-      let sv='';pans.forEach((p,i)=>{const px=ex[i][0]-pw/2,py=ex[i][1]+34,ph=p.offsetHeight||52;p.style.width=pw+'px';p.style.left=px+'px';p.style.top=py+'px';
+      let sv='';pans.forEach((p,i)=>{const px=ex[i][0]-pw/2,py=ex[i][1]+24,ph=p.offsetHeight||42;p.style.width=pw+'px';p.style.left=px+'px';p.style.top=py+'px';
         sv+=`<line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+6}" y2="${py+ph-4}" class="sc-str"/><line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+pw-6}" y2="${py+ph-4}" class="sc-str"/><circle cx="${ex[i][0]}" cy="${ex[i][1]}" r="4" class="sc-pin"/>`;});
       svg.setAttribute('viewBox',`0 0 ${w} ${sc.clientHeight||200}`);svg.innerHTML=sv+`<circle cx="${cx}" cy="${fy}" r="9" class="sc-pin big"/>`;};
     const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
@@ -214,7 +214,7 @@ window.__ix={QT,POOL,D,LV};
 REG.push({id:'indices',name:'Power Balance',emoji:'🔋',color:'#0b7285',cat:'Algebra',qmeta,
  desc:'Powers, indices and logs on a balance. See why n⁰ = 1, why negative indices flip, what a fractional index means, and how every index law turns into a log law. Tap the button to swap an equation between index form and log form.',
  skills:['powers and indices','zero, negative and fractional indices','index laws','logarithms','log laws'],levels:LV.map(l=>l[0]),
- how:'The balance shows both sides of an equation. Type the missing number (use − for negative and / for fractions) and watch the beam: when both sides are equal it levels out. Tap the ↔ button to see the same equation in log form — or, for the log laws, in index form. 5 questions per level, 4 to pass!',
+ how:'Type the missing number (− for negative, / for fractions) and watch the beam level out. Use the ↔ button to flip between index and log form. 4 out of 5 to pass.',
  art:'<div class="minibal">🔋</div>',
  mount(root,lv,ctx){mountQuiz(root,ctx,{game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,winTitle:'Power player!'});}});
 })();
