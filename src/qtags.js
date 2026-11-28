@@ -17,6 +17,7 @@ bk-letters-1|1 letter|1 個字母
 bk-letters-2|2 letters|2 個字母
 bk-letters-3|3 letters|3 個字母
 bk-gives-square|x² in answer|答案有平方
+bk-high-power|power of 4 or more|四次或以上
 bk-sq-inside|x² inside|括號內有平方項
 bk-coef-inside|coefficients inside|括號內有係數
 bk-multi-outside|xy outside|括號外有多個字母
@@ -216,9 +217,9 @@ function tagExpand(q){
   const no=q.m.c<0,ni=q.t.some(t=>t.c<0),L=Math.min(3,letters([q.m,...q.t]).size),sq=q.t.some(t=>maxExp(t)>=2),
         coef=q.t.some(t=>Math.abs(t.c)>1),mo=Object.keys(q.m.p).length>=2||maxExp(q.m)>=2,big=prod.some(t=>Math.abs(t.c)>=20);
   if(no)tags.push('bk-neg-outside');if(ni)tags.push('bk-neg-inside');if(no&&ni)tags.push('bk-neg-times-neg');
-  tags.push('bk-letters-'+L);if(prod.some(t=>maxExp(t)>=2))tags.push('bk-gives-square');
+  tags.push('bk-letters-'+L);if(prod.some(t=>maxExp(t)>=2))tags.push('bk-gives-square');const hp=prod.some(t=>maxExp(t)>=4);if(hp)tags.push('bk-high-power');
   if(sq)tags.push('bk-sq-inside');if(coef)tags.push('bk-coef-inside');if(mo)tags.push('bk-multi-outside');if(big)tags.push('big-numbers');
-  const d=1+.9*(nt-1)+(vo?1.4:0)+(no?1:0)+(ni?.5:0)+(no&&ni?.8:0)+(L-1)*.8+(sq?.8:0)+(coef?.5:0)+(mo?1:0)+(big?.5:0);
+  const d=(hp?.8:0)+(nt>=5?.6:0)+1+.9*(nt-1)+(vo?1.4:0)+(no?1:0)+(ni?.5:0)+(no&&ni?.8:0)+(L-1)*.8+(sq?.8:0)+(coef?.5:0)+(mo?1:0)+(big?.5:0);
   return fin(tags,d);
 }
 /* ---------- Factorise It!: q = {terms,H,cv} ---------- */

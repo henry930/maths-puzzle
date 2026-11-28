@@ -39,7 +39,7 @@ const S2=[ // multi-letter levels: roles p,q,r
  {n:'xy outside: xy(x + y)',g:()=>({m:T(r(1,3),'pq'),t:[T(1,'p'),T(sg(),'q')]})},
  {n:'Three terms: a(x + y + b)',g:()=>({m:T(r(2,5)),t:[T(1,'p'),T(1,'q'),T(r(1,9))]})},
  {n:'Three terms: a(bx ± cy ± d)',g:()=>({m:T(r(2,6)),t:[T(r(1,5),'p'),T(sg()*r(1,5),'q'),T(sg()*r(1,9))]})},
- {n:'Three terms · negative outside',g:()=>({m:T(-r(2,6)),t:[T(r(1,5),'p'),T(sg()*r(1,5),'q'),T(sg()*r(1,9))]})},
+ {n:'Two letters · three terms · negative outside',g:()=>({m:T(-r(2,6)),t:[T(r(1,5),'p'),T(sg()*r(1,5),'q'),T(sg()*r(1,9))]})},
  {n:'x(x + y + b)',g:()=>({m:T(1,'p'),t:[T(1,'p'),T(sg(),'q'),T(sg()*r(1,9))]})},
  {n:'y(bx + cy + d)',g:()=>({m:T(sg(),'q'),t:[T(r(1,4),'p'),T(sg()*r(1,4),'q'),T(sg()*r(1,9))]})},
  {n:'−x(bx − cy + d)',g:()=>({m:T(-1,'p'),t:[T(r(1,4),'p'),T(sg()*r(1,4),'q'),T(sg()*r(1,9))]})},
@@ -49,10 +49,90 @@ const S2=[ // multi-letter levels: roles p,q,r
  {n:'Boss: four terms, anything goes!',g:()=>{const k=r(0,2);const L=[T(r(1,4),'p'),T(sg()*r(1,4),'q'),T(sg()*r(1,4),'r'),T(sg()*r(1,9))];
    return k===0?{m:T(sg()*r(2,5)),t:L}:k===1?{m:T(sg()*r(1,3),pick(['p','q','r'])),t:L}:{m:T(sg()*r(1,3),'pq'),t:[T(r(1,3),'p'),T(sg()*r(1,3),'q'),T(sg()*r(1,3),'r'),T(sg()*r(1,9))]};},L:3}
 ];
-const SPECS=S1.concat(S2);
+
+// ---- GCSE extension (levels 41+): powers of letters, bigger coefficients, 3-letter, 5-term brackets ----
+const X=(c,a,b,d)=>T(c,'p'.repeat(a||0)+'q'.repeat(b||0)+'r'.repeat(d||0));
+const S3=[ // single letter with powers (role p)
+ {n:'x²(x + b)',g:()=>({m:X(1,2),t:[X(1,1),T(r(1,9))]})},
+ {n:'x²(x − b)',g:()=>({m:X(1,2),t:[X(1,1),T(-r(1,9))]})},
+ {n:'x³(x + b)',g:()=>({m:X(1,3),t:[X(1,1),T(r(1,9))]})},
+ {n:'x²(bx + c)',g:()=>({m:X(1,2),t:[X(r(2,5),1),T(sg()*r(1,9))]})},
+ {n:'x²(x² + b)',g:()=>({m:X(1,2),t:[X(1,2),T(sg()*r(1,9))]})},
+ {n:'x²(x² − bx)',g:()=>({m:X(1,2),t:[X(1,2),X(-r(2,6),1)]})},
+ {n:'x³(x² ± b)',g:()=>({m:X(1,3),t:[X(1,2),T(sg()*r(1,9))]})},
+ {n:'ax²(x + b)',g:()=>({m:X(r(2,5),2),t:[X(1,1),T(sg()*r(1,9))]})},
+ {n:'ax²(bx − c)',g:()=>({m:X(r(2,5),2),t:[X(r(2,4),1),T(-r(1,9))]})},
+ {n:'−x²(x + b)',g:()=>({m:X(-1,2),t:[X(1,1),T(r(1,9))]})},
+ {n:'−ax²(x − b)',g:()=>({m:X(-r(2,5),2),t:[X(1,1),T(-r(1,9))]})},
+ {n:'x²(x² + bx + c)',g:()=>({m:X(1,2),t:[X(1,2),X(r(1,6),1),T(r(1,9))]})},
+ {n:'x²(ax² − bx + c)',g:()=>({m:X(1,2),t:[X(r(2,4),2),X(-r(1,6),1),T(r(1,9))]})},
+ {n:'ax²(bx + c)',g:()=>({m:X(r(2,5),2),t:[X(r(2,4),1),T(sg()*r(1,9))]})},
+ {n:'x³(x² − x + b)',g:()=>({m:X(1,3),t:[X(1,2),X(-1,1),T(r(1,9))]})},
+ {n:'x(x² + bx + c)',g:()=>({m:X(1,1),t:[X(1,2),X(r(1,6),1),T(r(1,9))]})},
+ {n:'x(x³ − bx² + c)',g:()=>({m:X(1,1),t:[X(1,3),X(-r(1,6),2),T(sg()*r(1,9))]})},
+ {n:'−x(x² + bx − c)',g:()=>({m:X(-1,1),t:[X(1,2),X(r(1,6),1),T(-r(1,9))]})},
+ {n:'ax³(bx − c)',g:()=>({m:X(r(2,4),3),t:[X(r(2,4),1),T(-r(1,9))]})},
+ {n:'ax²(bx² + cx + d)',g:()=>({m:X(r(2,4),2),t:[X(r(2,3),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]})},
+ {n:'x²(x³ + x² + x)',g:()=>({m:X(1,2),t:[X(1,3),X(1,2),X(1,1)]})},
+ {n:'Four terms: x(x³ + bx² + cx + d)',g:()=>({m:X(1,1),t:[X(1,3),X(r(1,4),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]})},
+ {n:'Four terms: ax(bx³ ± cx² ± dx ± e)',g:()=>({m:X(r(2,4),1),t:[X(r(2,3),3),X(sg()*r(1,4),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]})},
+ {n:'Four terms · negative outside',g:()=>({m:X(-r(1,3),2),t:[X(r(1,3),3),X(sg()*r(1,4),2),X(sg()*r(1,4),1),T(sg()*r(1,9))]})},
+ {n:'Five terms: a(bx⁴ ± cx³ ± dx² ± ex ± f)',g:()=>({m:T(sg()*r(2,4)),t:[X(r(1,3),4),X(sg()*r(1,3),3),X(sg()*r(1,4),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]})},
+ {n:'x⁴(x ± b)',g:()=>({m:X(1,4),t:[X(1,1),T(sg()*r(1,9))]})},
+ {n:'ax⁴(x² ± b)',g:()=>({m:X(r(2,3),4),t:[X(1,2),T(sg()*r(1,9))]})},
+ {n:'−x³(x² ± bx)',g:()=>({m:X(-1,3),t:[X(1,2),X(sg()*r(2,6),1)]})},
+ {n:'Cubes: x³(x³ ± b)',g:()=>({m:X(1,3),t:[X(1,3),T(sg()*r(1,9))]})},
+ {n:'Large numbers: a(bx − c)',g:()=>({m:T(r(10,15)),t:[X(r(3,9),1),T(sg()*r(2,12))]})},
+ {n:'Large numbers · negative outside',g:()=>({m:T(-r(10,15)),t:[X(r(3,9),1),T(sg()*r(2,12))]})},
+ {n:'Large numbers: ax²(bx − c)',g:()=>({m:X(r(6,9),2),t:[X(r(4,9),1),T(sg()*r(3,12))]})},
+ {n:'Large numbers · three terms',g:()=>({m:T(sg()*r(7,12)),t:[X(r(2,6),2),X(sg()*r(3,9),1),T(sg()*r(4,12))]})},
+ {n:'Boss: powers of x',g:()=>{const k=r(0,3);return k===0?{m:X(sg()*r(1,3),2),t:[X(r(1,3),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]}:k===1?{m:X(sg(),3),t:[X(1,2),T(sg()*r(1,9))]}:k===2?{m:X(sg()*r(1,3),1),t:[X(r(1,3),3),X(sg()*r(1,4),2),X(sg()*r(1,5),1),T(sg()*r(1,9))]}:{m:X(sg()*r(2,4),4),t:[X(1,1),T(sg()*r(1,9))]};}}
+].map(o=>Object.assign(o,{L:1,pw:1}));
+const S4=[ // two letters with powers (roles p,q)
+ {n:'x²(y + b)',g:()=>({m:X(1,2),t:[X(1,0,1),T(sg()*r(1,9))]})},
+ {n:'x²(x + y)',g:()=>({m:X(1,2),t:[X(1,1),X(1,0,1)]})},
+ {n:'xy(x² + y)',g:()=>({m:X(1,1,1),t:[X(1,2),X(1,0,1)]})},
+ {n:'xy(ax + by)',g:()=>({m:X(r(1,3),1,1),t:[X(r(1,4),1),X(sg()*r(1,4),0,1)]})},
+ {n:'x²y(x + y)',g:()=>({m:X(1,2,1),t:[X(1,1),X(1,0,1)]})},
+ {n:'xy²(x − y)',g:()=>({m:X(1,1,2),t:[X(1,1),X(-1,0,1)]})},
+ {n:'x²y(ax + by + c)',g:()=>({m:X(1,2,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1),T(sg()*r(1,9))]})},
+ {n:'y²(x² + xy + y²)',g:()=>({m:X(1,0,2),t:[X(1,2),X(1,1,1),X(1,0,2)]})},
+ {n:'x(x² + xy + y²)',g:()=>({m:X(1,1),t:[X(1,2),X(1,1,1),X(1,0,2)]})},
+ {n:'−xy(x² ± xy ± y²)',g:()=>({m:X(-1,1,1),t:[X(1,2),X(sg(),1,1),X(sg(),0,2)]})},
+ {n:'ax²(y + bx − c)',g:()=>({m:X(r(2,4),2),t:[X(1,0,1),X(r(1,4),1),T(-r(1,9))]})},
+ {n:'x²y²(x + y)',g:()=>({m:X(1,2,2),t:[X(1,1),X(1,0,1)]})},
+ {n:'ax²(by ± cx ± d)',g:()=>({m:X(sg()*r(2,4),2),t:[X(r(1,4),0,1),X(sg()*r(1,4),1),T(sg()*r(1,9))]})},
+ {n:'ax²y(bx + cy)',g:()=>({m:X(r(2,4),2,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1)]})},
+ {n:'−ax²y(bx ± cy ± d)',g:()=>({m:X(-r(2,4),2,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1),T(sg()*r(1,9))]})},
+ {n:'Large numbers: ax(by − c)',g:()=>({m:X(r(6,9),1),t:[X(r(4,9),0,1),T(sg()*r(3,12))]})},
+ {n:'Boss: two letters with powers',g:()=>{const k=r(0,2);return k===0?{m:X(sg()*r(1,3),2,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1),T(sg()*r(1,9))]}:k===1?{m:X(sg(),1,2),t:[X(1,2),X(sg(),1,1),X(sg(),0,2)]}:{m:X(sg()*r(2,5),2),t:[X(r(1,3),0,1),X(sg()*r(1,4),1),T(sg()*r(1,9))]};}}
+].map(o=>Object.assign(o,{L:2,pw:1}));
+const S5=[ // three letters
+ {n:'xy(x + y + z)',g:()=>({m:X(1,1,1),t:[X(1,1),X(1,0,1),X(1,0,0,1)]})},
+ {n:'xyz(x + y + z)',g:()=>({m:X(1,1,1,1),t:[X(1,1),X(1,0,1),X(1,0,0,1)]})},
+ {n:'x²(x + y + z)',g:()=>({m:X(1,2),t:[X(1,1),X(1,0,1),X(1,0,0,1)]})},
+ {n:'ax(by ± cz ± d)',g:()=>({m:X(r(2,5),1),t:[X(r(1,4),0,1),X(sg()*r(1,4),0,0,1),T(sg()*r(1,9))]})},
+ {n:'xz(xy − z)',g:()=>({m:X(1,1,0,1),t:[X(1,1,1),X(-1,0,0,1)]})},
+ {n:'−xyz(ax ± by ± cz)',g:()=>({m:X(-1,1,1,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1),X(sg()*r(1,3),0,0,1)]})},
+ {n:'Four terms with powers',g:()=>({m:X(sg()*r(1,3),1,1),t:[X(r(1,3),2),X(sg()*r(1,3),0,1),X(sg()*r(1,3),0,0,1),T(sg()*r(1,9))]})},
+ {n:'Boss: three letters with powers',g:()=>{const k=r(0,2);return k===0?{m:X(sg()*r(1,3),1,1),t:[X(r(1,3),1),X(sg()*r(1,3),0,1),X(sg()*r(1,3),0,0,1)]}:k===1?{m:X(sg(),2,0,1),t:[X(1,1),X(sg(),0,1),X(sg(),0,0,1),T(sg()*r(1,9))]}:{m:X(sg()*r(2,4),1,1,1),t:[X(r(1,3),2),X(sg()*r(1,3),0,2),X(sg()*r(1,3),0,0,2)]};}}
+].map(o=>Object.assign(o,{L:3,pw:1}));
+
+const S6=[ // negative inside, and mixed bosses
+ {n:'x²(−bx − c)',g:()=>({m:X(1,2),t:[X(-r(2,5),1),T(-r(1,9))]}),L:1},
+ {n:'a(−bx − c)',g:()=>({m:T(r(2,6)),t:[X(-r(2,5),1),T(-r(1,9))]}),L:1},
+ {n:'−a(−bx − c)',g:()=>({m:T(-r(2,6)),t:[X(-r(2,5),1),T(-r(1,9))]}),L:1},
+ {n:'−x²(−x − b)',g:()=>({m:X(-1,2),t:[X(-1,1),T(-r(1,9))]}),L:1},
+ {n:'−ax(−bx² − cx − d)',g:()=>({m:X(-r(2,4),1),t:[X(-r(1,3),2),X(-r(1,4),1),T(-r(1,9))]}),L:1},
+ {n:'xyz(xy − yz)',g:()=>({m:X(1,1,1,1),t:[X(1,1,1),X(-1,0,1,1)]}),L:3},
+ {n:'Mega boss: anything so far',g:()=>pick(POOL_ALL).g(),L:3}
+].map(o=>Object.assign(o,{pw:1}));
+const POOL_ALL=S1.concat(S2,S3,S4,S5,S6.slice(0,6));
+const SPECS=S1.concat(S2,S3,S4,S5,S6);
 const mul=(a,b)=>{const p={};for(const k in a.p)p[k]=(p[k]||0)+a.p[k];for(const k in b.p)p[k]=(p[k]||0)+b.p[k];return{c:a.c*b.c,p};};
 const rename=(t,mp)=>{const p={};for(const k in t.p)p[mp[k]]=(p[mp[k]]||0)+t.p[k];return{c:t.c,p};};
-const SUP={1:'',2:'²',3:'³'};
+const SUP={1:'',2:'²',3:'³',4:'⁴',5:'⁵',6:'⁶',7:'⁷',8:'⁸',9:'⁹'};
+const SUPS='²³⁴⁵⁶⁷⁸⁹';
 function varStr(p){return Object.keys(p).sort().map(k=>k+(p[k]===1?'':(SUP[p[k]]||'^'+p[k]))).join('');}
 function fmt(t,first,spaced){
   const neg=t.c<0,ac=Math.abs(t.c),vs=varStr(t.p);
@@ -61,11 +141,11 @@ function fmt(t,first,spaced){
   return(neg?' − ':' + ')+body;
 }
 function parse(s,L){
-  s=s.replace(/[−–]/g,'-').replace(/\s/g,'').replace(/^\+/,'').replace(/²/g,'^2');
-  const m=s.match(new RegExp('^(-?)(\\d*)((?:['+L.join('')+'](?:\\^2)?)*)$'));
+  s=s.replace(/[−–]/g,'-').replace(/\s/g,'').replace(/^\+/,'').replace(/[²³⁴⁵⁶⁷⁸⁹]/g,c=>'^'+(SUPS.indexOf(c)+2));
+  const m=s.match(new RegExp('^(-?)(\\d*)((?:['+L.join('')+'](?:\\^\\d)?)*)$'));
   if(!m||(m[2]===''&&!m[3]))return null;
-  const p={};let rest=m[3];const re=new RegExp('(['+L.join('')+'])(\\^2)?','g');let x;
-  while((x=re.exec(rest)))p[x[1]]=(p[x[1]]||0)+(x[2]?2:1);
+  const p={};let rest=m[3];const re=new RegExp('(['+L.join('')+'])(?:\\^(\\d))?','g');let x;
+  while((x=re.exec(rest)))p[x[1]]=(p[x[1]]||0)+(x[2]?+x[2]:1);
   return{c:(m[2]===''?1:+m[2])*(m[1]?-1:1),p};
 }
 const same=(a,b)=>{if(!a||a.c!==b.c)return false;const ka=Object.keys(a.p),kb=Object.keys(b.p);return ka.length===kb.length&&ka.every(k=>a.p[k]===b.p[k]);};
@@ -84,8 +164,8 @@ REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Alg
   const stage=$('#exs'),svg=$('#exsv'),chips=[],pad=$('#expad');
   function buildPad(){
     pad.innerHTML='';
-    const ks=['7','8','9','del','4','5','6','neg','1','2','3','sq','0',...L];
-    ks.forEach(k=>{const b=el('button','key'+(k==='del'?' del':'')+(L.includes(k)?' var':''),k==='del'?'⌫':k==='neg'?'−':k==='sq'?'²':k);b.dataset.k=k;b.onclick=()=>press(k);pad.appendChild(b);});
+    const ks=['7','8','9','del','4','5','6','neg','1','2','3','sq','0',...L].concat(spec.pw?['pow']:[]);
+    ks.forEach(k=>{const b=el('button','key'+(k==='del'?' del':'')+(L.includes(k)?' var':''),k==='del'?'⌫':k==='neg'?'−':k==='sq'?'²':k==='pow'?'xⁿ':k);b.dataset.k=k;b.onclick=()=>press(k);pad.appendChild(b);});
     const ok=el('button','key ok','Check ✓');ok.dataset.k='ok';ok.style.gridColumn='1 / -1';ok.onclick=()=>press('ok');pad.appendChild(ok);
   }
   function build(){
@@ -114,7 +194,7 @@ REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Alg
       const c=chips[i];c.style.left=(x0+x1)/2+'px';c.style.top=(y0-hh*.75)+'px';});
     svg.innerHTML=h;
   }
-  const shown=()=>buf.replace(/\^2/g,'²').replace(/-/g,'−');
+  const shown=()=>buf.replace(/\^(\d)/g,(m,d)=>SUPS[d-2]).replace(/-/g,'−');
   const tm=(t)=>t.c<0?'('+fmt(t,true)+')':fmt(t,true);
   function draw(){
     chips.forEach((c,i)=>{c.className='ex-chip'+(done[i]?' ok':'')+(i===act&&!done[i]?' on':'');
@@ -125,10 +205,13 @@ REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Alg
   function press(k){
     if(done.every(Boolean)||document.querySelector('.overlay')||Date.now()-lastClose<200)return;
     const hasL=/[a-z]/.test(buf);
-    if(k==='del')buf=buf.endsWith('^2')?buf.slice(0,-2):buf.slice(0,-1);
+    if(k==='del')buf=/\^\d$/.test(buf)?buf.slice(0,-2):buf.slice(0,-1);
     else if(k==='neg')buf=buf.startsWith('-')?buf.slice(1):'-'+buf;
     else if(L.includes(k)){if(!buf.includes(k))buf+=k;}
     else if(k==='sq'){if(/[a-z]$/.test(buf))buf+='^2';}
+    else if(k==='pow'){if(/[a-z]$/.test(buf))buf+='^';}
+    else if(/^[2-9]$/.test(k)&&buf.endsWith('^'))buf+=k;
+    else if(/^[01]$/.test(k)&&buf.endsWith('^'))return;
     else if(k==='ok')return check();
     else if(!hasL&&buf.replace('-','').length<4)buf+=k;
     draw();
@@ -140,7 +223,7 @@ REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Alg
     const mA=Math.abs(m.c),tA=Math.abs(t.c);
     const row=(ok,title,good,bad)=>ok?'':`<div class="ex-ck ${ok?'g':'b'}"><span>❌</span><div><b>${title}</b><br>${bad}</div></div>`;
     const sameSign=(m.c<0)===(t.c<0);
-    let h=`<h2>❌ Not quite</h2><div class="ex-q">${tm(m)} × ${tm(t)}</div><div class="ex-you">You typed: <b>${shown()?buf.replace(/\^2/g,'²').replace(/-/g,'−'):'?'}</b></div>`;
+    let h=`<h2>❌ Not quite</h2><div class="ex-q">${tm(m)} × ${tm(t)}</div><div class="ex-you">You typed: <b>${shown()||'?'}</b></div>`;
     h+=row(numOk,'The number part','The numbers are right.',`Multiply the numbers in front: <b>${mA} × ${tA}</b>. (A letter on its own, like x, has an invisible 1 in front.) Check your times table.`);
     h+=row(sgnOk,'The sign',`The sign is right.`,`The two signs are <b>${m.c<0?'−':'+'}</b> and <b>${t.c<0?'−':'+'}</b>. ${sameSign?'Same signs give a <b>positive</b> answer.':'Different signs give a <b>negative</b> answer.'}`);
     h+=row(letOk,'The letters','The letters are right.',`Outside the bracket: <b>${lettersOf(m)}</b>. Inside: <b>${lettersOf(t)}</b>. Keep every letter from both, and add the powers when a letter is repeated (x × x = x², x × y = xy).`);
@@ -173,7 +256,7 @@ REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Alg
   $('#exh').onclick=()=>{if(done.every(Boolean))return;const p=Q.prod[act],vs=varStr(p.p);
     $('#exmsg').innerHTML='💡 Multiply the numbers, then combine the letters. '+(p.c<0?'The answer is negative. ':'The answer is positive. ')+(vs?`It contains: ${vs}.`:'It is just a number.');};
   $('#exn').onclick=build;
-  ctx.keys=e=>{const k=e.key.toLowerCase();if(/^[0-9]$/.test(k))press(k);else if(k==='-')press('neg');else if(L.includes(k))press(k);else if(k==='^')press('sq');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};
+  ctx.keys=e=>{const k=e.key.toLowerCase();if(/^[0-9]$/.test(k))press(k);else if(k==='-')press('neg');else if(L.includes(k))press(k);else if(k==='^')press('pow');else if(k==='backspace')press('del');else if(k==='enter')press('ok');};
   const rs=()=>{if(Q){place();draw();}};window.addEventListener('resize',rs);ctx.cleanups.push(()=>window.removeEventListener('resize',rs));
   window.__exq=()=>({Q,L,press,get done(){return done}});
   build();
