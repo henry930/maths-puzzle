@@ -46,6 +46,12 @@ ln-frac-gradient|fractional gradient|分數斜率
 ln-flat|horizontal line|水平線
 ln-steep|steep line|斜率大
 ln-neg-intercept|negative intercept|負截距
+ln-read-graph|read the equation from a graph|由圖像讀方程
+ln-parallel|parallel lines|平行線
+ln-perpendicular|perpendicular lines|垂直線
+ln-rearrange|rearrange to y = mx + c|整理成 y = mx + c
+ln-standard-form|ax + by = c form|ax + by = c 形式
+ln-fraction-rearrange|rearranging with a coefficient on y|y 前面有係數
 fa-prime|prime|質數
 fa-composite|composite|合成數
 fa-square|square number|平方數
@@ -244,7 +250,8 @@ function tagLine(P){
   const s=P.s,tags=[s.fixC?'ln-gradient-only':s.fixM?'ln-intercept-only':'ln-both'];
   if(P.m<0)tags.push('ln-neg-gradient');if(P.m%1!==0)tags.push('ln-frac-gradient');if(P.m===0)tags.push('ln-flat');if(Math.abs(P.m)>=3)tags.push('ln-steep');
   if(P.c<0)tags.push('ln-neg-intercept');
-  const d=(s.fixC||s.fixM?2:3.5)+(P.m<0?.8:0)+(P.m%1!==0?1.5:0)+(Math.abs(P.m)>=3?.7:0)+(P.c<0?.5:0)+(s.boss?2:0);
+  const mode=s.mode||'star';if(mode==='read')tags.push('ln-read-graph');if(mode==='par')tags.push('ln-parallel');if(mode==='perp')tags.push('ln-perpendicular');if(mode==='eq')tags.push('ln-rearrange');if(P.form==='xy'||P.form==='std2')tags.push('ln-standard-form');if(P.form==='2y'||P.form==='3y'||P.form==='half')tags.push('ln-fraction-rearrange');
+  const md2=s.mode,d=(md2==='read'?1.5:0)+(md2==='par'?1:0)+(md2==='perp'?3:0)+(md2==='eq'?2.5:0)+(P.form==='2y'||P.form==='3y'||P.form==='std2'||P.form==='half'?1.2:0)+(s.fixC||s.fixM?2:3.5)+(P.m<0?.8:0)+(P.m%1!==0?1.5:0)+(Math.abs(P.m)>=3?.7:0)+(P.c<0?.5:0)+(s.boss?2:0);
   return fin(tags,d,{eq:'y = '+(P.m===0?'':P.m+'x + ')+P.c});
 }
 /* ---------- Ball Factory: N ---------- */
