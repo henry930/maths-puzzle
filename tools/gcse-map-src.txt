@@ -1,0 +1,361 @@
+# GCSE Maths curriculum map — source file (edit this, then run: node tools/build-gcse-map.js)
+#
+# Structure follows the six content areas of the DfE national GCSE Maths subject content
+# (Number · Algebra · Ratio, proportion and rates of change · Geometry and measures · Probability · Statistics).
+# Topics and knowledge points are teaching-level groupings written for this project, NOT the official statement wording.
+#
+# Line formats
+#   @ AREA_ID ~ Area name
+#   # TOPIC_ID ~ Topic name
+#   POINT_ID ~ Knowledge point ~ Tier ~ coverage (optional)
+# Tier:  F = Foundation and Higher   H = Higher only   (tier labels are approximate; check against your exam board)
+# Coverage: game:regex;game:regex   — a regex over the game's skill names (levels grouped by name). The build fails if a
+#           regex matches nothing, so a renamed level cannot silently break the map.
+# Point IDs are permanent. Never rename one once students' data uses it; change the name only.
+
+@ N ~ Number
+# N-calc ~ Structure and calculation
+n-place-int ~ Place value and ordering of integers ~ F
+n-place-dec ~ Place value and ordering of decimals ~ F
+n-bonds ~ Number bonds and pairs to 10, 20, 100 ~ F ~ match:.
+n-tables ~ Times tables up to 12 × 12 ~ F ~ times:.
+n-add-sub ~ Add and subtract integers (mental and written) ~ F
+n-mul-div ~ Multiply and divide integers (written methods) ~ F
+n-bidmas ~ Order of operations (BIDMAS) ~ F
+n-neg-order ~ Order and compare negative numbers ~ F
+n-neg-addsub ~ Add and subtract negative numbers ~ F
+n-neg-muldiv ~ Multiply and divide negative numbers ~ F
+n-dec-addsub ~ Add and subtract decimals ~ F
+n-dec-mul ~ Multiply decimals ~ F
+n-dec-div ~ Divide by decimals ~ F
+n-squares ~ Square numbers and square roots ~ F
+n-cubes ~ Cube numbers and cube roots ~ F
+n-powers ~ Powers and index notation ~ F
+n-recip ~ Reciprocals ~ F
+n-calc-use ~ Use a calculator efficiently (brackets, memory, fraction keys) ~ F
+n-inverse ~ Use inverse operations to check an answer ~ F
+# N-fm ~ Factors, multiples and primes
+n-multiples ~ Multiples of a number ~ F
+n-divisibility ~ Tests of divisibility ~ F
+n-factors ~ List all factors of a number ~ F ~ factors:.
+n-primes ~ Recognise prime numbers ~ F ~ factors:Factors of (7|11|13|17|19|23)$
+n-factor-pairs ~ Factor pairs and composite numbers ~ F ~ factors:.
+n-prime-factors ~ Write a number as a product of prime factors ~ F
+n-hcf ~ Highest common factor (HCF) ~ F
+n-lcm ~ Lowest common multiple (LCM) ~ F
+n-hcf-lcm-venn ~ HCF and LCM using prime factors and Venn diagrams ~ F
+n-hcf-lcm-problems ~ Solve problems using HCF and LCM ~ F
+# N-frac ~ Fractions
+n-frac-name ~ Name and write fractions from diagrams ~ F ~ fraction:^Name the fraction
+n-frac-equiv ~ Equivalent fractions ~ F ~ fraction:^Equivalent
+n-frac-simplify ~ Simplify fractions ~ F ~ fraction:^Simplify
+n-frac-order ~ Order and compare fractions ~ F
+n-frac-mixed ~ Convert between mixed numbers and improper fractions ~ F ~ fraction:^Mixed
+n-frac-add-same ~ Add and subtract fractions with the same denominator ~ F ~ fraction:^Add · same
+n-frac-add-diff ~ Add and subtract fractions with different denominators ~ F ~ fraction:^Add · different;fraction:^Add & subtract
+n-frac-mixed-addsub ~ Add and subtract mixed numbers ~ F
+n-frac-mul ~ Multiply fractions ~ F ~ fraction:^Multiply fractions
+n-frac-div ~ Divide fractions ~ F ~ fraction:^Multiply & divide
+n-frac-mixed-muldiv ~ Multiply and divide mixed numbers ~ F
+n-frac-of ~ Find a fraction of an amount ~ F ~ fraction:^Fraction of an amount
+n-frac-express ~ Write one quantity as a fraction of another ~ F
+n-frac-reverse ~ Find the whole from a fraction of it ~ F ~ fraction:^Reverse
+n-frac-problems ~ Solve worded fraction problems ~ F
+n-frac-dec ~ Convert between fractions and decimals ~ F ~ percent:^Convert
+n-dec-recurring ~ Terminating and recurring decimals ~ F
+n-dec-rec-frac ~ Convert recurring decimals to fractions ~ H
+# N-pct ~ Percentages
+n-pct-meaning ~ Percentages as parts of 100 (grids and diagrams) ~ F ~ percent:^Percent of a grid
+n-pct-easy ~ Find 10%, 25%, 50% and 1% of an amount ~ F ~ percent:^10%
+n-pct-any ~ Find any percentage of an amount ~ F ~ percent:^Any percentage
+n-pct-convert ~ Convert between percentages, fractions and decimals ~ F ~ percent:^Convert
+n-pct-express ~ Write one quantity as a percentage of another ~ F ~ percent:^Test scores
+n-pct-incdec ~ Increase and decrease an amount by a percentage ~ F ~ percent:^Sale prices;percent:^Increase
+n-pct-multiplier ~ Percentage multipliers ~ F
+n-pct-change ~ Percentage change (profit, loss, increase, decrease) ~ F ~ percent:^Percentage change
+n-pct-reverse ~ Reverse percentages (find the original) ~ F ~ percent:^Reverse
+n-pct-simple-int ~ Simple interest ~ F ~ percent:^Interest
+n-pct-compound ~ Compound interest and repeated percentage change ~ H
+n-pct-growth ~ Growth and decay problems ~ H
+# N-form ~ Standard form, indices and surds
+n-std-big ~ Write large numbers in standard form ~ F
+n-std-small ~ Write small numbers in standard form ~ F
+n-std-calc ~ Calculate with numbers in standard form ~ F
+n-idx-laws ~ Laws of indices for numbers ~ F
+n-idx-neg ~ Negative indices ~ F
+n-idx-frac ~ Fractional indices ~ H
+n-surd-simplify ~ Simplify surds ~ H
+n-surd-calc ~ Add, subtract and multiply surds ~ H
+n-surd-rat ~ Rationalise a denominator ~ H
+n-exact-pi ~ Leave answers exactly in terms of π ~ F
+# N-acc ~ Approximation and accuracy
+n-round-dp ~ Round to decimal places ~ F
+n-round-sf ~ Round to significant figures ~ F
+n-estimate ~ Estimate answers by rounding to 1 significant figure ~ F
+n-trunc ~ Truncation ~ F
+n-err-int ~ Error intervals ~ F
+n-bounds ~ Upper and lower bounds ~ H
+n-bounds-calc ~ Calculate with bounds ~ H
+
+@ A ~ Algebra
+# A-expr ~ Expressions
+a-notation ~ Algebraic notation (3x, x², a/b, ab) ~ F
+a-subst ~ Substitute numbers into expressions ~ F
+a-collect ~ Collect like terms ~ F
+a-idx-laws ~ Simplify using the laws of indices ~ F
+a-expand-single ~ Expand a single bracket ~ F ~ expand:.
+a-expand-neg ~ Expand brackets with a negative outside ~ F ~ expand:^Negative;expand:^−
+a-expand-letters ~ Expand brackets with letters outside and inside ~ F ~ expand:^Two letters;expand:^Letter outside;expand:^Variable outside
+a-expand-double ~ Expand and simplify two brackets ~ F
+a-expand-triple ~ Expand three brackets ~ H
+a-factorise-common ~ Factorise by taking out a common factor ~ F ~ factorise:.
+a-factorise-quad1 ~ Factorise x² + bx + c ~ F ~ quad:^x² \+ 5x;quad:^All positive;quad:^Minus;quad:^Mixed
+a-factorise-dots ~ Factorise a difference of two squares ~ F ~ quad:^Difference of two squares
+a-factorise-quad2 ~ Factorise ax² + bx + c ~ H ~ quad:^Number in front;quad:^Up to 4x²
+a-factorise-grouping ~ Factorise by grouping four terms ~ H ~ factorise:^Four terms
+a-fractions-simplify ~ Simplify algebraic fractions ~ H
+a-fractions-addsub ~ Add and subtract algebraic fractions ~ H
+a-fractions-muldiv ~ Multiply and divide algebraic fractions ~ H
+# A-form ~ Formulae, identities and proof
+a-formula-subst ~ Substitute into formulae ~ F
+a-formula-derive ~ Write a formula from a situation ~ F
+a-subject-simple ~ Rearrange a formula (subject appears once) ~ F
+a-subject-hard ~ Rearrange a formula (subject appears twice or in a power) ~ H
+a-identity ~ Show two expressions are identical ~ H
+a-proof ~ Algebraic proof (odd, even, consecutive numbers) ~ H
+# A-eq ~ Equations
+a-eq-onestep ~ Solve one-step equations ~ F ~ balance:^x \+ a;balance:^Multiples;balance:^x/a = b$
+a-eq-twostep ~ Solve two-step equations ~ F ~ balance:^Two-step;balance:^x/a [+−] b
+a-eq-neg ~ Solve equations with negative numbers and negative answers ~ F ~ balance:^Negatives;balance:^Negative answers
+a-eq-both ~ Solve equations with the unknown on both sides ~ F ~ balance:^x on both sides
+a-eq-brackets ~ Solve equations with brackets ~ F
+a-eq-frac ~ Solve equations with fractions ~ F ~ balance:^Fractions;balance:^Fraction answers;balance:^x/a
+a-eq-flipped ~ Solve equations with the unknown on the right ~ F ~ balance:^Flipped
+a-eq-form ~ Form and solve equations from a situation ~ F
+a-eq-trial ~ Solve equations by trial and improvement ~ F
+a-eq-algfrac ~ Solve equations with algebraic fractions ~ H
+a-sim-graph ~ Solve simultaneous equations from graphs ~ F
+a-sim-linear ~ Solve linear simultaneous equations algebraically ~ H
+a-sim-quad ~ Solve simultaneous equations (one linear, one quadratic) ~ H
+a-quad-factorise ~ Solve quadratic equations by factorising ~ F
+a-quad-square ~ Solve quadratic equations by completing the square ~ H
+a-quad-formula ~ Solve quadratic equations using the formula ~ H
+a-quad-graph ~ Solve quadratic equations from a graph ~ F
+a-quad-form ~ Form and solve quadratic equations from a situation ~ H
+# A-ineq ~ Inequalities
+a-ineq-notation ~ Inequality notation and number lines ~ F
+a-ineq-solve ~ Solve linear inequalities ~ F
+a-ineq-int ~ List the integers that satisfy an inequality ~ F
+a-ineq-quad ~ Solve quadratic inequalities ~ H
+a-ineq-region ~ Show inequalities as regions on a graph ~ H
+# A-seq ~ Sequences
+a-seq-continue ~ Continue and describe sequences ~ F
+a-seq-term ~ Term-to-term rules ~ F
+a-seq-nth ~ Find the nth term of a linear sequence ~ F
+a-seq-test ~ Decide whether a number is in a sequence ~ F
+a-seq-special ~ Square, cube, triangular and Fibonacci-type sequences ~ F
+a-seq-geo ~ Geometric sequences ~ F
+a-seq-quad ~ Find the nth term of a quadratic sequence ~ H
+# A-graph ~ Graphs
+a-coord ~ Coordinates in all four quadrants ~ F
+a-line-plot ~ Plot straight-line graphs from a table of values ~ F
+a-line-grad ~ Find and use the gradient of a line ~ F ~ lines:^Gradient;lines:^Negative gradients;lines:^Fractional
+a-line-int ~ Find and use the y-intercept ~ F ~ lines:^Intercept
+a-line-eq ~ Understand and use y = mx + c ~ F ~ lines:^Both;lines:^Three stars;lines:^Boss;lines:^Horizontal
+a-line-through ~ Find the equation of a line through two points or a point and a gradient ~ H
+a-line-parallel ~ Parallel lines ~ F
+a-line-perp ~ Perpendicular lines ~ H
+a-line-midpoint ~ Midpoint of a line segment ~ F
+a-line-length ~ Length of a line segment ~ F
+a-quad-plot ~ Plot and read quadratic graphs ~ F
+a-quad-features ~ Roots, intercepts and turning points of quadratics ~ F
+a-cubic ~ Recognise and sketch cubic and reciprocal graphs ~ F
+a-exp ~ Exponential graphs ~ H
+a-trig-graph ~ Sine, cosine and tangent graphs ~ H
+a-graph-trans ~ Transformations of graphs ~ H
+a-circle-eq ~ Equation of a circle ~ H
+a-tangent-eq ~ Equation of a tangent to a circle ~ H
+a-real-graphs ~ Interpret real-life graphs ~ F
+a-dist-time ~ Distance-time graphs ~ F
+a-vel-time ~ Velocity-time graphs ~ F
+a-gradient-curve ~ Gradient of a curve as a rate of change ~ H
+a-area-curve ~ Area under a graph ~ H
+# A-func ~ Functions and iteration
+a-func-notation ~ Function notation ~ H
+a-func-compose ~ Composite functions ~ H
+a-func-inverse ~ Inverse functions ~ H
+a-iterate ~ Iteration to find approximate solutions ~ H
+
+@ R ~ Ratio, proportion and rates of change
+# R-ratio ~ Ratio
+r-simplify ~ Simplify a ratio ~ F
+r-unit ~ Write a ratio in the form 1 : n ~ F
+r-share ~ Share an amount in a given ratio ~ F
+r-from-share ~ Find an amount from a ratio when one part is known ~ F
+r-diff ~ Ratio problems using a difference ~ F
+r-frac ~ Link ratios and fractions ~ F
+r-three ~ Ratios with three parts ~ F
+r-compare ~ Compare ratios ~ F
+# R-prop ~ Proportion
+r-direct ~ Direct proportion problems ~ F
+r-recipe ~ Scale recipes and quantities ~ F
+r-best-buy ~ Best buys and unit prices ~ F
+r-inverse ~ Inverse proportion problems ~ F
+r-direct-eq ~ Direct proportion equations (y = kx, y = kx²) ~ H
+r-inverse-eq ~ Inverse proportion equations (y = k/x) ~ H
+r-prop-graph ~ Recognise proportion graphs ~ H
+# R-units ~ Units and compound measures
+r-metric ~ Convert metric units of length, mass and capacity ~ F
+r-time ~ Time: 12 and 24 hour clock, durations, timetables ~ F
+r-money ~ Money and currency conversion ~ F
+r-speed ~ Speed, distance and time ~ F
+r-density ~ Density, mass and volume ~ F
+r-pressure ~ Pressure, force and area ~ F
+r-conv-area ~ Convert units of area and volume ~ F
+r-conv-speed ~ Convert compound units ~ H
+r-map-scale ~ Scale on maps and plans ~ F
+# R-sim ~ Scale factors and similarity
+r-scale-factor ~ Scale factors for similar shapes ~ F
+r-scale-area ~ Scale factors for area and volume ~ H
+
+@ G ~ Geometry and measures
+# G-basic ~ Basic ideas and measuring
+g-vocab ~ Vocabulary of points, lines, angles and shapes ~ F
+g-measure-angle ~ Measure and draw angles with a protractor ~ F
+g-estimate-angle ~ Estimate the size of an angle ~ F ~ angles:^Estimate
+g-angle-types ~ Types of angle (acute, obtuse, reflex) ~ F ~ angles:^Complementary
+g-turns ~ Turns, clock angles and compass points ~ F ~ angles:^Turns
+g-bearings ~ Bearings ~ F ~ angles:^Bearings
+# G-angles ~ Angle facts
+g-ang-line ~ Angles on a straight line ~ F ~ angles:^Angles on a straight line
+g-ang-point ~ Angles around a point and vertically opposite angles ~ F ~ angles:^Straight line & around;angles:^Crossing lines
+g-ang-tri ~ Angles in a triangle ~ F ~ angles:^Angles in a triangle;angles:^Triangles II
+g-ang-iso ~ Isosceles and equilateral triangles ~ F ~ angles:^Isosceles
+g-ang-quad ~ Angles in quadrilaterals ~ F ~ angles:^Quadrilaterals
+g-ang-parallel ~ Angles in parallel lines ~ F ~ angles:^Parallel lines
+g-ang-polygon ~ Interior and exterior angles of polygons ~ F ~ angles:^Polygons;angles:^How many sides
+g-ang-algebra ~ Angle problems using algebra ~ F ~ angles:^Angles with algebra;angles:^Triangles with algebra;angles:^Parallel lines with algebra;angles:^Lines, points
+g-ang-ratio ~ Angles in a ratio ~ F ~ angles:^Angles in ratios
+g-ang-reason ~ Give reasons for angle calculations ~ F
+g-ang-mixed ~ Choose the right angle rule in mixed problems ~ F ~ angles:^Mixed angle rules;angles:^Boss;angles:^Angle facts
+# G-shape ~ Shapes and their properties
+g-shape-names ~ Name and describe polygons ~ F
+g-tri-types ~ Properties of triangles ~ F
+g-quad-types ~ Properties of quadrilaterals ~ F
+g-symmetry ~ Line and rotational symmetry ~ F
+g-3d-names ~ Names and properties of 3D shapes ~ F
+g-plans ~ Plans and elevations ~ F
+g-nets ~ Nets of 3D shapes ~ F
+g-congruent ~ Congruent shapes and congruent triangles ~ F
+g-congruent-proof ~ Prove triangles are congruent ~ H
+g-similar ~ Similar shapes and similar triangles ~ F
+g-similar-ratio ~ Area and volume of similar shapes ~ H
+# G-constr ~ Constructions and loci
+g-constr-tri ~ Construct triangles with ruler and compasses ~ F
+g-constr-bisect ~ Bisect an angle or a line ~ F
+g-constr-perp ~ Construct perpendiculars ~ F
+g-loci ~ Loci ~ F
+g-scale-draw ~ Scale drawings ~ F
+# G-meas ~ Perimeter, area and volume
+g-perimeter ~ Perimeter of 2D shapes ~ F
+g-area-basic ~ Area of rectangles, triangles, parallelograms and trapeziums ~ F
+g-area-compound ~ Area of compound shapes ~ F
+g-circle-parts ~ Parts of a circle ~ F
+g-circumference ~ Circumference of a circle ~ F
+g-circle-area ~ Area of a circle ~ F
+g-arc ~ Arc length ~ H
+g-sector ~ Area of a sector ~ H
+g-prism-vol ~ Volume of prisms and cuboids ~ F
+g-cyl-vol ~ Volume of a cylinder ~ F
+g-sa-prism ~ Surface area of prisms ~ F
+g-sa-cyl ~ Surface area of a cylinder ~ F
+g-pyr-cone-sph ~ Volume and surface area of pyramids, cones and spheres ~ H
+g-frustum ~ Frustums and composite solids ~ H
+# G-trans ~ Transformations and vectors
+g-trans-translate ~ Translate a shape by a vector ~ F ~ transform:^Translations
+g-trans-reflect ~ Reflect a shape in a line ~ F ~ transform:^Reflect
+g-trans-rotate ~ Rotate a shape about a point ~ F ~ transform:^Rotate
+g-trans-enlarge ~ Enlarge a shape by a positive whole-number scale factor ~ F ~ transform:^Enlarge
+g-trans-enlarge-frac ~ Enlarge by a fractional or negative scale factor ~ H
+g-trans-describe ~ Describe a single transformation fully ~ F ~ transform:^Boss
+g-trans-combine ~ Combine transformations ~ H
+g-vec-column ~ Column vectors ~ F
+g-vec-arith ~ Add, subtract and multiply vectors by a number ~ H
+g-vec-geom ~ Vector geometry and proofs ~ H
+# G-pyth ~ Pythagoras and trigonometry
+g-pyth-hyp ~ Pythagoras: find the hypotenuse ~ F
+g-pyth-side ~ Pythagoras: find a shorter side ~ F
+g-pyth-problems ~ Pythagoras in context and on coordinates ~ F
+g-trig-ratio ~ Trigonometric ratios (SOH CAH TOA): find a side ~ F
+g-trig-angle ~ Trigonometric ratios: find an angle ~ F
+g-trig-exact ~ Exact trigonometric values ~ F
+g-trig-elev ~ Angles of elevation and depression ~ F
+g-sine ~ The sine rule ~ H
+g-cosine ~ The cosine rule ~ H
+g-area-sin ~ Area of a triangle using ½ab sin C ~ H
+g-3d ~ Pythagoras and trigonometry in 3D ~ H
+# G-circ ~ Circle theorems
+g-circ-centre ~ Angle at the centre is twice the angle at the circumference ~ H ~ angles:^Circle theorems 1
+g-circ-semi ~ Angle in a semicircle ~ H ~ angles:^Circle theorems 1
+g-circ-seg ~ Angles in the same segment ~ H ~ angles:^Circle theorems
+g-circ-cyclic ~ Opposite angles of a cyclic quadrilateral ~ H ~ angles:^Cyclic
+g-circ-tangent ~ Tangents and radii ~ H
+g-circ-alt ~ Alternate segment theorem ~ H
+g-circ-chord ~ Chords and perpendicular bisectors ~ H
+g-circ-proof ~ Prove circle theorems ~ H
+
+@ P ~ Probability
+# P-basic ~ Basic probability
+p-scale ~ The probability scale: impossible, certain, likely, unlikely ~ F ~ chance:^Certain
+p-single ~ Probability of a single event ~ F ~ chance:^Bags · one;chance:^Spinners;chance:^Certain;chance:^Playing cards;chance:^Letters
+p-not ~ Probability that an event does not happen ~ F ~ chance:^Bags · “not”;chance:^Probability rules
+p-sum-one ~ Probabilities of all outcomes add up to 1 ~ F ~ chance:^Probability rules
+p-fmt ~ Write probabilities as fractions, decimals and percentages ~ F ~ chance:^Fractions, decimals
+p-rel-freq ~ Relative frequency ~ F ~ chance:^Expected & relative
+p-expected ~ Expected number of outcomes ~ F ~ chance:^Expected & relative;chance:^Estimates & expected
+p-fairness ~ Fair and biased: compare experimental and theoretical probability ~ F
+# P-enum ~ Listing and counting outcomes
+p-list ~ List outcomes systematically ~ F ~ chance:^Listing outcomes
+p-sample ~ Sample space diagrams ~ F ~ chance:^Two dice
+p-two-way ~ Two-way tables ~ F ~ chance:^Two-way tables
+p-venn ~ Venn diagrams ~ F ~ chance:^Venn diagrams
+p-venn-set ~ Set notation and Venn diagrams (A ∪ B, A ∩ B, A′) ~ H
+p-freq-tree ~ Frequency trees ~ F ~ chance:^Overlapping events
+p-product ~ The product rule for counting ~ F ~ chance:^Counting · product;chance:^Pairs & handshakes;chance:^Counting extras
+p-arrange ~ Arrangements and permutations ~ H ~ chance:^Counting · arrangements
+# P-comb ~ Combined events
+p-or ~ Mutually exclusive events: the “or” rule ~ F ~ chance:^Bags · “or”
+p-and ~ Independent events: the “and” rule ~ F ~ chance:^Two spinners;chance:^Combined events;chance:^Probability arithmetic
+p-tree-with ~ Tree diagrams with independent events ~ F ~ chance:^Tree diagrams · with;chance:^Two picks · with replacement
+p-tree-without ~ Tree diagrams with dependent events (without replacement) ~ H ~ chance:^Tree diagrams · without;chance:^Two picks · without;chance:^Dependent trees
+p-conditional ~ Conditional probability ~ H
+p-at-least ~ “At least one” probabilities ~ H ~ chance:^Two dice · at least
+
+@ S ~ Statistics
+# S-collect ~ Collecting and sampling data
+s-types ~ Types of data (qualitative, quantitative, discrete, continuous) ~ F
+s-collect ~ Data collection methods and questionnaires ~ F
+s-tally ~ Tally charts and frequency tables ~ F
+s-sampling ~ Sampling methods and bias ~ F
+s-stratified ~ Stratified sampling ~ H
+s-capture ~ Capture–recapture estimates ~ H
+# S-diag ~ Charts and diagrams
+s-pictogram ~ Pictograms ~ F
+s-bar ~ Bar charts, dual and composite bar charts ~ F
+s-pie ~ Pie charts ~ F
+s-line ~ Line graphs and time series ~ F
+s-stem ~ Stem-and-leaf diagrams ~ F
+s-scatter ~ Scatter graphs and correlation ~ F
+s-lobf ~ Lines of best fit ~ F
+s-misleading ~ Spot misleading graphs and statistics ~ F
+s-freq-poly ~ Frequency polygons ~ F
+s-hist-equal ~ Histograms with equal class widths ~ F
+s-hist-unequal ~ Histograms with unequal class widths ~ H
+# S-avg ~ Averages and spread
+s-mean ~ Mean, median, mode and range of a list ~ F
+s-freq-table ~ Averages from a frequency table ~ F
+s-grouped ~ Estimate the mean from a grouped frequency table ~ F
+s-compare ~ Compare two distributions using averages and spread ~ F
+s-cf ~ Cumulative frequency graphs ~ H
+s-quartiles ~ Quartiles and the interquartile range ~ H
+s-box ~ Box plots ~ H
