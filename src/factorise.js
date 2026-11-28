@@ -76,7 +76,7 @@ function factAnim(box,api){
   let tm=[],stopped=false,gen=0;
   const SS=window.speechSynthesis,CAN=!!(SS&&window.SpeechSynthesisUtterance);
   let voiceOn=CAN;try{if(localStorage.getItem('pz-voice')==='0')voiceOn=false;}catch(e){}
-  let blocked=false;
+  let blocked=false,curA=null;
   dots.innerHTML='<i></i><i></i><i></i><i></i><i></i><i></i><i></i>';
   const dot=n=>[...dots.children].forEach((d,i)=>d.classList.toggle('on',i<=n));
   const pop=e=>{e.classList.remove('pop');void e.offsetWidth;e.classList.add('pop');};
@@ -103,8 +103,18 @@ function factAnim(box,api){
    {say:"And the expression is factorised: five times, six x plus five.",cap:'30x + 25 = 5(6x + 5)',min:5000,d:6,do(){l2.innerHTML='= <b>5</b>(6x + 5)';l2.classList.add('on');pop(l2);hand.style.opacity=0;}},
    {say:"That's it! Keep going until nothing more can be taken out. Good luck!",cap:'Keep going until nothing more can be taken out',min:4200,d:6,do(){end.hidden=false;}}
   ];
-  function speak(text,onDone){
+  const stopAudio=()=>{if(curA){try{curA.onended=null;curA.onerror=null;curA.pause();}catch(e){}curA=null;}};
+  function speak(text,onDone,idx){
     let done=false;const fin=()=>{if(!done){done=true;onDone();}};
+    if(idx!=null){ // recorded (pre-generated) voice first
+      try{const a=new Audio(ROOT+'audio/factorise/'+idx+'.mp3');curA=a;
+        const fallback=()=>{if(done)return;stopAudio();speak(text,onDone,null);};
+        a.onended=fin;a.onerror=fallback;
+        const pr=a.play();
+        if(pr&&pr.catch)pr.catch(err=>{if(err&&err.name==='NotAllowedError'){blocked=true;fin();}else fallback();});
+        at(Math.max(9000,text.length*200),fin);return;
+      }catch(e){}
+    }
     try{SS.cancel();const u=new SpeechSynthesisUtterance(text);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang;}else u.lang='en-GB';u.rate=.95;u.pitch=1.02;u.volume=1;
       let started=false;u.onstart=()=>{started=true;};u.onend=fin;u.onerror=()=>{if(!started){blocked=true;}fin();};
       SS.speak(u);
@@ -118,15 +128,15 @@ function factAnim(box,api){
     const s=STEPS[i];s.do();cap.textContent=s.cap;dot(s.d);
     let proceed=false;const useV=voiceOn&&CAN&&!blocked;
     const next=()=>{if(proceed||myGen!==gen)return;proceed=true;at(useV?900:0,()=>runFrom(i+1,myGen));};
-    if(useV)speak(s.say,()=>{if(blocked){st.hidden=false;gen++;tm.forEach(clearTimeout);tm=[];return;}next();});else at(s.min,next);
+    if(useV)speak(s.say,()=>{if(blocked){st.hidden=false;gen++;tm.forEach(clearTimeout);tm=[];return;}next();},i);else at(s.min,next);
   }
-  function run(){gen++;tm.forEach(clearTimeout);tm=[];if(CAN){try{SS.cancel();}catch(e){}}vbLabel();q('fis').querySelectorAll('.fi-pad i').forEach(k=>k.classList.remove('hit'));runFrom(0,gen);}
+  function run(){gen++;tm.forEach(clearTimeout);tm=[];stopAudio();if(CAN){try{SS.cancel();}catch(e){}}vbLabel();q('fis').querySelectorAll('.fi-pad i').forEach(k=>k.classList.remove('hit'));runFrom(0,gen);}
   vb.onclick=()=>{voiceOn=!voiceOn;blocked=false;try{localStorage.setItem('pz-voice',voiceOn?'1':'0');}catch(e){}vbLabel();run();};
   q('fisb').onclick=()=>{blocked=false;st.hidden=true;voiceOn=true;vbLabel();run();};
   q('figo').onclick=()=>api.close();
   q('firp').onclick=()=>{blocked=false;run();};
   vbLabel();setTimeout(()=>{if(!stopped)run();},300);
-  return()=>{stopped=true;gen++;tm.forEach(clearTimeout);if(CAN){try{SS.cancel();}catch(e){}}};
+  return()=>{stopped=true;gen++;tm.forEach(clearTimeout);stopAudio();if(CAN){try{SS.cancel();}catch(e){}}};
 }
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',
  desc:'Factorise expressions like 30x + 25. Tap a number or letter and break it into factors (30x → 5 × 6x → 5 × 2 × 3x…). When the same factor shows up in every term, press Factorise. Repeat until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','prime factors'],
