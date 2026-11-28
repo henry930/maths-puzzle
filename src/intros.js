@@ -1,109 +1,91 @@
-// Animated how-to-play scripts for the GCSE games (voice clips: audio/<id>/<n>.mp3)
+// Live-demo scripts: the REAL game (seeded first question) is driven step by step. Voice clips: audio/<id>/<n>.mp3
 (function(){
-const C=h=>`<div class="gi-card">${h}</div>`,H=(d,h,c)=>`<div class="gi-hid ${c||''}" data-d="${d}">${h}</div>`;
-const T=(l,c)=>`<span class="gi-tile ${c||''}">${l}</span>`;
-const I={};
-const GO=" Good luck!";
-// ---------- Balance Scale
-const pans=(L,R)=>`<div class="gi-bal"><div class="gi-pan">${L}</div><span class="gi-fu">▲</span><div class="gi-pan">${R}</div></div>`;
-I.balance=[
- {say:"Hi there! This is a real balance scale. Our goal is to get x all by itself!",cap:'Get x on its own',html:C(`<div class="gi-big">⚖️</div><div class="gi-mid">x + 3 = 7</div>`)},
- {say:"Whatever you do to one side, the game does to the other side too. So it always stays balanced!",cap:'Both sides change together',html:C(pans(T('x')+T('3','n'),T('7','n')+'')+`<div class="gi-sm">Always balanced</div>`)},
- {say:"Here we have x plus three on the left, and seven on the right. Let's drag the three off the pan.",cap:'Drag the 3 off the pan',html:C(pans(T('x')+`<span class="gi-sl" data-t="1500:go" style="--dy:-120px;display:inline-block">${T('3','n')}</span>`,T('7','n')))+'',hand:[[300,38,34],[1500,38,16,1]],min:5200},
- {say:"Look! The three disappears from both sides, and now seven minus three leaves four. So x equals four!",cap:'x = 4 ✓',html:C(pans(T('x'),T('4','n'))+`<div class="gi-mid gi-g">x = 4</div>`)},
- {say:"If a number is multiplying x, swing the pointer on the base to divide. Two x equals eight becomes x equals four!",cap:'2x = 8 → ÷2 → x = 4',html:C(`<div class="gi-mid">2x = 8</div><div class="gi-big">🧭</div><div class="gi-mid gi-g" data-d="2200" style="opacity:0;transition:.5s" ></div>`+H(2500,`<div class="gi-mid">÷ 2 → <b class="gi-g">x = 4</b></div>`))},
- {say:"When x is all alone, you've solved it. Have fun!"+"",cap:'Press Apply, then keep x alone',html:C(`<div class="gi-big">😄</div><div class="gi-mid">x is alone!</div>`),last:1}
-];
-// ---------- Arrow Expander
-const br=(a)=>`<div class="gi-big">2(<span>x</span> + <span>5</span>)</div>`;
-I.expand=[
- {say:"Hi there! Let's learn how to expand brackets. Look at two, times, bracket x plus five.",cap:'Expand 2(x + 5)',html:C(br())},
- {say:"The number outside the bracket must multiply everything inside. So we follow an arrow to each term!",cap:'Multiply EVERY term inside',html:C(`<svg viewBox="0 0 300 120"><text x="20" y="80" font-size="46" font-weight="900" fill="#2b2160">2(x + 5)</text><path d="M45 52 Q95 0 140 50" fill="none" stroke="#e8590c" stroke-width="5" stroke-dasharray="200" stroke-dashoffset="200"><animate attributeName="stroke-dashoffset" to="0" dur="1.2s" begin="0.4s" fill="freeze"/></path><path d="M45 52 Q130 -30 235 50" fill="none" stroke="#1c7ed6" stroke-width="5" stroke-dasharray="300" stroke-dashoffset="300"><animate attributeName="stroke-dashoffset" to="0" dur="1.4s" begin="2s" fill="freeze"/></path></svg>`),min:6000},
- {say:"First arrow: two times x makes two x! Tap the box, and type it in.",cap:'2 × x = 2x',html:C(`<div class="gi-big">2 × x = <span class="gi-box" data-t="2200:on">?</span></div>`+H(2200,`<div class="gi-big gi-g">2x</div>`)),hand:[[400,60,38],[1700,60,38,1]],min:5000},
- {say:"Second arrow: two times five makes ten!",cap:'2 × 5 = 10',html:C(`<div class="gi-big">2 × 5 = <span class="gi-box on">10</span></div>`)},
- {say:"Put it together: two x plus ten. And watch the signs! A minus times a minus makes a plus."+GO,cap:'2(x + 5) = 2x + 10',html:C(`<div class="gi-big">2x + 10 ✓</div><div class="gi-sm">− × − = +   ·   x × x = x²</div>`),last:1}
-];
-// ---------- Line Hunter
-const AX=(extra,stars)=>`<svg viewBox="0 0 240 200"><rect width="240" height="200" fill="#f8f9ff"/><g stroke="#ced4da"><path d="M20 100H230M120 10V190"/></g><path d="M120 100H230M120 100V10" stroke="#495057" stroke-width="2" fill="none"/>${stars||''}${extra||''}</svg>`;
-const STR=`<text x="150" y="68" font-size="22">⭐</text><text x="180" y="38" font-size="22">⭐</text><text x="112" y="82" font-size="22">⭐</text>`;
-I.lines=[
- {say:"Hi there! Here's a graph with some stars. Your job is to make the line pass through every single star!",cap:'Make the line hit every ⭐',html:C(AX('',STR))},
- {say:"The line is y equals m x plus c. You get to change m and c.",cap:'y = mx + c',html:C(`<div class="gi-big">y = <b class="gi-y">m</b>x + <b class="gi-g">c</b></div>`)},
- {say:"M is the gradient. It tells you how steep the line is. Tap plus, and the line gets steeper!",cap:'m = gradient (steepness)',html:C(AX('<line x1="20" y1="100" x2="220" y2="70" stroke="#e8590c" stroke-width="5"><animate attributeName="y2" to="-60" dur="2.5s" begin="0.8s" fill="freeze"/></line>',STR)+`<div class="gi-mid gi-y">m  <b>+</b></div>`),hand:[[500,40,92],[1200,40,92,1]],min:5000},
- {say:"C is where the line crosses the y axis. Change c, and the whole line slides up or down.",cap:'c = where it crosses the y-axis',html:C(AX('<line x1="20" y1="170" x2="220" y2="30" stroke="#2f9e44" stroke-width="5"><animateTransform attributeName="transform" type="translate" to="0 -50" dur="2.5s" begin="0.8s" fill="freeze"/></line>',STR)+`<div class="gi-mid gi-g">c  <b>+</b></div>`),min:5000},
- {say:"When the line goes through all the stars, you win!"+GO,cap:'Line through every ⭐ = level complete!',html:C(AX('<line x1="60" y1="150" x2="200" y2="10" stroke="#7048e8" stroke-width="5"/>',STR)+`<div class="gi-mid gi-g">🎉</div>`),last:1}
-];
-// ---------- Angle Hunter
-const TRI=(q)=>`<svg viewBox="0 0 260 170"><polygon points="30,150 230,150 90,20" fill="#e7f5ff" stroke="#1971c2" stroke-width="4"/><text x="55" y="140" font-size="20" font-weight="800" fill="#1971c2">50°</text><text x="170" y="140" font-size="20" font-weight="800" fill="#1971c2">60°</text><text x="75" y="62" font-size="22" font-weight="900" fill="#e8590c">${q}</text></svg>`;
-I.angles=[
- {say:"Hi there! In this game, you hunt for the missing angle. Here, two angles are fifty and sixty, and one is a mystery!",cap:'Find the missing angle',html:C(TRI('?'))},
- {say:"A key rule: the angles in a triangle always add up to one hundred and eighty degrees!",cap:'Triangle angles add to 180°',html:C(`<div class="gi-big">△ = 180°</div>`)},
- {say:"Fifty plus sixty is one hundred and ten. So we do one eighty, minus one ten.",cap:'50 + 60 = 110   →   180 − 110',html:C(`<div class="gi-mid">50 + 60 = <b>110</b></div>`+H(1800,`<div class="gi-mid">180 − 110 = ?</div>`)),min:5000},
- {say:"That makes seventy! Just type it in with the keypad.",cap:'The answer is 70°',html:C(TRI('70°')+`<div class="gi-big gi-g">70</div>`)},
- {say:"There are other rules too: angles on a straight line make one eighty, and angles around a point make three sixty. Diagrams are not always to scale, so calculate!"+GO,cap:'Straight line 180° · Around a point 360°',html:C(`<div class="gi-mid">Straight line = <b>180°</b></div><div class="gi-mid">Around a point = <b>360°</b></div><div class="gi-sm">Not drawn to scale!</div>`),last:1,min:7000}
-];
-// ---------- Transform Quest
-const GR=(poly,extra)=>`<svg viewBox="0 0 240 200"><g stroke="#dee2e6">${[0,1,2,3,4,5,6,7,8].map(i=>`<path d="M${i*30} 0V200M0 ${i*25}H240"/>`).join('')}</g><polygon points="${poly}" fill="#74c0fc" stroke="#1971c2" stroke-width="3"/>${extra||''}</svg>`;
-I.transform=[
- {say:"Hi there! In this game you move shapes on a grid. You can slide them, flip them, turn them, or make them bigger!",cap:'Slide · Flip · Turn · Enlarge',html:C(GR('30,150 90,150 30,100'))},
- {say:"First, read the instruction. For example: translate the shape three squares right, and one square up.",cap:'Translate: 3 right, 1 up',html:C(`<div class="gi-mid">Translate by <b class="gi-y">(3, 1)</b></div><div class="gi-sm">3 right · 1 up</div>`)},
- {say:"Every corner of the shape moves three squares right, and one up.",cap:'Move every corner',html:C(GR('30,150 90,150 30,100','<polygon points="120,125 180,125 120,75" fill="#ffd43b" fill-opacity=".7" stroke="#f08c00" stroke-width="3" class="gi-hid" data-d="800"/>')),min:5200},
- {say:"Now tap the grid points where the corners of the new shape land. Tap a point again to take it away.",cap:'Tap where each corner lands',html:C(GR('30,150 90,150 30,100','<g fill="#f03e3e"><circle cx="120" cy="125" r="7" class="gi-hid" data-d="900"/><circle cx="180" cy="125" r="7" class="gi-hid" data-d="2200"/><circle cx="120" cy="75" r="7" class="gi-hid" data-d="3500"/></g>')),hand:[[300,50,63,1],[1700,75,63,1],[3000,50,45,1]],min:6000},
- {say:"Feeling stuck? Tap the light bulb for a visual clue."+GO,cap:'💡 Hint = visual clue',html:C(`<div class="gi-big gi-bounce">💡</div>`),last:1}
-];
-// ---------- Fraction Factory
-const PIZ=(n)=>{let s='';for(let i=0;i<8;i++){const a0=i*Math.PI/4-Math.PI/2,a1=(i+1)*Math.PI/4-Math.PI/2;s+=`<path d="M100 100 L${100+80*Math.cos(a0)} ${100+80*Math.sin(a0)} A80 80 0 0 1 ${100+80*Math.cos(a1)} ${100+80*Math.sin(a1)} Z" fill="${i<n?'#ff922b':'#fff3bf'}" stroke="#e67700" stroke-width="3"/>`;}return `<svg viewBox="0 0 200 200" style="max-height:32vh">${s}</svg>`;};
-I.fraction=[
- {say:"Hi there! Pizzas and chocolate bars make fractions easy to see!",cap:'Fractions you can see',html:C(PIZ(6))},
- {say:"Count the slices that are shaded. That's six. Then count all the slices. That's eight.",cap:'6 shaded · 8 slices in total',html:C(PIZ(6)+`<div class="gi-mid">6 shaded of 8</div>`)},
- {say:"So the fraction is six eighths. Type it using the slash key: six, slash, eight.",cap:'Type  6 / 8',html:C(`<div class="gi-big"><span class="fr"><i>6</i><i>8</i></span></div><div class="gi-sm">Use the / key</div>`),hand:[[500,70,60,1]],min:5000},
- {say:"Sometimes it asks for simplest form. Divide the top and the bottom by the same number. Two goes into both!",cap:'Simplest form: ÷ 2 top and bottom',html:C(`<div class="gi-big"><span class="fr"><i>6</i><i>8</i></span> = <span class="fr"><i>3</i><i>4</i></span></div>`+`<div class="gi-sm">÷ 2 on the top and the bottom</div>`),min:5500},
- {say:"Three quarters! That's it."+GO,cap:'Answer: 3/4',html:C(PIZ(6)+`<div class="gi-big gi-g">¾</div>`),last:1}
-];
-// ---------- Percent Shop
-I.percent=[
- {say:"Hi there! Welcome to the percent shop. Let's work out twenty percent off a fifty pound jacket!",cap:'20% off a £50 jacket',html:C(`<div class="gi-big">🧥</div><div class="gi-mid">£50</div><div class="gi-mid gi-r">20% OFF</div>`)},
- {say:"Here's a top tip. Find ten percent first, by dividing by ten.",cap:'Tip: 10% = ÷ 10',html:C(`<div class="gi-mid">10% of £50</div><div class="gi-big">50 ÷ 10 = <b class="gi-g">5</b></div>`),min:4500},
- {say:"Twenty percent is two lots of ten percent. So that's ten pounds off!",cap:'20% = 2 × 5 = £10',html:C(`<div class="gi-mid">20% = 2 × 10%</div><div class="gi-big">2 × 5 = <b class="gi-g">10</b></div>`)},
- {say:"The sale takes ten pounds off, so you pay forty pounds! Just type the number, no pound sign needed.",cap:'£50 − £10 = £40',html:C(`<div class="gi-big">50 − 10 = <b class="gi-g">40</b></div>`),hand:[[600,55,70,1]],min:5000},
- {say:"For reverse percentages, work out one percent first."+GO,cap:'Reverse %: find 1% first',html:C(`<div class="gi-mid">Reverse percentages</div><div class="gi-big">1% first!</div>`),last:1}
-];
-// ---------- Ball Factory
-const BALLS=(n,rows,cols,odd)=>{let s='';for(let i=0;i<n;i++)s+=`<span class="gi-ball ${i>=odd?'o':''}"></span>`;return `<div class="gi-grid" style="grid-template-columns:repeat(${cols},26px)">${s}</div>`;};
-const B12=(c)=>{let s='';for(let i=0;i<12;i++)s+='<span class="gi-ball"></span>';return `<div class="gi-grid" style="grid-template-columns:repeat(${c},26px)">${s}</div>`;};
-I.factors=[
- {say:"Hi there! Let's find factors using balls. Here are twelve balls in a pile.",cap:'12 balls',html:C(`<div class="gi-row">${'<span class="gi-ball"></span>'.repeat(12)}</div><div class="gi-mid">12</div>`)},
- {say:"Type how many rows to use. Let's try three rows, and press Arrange.",cap:'3 rows → Arrange',html:C(B12(4)+`<div class="gi-mid">3 rows × 4 columns</div>`),hand:[[500,50,80,1]],min:5000},
- {say:"Every row is full! So three and four are both factors of twelve.",cap:'3 and 4 are factors of 12 ✓',html:C(B12(4)+`<div class="gi-mid gi-g">3 × 4 = 12 ✓</div>`)},
- {say:"Now try five rows. Look, some orange balls are left over. So five is not a factor.",cap:'5 rows: orange balls left over ✗',html:C(`<div class="gi-grid" style="grid-template-columns:repeat(3,26px)">${'<span class="gi-ball"></span>'.repeat(10)}<span class="gi-ball o"></span><span class="gi-ball o"></span></div><div class="gi-mid gi-r">5 is not a factor ✗</div>`),min:5000},
- {say:"Find all the factors, then press, That's all."+GO,cap:'Find ALL the factors',html:C(`<div class="gi-mid">Factors of 12</div><div class="gi-row">${[1,2,3,4,6,12].map(n=>T(n)).join('')}</div>`),last:1}
-];
-// ---------- Chance Lab
-const BAG=`<div class="gi-row"><span class="gi-ball r"></span><span class="gi-ball r"></span><span class="gi-ball r"></span><span class="gi-ball b"></span><span class="gi-ball b"></span></div>`;
-I.chance=[
- {say:"Hi there! Let's work out probability. Here's a bag with three red balls and two blue balls.",cap:'3 red 🔴 · 2 blue 🔵',html:C(`<div class="gi-big">🎒</div>`+BAG)},
- {say:"Probability is the number of ways you want, over the total number of outcomes.",cap:'Probability = wanted ÷ total',html:C(`<div class="gi-mid">Probability =</div><div class="gi-big"><span class="fr"><i>wanted</i><i>total</i></span></div>`)},
- {say:"We want a red ball. There are three reds, and five balls altogether. So the probability is three fifths!",cap:'P(red) = 3/5',html:C(BAG+`<div class="gi-big"><span class="fr"><i>3</i><i>5</i></span></div>`),min:5500},
- {say:"Type three, slash, five. A decimal works too: zero point six!",cap:'3/5 or 0.6 — both work',html:C(`<div class="gi-big">3/5 = 0.6 ✓</div>`),hand:[[500,60,70,1]],min:5000},
- {say:"You'll also see spinners and dice grids. Get four out of five right to pass!"+GO,cap:'4 out of 5 to pass',html:C(`<div class="gi-big">🎲 🎡</div>`),last:1}
-];
-// ---------- Dice Derby
-const HORSES=`<div style="display:flex;flex-direction:column;gap:6px;font-size:22px;align-items:flex-start;width:100%"><div>🏇 <b>6</b> ·········</div><div>🏇 <b>7</b> ·········</div><div>🏇 <b>8</b> ·········</div></div>`;
-I.derby=[
- {say:"Hi there! Welcome to the Dice Derby! Horses are numbered two to twelve, and they're about to race!",cap:'Horses numbered 2–12',html:C(HORSES)},
- {say:"Tap a horse number to bet ten coins on it. You can back up to three horses.",cap:'Tap a number: bet 10 coins (up to 3)',html:C(`<div class="gi-row">${T(6)}${T(7,'o')}${T(8)}</div><div class="gi-sm">🪙 10 each</div>`),hand:[[600,50,40,1]],min:5000},
- {say:"Press Start! Every time two dice are rolled, the horse matching the total moves forward!",cap:'🎲 3 + 4 = 7 → horse 7 moves!',html:C(`<div class="gi-big">🎲🎲</div><div class="gi-mid">3 + 4 = <b class="gi-y">7</b></div>`+H(1500,`<div class="gi-mid">🏇 7 →</div>`)),min:5200},
- {say:"The first horse to the finish line wins, and pays forty coins for each winning bet!",cap:'First to the finish pays 40 coins',html:C(`<div class="gi-big">🏁🏆</div><div class="gi-mid">🪙 40</div>`)},
- {say:"But which totals come up the most? Think carefully before you bet!"+GO,cap:'Which totals come up most?',html:C(`<div class="gi-big gi-bounce">🤔</div>`),last:1}
-];
-// ---------- Quadratic Factoriser
-I.quad=[
- {say:"Hi there! Let's factorise a quadratic: x squared plus seven x plus twelve.",cap:'Factorise x² + 7x + 12',html:C(`<div class="gi-big">x² + 7x + 12</div>`)},
- {say:"Step one: find two numbers that multiply to twelve, and add up to seven.",cap:'Multiply to 12 · Add to 7',html:C(`<div class="gi-mid">× → <b class="gi-y">12</b></div><div class="gi-mid">+ → <b class="gi-g">7</b></div>`)},
- {say:"Three times four is twelve, and three plus four is seven. Perfect!",cap:'3 × 4 = 12 ✓   3 + 4 = 7 ✓',html:C(`<div class="gi-big">${T(3)} ${T(4)}</div><div class="gi-mid">3 × 4 = 12 ✓</div><div class="gi-mid">3 + 4 = 7 ✓</div>`),min:5000},
- {say:"Step two: write the brackets. x plus three, times, x plus four!",cap:'(x + 3)(x + 4)',html:C(`<div class="gi-big">(x + <b class="gi-g">3</b>)(x + <b class="gi-g">4</b>)</div>`),hand:[[500,60,50,1],[1500,80,50,1]],min:5000},
- {say:"Watch the signs, and good luck! If the first number in front of x squared isn't one, there's a bit more to do."+"",cap:'Watch the signs!',html:C(`<div class="gi-big">+ − ✓</div>`),last:1,min:6000}
-];
-window.__INTROS=I;
-REG.forEach(g=>{if(I[g.id])g.anim=mkAnim(g.id,I[g.id]);});
+const D={};
+D.balance={seed:13,steps:[
+ {say:"Hi there! This is a real balance scale. Our goal is to get x all by itself!",cap:'Get x on its own',async do(h){h.hl('#eq');await h.wait(2500);},min:2500},
+ {say:"The equation is up here, and the scale shows the very same thing. Whatever you do to one side, the game does to the other side too!",cap:'Both sides always change together',async do(h){h.unhl();h.hl('#scene');await h.wait(2000);},min:3000},
+ {say:"Here, x plus four equals ten. To get x alone, we need to take away the four. Just drag its tile off the pan!",cap:'Drag the number tile off the pan',async do(h){h.unhl();const t=[...document.querySelectorAll('.sc-pan[data-p=L] .t.tn')][0];if(t)await h.drag(t,{x:30,y:t.getBoundingClientRect().top-40});},min:3000},
+ {say:"Look! Four disappears from both sides, and the scale stays balanced. Now x equals six!",cap:'Both sides change · x is alone ✓',async do(h){h.hide();h.hl('#eq');await h.wait(2000);},min:3000},
+ {say:"You can also drag a weight from this box onto a pan, to add it to both sides.",cap:'Add weights from this box',async do(h){h.unhl();h.hl('.sc-wts');await h.point('.sc-wts',900);},min:3000},
+ {say:"If a number is stuck to x, use the dial. Swing the pointer left to divide, or right to multiply, then press Apply. Have fun!",cap:'Dial: left = ÷ · right = ×',async do(h){h.unhl();h.hl('.sc-base');await h.point('#gauge',900);},last:1,min:3000}
+]};
+
+const hl=(h,sel)=>{h.unhl();h.hl(sel);};
+// ---------- Arrow Expander  (seed 14 → 3(x + 4))
+D.expand={seed:14,steps:[
+ {say:"Hi there! Let's learn how to expand brackets. The number outside the bracket must multiply everything inside!",cap:'Outside number × EVERY term inside',async do(h){hl(h,'#exe');await h.wait(2500);},min:3000},
+ {say:"Follow the arrows! Arrow one: three times x. Tap the box on the arrow, and type the answer with the keypad.",cap:'Tap the arrow box · type the answer',async do(h){h.unhl();await h.tap('.ex-chip');await h.key('3');await h.key('x');await h.key('✓');},min:3000},
+ {say:"Arrow two: three times four. That's twelve!",cap:'3 × 4 = 12',async do(h){await h.key('1');await h.key('2');await h.key('✓');},min:3000},
+ {say:"All done! Three x plus twelve. Watch the signs: a minus times a minus makes a plus. Good luck!",cap:'3(x + 4) = 3x + 12 ✓',async do(h){h.hide();hl(h,'#exres');await h.wait(1500);},last:1,min:3000}
+]};
+// ---------- Line Hunter  (seed 1 → star on y = 2x)
+D.lines={seed:1,steps:[
+ {say:"Hi there! Here's a graph with a star on it. Your job is to make the line pass through the star!",cap:'Make the line pass through the ⭐',async do(h){hl(h,'.ln-svg');await h.wait(2500);},min:3000},
+ {say:"The line is y equals m x plus c, and you can see its equation up here.",cap:'y = mx + c',async do(h){hl(h,'.ln-eq');await h.wait(2000);},min:2500},
+ {say:"M is the gradient. It tells you how steep the line is. Tap plus, and watch the line tilt towards the star!",cap:'m = gradient (steepness) · tap +',async do(h){h.unhl();for(let i=0;i<8&&!document.querySelector('.ln-l.ok');i++)await h.tap('[data-a="m+"]');},min:4000},
+ {say:"The line goes right through the star, so you win! In later levels, c moves the line up and down. Good luck!",cap:'Line through every ⭐ = win!',async do(h){h.hide();hl(h,'.ln-svg');await h.wait(1500);},last:1,min:3000}
+]};
+// ---------- Angle Hunter  (seed 1 → 60°)
+D.angles={seed:1,steps:[
+ {say:"Hi there! In this game, you hunt for the missing angle. It's marked with a question mark.",cap:'Find the angle marked ?',async do(h){hl(h,'.ch-vis');await h.wait(2500);},min:3000},
+ {say:"At this level, you estimate it. A square corner is ninety degrees, and this angle is a bit smaller. About sixty!",cap:'Estimate: smaller than 90° → about 60°',async do(h){await h.point('.ch-vis svg',900);},min:3500},
+ {say:"Type sixty on the keypad, then press the tick.",cap:'Type 60 · press ✓',async do(h){h.unhl();await h.type('60');await h.key('✓');},min:3000},
+ {say:"Later levels use rules. Angles on a straight line make one eighty. Angles in a triangle make one eighty. Angles around a point make three sixty. Diagrams are not always to scale! Good luck!",cap:'Straight line 180° · Triangle 180° · Point 360°',async do(h){h.hide();await h.wait(1000);},last:1,min:7000}
+]};
+// ---------- Transform Quest  (seed 1 → translate by (2, 4))
+const gx=(x)=>(x+7)/14,gy=(y)=>(7-y)/14;
+D.transform={seed:1,steps:[
+ {say:"Hi there! In this game, you move shapes on a grid. First, read the instruction at the top.",cap:'Read the instruction',async do(h){hl(h,'.ch-q');await h.wait(2500);},min:3000},
+ {say:"This one says translate by two, four. That means two squares right, and four squares up.",cap:'(2, 4) = 2 right, 4 up',async do(h){await h.wait(2000);},min:3500},
+ {say:"Move each corner of the blue shape two right, and four up, then tap that point on the grid.",cap:'Tap where each corner lands',async do(h){h.unhl();await h.tapAt('#tfs',gx(2),gy(4));await h.tapAt('#tfs',gx(-1),gy(3));await h.tapAt('#tfs',gx(0),gy(1));},min:5000},
+ {say:"When every corner is placed, the game checks your answer. Stuck? The light bulb gives you a visual clue. Good luck!",cap:'💡 Hint = visual clue',async do(h){h.hide();hl(h,'#hn');await h.wait(1500);},last:1,min:3500}
+]};
+// ---------- Fraction Factory  (seed 3 → 2/5)
+D.fraction={seed:3,steps:[
+ {say:"Hi there! Pizzas make fractions easy to see. What fraction of this pizza is coloured?",cap:'What fraction is coloured?',async do(h){hl(h,'.ch-vis');await h.wait(2500);},min:3000},
+ {say:"Count the coloured slices. There are two! Then count all of the slices. Five altogether.",cap:'2 coloured · 5 slices in total',async do(h){await h.wait(2500);},min:3500},
+ {say:"So the answer is two fifths. Tap two, then the slash key, then five, and press enter.",cap:'Type 2 / 5 · press Enter',async do(h){h.unhl();await h.type('2');await h.key('/');await h.type('5');await h.key('✓');},min:3500},
+ {say:"If a question asks for simplest form, divide the top and the bottom by the same number, until you can't any more. Good luck!",cap:'Simplest form: ÷ top and bottom',async do(h){h.hide();await h.wait(1000);},last:1,min:5000}
+]};
+// ---------- Percent Shop  (seed 1 → 60%)
+D.percent={seed:1,steps:[
+ {say:"Hi there! Welcome to the percent shop! Here, a hundred squares make a grid.",cap:'100 squares = 100%',async do(h){hl(h,'.ch-vis');await h.wait(2500);},min:3000},
+ {say:"Each full row has ten squares, which is ten percent. Six rows are shaded, so that's sixty percent!",cap:'1 row = 10% · 6 rows = 60%',async do(h){await h.wait(2500);},min:4000},
+ {say:"Type sixty. You don't need the percent sign. Then press the tick.",cap:'Type 60 · press ✓',async do(h){h.unhl();await h.type('60');await h.key('✓');},min:3500},
+ {say:"Here's a top tip for later: find ten percent first, by dividing by ten, then build any other percentage from it. Good luck!",cap:'Tip: 10% = ÷ 10',async do(h){h.hide();await h.wait(1000);},last:1,min:5000}
+]};
+// ---------- Ball Factory  (level 7 → 12 balls)
+const setIn=async(h,sel,v)=>{const i=document.querySelector(sel);if(!i)return;await h.point(i,800);i.value=v;i.dispatchEvent(new Event('input',{bubbles:true}));};
+D.factors={seed:1,lv:7,steps:[
+ {say:"Hi there! Let's find factors using balls. Here are twelve balls in a pile.",cap:'12 balls',async do(h){hl(h,'#fcb');await h.wait(2500);},min:3000},
+ {say:"Type how many rows to use. Let's try three rows, and press Arrange.",cap:'3 rows → Arrange',async do(h){h.unhl();await setIn(h,'#fcr','3');await h.tap('#fcgo');},min:3500},
+ {say:"Every row is full! So three and four are both factors of twelve.",cap:'3 × 4 = 12 ✓ · both are factors',async do(h){hl(h,'.fc-top');await h.wait(2500);},min:3500},
+ {say:"Now try five rows. Look, orange balls are left over, so five is not a factor.",cap:'5 rows: orange balls left over ✗',async do(h){h.unhl();await setIn(h,'#fcr','5');await h.tap('#fcgo');},min:3500},
+ {say:"Find all the factors, then press, That's all. Good luck!",cap:'Find ALL the factors → That’s all ✓',async do(h){await h.point('#fcdone',900);},last:1,min:3500}
+]};
+// ---------- Chance Lab  (seed 12 → blue = 4/10)
+D.chance={seed:12,steps:[
+ {say:"Hi there! Let's work out probability. A bag holds these balls, and one is picked at random.",cap:'One ball is picked at random',async do(h){hl(h,'.ch-vis');await h.wait(2500);},min:3000},
+ {say:"We want blue. Count the blue balls: four. Then count all the balls: ten.",cap:'Blue: 4 · Total: 10',async do(h){await h.wait(2500);},min:3500},
+ {say:"Probability is the wanted number over the total, so four tenths. Type four on top, tap the bottom box, then type ten.",cap:'4 over 10',async do(h){h.unhl();await h.tap('#fn');await h.type('4');await h.tap('#fd');await h.type('10');},min:4500},
+ {say:"Press the tick! Any equivalent fraction works too, and so does a decimal. Good luck!",cap:'4/10 = 2/5 = 0.4 — all accepted',async do(h){await h.key('✓');},last:1,min:4000}
+]};
+// ---------- Dice Derby  (level 3: two dice)
+D.derby={seed:5,lv:3,steps:[
+ {say:"Hi there! Welcome to the Dice Derby! Every horse has a number, and they're about to race.",cap:'Horses numbered by dice totals',async do(h){hl(h,'.dy-lanes');await h.wait(2500);},min:3000},
+ {say:"Tap a horse number to bet ten coins on it. You can back up to three horses.",cap:'Tap numbers to bet (max 3)',async do(h){h.unhl();await h.tap('.dy-lane[data-k="7"]');await h.tap('.dy-lane[data-k="6"]');},min:4000},
+ {say:"Now press Start! Every time the dice are rolled, the horse matching the total moves forward.",cap:'Press Start race!',async do(h){await h.tap('#st');await h.wait(5000);},min:6000},
+ {say:"The first horse to reach the finish line wins, and pays forty coins for each winning bet!",cap:'First to the finish wins 40 🪙',async do(h){h.hide();await h.wait(2500);},min:4000},
+ {say:"But which numbers win most often? Tap, Show chances, to find out. Think carefully before you bet. Good luck!",cap:'Show chances: why do some win more?',async do(h){await h.tap('#pp');},last:1,min:4500}
+]};
+// ---------- Quadratic Factoriser  (seed 13 → x² + 5x + 6)
+D.quad={seed:13,steps:[
+ {say:"Hi there! Let's factorise a quadratic: x squared plus five x plus six.",cap:'Factorise x² + 5x + 6',async do(h){hl(h,'#qt');await h.wait(2500);},min:3000},
+ {say:"Step one: find two numbers that multiply to six, and add up to five.",cap:'Multiply to 6 · Add to 5',async do(h){hl(h,'#qti');await h.wait(2500);},min:3500},
+ {say:"Two times three is six, and two plus three is five. Perfect! Type two, press Next, then three, and Next.",cap:'2 × 3 = 6 ✓   2 + 3 = 5 ✓',async do(h){h.unhl();await h.type('2');await h.key('Next');await h.type('3');await h.key('Next');},min:4500},
+ {say:"Step two: write the brackets. x plus two, times, x plus three.",cap:'(x + 2)(x + 3)',async do(h){await h.type('2');await h.key('Next');await h.type('3');await h.key('Next');},min:4000},
+ {say:"That's the answer! Watch the signs, and good luck!",cap:'Watch the signs!',async do(h){h.hide();await h.wait(1000);},last:1,min:2500}
+]};
+window.__DEMOS=D;
+REG.forEach(g=>{if(D[g.id]){g.demo={seed:D[g.id].seed,lv:D[g.id].lv||1};g.anim=mkDemo(g.id,D[g.id].steps);}});
 })();
