@@ -26,3 +26,10 @@ Each game has its own address, e.g. `/balance/`, `/sudoku/`, `/g24/`, `/p2048/`.
 
 Without these settings the arcade still works, but accounts are stored only in each device's browser.
 Stored online: players (name + hashed PIN), progress, and an event log (`pz_events`) of every wrong answer with the question, typed answer, expected answer and error type, for later strength/weakness analysis.
+
+## Question tags (for recommending levels by student level)
+Every generated question can carry tags, so later we can match questions to what each student has mastered.
+- `src/tags.js` holds the shared vocabulary (`TAXO`, English + Chinese labels). Tag ids are stored in the online event log, so **never rename an id** – only its label.
+- A game opts in with `qmeta(lv)` (level-level tags, shown as chips under the level name) and sets `ctx.q = {tags, ops, steps, diff, score, eq}` for each question it generates. `ctx.q` is attached to every `wrong` and `complete` event; `ctx.perf` (moves vs best, undos, hints, restarts) is attached to `complete`.
+- Balance Scale is tagged so far: operations needed (`op-add/sub/mul/div`, `only-*`), length (`steps-1/2/3`), `x-one-side` / `x-both-sides`, `neg-const`, `neg-answer`, `fractions` (+ `frac-unit`, `frac-nonunit`, `frac-both`), `big-numbers`; difficulty 1–10 (`score` = same on a finer scale).
+- `node tools/export-tags.js` first checks that the "shortest solution" of thousands of generated questions really solves them, then writes `data/question-tags.json` and `data/question-tags-<game>.csv` (one row per level). Add a game id to `games` in that script once it has `qmeta`.

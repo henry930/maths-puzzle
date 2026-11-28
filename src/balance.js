@@ -57,6 +57,38 @@ const ftxt=a=>a[1]===1?S(a[0]):S(a[0])+'/'+a[1];
 const xval=E=>E.sol[0]/E.sol[1];
 const val=(side,xs)=>side.x[0]/side.x[1]*xs+side.n[0]/side.n[1];
 const fz=a=>a[0]/a[1];
+/* ---------- question tags: what a given equation really asks of the student ---------- */
+const eqTxt=E=>{const side=S=>{const t=[];if(!z(S.x)){const[p,q]=S.x;t.push((p<0?'-':'')+(Math.abs(p)===1?'':Math.abs(p))+'x'+(q===1?'':'/'+q));}if(!z(S.n)||!t.length)t.push(ftxt(S.n));return t.join(' + ').replace(/\+ [-−]/g,'- ');};return side(E.L)+' = '+side(E.Rr);};
+/* shortest solution: collect x on the side with the bigger x (keeps the coefficient positive), clear the constant there, then undo the coefficient */
+function plan(E){
+  let xs=E.L,os=E.Rr;if(!z(os.x)&&(z(xs.x)||fz(os.x)>fz(xs.x))){xs=E.Rr;os=E.L;}
+  const both=!z(xs.x)&&!z(os.x),k=sub(xs.x,os.x),out=[];
+  if(both)out.push({op:'sub',on:'x',by:os.x});
+  if(!z(xs.n))out.push({op:xs.n[0]>0?'sub':'add',on:'n',by:[Math.abs(xs.n[0]),xs.n[1]]});
+  if(k[1]!==1)out.push({op:'mul',on:'all',by:[k[1],1]});
+  if(Math.abs(k[0])!==1)out.push({op:'div',on:'all',by:[Math.abs(k[0]),1]});
+  return{moves:out,xs,os,both,k};
+}
+function analyse(E){
+  const P=plan(E),ops=[...new Set(P.moves.map(m=>m.op))],steps=P.moves.length,tags=[];
+  ops.forEach(o=>tags.push('op-'+o));if(steps===1)tags.push('only-'+ops[0]);
+  tags.push('steps-'+Math.min(3,Math.max(1,steps)));
+  tags.push(P.both?'x-both-sides':'x-one-side');
+  const sides=[E.L,E.Rr],xt=sides.map(s=>s.x).filter(a=>!z(a)),all=[E.L.x,E.L.n,E.Rr.x,E.Rr.n];
+  if(sides.some(s=>s.n[0]<0))tags.push('neg-const');
+  if(E.sol[0]<0)tags.push('neg-answer');
+  if(xt.some(a=>a[1]>1)||sides.some(s=>s.n[1]>1))tags.push('fractions');
+  if(xt.some(a=>a[1]>1)){tags.push(xt.some(a=>a[1]>1&&Math.abs(a[0])>1)?'frac-nonunit':'frac-unit');}
+  if(sides.some(s=>s.n[1]>1))tags.push('frac-const');
+  if(P.both&&xt.length===2&&xt.every(a=>a[1]>1))tags.push('frac-both');
+  const big=Math.max(...all.map(a=>Math.abs(a[0])),Math.abs(E.sol[0]));
+  if(big>=30)tags.push('big-numbers');
+  /* difficulty 1-10: how many moves, plus what makes each move harder */
+  const has=t=>tags.includes(t);
+  let d=steps+(has('x-both-sides')?1:0)+(has('neg-const')?.75:0)+(has('neg-answer')?.75:0)
+       +(has('frac-unit')?1.5:0)+(has('frac-nonunit')?2.25:0)+(has('frac-both')?.75:0)+(has('frac-const')?1:0)+Math.min(1.5,big/40);
+  d=Math.max(1,Math.min(10,d*1.15));return{v:1,eq:eqTxt(E),tags:tags.sort(),ops,steps,diff:Math.round(d),score:Math.round(d*10)/10};
+}
 function tilesOf(side){
   const out=[];
   const x=side.x;if(x[0]!==0){const ap=Math.abs(x[0]);out.push({kind:'x',v:x,label:(x[0]<0?'−':'')+(ap===1?'':ap)+'x'+(x[1]===1?'':'/'+x[1])});}
@@ -64,13 +96,13 @@ function tilesOf(side){
   return out;
 }
 const GX={'+':'＋','-':'−'};
-REG.push({id:'balance',name:'Balance Scale',emoji:'⚖️',color:'#6741d9',cat:'Algebra',
+REG.push({id:'balance',qmeta:lv=>levelFromSamples(()=>analyse(genL(lv))),qtest:{genL,plan,analyse,F,add,sub,mul,dv},name:'Balance Scale',emoji:'⚖️',color:'#6741d9',cat:'Algebra',
  desc:'A real balance! Drag x and 1 weights on and off the pans (both sides always change together), and swing the pointer on the base right to multiply or left to divide. Keep it level to find x.',skills:['solving equations','inverse operations','balancing method','fractions in equations'],
  levels:['x + a = b','Multiples: 2x = b','Two-step: 2x + a = b','Two-step: ax + b = c','Negatives: x − a = b','Negatives: ax − b = c','x on both sides (easy)','x on both sides','x on both sides + negatives','x on both sides · bigger numbers','Negative answers','Boss equations','x/a = b','x/a = b · bigger','x/a + b = c','x/a − b = c','Fractions: (p/q)x = c','Fractions: (p/q)x + b = c','x/a + b = x + c','Fractions on both sides'].flatMap(n=>['warm-up','easy','medium','hard','tough'].map(d=>n+' · '+d)),
  how:'Drop an x or 1 weight on a pan to add it to BOTH sides. Drag a tile off a pan to take ALL of it away from both sides (tap a tile to take away just one). The tiles show the totals. On the base, swing the pointer right (×) or left (÷), flip +/− for negatives, then press Apply. Get x alone.',
  art:'<div class="minibal">⚖️</div>',
  mount(root,lv,ctx){
-  let E,E0,snap=[],over=false,busy=false,ang=0,vel=0,tgt=0,raf=0,drag=null,kick=0,steps=[],solvedTxt=null;
+  let nUndo=0,nHint=0,nRestart=0,E,E0,snap=[],over=false,busy=false,ang=0,vel=0,tgt=0,raf=0,drag=null,kick=0,steps=[],solvedTxt=null;
   const W=()=>Math.max(260,Math.min(root.clientWidth||340,440));
   root.innerHTML=`<div class="sc"><div class="sc-top"><div class="sc-box"><div class="sc-lab">Weights</div><div class="sc-wts"><div class="wt xw" data-k="x">x</div><div class="wt uw" data-k="n">1</div></div></div><div class="sc-eq" id="eq"></div></div>
    <div class="sc-scene" id="scene"><div class="sc-opb" id="opb"></div><svg class="sc-svg" id="svg"></svg><div class="sc-beam" id="beam"><i></i></div>
@@ -128,7 +160,7 @@ REG.push({id:'balance',name:'Balance Scale',emoji:'⚖️',color:'#6741d9',cat:'
     if(balanced()&&(solvedSide(E.L,E.Rr)||solvedSide(E.Rr,E.L))){over=true;const v=solvedSide(E.L,E.Rr)?E.Rr.n:E.L.n;
       $('#msg').innerHTML='✅ x = '+ftxt(v);solvedTxt=ftxt(v);try{const u=me();if(u){u.rv=u.rv||{};u.rv['balance_'+lv]={E0:clone(E0),E:clone(E),steps:JSON.parse(JSON.stringify(steps)),solved:solvedTxt};persist();}}catch(e){}
       $('#eq').innerHTML+=`<div class="el fin">✅ x = ${lab(solvedTxt)}</div>`;$('#eq').scrollTop=1e5;const first=!isDone('balance',lv);const nb=$('#nw');if(first&&lv<ctx.N){nb.textContent='Next level ▶';nb.onclick=()=>openGame('balance',lv+1);}
-      ctx.timeout(()=>ctx.win('Balanced!',`x = ${ftxt(v)}. You kept the scale level all the way.`,build,'New equation',{stay:true}),700);}
+      ctx.perf={moves:steps.length,best:ctx.q.steps,undos:nUndo,hints:nHint,restarts:nRestart};ctx.timeout(()=>ctx.win('Balanced!',`x = ${ftxt(v)}. You kept the scale level all the way.`,build,'New equation',{stay:true}),700);}
   }
   function commit(f,anim,msg,info){if(over||busy)return false;snap.push({E:clone(E),st:JSON.stringify(steps)});const ok=f();if(ok===false){snap.pop();return false;}if(info)recordStep(info);update(anim,msg);return true;}
   const addTile=(p,kind,v)=>{E[p]={...E[p],[kind]:add(E[p][kind],v)};};
@@ -191,11 +223,11 @@ REG.push({id:'balance',name:'Balance Scale',emoji:'⚖️',color:'#6741d9',cat:'
     setTimeout(()=>{busy=false;commit(()=>{E=nE;},'pop',null,info);},380);
   }
   /* ---------- buttons ---------- */
-  function build(){E=genL(lv);E0=clone(E);snap=[];steps=[];solvedTxt=null;{const nb=$('#nw');if(nb){nb.textContent='New equation ⏭';nb.onclick=build;}}over=false;busy=false;ang=0;vel=0;setP(0);setSg(1);update();}
-  $('#un').onclick=()=>{if(busy||over||!snap.length)return;over=false;const sn=snap.pop();E=sn.E;steps=JSON.parse(sn.st);update();};
-  $('#rs').onclick=()=>{if(busy||over)return;E=clone(E0);snap=[];steps=[];over=false;update();};
+  function build(){E=genL(lv);E0=clone(E);ctx.q=analyse(E0);ctx.perf=null;nUndo=nHint=nRestart=0;snap=[];steps=[];solvedTxt=null;{const nb=$('#nw');if(nb){nb.textContent='New equation ⏭';nb.onclick=build;}}over=false;busy=false;ang=0;vel=0;setP(0);setSg(1);update();}
+  $('#un').onclick=()=>{if(busy||over||!snap.length)return;nUndo++;over=false;const sn=snap.pop();E=sn.E;steps=JSON.parse(sn.st);update();};
+  $('#rs').onclick=()=>{if(busy||over)return;nRestart++;E=clone(E0);snap=[];steps=[];over=false;update();};
   $('#nw').onclick=build;
-  $('#hn').onclick=()=>{if(over)return;let A=E.L,B=E.Rr,m;const nm=A===E.L?'left':'right';
+  $('#hn').onclick=()=>{if(over)return;nHint++;let A=E.L,B=E.Rr,m;const nm=A===E.L?'left':'right';
     
     let side='left';if(z(A.x)&&!z(B.x)){[A,B]=[B,A];side='right';}
     if(!z(A.x)&&!z(B.x)){const s=Math.abs(fz(A.x))<=Math.abs(fz(B.x))?A.x:B.x;m=`x’s on both pans. Drag x weights off a pan, ${ftxt([Math.abs(s[0]),s[1]])} time${s[0]===1&&s[1]===1?'':'s'} — each one comes off both sides.`;}
@@ -207,7 +239,7 @@ REG.push({id:'balance',name:'Balance Scale',emoji:'⚖️',color:'#6741d9',cat:'
   window.addEventListener('resize',place);ctx.cleanups.push(()=>window.removeEventListener('resize',place));
   root.__E=()=>E;root.__bal=()=>balanced();
   root.__steps=()=>steps.map(t=>t.op);root.__test={add:(p,kind,v)=>commit(()=>addBoth(kind,F(v)),null,null,{t:'w',kind,amt:F(v)}),mul:f=>scale(true,F(f)),div:f=>{if(over)return;const nE=clone(E);for(const p of['L','Rr'])nE[p]={x:mul(nE[p].x,F(1,f)),n:mul(nE[p].n,F(1,f))};commit(()=>{E=nE;},'pop',null,{t:'d',kind:'d',amt:F(1,f),op:'÷'+f});}};
-  function restore(rv){E=rv.E;E0=rv.E0;steps=rv.steps;solvedTxt=rv.solved;snap=[];over=true;ang=0;update();$('#msg').innerHTML='📖 Your solution — tap <b>New equation</b> to play again';}
+  function restore(rv){E=rv.E;E0=rv.E0;ctx.q=analyse(E0);steps=rv.steps;solvedTxt=rv.solved;snap=[];over=true;ang=0;update();$('#msg').innerHTML='📖 Your solution — tap <b>New equation</b> to play again';}
   {const u=me(),rv=u&&u.rv&&u.rv['balance_'+lv];if(rv){try{restore(rv);}catch(e){build();}}else build();}
  }});
 })();

@@ -1,0 +1,2209 @@
+{
+ "version": 1,
+ "taxonomy": {
+  "op-add": {
+   "g": "op",
+   "en": "+ add",
+   "zh": "要用加法（消去減數）"
+  },
+  "op-sub": {
+   "g": "op",
+   "en": "− subtract",
+   "zh": "要用減法"
+  },
+  "op-mul": {
+   "g": "op",
+   "en": "× multiply",
+   "zh": "要用乘法"
+  },
+  "op-div": {
+   "g": "op",
+   "en": "÷ divide",
+   "zh": "要用除法"
+  },
+  "only-add": {
+   "g": "op",
+   "en": "only +",
+   "zh": "只用加法"
+  },
+  "only-sub": {
+   "g": "op",
+   "en": "only −",
+   "zh": "只用減法"
+  },
+  "only-mul": {
+   "g": "op",
+   "en": "only ×",
+   "zh": "只用乘法"
+  },
+  "only-div": {
+   "g": "op",
+   "en": "only ÷",
+   "zh": "只用除法"
+  },
+  "steps-1": {
+   "g": "steps",
+   "en": "1 step",
+   "zh": "一步"
+  },
+  "steps-2": {
+   "g": "steps",
+   "en": "2 steps",
+   "zh": "兩步"
+  },
+  "steps-3": {
+   "g": "steps",
+   "en": "3+ steps",
+   "zh": "三步或以上"
+  },
+  "x-one-side": {
+   "g": "shape",
+   "en": "x on one side",
+   "zh": "x 只在一邊"
+  },
+  "x-both-sides": {
+   "g": "shape",
+   "en": "x on both sides",
+   "zh": "兩邊都有 x"
+  },
+  "neg-const": {
+   "g": "num",
+   "en": "negative numbers",
+   "zh": "有負數"
+  },
+  "neg-answer": {
+   "g": "num",
+   "en": "negative answer",
+   "zh": "答案係負數"
+  },
+  "fractions": {
+   "g": "num",
+   "en": "fractions",
+   "zh": "有分數"
+  },
+  "frac-unit": {
+   "g": "num",
+   "en": "fraction x/a",
+   "zh": "分數 x/a（分子係 1）",
+   "hide": 1
+  },
+  "frac-nonunit": {
+   "g": "num",
+   "en": "fraction (p/q)x",
+   "zh": "分數 (p/q)x（分子唔係 1）",
+   "hide": 1
+  },
+  "frac-const": {
+   "g": "num",
+   "en": "fraction constant",
+   "zh": "常數項係分數",
+   "hide": 1
+  },
+  "frac-both": {
+   "g": "num",
+   "en": "fractions on both sides",
+   "zh": "兩邊都有分數",
+   "hide": 1
+  },
+  "big-numbers": {
+   "g": "num",
+   "en": "bigger numbers",
+   "zh": "數字較大"
+  }
+ },
+ "games": {
+  "balance": {
+   "name": "Balance Scale",
+   "levels": [
+    {
+     "level": 1,
+     "name": "x + a = b · warm-up",
+     "tags": [
+      "only-sub",
+      "op-sub",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "sub"
+     ],
+     "steps": 1,
+     "diff": 1,
+     "score": 1.5
+    },
+    {
+     "level": 2,
+     "name": "x + a = b · easy",
+     "tags": [
+      "only-sub",
+      "op-sub",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "sub"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 1.6
+    },
+    {
+     "level": 3,
+     "name": "x + a = b · medium",
+     "tags": [
+      "only-sub",
+      "op-sub",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "sub"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 1.7
+    },
+    {
+     "level": 4,
+     "name": "x + a = b · hard",
+     "tags": [
+      "only-sub",
+      "op-sub",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 1.9
+    },
+    {
+     "level": 5,
+     "name": "x + a = b · tough",
+     "tags": [
+      "only-sub",
+      "op-sub",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 6,
+     "name": "Multiples: 2x = b · warm-up",
+     "tags": [
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 1.7
+    },
+    {
+     "level": 7,
+     "name": "Multiples: 2x = b · easy",
+     "tags": [
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2.1
+    },
+    {
+     "level": 8,
+     "name": "Multiples: 2x = b · medium",
+     "tags": [
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2.3
+    },
+    {
+     "level": 9,
+     "name": "Multiples: 2x = b · hard",
+     "tags": [
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 2.6
+    },
+    {
+     "level": 10,
+     "name": "Multiples: 2x = b · tough",
+     "tags": [
+      "only-div",
+      "op-div",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 2.6
+    },
+    {
+     "level": 11,
+     "name": "Two-step: 2x + a = b · warm-up",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 3,
+     "score": 2.8
+    },
+    {
+     "level": 12,
+     "name": "Two-step: 2x + a = b · easy",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 3,
+     "score": 2.9
+    },
+    {
+     "level": 13,
+     "name": "Two-step: 2x + a = b · medium",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 3,
+     "score": 3.2
+    },
+    {
+     "level": 14,
+     "name": "Two-step: 2x + a = b · hard",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 3,
+     "score": 3.3
+    },
+    {
+     "level": 15,
+     "name": "Two-step: 2x + a = b · tough",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 16,
+     "name": "Two-step: ax + b = c · warm-up",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 17,
+     "name": "Two-step: ax + b = c · easy",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 3.6
+    },
+    {
+     "level": 18,
+     "name": "Two-step: ax + b = c · medium",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 3.7
+    },
+    {
+     "level": 19,
+     "name": "Two-step: ax + b = c · hard",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 3.8
+    },
+    {
+     "level": 20,
+     "name": "Two-step: ax + b = c · tough",
+     "tags": [
+      "op-div",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 3.9
+    },
+    {
+     "level": 21,
+     "name": "Negatives: x − a = b · warm-up",
+     "tags": [
+      "neg-const",
+      "only-add",
+      "op-add",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "add"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2.2
+    },
+    {
+     "level": 22,
+     "name": "Negatives: x − a = b · easy",
+     "tags": [
+      "neg-const",
+      "only-add",
+      "op-add",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "add"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2.3
+    },
+    {
+     "level": 23,
+     "name": "Negatives: x − a = b · medium",
+     "tags": [
+      "neg-const",
+      "only-add",
+      "op-add",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "add"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2.4
+    },
+    {
+     "level": 24,
+     "name": "Negatives: x − a = b · hard",
+     "tags": [
+      "neg-const",
+      "only-add",
+      "op-add",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "add"
+     ],
+     "steps": 1,
+     "diff": 2,
+     "score": 2.4
+    },
+    {
+     "level": 25,
+     "name": "Negatives: x − a = b · tough",
+     "tags": [
+      "neg-const",
+      "only-add",
+      "op-add",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "add"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 2.6
+    },
+    {
+     "level": 26,
+     "name": "Negatives: ax − b = c · warm-up",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "add",
+      "div"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 3.7
+    },
+    {
+     "level": 27,
+     "name": "Negatives: ax − b = c · easy",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "add",
+      "div"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 4.1
+    },
+    {
+     "level": 28,
+     "name": "Negatives: ax − b = c · medium",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "add",
+      "div"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 4.3
+    },
+    {
+     "level": 29,
+     "name": "Negatives: ax − b = c · hard",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "add",
+      "div"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 4.5
+    },
+    {
+     "level": 30,
+     "name": "Negatives: ax − b = c · tough",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "add",
+      "div"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 31,
+     "name": "x on both sides (easy) · warm-up",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 32,
+     "name": "x on both sides (easy) · easy",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 5,
+     "score": 5.1
+    },
+    {
+     "level": 33,
+     "name": "x on both sides (easy) · medium",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.6
+    },
+    {
+     "level": 34,
+     "name": "x on both sides (easy) · hard",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.9
+    },
+    {
+     "level": 35,
+     "name": "x on both sides (easy) · tough",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 36,
+     "name": "x on both sides · warm-up",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 37,
+     "name": "x on both sides · easy",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 38,
+     "name": "x on both sides · medium",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 5,
+     "score": 5.4
+    },
+    {
+     "level": 39,
+     "name": "x on both sides · hard",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.9
+    },
+    {
+     "level": 40,
+     "name": "x on both sides · tough",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.9
+    },
+    {
+     "level": 41,
+     "name": "x on both sides + negatives · warm-up",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "add",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 5,
+     "score": 5.4
+    },
+    {
+     "level": 42,
+     "name": "x on both sides + negatives · easy",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "add",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.7
+    },
+    {
+     "level": 43,
+     "name": "x on both sides + negatives · medium",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "add",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 6.2
+    },
+    {
+     "level": 44,
+     "name": "x on both sides + negatives · hard",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "add",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 6.3
+    },
+    {
+     "level": 45,
+     "name": "x on both sides + negatives · tough",
+     "tags": [
+      "neg-const",
+      "op-add",
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "add",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 6.5
+    },
+    {
+     "level": 46,
+     "name": "x on both sides · bigger numbers · warm-up",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 5,
+     "score": 4.8
+    },
+    {
+     "level": 47,
+     "name": "x on both sides · bigger numbers · easy",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 5,
+     "score": 5.4
+    },
+    {
+     "level": 48,
+     "name": "x on both sides · bigger numbers · medium",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.7
+    },
+    {
+     "level": 49,
+     "name": "x on both sides · bigger numbers · hard",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.8
+    },
+    {
+     "level": 50,
+     "name": "x on both sides · bigger numbers · tough",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 6.1
+    },
+    {
+     "level": 51,
+     "name": "Negative answers · warm-up",
+     "tags": [
+      "neg-answer",
+      "op-sub"
+     ],
+     "sometimes": [
+      "neg-const",
+      "op-div",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-one-side"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 4.9
+    },
+    {
+     "level": 52,
+     "name": "Negative answers · easy",
+     "tags": [
+      "neg-answer",
+      "op-sub"
+     ],
+     "sometimes": [
+      "neg-const",
+      "op-div",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-one-side"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 5.4
+    },
+    {
+     "level": 53,
+     "name": "Negative answers · medium",
+     "tags": [
+      "neg-answer",
+      "op-sub"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-div",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-one-side"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 5.8
+    },
+    {
+     "level": 54,
+     "name": "Negative answers · hard",
+     "tags": [
+      "neg-answer",
+      "op-sub"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-div",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-one-side"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 5.9
+    },
+    {
+     "level": 55,
+     "name": "Negative answers · tough",
+     "tags": [
+      "neg-answer",
+      "op-div",
+      "op-sub"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "steps-2",
+      "steps-3",
+      "x-both-sides",
+      "x-one-side"
+     ],
+     "ops": [
+      "div",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 6.4
+    },
+    {
+     "level": 56,
+     "name": "Boss equations · warm-up",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 4.6
+    },
+    {
+     "level": 57,
+     "name": "Boss equations · easy",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.6
+    },
+    {
+     "level": 58,
+     "name": "Boss equations · medium",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.8
+    },
+    {
+     "level": 59,
+     "name": "Boss equations · hard",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-2",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 5.9
+    },
+    {
+     "level": 60,
+     "name": "Boss equations · tough",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 6.6
+    },
+    {
+     "level": 61,
+     "name": "x/a = b · warm-up",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "only-mul",
+      "op-mul",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 3,
+     "score": 3.4
+    },
+    {
+     "level": 62,
+     "name": "x/a = b · easy",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "only-mul",
+      "op-mul",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 3.9
+    },
+    {
+     "level": 63,
+     "name": "x/a = b · medium",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "only-mul",
+      "op-mul",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 64,
+     "name": "x/a = b · hard",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "only-mul",
+      "op-mul",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 4.1
+    },
+    {
+     "level": 65,
+     "name": "x/a = b · tough",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "only-mul",
+      "op-mul",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 4.1
+    },
+    {
+     "level": 66,
+     "name": "x/a = b · bigger · warm-up",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "only-mul",
+      "op-mul",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 67,
+     "name": "x/a = b · bigger · easy",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "only-mul",
+      "op-mul",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 3.9
+    },
+    {
+     "level": 68,
+     "name": "x/a = b · bigger · medium",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "only-mul",
+      "op-mul",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 4.1
+    },
+    {
+     "level": 69,
+     "name": "x/a = b · bigger · hard",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "only-mul",
+      "op-mul",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 4.2
+    },
+    {
+     "level": 70,
+     "name": "x/a = b · bigger · tough",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "only-mul",
+      "op-mul",
+      "steps-1",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul"
+     ],
+     "steps": 1,
+     "diff": 4,
+     "score": 4.2
+    },
+    {
+     "level": 71,
+     "name": "x/a + b = c · warm-up",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 4,
+     "score": 4.5
+    },
+    {
+     "level": 72,
+     "name": "x/a + b = c · easy",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 4.8
+    },
+    {
+     "level": 73,
+     "name": "x/a + b = c · medium",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 5.1
+    },
+    {
+     "level": 74,
+     "name": "x/a + b = c · hard",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 5.1
+    },
+    {
+     "level": 75,
+     "name": "x/a + b = c · tough",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 5.2
+    },
+    {
+     "level": 76,
+     "name": "x/a − b = c · warm-up",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "neg-const",
+      "op-add",
+      "op-mul",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "add",
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 5.7
+    },
+    {
+     "level": 77,
+     "name": "x/a − b = c · easy",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "neg-const",
+      "op-add",
+      "op-mul",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "add",
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 78,
+     "name": "x/a − b = c · medium",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "neg-const",
+      "op-add",
+      "op-mul",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "add",
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 6.3
+    },
+    {
+     "level": 79,
+     "name": "x/a − b = c · hard",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "neg-const",
+      "op-add",
+      "op-mul",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "add",
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 6.4
+    },
+    {
+     "level": 80,
+     "name": "x/a − b = c · tough",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "neg-const",
+      "op-add",
+      "op-mul",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "add",
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 6.3
+    },
+    {
+     "level": 81,
+     "name": "Fractions: (p/q)x = c · warm-up",
+     "tags": [
+      "frac-nonunit",
+      "fractions",
+      "op-div",
+      "op-mul",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "div",
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 5.3
+    },
+    {
+     "level": 82,
+     "name": "Fractions: (p/q)x = c · easy",
+     "tags": [
+      "frac-nonunit",
+      "fractions",
+      "op-div",
+      "op-mul",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "div",
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 5,
+     "score": 5.4
+    },
+    {
+     "level": 83,
+     "name": "Fractions: (p/q)x = c · medium",
+     "tags": [
+      "frac-nonunit",
+      "fractions",
+      "op-div",
+      "op-mul",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 5.7
+    },
+    {
+     "level": 84,
+     "name": "Fractions: (p/q)x = c · hard",
+     "tags": [
+      "frac-nonunit",
+      "fractions",
+      "op-div",
+      "op-mul",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 5.8
+    },
+    {
+     "level": 85,
+     "name": "Fractions: (p/q)x = c · tough",
+     "tags": [
+      "frac-nonunit",
+      "fractions",
+      "op-div",
+      "op-mul",
+      "steps-2",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "mul"
+     ],
+     "steps": 2,
+     "diff": 6,
+     "score": 5.9
+    },
+    {
+     "level": 86,
+     "name": "Fractions: (p/q)x + b = c · warm-up",
+     "tags": [
+      "frac-nonunit",
+      "fractions",
+      "op-div",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-one-side"
+     ],
+     "sometimes": [],
+     "ops": [
+      "div",
+      "mul",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 6.5
+    },
+    {
+     "level": 87,
+     "name": "Fractions: (p/q)x + b = c · easy",
+     "tags": [
+      "frac-nonunit",
+      "fractions",
+      "op-div",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "mul",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 6.7
+    },
+    {
+     "level": 88,
+     "name": "Fractions: (p/q)x + b = c · medium",
+     "tags": [
+      "frac-nonunit",
+      "fractions",
+      "op-div",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "mul",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 6.8
+    },
+    {
+     "level": 89,
+     "name": "Fractions: (p/q)x + b = c · hard",
+     "tags": [
+      "frac-nonunit",
+      "fractions",
+      "op-div",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "mul",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 90,
+     "name": "Fractions: (p/q)x + b = c · tough",
+     "tags": [
+      "frac-nonunit",
+      "fractions",
+      "op-div",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-one-side"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [
+      "div",
+      "mul",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 7,
+     "score": 7.2
+    },
+    {
+     "level": 91,
+     "name": "x/a + b = x + c · warm-up",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 4,
+     "diff": 8,
+     "score": 8
+    },
+    {
+     "level": 92,
+     "name": "x/a + b = x + c · easy",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 4,
+     "diff": 8,
+     "score": 8.1
+    },
+    {
+     "level": 93,
+     "name": "x/a + b = x + c · medium",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 4,
+     "diff": 8,
+     "score": 8.2
+    },
+    {
+     "level": 94,
+     "name": "x/a + b = x + c · hard",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 4,
+     "diff": 8,
+     "score": 8.3
+    },
+    {
+     "level": 95,
+     "name": "x/a + b = x + c · tough",
+     "tags": [
+      "frac-unit",
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 4,
+     "diff": 9,
+     "score": 8.6
+    },
+    {
+     "level": 96,
+     "name": "Fractions on both sides · warm-up",
+     "tags": [
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "frac-both",
+      "frac-nonunit",
+      "frac-unit"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 8,
+     "score": 7.6
+    },
+    {
+     "level": 97,
+     "name": "Fractions on both sides · easy",
+     "tags": [
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "frac-both",
+      "frac-nonunit"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 8,
+     "score": 8
+    },
+    {
+     "level": 98,
+     "name": "Fractions on both sides · medium",
+     "tags": [
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "frac-both",
+      "frac-nonunit"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 8,
+     "score": 8
+    },
+    {
+     "level": 99,
+     "name": "Fractions on both sides · hard",
+     "tags": [
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "frac-both",
+      "frac-nonunit"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 8,
+     "score": 8.4
+    },
+    {
+     "level": 100,
+     "name": "Fractions on both sides · tough",
+     "tags": [
+      "fractions",
+      "op-mul",
+      "op-sub",
+      "steps-3",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "frac-both",
+      "frac-nonunit"
+     ],
+     "ops": [
+      "mul",
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 8,
+     "score": 8.3
+    }
+   ]
+  }
+ }
+}

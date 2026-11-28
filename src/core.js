@@ -22,7 +22,7 @@ function markDone(id,lv){
   let r=(done[id]=done[id]||{})[lv],gain;
   if(!r){r=done[id][lv]={n:1,t:secs,p:lvPts(lv)};gain=lvPts(lv);}
   else{r.n++;gain=r.n<=11?5:0;r.p+=gain;if(secs!=null&&(r.t==null||secs<r.t))r.t=secs;}
-  logEvent(id,lv,'complete',{secs,n:r.n,gain});
+  logEvent(id,lv,'complete',Object.assign({secs,n:r.n,gain},ctx&&ctx.q?{q:ctx.q}:{},ctx&&ctx.perf?{perf:ctx.perf}:{}));
   if(ctx)ctx.t0=Date.now();persist();return gain;
 }
 const REG=[];
@@ -80,10 +80,10 @@ function openGame(id,lv,fromRoute){
   const pills=$('#glevels');pills.innerHTML='';pills.classList.toggle('long',N>24);pills.classList.remove('open');{const lb=$('#lvbtn');lb.textContent='Levels '+lv+'/'+N+' ▾';lb.onclick=()=>{pills.classList.toggle('open');if(N>24&&pills.classList.contains('open')){const c=pills.children[lv-1];if(c)pills.scrollLeft=c.offsetLeft-pills.clientWidth/2+c.offsetWidth/2;}};}
   g.levels.forEach((n,i)=>{const b=el('button','pill'+(i+1===lv?' on':'')+(isDone(id,i+1)?' dn':''),String(i+1));b.title=n;b.onclick=()=>openGame(id,i+1);pills.appendChild(b);});
   if(N>24){const cur=pills.children[lv-1];if(cur)setTimeout(()=>{try{pills.scrollLeft=cur.offsetLeft-pills.clientWidth/2+cur.offsetWidth/2}catch(e){}},0);}
-  $('#glvname').innerHTML=`<b>Level ${lv}/${N}</b> · ${g.levels[lv-1]}`;
+  {const lm=levelMeta(g,lv);$('#glvname').innerHTML=`<b>Level ${lv}/${N}</b> · ${g.levels[lv-1]}`+(lm?`<div class="qts">${diffBar(lm.diff)}${tagChips(lm.tags)}</div>`:'');}
   const root=$('#groot');root.innerHTML='';
-  ctx={id,lv,N,t0:Date.now(),cleanups:[],keys:null,
-    log(kind,detail){logEvent(id,lv,kind,detail);},
+  ctx={id,lv,N,t0:Date.now(),cleanups:[],keys:null,q:null,perf:null,
+    log(kind,detail){logEvent(id,lv,kind,this.q?Object.assign({q:this.q},detail):detail);},
     interval(fn,ms){const h=setInterval(fn,ms);this.cleanups.push(()=>clearInterval(h));return h},
     timeout(fn,ms){const h=setTimeout(fn,ms);this.cleanups.push(()=>clearTimeout(h));return h},
     win(title,text,again,againLabel,opt){const gain=markDone(id,lv),first=gain===lvPts(lv);const chip=pills.children[lv-1];if(chip)chip.classList.add('dn');showWin(title,text+(gain?` <b class="gain">+${gain} pts ⭐</b>`:''),again,againLabel,first,opt&&opt.stay);}};
