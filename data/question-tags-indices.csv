@@ -34,3 +34,15 @@ level,name,difficulty,score,steps,ops,tags,sometimes
 33,"Log laws combined · hard",8,7.7,,,,lg-add lg-mix lg-pow lg-simplify
 34,"Mixed indices · medium",4,3.9,,,,ix-combine ix-eval ix-frac ix-frac-pq ix-law-mul ix-law-neg ix-neg ix-zero
 35,"Mixed logs and laws · hard",7,6.7,,,,lg-add lg-convert lg-frac lg-mix lg-neg lg-pow lg-sub lg-value
+36,"Tutorial: make the same base",1,1,,,ix-find-base,
+37,"Tutorial: multiply powers",1,1,,,ix-law-mul,
+38,"Tutorial: divide powers",1,1,,,ix-law-div,
+39,"Tutorial: power of a power",1,1,,,ix-law-pow,
+40,"Tutorial: zero and negative index",1,1,,,ix-neg ix-zero,
+41,"Tutorial: fractional index and roots",1,1,,,ix-frac ix-frac-pq,
+42,"Tutorial: logs count blocks",1,1,,,lg-convert lg-value,
+43,"Tutorial: solve an index equation",1,1,,,ix-find-index lg-convert,
+44,"Tutorial: log laws",1,1,,,lg-add lg-sub,
+45,"Solve with operations · easy",3,3,,,ix-find-index lg-convert,
+46,"Solve with operations · medium",5,5,,,ix-find-index ix-frac lg-frac,
+47,"Solve with operations · hard",8,7.5,,,ix-find-index lg-convert,ix-law-pow lg-value

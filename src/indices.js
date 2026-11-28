@@ -36,8 +36,31 @@ const num=s=>{const v=parseT(s);return v==null?null:{v,n:null,d:1};};
 /* ---- the balance picture ----
    forms[i] = {L(T),R(T),tl(v),btn}:  L/R give the HTML of each pan (T = what has been typed so far),
    tl(v) = left − right in "steps" for a typed value v, and is 0 exactly when the balance is level. */
+
+/* ---- solve mode: equations b^(a·x) = N, worked with buttons that act on the whole equation ---- */
+const nice=r=>{for(let d=1;d<=12;d++){const n=r*d;if(Math.abs(n-Math.round(n))<1e-9)return Math.round(n)/d;}return null;};
+const cbN=(b,N)=>{for(let c=2;c<=b;c++){const u=Math.round(Math.log(b)/Math.log(c)),v=Math.round(Math.log(N)/Math.log(c));
+  if(u>=1&&Math.abs(Math.pow(c,u)-b)<1e-9&&Math.abs(Math.pow(c,v)-N)<1e-9*Math.max(1,N)&&Math.abs(v)<=12)return{c,u,v};}return null;};
+const sCan={sb:s=>s.form==='pow'&&!s.nb&&!!cbN(s.b,s.N),
+  p2:s=>s.form==='pow'&&Math.pow(s.N,2)<=1e6&&Math.pow(s.N,2)>=1e-6,p3:s=>s.form==='pow'&&Math.pow(s.N,3)<=1e6&&Math.pow(s.N,3)>=1e-6,
+  r2:s=>s.form==='pow'&&nice(Math.pow(s.N,1/2))!=null&&(!s.nb||Number.isInteger(s.ne/2)),r3:s=>s.form==='pow'&&nice(Math.pow(s.N,1/3))!=null&&(!s.nb||Number.isInteger(s.ne/3)),
+  log:s=>s.form!=='lin',eq:s=>s.form==='pow'&&!!s.nb};
+const sTag={sb:['same base','dv'],p2:['( )²','ml'],p3:['( )³','ml'],r2:['√','dv'],r3:['∛','dv'],log:['log ⇄ power','dv'],eq:['indices','ml']};
+const sApply=(op,s)=>{
+  if(op==='sb'){const c=cbN(s.b,s.N);s.a*=c.u;s.nb=c.c;s.ne=c.v;s.b=c.c;}
+  else if(op==='p2'||op==='p3'){const n=op==='p2'?2:3;s.a*=n;s.N=Math.pow(s.N,n);if(s.nb)s.ne*=n;}
+  else if(op==='r2'||op==='r3'){const n=op==='r2'?2:3;s.a/=n;s.N=nice(Math.pow(s.N,1/n));if(s.nb)s.ne/=n;}
+  else if(op==='log')s.form=s.form==='pow'?'log':'pow';
+  else if(op==='eq')s.form='lin';};
+const cX=a=>{const r=Math.round(a);if(Math.abs(a-r)<1e-9)return r===1?'<var>x</var>':`${r}<var>x</var>`;
+  for(let d=2;d<=12;d++){const n=a*d;if(Math.abs(n-Math.round(n))<1e-9){const m=Math.round(n);return `<span class="fr"><i>${m===1?'<var>x</var>':m+'<var>x</var>'}</i><i>${d}</i></span>`;}}return a.toFixed(2)+'<var>x</var>';};
+const sEq=s=>{const rhs=s.nb?pw(s.nb,eT(s.ne)):H(s.N);
+  if(s.form==='pow')return{L:pw(s.b,cX(s.a)),R:rhs};
+  if(s.form==='log')return{L:cX(s.a),R:`log<sub>${s.b}</sub> ${rhs}`};
+  return{L:cX(s.a),R:s.nb?H(s.ne):H(s.N)};};
 function Q(o){
-  const q={k:o.k,q:o.q,ans:o.ans,ex:o.ex,forms:o.forms,form:0,start:o.start,build:o.build,hist:[],nopad:!!o.build,proc:o.proc||null,ms:0};
+  const q={k:o.k,q:o.q,ans:o.ans,ex:o.ex,forms:o.forms,form:0,start:o.start,build:o.build,hist:[],nopad:!!o.build,proc:o.proc||null,ms:0,solve:!!o.solve,shist:[]};
+  if(o.solve){q.sv=Object.assign({form:'pow',a:1,nb:null,ne:null},o.solve);q.eq0=sEq(q.sv);}
   const bs=o.build;if(o.build){q.st=mkSt(o.start);}
   const eh=e=>Math.abs(e)<1e-9?'1':Math.abs(e-1)<1e-9?bv(bs):pw(bs,eT(e));
   const OPS={p2:['pow',2,'( )²'],p3:['pow',3,'( )³'],r2:['root',2,'√'],r3:['root',3,'∛']};
@@ -48,6 +71,15 @@ function Q(o){
   /* the scene uses the Balance Scale game's own classes: .sc-top / .sc-box / .sc-wts / .wt (weights), .sc-eq / .el / .otg (working lines),
      .sc-scene / .sc-beam / .sc-pan / .sc-tiles / .t (tiles) / .sc-dish / .sc-post / .sc-base (+ .lv.go buttons) */
   q.visf=function(buf,answered,ok){
+    if(o.solve){const sv=q.sv,e=answered?{L:'<var>x</var>',R:H(q.ans)}:sEq(sv),can=k=>!answered&&sCan[k](sv);
+      const lines=q.shist.map((h,i)=>`<div class="el ${i===q.shist.length-1?'last':'old'}"><span class="otg ${h.cls}">${h.tag}</span>${h.L} <b class="eqb">=</b> ${h.R}</div>`).join('');
+      const chp=x=>`<div class="t chip tn big"><span>${x}</span></div>`;
+      const btn=(k,l)=>`<button class="lv go op" data-sop="${k}" ${can(k)?'':'disabled'}>${l}</button>`;
+      const ctl=answered?'':`<div class="opr">${btn('sb','same base')}${btn('p2','( )²')}${btn('p3','( )³')}${btn('r2','√')}${btn('r3','∛')}</div><div class="opr">${btn('log','log ⇄ power')}${btn('eq','match indices')}<button class="lv go" id="sun" style="background:#868e96" ${q.shist.length?'':'disabled'}>↶</button></div>`;
+      return `<div class="px sv ${answered?'lv done':''} ${answered?'':'ops2'}"><div class="sc-top"><div class="sc-eq" id="bklog"><div class="el orig">${q.eq0.L} <b class="eqb">=</b> ${q.eq0.R}</div>${lines}${answered?`<div class="el fin">✅ x = ${H(q.ans)}</div>`:''}</div></div>
+       <div class="sc-scene" data-a="0" data-p="0"><svg class="sc-svg"></svg><div class="sc-beam"><i></i></div>
+        <div class="sc-pan" data-p="L"><div class="sc-tiles">${chp(e.L)}</div><div class="sc-dish"></div></div><div class="sc-pan" data-p="R"><div class="sc-tiles">${chp(e.R)}</div><div class="sc-dish"></div></div>
+        <div class="sc-post"></div><div class="sc-base">${ctl}</div></div></div>`;}
     const f=q.forms[q.form||0];
     let v=answered?q.ans:parseT(buf);
     if(o.build&&!answered)v=evalSt(q.st);
@@ -89,7 +121,10 @@ function Q(o){
     const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
     place();q._raf=requestAnimationFrame(step);
     {const mb=root.querySelector('#mbtn');if(mb&&api)mb.onclick=()=>{q.ms=q.ms>=q.proc.length?0:q.ms+1;(api.redraw||api.set)(api.buf());};}
-    if(q.build&&api)bindBuild(root,api,pans[1]);
+    if(q.solve&&api){const lg=root.querySelector('#bklog');if(lg)lg.scrollTop=1e5;
+      root.querySelectorAll('[data-sop]').forEach(b=>b.onclick=()=>{const op=b.dataset.sop,sv=q.sv;if(!sCan[op](sv))return;const snap=JSON.parse(JSON.stringify(sv));sApply(op,sv);const e=sEq(sv);q.shist.push({tag:sTag[op][0],cls:sTag[op][1],L:e.L,R:e.R,snap});api.set(api.buf());});
+      const un=root.querySelector('#sun');if(un)un.onclick=()=>{const h=q.shist.pop();if(h){q.sv=h.snap;api.set(api.buf());}};}
+    else if(q.build&&api)bindBuild(root,api,pans[1]);
     else if(api&&api.open){root.querySelectorAll('.t.dsb,.t.dsv').forEach(t=>{t.style.cursor='pointer';t.onclick=()=>{q.dis=((q.dis|0)+1)%((q._nst||1)+1);api.set(api.buf());};});root.querySelectorAll('.t.cvb').forEach(t=>{t.style.cursor='pointer';t.onclick=()=>{q.form=1-(q.form||0);q.dis=0;api.set(api.buf());};});root.querySelectorAll('.t.q').forEach(t=>{t.style.cursor='pointer';t.onclick=api.open;});}};
   /* build mode: every operation (×a, ÷a, raise the whole pan to a power, take a root) acts on the right pan and adds a line to the working */
   function bindBuild(root,api,pan){
@@ -321,11 +356,18 @@ B10(){const b=BK(),k=pick([2,3]),p=pick([1,2,3].filter(x=>x!==k));return bq('B10
    {L:()=>`log ${a} + log ${d}`,R:T=>T,tl:v=>k-v,btn:'Show in index form'},
    {L:()=>`${a} × ${d}`,R:T=>pw(10,T),tl:v=>(k-v)*log2(10),btn:'Show in log form'}],ex:`Add logs → multiply: ${a} × ${d} = ${a*d} = ${pw(10,k)}, so the answer is ${k}.`});},
  G7(){const b=pick([2,3,5,10]);let c,m,D=null;if(R(0,1)){const t=R(1,2),u=R(1,2);c=exp(b,t);m=exp(b,u);D={op:'lgs',b,add:[2*t+u],sub:2*t};}else{c=R(2,4);m=R(2,5);}const a=c*c*m,X=m;return logLaw('G7',b,`${lg(b,a)} − 2 × ${lg(b,c)}`,X,`${a} ÷ ${c}<sup>2</sup>`,`2 × log<sub>${b}</sub> ${c} = log<sub>${b}</sub> ${c*c}. Then subtract → divide: ${a} ÷ ${c*c} = ${X}.`,D);},
+ S1(){const c=pick([2,3,5]),u=pick([2,3]),k=c===2?R(1,3):R(1,2),b=exp(c,u),N=exp(c,u*k);return solveQ('S1',c,u,u*k,1,'pow',`${b} = ${pw(c,u)} and ${N} = ${pw(c,u*k)}: x groups of ${u} blocks = ${u*k} blocks.`);},
+ S2(){const c=pick([2,3,5]),u=pick(c===5?[2]:[2,3]);let v;do{v=R(-3,5);}while(!v||v%u===0||Math.abs(v)>(c===2?5:3));return solveQ('S2',c,u,v,1,'pow',`${exp(c,u)} = ${pw(c,u)}, so x groups of ${u} blocks must equal ${Math.abs(v)} blocks${v<0?' under 1':''}: x = ${fmtV(v/u)}.`);},
+ S3(){const c=pick([2,3]);let u,a,v,g=0;do{u=pick([1,2,3]);a=pick([2,3,0.5,2/3]);v=R(1,c===2?6:4);g++;}while(!(nice(v/(u*a)*6)!=null&&Math.abs(v/(u*a)*6-Math.round(v/(u*a)*6))<1e-9)&&g<500);return solveQ('S3',c,u,v,a,'pow',`Write both sides in base ${c}: ${pw(c,cX(a*u))} = ${pw(c,v)}, so ${cX(a*u)} = ${v} and x = ${fmtV(v/(u*a))}.`);},
+ S4(){const c=pick([2,3,5]),u=pick([2,3]),a=pick([1,2,3,0.5]);let v;do{v=R(-3,5);}while(!v||Math.abs(v)>(c===2?5:3));return solveQ('S4',c,u,v,a,'log',`Turn it into a power: ${pw(exp(c,u),cX(a))} = ${fmtV(exp(c,v))}. Same base ${c}: ${pw(c,cX(a*u))} = ${pw(c,v)}, so x = ${fmtV(v/(u*a))}.`);},
  G8(){const b=pick([2,3,5]),k=R(1,3),n=R(2,4),a=exp(b,k);return Q({k:'G8',proc:[['Same base',mstep(`${a} = ${pw(b,k)}`,`write ${a} as a power of ${b}`)],['Visualise',mstep(dsH({op:'pow',b,m:k,n}),'a power of a power → groups of groups: multiply')],['Convert',mstep(`${lg(b,a+'<sup>'+n+'</sup>')} <b>⇄</b> ${pw(b,k*n)}`,'log form ⇄ index form')]],q:`Work out ${lg(b,a+'<sup>'+n+'</sup>')}.`,ans:k*n,forms:[
    {conv:'L',L:()=>lg(b,a+'<sup>'+n+'</sup>'),R:T=>T,tl:v=>k*n-v,btn:'Show in index form'},
    {dis:{side:'R',op:'pow',b,m:k,n},L:T=>pw(b,T),R:()=>`${a}<sup>${n}</sup>`,tl:v=>(v-k*n)*log2(b),btn:'Show in log form'}],ex:`${n} × log<sub>${b}</sub> ${a} = ${n} × ${k} = ${k*n}.`});}
 };
 /* an index-law question: balance of the numbers form, log version one tap away */
+function solveQ(k,c,u,v,a,form,ex){const b=exp(c,u),N=exp(c,v),e=sEq({form,a,b,N,nb:null});
+  return Q({k,solve:{form,a,b,N},ans:v/(u*a),q:form==='pow'?`Solve for x: ${e.L} = ${e.R}. Use the buttons to change the equation, then type x.`:`Solve for x: ${e.L} = ${e.R}. Use the buttons to change the equation, then type x.`,ex});
+}
 function lawQ(k,b,L,s,logL,logW,ex,dis){
   const forms=[{dis,L:()=>L,R:T=>pw(b,T),tl:v=>s-v,btn:logL?'Show the log version of this law':''}];
   if(logL)forms.push({L:()=>`${logL}`,R:T=>T,tl:v=>s-v,btn:'Show the index version'});
@@ -347,7 +389,7 @@ const D={B8:[3,['ix-law-pow']],B9:[5,['ix-frac']],B10:[6,['ix-frac','ix-frac-pq'
  F1:[4,['ix-frac']],F2:[4,['ix-frac']],F3:[5,['ix-frac']],F4:[6,['ix-frac','ix-frac-pq']],F5:[7,['ix-frac','ix-frac-pq','ix-frac-neg']],F6:[7,['ix-frac','ix-find-index']],
  L1:[3,['ix-law-mul']],L2:[3,['ix-law-div']],L3:[4,['ix-law-pow']],L4:[5,['ix-law-neg']],L5:[4,['ix-letters']],L6:[5,['ix-missing']],L7:[6,['ix-combine']],L8:[3,['ix-law-div','ix-eval']],
  C1:[4,['lg-convert','ix-find-index']],C2:[5,['lg-convert','lg-value']],C3:[5,['lg-value','lg-neg']],C4:[5,['lg-special']],C5:[7,['lg-value','lg-neg','lg-frac']],C6:[7,['lg-base']],C8:[8,['lg-convert','lg-neg','lg-frac']],
- G1:[6,['lg-add']],G2:[6,['lg-sub']],G3:[7,['lg-pow']],G4:[8,['lg-mix']],G5:[7,['lg-simplify','lg-sub']],G6:[7,['lg-simplify','lg-add']],G7:[8,['lg-mix','lg-pow']],G8:[7,['lg-pow','lg-simplify']]};
+ G1:[6,['lg-add']],G2:[6,['lg-sub']],G3:[7,['lg-pow']],G4:[8,['lg-mix']],G5:[7,['lg-simplify','lg-sub']],G6:[7,['lg-simplify','lg-add']],G7:[8,['lg-mix','lg-pow']],G8:[7,['lg-pow','lg-simplify']],S1:[3,['lg-convert','ix-find-index']],S2:[5,['ix-find-index','ix-frac','lg-frac']],S3:[7,['ix-find-index','lg-convert','ix-law-pow']],S4:[8,['lg-convert','lg-value','ix-find-index']],T1:[1,['ix-find-base']],T2:[1,['ix-law-mul']],T3:[1,['ix-law-div']],T4:[1,['ix-law-pow']],T5:[1,['ix-neg','ix-zero']],T6:[1,['ix-frac','ix-frac-pq']],T7:[1,['lg-value','lg-convert']],T8:[1,['ix-find-index','lg-convert']],T9:[1,['lg-add','lg-sub']]};
 const clamp=d=>Math.max(1,Math.min(10,d));
 /* one level = one question.  A level is named  “skill · easy|medium|hard”; the difficulty word is worked out from the question tags, the same way the player profile does it. */
 const LVS=[
@@ -360,18 +402,126 @@ const LVS=[
  ['Index form and log form',['C1']],['Log values',['C2','C3']],['Special logs',['C4']],['Negative and fractional logs',['C5']],['Find the base',['C6','C2']],['Solve index equations with logs',['C8','C1']],
  ['Log law: add',['G1']],['Log law: subtract',['G2','G5']],['Log law: powers',['G3','G8']],['Log laws combined',['G4','G6','G7']],
  ['Mixed indices',['R2','Z3','N2','F4','L1','L4','L7']],['Mixed logs and laws',['C2','C5','G1','G2','G3','G4','G7']]];
-const LV=LVS.map(([sk,pool])=>{const d=Math.round(clamp(pool.reduce((t,k)=>t+D[k][0],0)/pool.length));return[sk+' · '+(d<=3?'easy':d<=6?'medium':'hard'),pool];});
+
+/* ---- animated tutorials: blocks slide, group, cancel and regroup on a small stage ---- */
+const GAP=31,tb=(id,t,c,x,y,o)=>Object.assign({id,k:'b',t,c,x,y},o||{}),tt=(id,h,x,y,o)=>Object.assign({id,k:'t',h,x,y},o||{}),
+  tbar=(id,x,y,w,o)=>Object.assign({id,k:'bar',x,y,w},o||{}),tbox=(id,x,y,w,h,o)=>Object.assign({id,k:'box',x,y,w,h},o||{});
+const TF=(cap,eq,items)=>({cap,eq,items}),BLK=(pre,b,n,c,x0,y,o)=>Array.from({length:n},(_,i)=>tb(pre+i,bv(b),typeof c==='function'?c(i):c,x0+i*GAP,y,o));
+const rpt=(v,n)=>Array(n).fill(v).join(' × ');
+const TUTS=[
+{name:'make the same base',tags:['ix-find-base'],make(){const[b1,b2,c,u,v]=pick([[8,4,2,3,2],[9,27,3,2,3],[4,32,2,2,5],[25,125,5,2,3],[16,8,2,4,3],[27,9,3,3,2],[4,8,2,2,3]]);
+  const big=(id,h,x,y)=>tt(id,h,x,y,{sz:26}),r1=BLK('a',c,u,1,92,28),r2=BLK('b',c,v,2,92,96);
+  return{title:`Make the same base: ${b1} and ${b2}`,frames:[
+   TF(`${b1} and ${b2} are different numbers. To compare them we need the same base.`,`${b1} &nbsp; ${b2}`,[big('n1',b1,90,70),big('n2',b2,210,70)]),
+   TF(`Break ${b1} into ${c}s: ${rpt(c,u)}. That is ${u} blocks.`,`${b1} = ${rpt(c,u)}`,[big('n1',`${b1} =`,14,28),...r1,big('n2',b2,210,98)]),
+   TF(`Break ${b2} into ${c}s too: ${rpt(c,v)}. That is ${v} blocks.`,`${b2} = ${rpt(c,v)}`,[big('n1',`${b1} =`,14,28),...r1,big('n2',`${b2} =`,14,96),...r2]),
+   TF(`Count the blocks: the count is the index.`,`${b1} = ${pw(c,u)} &nbsp; ${b2} = ${pw(c,v)}`,[big('n1',`${b1} =`,14,28),...r1,big('p1',pw(c,u),92+u*GAP+8,26),big('n2',`${b2} =`,14,96),...r2,big('p2',pw(c,v),92+v*GAP+8,94)]),
+   TF(`Now both are powers of ${c}. Same base!`,`${pw(b1,'x')} = ${b2} &nbsp;⇒&nbsp; (${pw(c,u)})<sup>x</sup> = ${pw(c,v)}`,[big('f1',`${pw(b1,'<var>x</var>')} = ${b2}`,80,40),big('f2','⬇',150,84),big('f3',`(${pw(c,u)})<sup><var>x</var></sup> = ${pw(c,v)}`,70,126)])]};}},
+{name:'multiply powers',tags:['ix-law-mul'],make(){const b=pick([2,3,5,'a','x']),m=R(2,4),n=R(2,4),s=m+n,A=y=>BLK('a',b,m,1,44,y),B=(x,y,o)=>BLK('b',b,n,2,x,y,o);
+  return{title:`Multiply powers: ${pw(b,m)} × ${pw(b,n)}`,frames:[
+   TF(`${pw(b,m)} is ${m} blocks of ${bv(b)}. ${pw(b,n)} is ${n} blocks of ${bv(b)}.`,`${pw(b,m)} × ${pw(b,n)}`,[...A(24),...B(44,96),tt('x','×',14,60,{sz:26})]),
+   TF(`Multiplying means pushing all the blocks into one pile.`,`${pw(b,m)} × ${pw(b,n)}`,[...A(24),...B(44+m*GAP,24),tt('x','×',14,60,{sz:26,o:0})]),
+   TF(`Count the blocks: ${m} + ${n} = ${s}.`,`${m} + ${n} = ${s}`,[...A(24),...B(44+m*GAP,24),tt('c',`${m} + ${n} = ${s}`,90,84,{sz:26})]),
+   TF(`${pw(b,m)} × ${pw(b,n)} = ${pw(b,s)}. Same base: add the indices.`,`${pw(b,m)} × ${pw(b,n)} = ${pw(b,s)}`,[...A(24),...B(44+m*GAP,24),tt('c',`${m} + ${n} = ${s}`,90,84,{sz:20,o:.35}),tt('r',`= ${pw(b,s)}`,110,118,{sz:30})])]};}},
+{name:'divide powers',tags:['ix-law-div'],make(){const b=pick([2,3,5,'a','x']),n=R(1,3),m=n+R(1,4),x0=44,mid=165-(m-n)*GAP/2;
+  const top=(mode)=>Array.from({length:m},(_,i)=>{const gone=i>=m-n;return tb('t'+i,bv(b),gone?2:1,mode==='left'&&!gone?mid+i*GAP:x0+i*GAP,mode==='res'?40:mode==='left'?60:22,mode==='cancel'&&gone?{o:.35,cx:1}:(mode==='left'||mode==='res')&&gone?{o:0,cx:1}:{});});
+  const bot=(mode)=>Array.from({length:n},(_,j)=>tb('u'+j,bv(b),2,x0+(m-n+j)*GAP,74,mode==='cancel'?{o:.35,cx:1}:mode==='full'?{}:{o:0,cx:1}));
+  const bar=(on)=>tbar('bar',x0-6,58,m*GAP+6,on?{}:{o:0});
+  return{title:`Divide powers: ${pw(b,m)} ÷ ${pw(b,n)}`,frames:[
+   TF(`${pw(b,m)} ÷ ${pw(b,n)} is a fraction: ${m} blocks over ${n} blocks.`,`${pw(b,m)} ÷ ${pw(b,n)} = <span class="fr"><i>${pw(b,m)}</i><i>${pw(b,n)}</i></span>`,[...top('full'),bar(1),...bot('full')]),
+   TF(`Each block on the bottom cancels one block on top.`,`cancel ${n} pair${n>1?'s':''}`,[...top('cancel'),bar(1),...bot('cancel')]),
+   TF(`The cancelled blocks are gone. ${m-n} block${m-n>1?'s are':' is'} left.`,`${m} − ${n} = ${m-n}`,[...top('left'),bar(0),...bot('gone')]),
+   TF(`${pw(b,m)} ÷ ${pw(b,n)} = ${pw(b,m-n)}. Same base: subtract the indices.`,`${pw(b,m)} ÷ ${pw(b,n)} = ${pw(b,m-n)}`,[...top('res'),bar(0),...bot('gone'),tt('r',`= ${pw(b,m-n)}`,125,92,{sz:30})])]};}},
+{name:'power of a power',tags:['ix-law-pow'],make(){const b=pick([2,3,5,'a','x']);let m,n;do{m=R(2,4);n=R(2,3);}while(m*n>8);
+  const blk=(f)=>Array.from({length:m*n},(_,i)=>{const g=Math.floor(i/m),k=i%m;return tb('k'+i,bv(b),g%2?2:1,...f(g,k,i));}),pos=(x,y)=>[x,y];
+  const boxes=(o)=>Array.from({length:n},(_,g)=>tbox('g'+g,52,14+g*58-4,m*GAP+4,35,o));
+  return{title:`Power of a power: (${pw(b,m)})<sup>${n}</sup>`,frames:[
+   TF(`${pw(b,m)} is a group of ${m} blocks. The power ${n} means ${n} groups.`,`(${pw(b,m)})<sup>${n}</sup>`,[...boxes(),...blk((g,k)=>pos(56+k*GAP,14+g*58))]),
+   TF(`Take the brackets away: it is just ${m*n} blocks multiplied.`,`(${pw(b,m)})<sup>${n}</sup>`,[...boxes({o:0}),...blk((g,k)=>pos(56+k*GAP,14+g*58))]),
+   TF(`Line them all up in one row.`,`${n} × ${m} = ${m*n}`,[...boxes({o:0}),...blk((g,k,i)=>pos(34+i*GAP,40))]),
+   TF(`${n} groups of ${m} = ${m*n} blocks. (${pw(b,m)})<sup>${n}</sup> = ${pw(b,m*n)}. Multiply the indices.`,`(${pw(b,m)})<sup>${n}</sup> = ${pw(b,m*n)}`,[...blk((g,k,i)=>pos(34+i*GAP,40)),tt('r',`= ${pw(b,m*n)}`,110,100,{sz:30}),tt('c',`${n} × ${m} = ${m*n}`,100,140,{sz:16,o:.6})])]};}},
+{name:'zero and negative index',tags:['ix-neg','ix-zero'],make(){const b=pick([2,3,5,'a']),k=i=>tb('k'+i,bv(b),1,124+i*GAP,64),keep=(a,z)=>[0,1,2].map(i=>Object.assign(k(i),i<a?{}:{o:0}));
+  return{title:`Zero and negative indices for ${bv(b)}`,frames:[
+   TF(`${pw(b,3)} is 3 blocks.`,`${pw(b,3)}`,keep(3)),
+   TF(`Divide by ${bv(b)}: take one block away. ${pw(b,2)} left.`,`${pw(b,3)} ÷ ${bv(b)} = ${pw(b,2)}`,keep(2)),
+   TF(`Divide again: ${bv(b)} is left.`,`${pw(b,2)} ÷ ${bv(b)} = ${bv(b)}`,keep(1)),
+   TF(`Divide again: no blocks left, just 1. That is why ${pw(b,0)} = 1.`,`${bv(b)} ÷ ${bv(b)} = 1 = ${pw(b,0)}`,[...keep(0),tt('one','1',148,54,{sz:36})]),
+   TF(`Divide by ${bv(b)} once more: the block goes UNDER the 1. ${pw(b,'−1')} = 1/${bv(b)}.`,`${pw(b,'−1')} = <span class="fr"><i>1</i><i>${bv(b)}</i></span>`,[...keep(0),tt('one','1',150,20,{sz:30}),tbar('bar',132,60,66),tb('n0',bv(b),1,150,68)]),
+   TF(`And again: ${pw(b,'−2')} = 1/(${bv(b)} × ${bv(b)}). A negative index flips the blocks under 1.`,`${pw(b,'−2')} = <span class="fr"><i>1</i><i>${pw(b,2)}</i></span>`,[...keep(0),tt('one','1',150,20,{sz:30}),tbar('bar',118,60,94),tb('n0',bv(b),1,134,68),tb('n1',bv(b),1,166,68)])]};}},
+{name:'fractional index and roots',tags:['ix-frac','ix-frac-pq'],make(){const[r,q,p]=pick([[2,3,1],[2,3,2],[3,2,1],[2,2,3],[3,3,2],[2,4,3],[5,2,1],[2,4,1],[3,2,3]]),N=exp(r,q),nb=['b'],
+  fr=frH(p+'/'+q),row=(i)=>[Math.floor(i/q),i%q],col=(i)=>[Math.floor(i/p),i%p],tot=p*q;
+  const blk=(f,n)=>Array.from({length:n},(_,i)=>{const[x,y,c,o]=f(i);return tb('k'+i,r,c,x,y,o);});
+  const F2=blk(i=>[92+i*GAP,44,1],q),F3=blk(i=>{const[g,k]=row(i);return[44+k*GAP,20+g*48,g%3+1];},tot),F4=blk(i=>{const[j,k]=col(i);return[48+j*66,24+k*31,j%3+1];},tot),
+   F5=blk(i=>{const[j,k]=col(i);return[48+j*66,24+k*31,j%3+1,j===0?{}:{o:.18}];},tot);
+  const boxR=(o)=>Array.from({length:p},(_,g)=>tbox('bx'+g,40,16+g*48,q*GAP+4,35,o)),boxC=(o5)=>Array.from({length:q},(_,j)=>tbox('bx'+j,44+j*66,20,35,p*31+4,j===0?(o5?{hi:1}:{}):(o5?{o:.25}:{})));
+  return{title:`Fractional index: ${pw(N,fr)}`,frames:[
+   TF(`${N} to the power ${p}/${q}. Start by writing ${N} with its base ${r}.`,`${pw(N,fr)}`,[tt('b',pw(N,fr),110,70,{sz:34})]),
+   TF(`${N} = ${rpt(r,q)}: ${q} blocks of ${r}.`,`${pw(N,fr)} = (${pw(r,q)})<sup>${fr}</sup>`,[tt('n',`${N} =`,20,40,{sz:26}),...F2]),
+   TF(`The top number ${p}: take ${p} group${p>1?'s':''} of these ${q} blocks.`,`(${pw(r,q)})<sup>${p}</sup> &nbsp;(${p} × ${q} = ${tot} blocks)`,[tt('n',`${N} =`,20,40,{sz:26,o:0}),...boxR(),...F3]),
+   TF(`The bottom number ${q}: share all ${tot} blocks into ${q} equal groups of ${p}.`,`${tot} blocks ÷ ${q} groups = ${p} in each`,[...boxC(false),...F4]),
+   TF(`The index 1/${q} says: keep just ONE group. ${r}${p>1?'<sup>'+p+'</sup>':''} = ${exp(r,p)}.`,`${pw(N,fr)} = ${pw(r,p)} = ${exp(r,p)}`,[...boxC(true),...F5,tt('r',`= ${exp(r,p)}`,60+q*66,60,{sz:30})])]};}},
+{name:'logs count blocks',tags:['lg-value','lg-convert'],make(){const b=pick([2,3,5,10]),n=R(2,4),N=exp(b,n),fr=[];
+  const frames=[TF(`log asks: how many ${b}s multiply to make ${N}?`,`log<sub>${b}</sub> ${N} = ?`,[tt('l',`log<sub>${b}</sub> ${N}`,100,70,{sz:34})])];
+  for(let k=1;k<=n;k++)frames.push(TF(`${k} block${k>1?'s':''} of ${b}${k<n?'… keep going':''}.`,`${rpt(b,k)}`,[tt('lab',`${N} =`,14,70,{sz:26,o:k>=0?1:0}),...BLK('k',b,k,1,100,66),...Array.from({length:k},(_,i)=>tt('c'+i,`${i+1}`,108+i*GAP,36,{sz:16,o:i===k-1?1:.4}))]));
+  frames.push(TF(`${n} blocks of ${b} make ${N}, so log<sub>${b}</sub> ${N} = ${n}.`,`log<sub>${b}</sub> ${N} = ${n}`,[tt('lab',`${N} =`,14,70,{sz:26}),...BLK('k',b,n,1,100,66),tt('res',`log<sub>${b}</sub> ${N} = ${n}`,70,118,{sz:28})]));
+  frames.push(TF(`Power form and log form say the same thing.`,`${pw(b,n)} = ${N} &nbsp;⇄&nbsp; log<sub>${b}</sub> ${N} = ${n}`,[tt('p',`${pw(b,n)} = ${N}`,100,30,{sz:30}),tt('a','⇄',150,76,{sz:34}),tt('res',`log<sub>${b}</sub> ${N} = ${n}`,70,126,{sz:30})]));
+  return{title:`Logs count blocks: log<sub>${b}</sub> ${N}`,frames};}},
+{name:'solve an index equation',tags:['ix-find-index','lg-convert'],make(){const[c,u,v]=pick([[2,3,2],[3,2,1],[2,2,5],[3,3,2],[5,2,3],[2,3,4]]),b=exp(c,u),N=exp(c,v);
+  const L=BLK('l',c,u,1,28,58),R_=BLK('r',c,v,2,172,58);
+  return{title:`Solve ${pw(b,'<var>x</var>')} = ${N}`,frames:[
+   TF(`Different bases (${b} and ${N}), so first make them the same base.`,`${pw(b,'<var>x</var>')} = ${N}`,[tt('e',`${pw(b,'<var>x</var>')} = ${N}`,90,70,{sz:34})]),
+   TF(`${b} = ${pw(c,u)} is a group of ${u} blocks. ${N} = ${pw(c,v)} is ${v} blocks.`,`(${pw(c,u)})<sup>x</sup> = ${pw(c,v)}`,[tbox('g',22,52,u*GAP+6,38),...L,tt('x','<var>x</var>',26+u*GAP+10,34,{sz:20}),tt('eq','=',134,60,{sz:30}),...R_]),
+   TF(`<var>x</var> groups of ${u} blocks must equal ${v} blocks.`,`${pw(c,u+'<var>x</var>')} = ${pw(c,v)}`,[tt('e',`${pw(c,u+'<var>x</var>')} = ${pw(c,v)}`,70,70,{sz:34})]),
+   TF(`Same base, so the indices must be equal: ${u}<var>x</var> = ${v}.`,`${u}<var>x</var> = ${v}`,[tt('e',`${u}<var>x</var> = ${v}`,110,70,{sz:36})]),
+   TF(`Divide both sides by ${u}.`,`<var>x</var> = ${H(v/u)}`,[tt('e',`<var>x</var> = ${H(v/u)}`,110,64,{sz:36})])]};}},
+{name:'log laws',tags:['lg-add','lg-sub'],make(){const b=pick([2,3,5]),s1=R(1,3),t=R(1,3),A=exp(b,s1),C=exp(b,t);
+  return{title:`Log law: log<sub>${b}</sub> ${A} + log<sub>${b}</sub> ${C}`,frames:[
+   TF(`Each log counts blocks of ${b}.`,`log<sub>${b}</sub> ${A} + log<sub>${b}</sub> ${C}`,[tt('e',`log<sub>${b}</sub> ${A} + log<sub>${b}</sub> ${C}`,30,70,{sz:28})]),
+   TF(`log<sub>${b}</sub> ${A} = ${s1} blocks. log<sub>${b}</sub> ${C} = ${t} blocks.`,`${s1} and ${t}`,[...BLK('a',b,s1,1,120,26),tt('la',`log<sub>${b}</sub> ${A} =`,8,26,{sz:16}),...BLK('b',b,t,2,120,92),tt('lb',`log<sub>${b}</sub> ${C} =`,8,92,{sz:16}),tt('p','+',70,60,{sz:30})]),
+   TF(`Adding logs puts the blocks together.`,`${s1} + ${t} = ${s1+t}`,[...BLK('a',b,s1,1,120,26),tt('la',`log<sub>${b}</sub> ${A} =`,8,26,{sz:16}),...BLK('b',b,t,2,120+s1*GAP,26),tt('lb',`log<sub>${b}</sub> ${C} =`,8,92,{sz:16,o:0}),tt('p','+',70,60,{sz:30,o:0})]),
+   TF(`${s1+t} blocks of ${b} make ${A*C}. Adding logs multiplies the numbers: ${A} × ${C} = ${A*C}.`,`log<sub>${b}</sub> ${A} + log<sub>${b}</sub> ${C} = log<sub>${b}</sub> ${A*C} = ${s1+t}`,[...BLK('a',b,s1,1,120,26),...BLK('b',b,t,2,120+s1*GAP,26),tt('r',`= log<sub>${b}</sub> ${A*C} = ${s1+t}`,50,92,{sz:26})])]};}}
+];
+function tutMount(root,ti,ctx){
+  const T=TUTS[ti];let tut=T.make(),fi=0,playing=true,sp=1,timer=null,els={};
+  const stop=()=>{clearTimeout(timer);timer=null;};
+  const draw=()=>{stop();els={};root.innerHTML=`<div class="ch tutc"><div class="tut-title">${tut.title}</div><div class="tut-eq" id="teq"></div><div class="tstage" id="tst"></div><div class="tut-cap" id="tcap"></div><div class="tut-dots" id="tdots"></div>
+    <div class="tut-ctl"><button id="tprev" class="lv go">◀</button><button id="tplay" class="lv go">⏸</button><button id="tnext" class="lv go">▶</button><button id="tspd" class="lv go sm">1×</button></div>
+    <div class="toolrow"><button class="btn" id="tdone" style="visibility:hidden">✅ I understand</button><button class="btn" id="tagain" style="background:#868e96">🔄 Another example</button></div></div>`;
+    root.querySelector('#tprev').onclick=()=>{playing=false;show(fi-1);};root.querySelector('#tnext').onclick=()=>{playing=false;show(fi+1);};
+    root.querySelector('#tplay').onclick=()=>{if(playing){playing=false;stop();upd();}else{playing=true;if(fi>=tut.frames.length-1)show(0);else sched();upd();}};
+    root.querySelector('#tspd').onclick=e=>{sp=sp===1?.5:sp===.5?2:1;e.target.textContent=({1:'1×',.5:'½×',2:'2×'})[sp];};
+    root.querySelector('#tagain').onclick=()=>{tut=T.make();fi=0;playing=true;draw();};
+    root.querySelector('#tdone').onclick=()=>ctx.win('Lesson complete!',T.name[0].toUpperCase()+T.name.slice(1)+' — now try the practice levels.',()=>{tut=T.make();fi=0;playing=true;draw();},'Another example');
+    root.querySelector('#tdots').innerHTML=tut.frames.map((_,i)=>`<i data-i="${i}"></i>`).join('');root.querySelectorAll('#tdots i').forEach(d=>d.onclick=()=>{playing=false;show(+d.dataset.i);});
+    show(0);};
+  const upd=()=>{const pb=root.querySelector('#tplay');if(pb)pb.textContent=playing?'⏸':'▶';};
+  const sched=()=>{stop();if(!playing||fi>=tut.frames.length-1)return;timer=setTimeout(()=>{if(!root.isConnected)return;show(fi+1);},2900/sp);};
+  function show(i){if(i<0||i>=tut.frames.length){return;}fi=i;const f=tut.frames[i],st=root.querySelector('#tst');if(!st)return;const seen={};
+    f.items.forEach(it=>{seen[it.id]=1;let el=els[it.id],fresh=false;if(!el){el=document.createElement('div');els[it.id]=el;st.appendChild(el);el.style.opacity='0';fresh=true;}
+      el.className=`ti ti-${it.k}${it.c?' c'+it.c:''}${it.cx?' cx':''}${it.hi?' hi':''}`;if(it.k==='b'||it.k==='t')el.innerHTML=it.k==='b'?it.t:it.h;
+      el.style.left=it.x+'px';el.style.top=it.y+'px';if(it.w!=null)el.style.width=it.w+'px';if(it.h!=null&&it.k==='box')el.style.height=it.h+'px';if(it.sz)el.style.fontSize=it.sz+'px';
+      const o=it.o==null?1:it.o;el._want=o;if(fresh)requestAnimationFrame(()=>requestAnimationFrame(()=>{el.style.opacity=el._want;}));else el.style.opacity=o;});
+    Object.keys(els).forEach(id=>{if(!seen[id]){els[id]._want=0;els[id].style.opacity='0';}});
+    root.querySelector('#teq').innerHTML=f.eq;root.querySelector('#tcap').innerHTML=f.cap;
+    root.querySelectorAll('#tdots i').forEach((d,k)=>d.className=k===i?'on':k<i?'dn':'');
+    const last=i>=tut.frames.length-1,dn=root.querySelector('#tdone');if(dn)dn.style.visibility=last?'visible':'hidden';
+    if(last){playing=false;ctx.q={v:1,tags:T.tags,diff:1,score:1,qt:'T',eq:T.name};}upd();sched();}
+  draw();
+}
+const LVS2=[['Solve with operations',['S1']],['Solve with operations',['S2']],['Solve with operations',['S3','S4']]];
+const stg2=([sk,pool])=>{const d=Math.round(clamp(pool.reduce((t,k)=>t+D[k][0],0)/pool.length));return[sk+' · '+(d<=3?'easy':d<=6?'medium':'hard'),pool];};
+const NQ0=LVS.length,LV=LVS.map(stg2).concat(TUTS.map((t,i)=>['Tutorial: '+t.name,['T'+(i+1)]])).concat(LVS2.map(stg2));
 const POOL=LV.map(l=>l[1]);
 const plain=h=>String(h).replace(/<sup>/g,'^(').replace(/<\/sup>/g,')').replace(/<\/i><i>/g,'/').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 const qq=(key,cur)=>{const m=D[cur.k||key];if(!m)return null;return{v:1,tags:[...m[1]].sort(),diff:m[0],score:m[0],qt:cur.k||key,eq:plain(cur.q)};};
 const qmeta=lv=>{const pool=[...new Set(POOL[lv-1])],ms=pool.map(k=>D[k]),all=new Set(ms.flatMap(m=>m[1])),tags=[...all].filter(t=>ms.every(m=>m[1].includes(t))).sort(),
   sometimes=[...all].filter(t=>!tags.includes(t)).sort(),d=ms.reduce((a,m)=>a+m[0],0)/ms.length;
   return{tags,sometimes,types:pool,diff:Math.round(clamp(d)),score:Math.round(clamp(d)*10)/10};};
-window.__ix={QT,POOL,D,LV};
+window.__ix={QT,POOL,D,LV,solve:{sCan,sApply,sEq}};
 REG.push({id:'indices',name:'Power Balance',emoji:'🔋',color:'#0b7285',cat:'Algebra',qmeta,
  desc:'Powers, indices and logs on a balance. See why n⁰ = 1, why negative indices flip, what a fractional index means, and how every index law turns into a log law. Tap the button to swap an equation between index form and log form.',
  skills:['powers and indices','zero, negative and fractional indices','index laws','logarithms','log laws'],levels:LV.map(l=>l[0]),
- how:'Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan (some levels also have ( )ⁿ and √ buttons that act on the whole pan), then press Check.',
+ how:'Tutorial levels: watch the animated lesson (▶ ⏸ ◀ and the speed button), then press “I understand”. Solve levels: press the buttons to change the whole equation (same base, ( )ⁿ, √, log ⇄ power), then type x. Index levels: type the missing number (− for negative, / for a fraction). Build levels: drag ×a or ÷a blocks onto the right pan (some levels also have ( )ⁿ and √ buttons that act on the whole pan), then press Check.',
  art:'<div class="minibal">🔋</div>',
- mount(root,lv,ctx){mountQuiz(root,ctx,{single:true,popup:true,game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
+ mount(root,lv,ctx){if(lv>NQ0&&lv<=NQ0+TUTS.length)return tutMount(root,lv-NQ0-1,ctx);mountQuiz(root,ctx,{single:true,popup:true,game:null,qq,QT,pool:POOL[lv-1],parse:num,slash:true,minus:true,compact:true,winTitle:'Power player!'});}});
 })();
