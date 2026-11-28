@@ -427,7 +427,7 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 
 .pw sup,.pw-eq sup,.pw-ladder sup,.ch-q sup{font-size:.68em;line-height:0}.pw sub,.ch-q sub,.pw-eq sub,.pw-ladder sub{font-size:.68em}
 .pw sup .fr,.ch-q sup .fr,.pw-eq sup .fr{font-size:.7em;margin:0}.pw-sub{font-size:13px;margin-top:3px;font-weight:700}
-.tile{display:inline-block;min-width:22px;padding:1px 5px;margin:1px;background:#e5dbff;border-radius:6px;color:#4c2fb5}.tmul{margin:0 2px;color:#868e96}
+.btl{display:inline-block;min-width:22px;padding:1px 5px;margin:1px;background:#e5dbff;border-radius:6px;color:#4c2fb5;font-style:normal}.tmul{margin:0 2px;color:#868e96}
 .pw-eq{text-align:center;font-size:18px;font-weight:800;margin:2px 0 0;color:#2b2160}.pw-ok{font-size:13px;color:#2b8a3e;margin-left:6px}
 .pw-tg{margin:4px auto;display:block;font-size:13px;padding:5px 12px}
 .pw-ladder{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center;margin:2px 0 6px;font-size:14px;font-weight:800}.lp{background:#e7f5ff;border-radius:8px;padding:2px 7px;color:#1864ab}.lp.d{background:#fff3bf;color:#e67700}
@@ -465,6 +465,13 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .px sup .fr i,.ch sup .fr i{padding:0 1px}
 .px .sc-eq .el{display:block;white-space:normal}.px .sc-eq .el .otg{margin-right:6px;vertical-align:middle}.px .sc-eq .el.fin{display:block}
 .px .t.chip span{white-space:nowrap}
+
+/* once answered, the blocks box and the button bar are no use: shrink to a short scene with a thin foot */
+.px.done .sc-box{display:none}.px.done .sc-scene{height:176px}.px.done .sc-post{top:36px;height:130px}
+.px.done .sc-base,.px.done .sc-base:empty{height:14px;padding:0;left:30%;right:30%;border-radius:10px 10px 6px 6px;box-shadow:0 3px 0 #0003}
+.px.done .sc-eq{max-height:110px}
+.px .t.pb{min-width:25px;height:28px;padding:0 4px;font-size:15px;border-radius:8px}.px .sc-tiles{gap:2px}
+.msg .btl{min-width:0;font-size:.85em;padding:0 4px;margin:0}.msg .tmul{margin:0 1px}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><button class="back" id="lvbtn">Levels ▾</button><button class="back" id="pbtn">👤</button><div class="pills" id="glevels"></div></div>
@@ -4724,7 +4731,7 @@ const pw=(b,e)=>`<span class="pwr">${bv(b)}<sup>${e}</sup></span>`;
 const pe=(b,e)=>e===1?bv(b):pw(b,e);              /* x¹ is written x */
 const lg=(b,x)=>`log<sub>${b}</sub> ${x}`;
 const log2=x=>Math.log(x)/Math.LN2;
-const tiles=(b,n)=>Array.from({length:n},()=>`<b class="tile">${b}</b>`).join('<span class="tmul">×</span>');
+const tiles=(b,n)=>Array.from({length:n},()=>`<b class="btl">${b}</b>`).join('<span class="tmul">×</span>');
 const par=s=>`(${s})`;
 function parseT(buf){const s=String(buf).trim().replace('−','-');if(!s||s==='-')return null;const m=/^(-?)(\d*\.?\d+)(?:\/(\d*\.?\d+))?$/.exec(s);if(!m)return null;
   const a=parseFloat(m[2]),d=m[3]!=null?parseFloat(m[3]):1;if(!d)return null;return(m[1]?-1:1)*a/d;}
@@ -4759,7 +4766,7 @@ function Q(o){
     let ctl;
     if(o.build)ctl=answered?'':`<button class="lv go ml" id="bkmul">×${bs}</button>${o.neg?`<button class="lv go dv" id="bkdiv">÷${bs}</button>`:''}<button class="lv go" id="bkun" style="background:#868e96">↶</button><button class="lv go" id="chk" style="background:#2f9e44">Check ✓</button>`;
     else ctl=q.forms.length>1?`<button class="lv go dv" id="ftg">↔ ${f.btn}</button>`:'';
-    return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}<div class="px ${level?'lv':''}">${top}
+    return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}<div class="px ${level?'lv':''} ${answered?'done':''}">${top}
      <div class="sc-scene" data-a="${ang}" data-p="${prev}"><svg class="sc-svg"></svg><div class="sc-beam"><i></i></div>
       <div class="sc-pan" data-p="L"><div class="sc-tiles">${left}</div><div class="sc-dish"></div></div><div class="sc-pan" data-p="R"><div class="sc-tiles">${right}</div><div class="sc-dish"></div></div>
       <div class="sc-post"></div><div class="sc-base">${ctl}</div></div></div>`;

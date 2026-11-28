@@ -25,7 +25,7 @@ const pw=(b,e)=>`<span class="pwr">${bv(b)}<sup>${e}</sup></span>`;
 const pe=(b,e)=>e===1?bv(b):pw(b,e);              /* x¹ is written x */
 const lg=(b,x)=>`log<sub>${b}</sub> ${x}`;
 const log2=x=>Math.log(x)/Math.LN2;
-const tiles=(b,n)=>Array.from({length:n},()=>`<b class="tile">${b}</b>`).join('<span class="tmul">×</span>');
+const tiles=(b,n)=>Array.from({length:n},()=>`<b class="btl">${b}</b>`).join('<span class="tmul">×</span>');
 const par=s=>`(${s})`;
 function parseT(buf){const s=String(buf).trim().replace('−','-');if(!s||s==='-')return null;const m=/^(-?)(\d*\.?\d+)(?:\/(\d*\.?\d+))?$/.exec(s);if(!m)return null;
   const a=parseFloat(m[2]),d=m[3]!=null?parseFloat(m[3]):1;if(!d)return null;return(m[1]?-1:1)*a/d;}
@@ -60,7 +60,7 @@ function Q(o){
     let ctl;
     if(o.build)ctl=answered?'':`<button class="lv go ml" id="bkmul">×${bs}</button>${o.neg?`<button class="lv go dv" id="bkdiv">÷${bs}</button>`:''}<button class="lv go" id="bkun" style="background:#868e96">↶</button><button class="lv go" id="chk" style="background:#2f9e44">Check ✓</button>`;
     else ctl=q.forms.length>1?`<button class="lv go dv" id="ftg">↔ ${f.btn}</button>`:'';
-    return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}<div class="px ${level?'lv':''}">${top}
+    return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}<div class="px ${level?'lv':''} ${answered?'done':''}">${top}
      <div class="sc-scene" data-a="${ang}" data-p="${prev}"><svg class="sc-svg"></svg><div class="sc-beam"><i></i></div>
       <div class="sc-pan" data-p="L"><div class="sc-tiles">${left}</div><div class="sc-dish"></div></div><div class="sc-pan" data-p="R"><div class="sc-tiles">${right}</div><div class="sc-dish"></div></div>
       <div class="sc-post"></div><div class="sc-base">${ctl}</div></div></div>`;
