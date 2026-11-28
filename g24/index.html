@@ -2704,6 +2704,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
     const fs=[...found].sort((a,b)=>a-b);
     $('#fcf').innerHTML='<span class="fl">Factors found:</span> '+fs.map(x=>`<b>${x}</b>`).join('');
     $('#fcpr').innerHTML=pairs.map(p=>`<span>${p[0]} × ${p[1]} = ${N}</span>`).join('');
+    $('#fcdone').disabled=found.size<F.length;
   }
   function set(v,silent){
     if(!(v>=1&&v<=N&&Number.isInteger(v))){$('#fcmsg').innerHTML=`Type a whole number from 1 to ${N}.`;return;}
