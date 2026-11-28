@@ -99,6 +99,7 @@ function openGame(id,lv,fromRoute){
   cleanup();const g=REG.find(x=>x.id===id);lv=lv||curLv[id]||1;curLv[id]=lv;const N=g.levels.length;
   $('#menu').hidden=true;$('#game').hidden=false;
   $('#gtitle').innerHTML=`<span class="gemo">${g.emoji}</span> ${g.name}`;
+  {const pb=$('#pbtn');pb.textContent='👤 '+(DB.cur||'Player');pb.onclick=()=>me()?showProfile(id):showLogin(true);}
   document.documentElement.style.setProperty('--gc',g.color);$('#gbar').style.setProperty('--c',g.color);
   const pills=$('#glevels');pills.innerHTML='';pills.classList.toggle('long',N>24);pills.classList.remove('open');{const lb=$('#lvbtn');lb.textContent='Levels '+lv+'/'+N+' ▾';lb.onclick=()=>{pills.classList.toggle('open');if(N>24&&pills.classList.contains('open')){const c=pills.children[lv-1];if(c)pills.scrollLeft=c.offsetLeft-pills.clientWidth/2+c.offsetWidth/2;}};}
   g.levels.forEach((n,i)=>{const b=el('button','pill'+(i+1===lv?' on':'')+(isDone(id,i+1)?' dn':''),String(i+1));b.title=n;b.onclick=()=>openGame(id,i+1);pills.appendChild(b);});
