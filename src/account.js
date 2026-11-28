@@ -145,14 +145,32 @@ function showLogin(first){
 }
 
 /* ---------- profile ---------- */
-function syncLabel(){return !CLOUD?'📱 Saved on this device':SYNC==='ok'?'☁ Saved online':SYNC==='pending'?'⏳ Saving…':'⚠ Offline — will sync when you are back online';}
+/* ---------- skill status: one row per knowledge point (levels of a game grouped by name) ---------- */
+const STAGE_RE=/ · (warm-up|easy|medium|hard|tough)$/;
+const BAND=d=>d==null?-1:d<=3?0:d<=6?1:2;            /* difficulty 1-10 (from the level tags) -> Easy / Medium / Hard */
+const BAND_NAME=['Easy','Medium','Hard'];
+function skillsOf(G){
+  const m=new Map();
+  G.levels.forEach((nm,i)=>{const k=String(nm).replace(STAGE_RE,'');if(!m.has(k))m.set(k,[]);m.get(k).push(i+1);});
+  return [...m].map(([name,lvs])=>{
+    const d=done[G.id]||{};
+    let best=-1,any=false;                                   /* best = hardest difficulty band among the cleared levels */
+    lvs.forEach(l=>{if(!d[l])return;any=true;const q=levelMeta(G,l);best=Math.max(best,q?BAND(q.diff):0);});
+    return{name,achieved:any?Math.max(best,0):-1};
+  });
+}
+function skillHtml(G){
+  return skillsOf(G).map(s=>`<div class="srow"><span class="sn">${esc(s.name)}</span>${s.achieved>=0?`<span class="sbd sbd-${s.achieved}">${BAND_NAME[s.achieved]}</span>`:'<span class="sst">–</span>'}</div>`).join('');
+}
+
 function showProfile(){
   const u=me();
   const rows=REG.map(G=>{const d=done[G.id]||{};let p=0;for(const l in d){p+=d[l].p||0;}
-    return `<div class="prow"><span class="pe">${G.emoji}</span><span class="pn">${esc(G.name)}</span><span class="pb"><i style="width:${Object.keys(d).length/G.levels.length*100}%;background:${G.color}"></i></span><span class="pv">${Object.keys(d).length}/${G.levels.length}</span><span class="pp">⭐${p}</span></div>`;}).join('');
+    return `<details class="pg" data-g="${G.id}"><summary class="prow"><span class="pe">${G.emoji}</span><span class="pn">${esc(G.name)}</span><span class="pb"><i style="width:${Object.keys(d).length/G.levels.length*100}%;background:${G.color}"></i></span><span class="pv">${Object.keys(d).length}/${G.levels.length}</span><span class="pp">⭐${p}</span></summary><div class="sk"></div></details>`;}).join('');
   const o=ov(`<h2>👤 ${esc(DB.cur)}</h2><p class="pbig">⭐ <b>${ptsOf(u)}</b> points · <b>${lvOf(u)}</b> levels cleared</p><p class="small" id="psync">${syncLabel()}</p><div class="plist">${rows}</div>
    <p class="small">Points: first clear of a level = 50 + 10 × level (up to level 20). Replaying a level gives +5.</p>
    <div class="row"><button class="btn" id="psw">Log out</button><button class="btn alt" id="pcl">🏫 Teacher board</button>${CLOUD?'':'<button class="btn alt" id="psh">📤 Share my progress</button>'}<button class="btn alt" id="prs">Reset my progress</button><button class="btn alt" id="pcx">Close</button></div>`,'big');
+  o.querySelectorAll('details.pg').forEach(dt=>dt.addEventListener('toggle',()=>{if(dt.open&&!dt.dataset.r){dt.dataset.r=1;dt.querySelector('.sk').innerHTML=skillHtml(REG.find(g=>g.id===dt.dataset.g));}}));
   $('#pcx',o).onclick=()=>o.remove();
   $('#psw',o).onclick=()=>{o.remove();logout();};
   const sh=$('#psh',o);if(sh)sh.onclick=()=>copyText(progressCode(),'Progress code copied — send it to your teacher');
