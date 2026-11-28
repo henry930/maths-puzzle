@@ -334,3 +334,14 @@ a.card.news{text-decoration:none;color:inherit}
 .qd-title{font-size:18px;font-weight:700;color:#343a40;margin:6px 0 10px}.qd-title small{color:#868e96}.qd-row{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:26px;font-weight:900;margin:8px 0}
 .qd-op{color:#495057}.qd-sl{display:inline-block;min-width:54px;height:46px;line-height:46px;border:3px solid #ced4da;border-radius:12px;background:#fff;color:#343a40;font-size:24px;cursor:pointer;user-select:none}.qd-sl.cur{border-color:#d6336c;background:#fff0f6}.qd-sl.ok{border-color:#2f9e44;background:#ebfbee}
 .qd-split{font-size:16px;color:#495057;min-height:22px;margin:4px 0}
+
+.howto.anim{padding:10px}.fa-card{background:#7048e8;color:#fff;border-radius:14px;padding:14px 8px 40px;position:relative;min-height:128px;text-align:center;overflow:hidden}
+.fa-l1{font-size:28px;font-weight:900}.fa-t{display:inline-block;padding:2px 6px;border-radius:10px}.fa-t.sel{color:#ffd43b}.fa-pl{margin:0 8px}
+.fa-l2{font-size:26px;font-weight:900;min-height:34px;margin-top:8px;opacity:0;transition:opacity .3s}.fa-l2.on{opacity:1}
+.fa-g{font-style:normal;color:#69db7c;background:rgba(105,219,124,.18);box-shadow:0 0 0 2px #69db7c;border-radius:8px;padding:0 4px;animation:fag 1s infinite}@keyframes fag{50%{box-shadow:0 0 0 5px rgba(105,219,124,.45)}}
+.fa-hand{position:absolute;font-size:30px;transition:left .6s ease,top .6s ease;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}.fa-hand.tap{animation:fat .3s}@keyframes fat{50%{transform:scale(.7)}}
+.fa-bub{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);background:#fff;color:#5f3dc4;border-radius:12px;padding:6px 14px;font-weight:800;font-size:16px;display:none;white-space:nowrap}.fa-bub.on{display:block}.fa-ty{display:inline-block;min-width:18px;margin-left:6px;color:#7048e8;font-size:20px;border-bottom:2px solid #7048e8}
+.fa-cap{text-align:center;font-weight:800;color:#5f3dc4;margin:8px 0 4px;min-height:40px;font-size:15px}.fa-foot{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.fa-dots i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#d0bfff;margin-right:5px}.fa-dots i.on{background:#7048e8}
+.fa-rp,.fa-tx{border:none;background:#f1ecff;color:#5f3dc4;font-weight:800;border-radius:10px;padding:5px 10px;cursor:pointer;font-size:13px}.fa-how{font-size:14px;margin-top:8px;color:#495057;line-height:1.4}
+.pop{animation:fapop .35s}@keyframes fapop{0%{transform:scale(.7);opacity:.3}100%{transform:scale(1);opacity:1}}

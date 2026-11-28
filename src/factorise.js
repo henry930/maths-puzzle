@@ -65,11 +65,42 @@ const blkT=s=>{if(/^\d+$/.test(s))return{c:+s,p:{}};const m=s.match(/^([a-z])([�
 const reqOf=t=>{const o=facs(Math.abs(t.c)).filter(n=>n>1).map(String);for(const k of Object.keys(t.p).sort())for(let e=1;e<=t.p[k];e++)o.push(k+sup(e));return o;};
 const divides=(b,t)=>Math.abs(t.c)%b.c===0&&Object.keys(b.p).every(k=>(t.p[k]||0)>=b.p[k]);
 const common=ts=>{const c=gcdAll(ts.map(t=>Math.abs(t.c))),p={};Object.keys(ts[0].p).forEach(k=>{const e=Math.min(...ts.map(t=>t.p[k]||0));if(e>0)p[k]=e;});return{c,p};};
+
+function factAnim(hw,g){
+  hw.innerHTML=`<div class="fa"><div class="fa-card" id="fac"><div class="fa-l1"><span class="fa-t" id="fa1"></span><span class="fa-pl">+</span><span class="fa-t" id="fa2"></span></div><div class="fa-l2" id="fal2"></div><div class="fa-bub" id="fab"></div><span class="fa-hand" id="fah">👆</span></div><div class="fa-cap" id="facap"></div><div class="fa-foot"><span class="fa-dots" id="fad"></span><span><button class="fa-rp" id="farp">↻ Replay</button> <button class="fa-tx" id="fatx">📖 Steps</button></span></div><div class="fa-how" id="fahow" hidden></div></div>`;
+  const q=id=>hw.querySelector('#'+id),card=q('fac'),t1=q('fa1'),t2=q('fa2'),l2=q('fal2'),bub=q('fab'),hand=q('fah'),cap=q('facap'),dots=q('fad');
+  q('fahow').textContent=g.how;let tm=[],stopped=false;
+  dots.innerHTML='<i></i><i></i><i></i><i></i><i></i>';
+  const at=(ms,fn)=>tm.push(setTimeout(()=>{if(!stopped)fn();},ms));
+  const dot=n=>[...dots.children].forEach((d,i)=>d.classList.toggle('on',i<=n));
+  const pop=e=>{e.classList.remove('pop');void e.offsetWidth;e.classList.add('pop');};
+  const go=(el,dx)=>{const r=el.getBoundingClientRect(),c=card.getBoundingClientRect();hand.style.left=(r.left-c.left+r.width/2-10+(dx||0))+'px';hand.style.top=(r.top-c.top+r.height-6)+'px';};
+  const tap=()=>{hand.classList.remove('tap');void hand.offsetWidth;hand.classList.add('tap');};
+  function run(){
+    tm.forEach(clearTimeout);tm=[];
+    t1.className='fa-t';t2.className='fa-t';t1.innerHTML='30x';t2.innerHTML='25';l2.className='fa-l2';l2.innerHTML='';bub.className='fa-bub';
+    cap.textContent='① Tap a term';dot(0);hand.style.left='70%';hand.style.top='70%';
+    at(700,()=>go(t1));
+    at(1500,()=>{tap();t1.classList.add('sel');bub.innerHTML='Factors of 30x <span class="fa-ty"></span>';bub.classList.add('on');cap.textContent='Type one of its factors…';});
+    at(2300,()=>{q('fa1');bub.querySelector('.fa-ty').textContent='5';});
+    at(3200,()=>{bub.classList.remove('on');t1.classList.remove('sel');t1.innerHTML='5 × 6x';pop(t1);cap.textContent='30x = 5 × 6x';dot(1);});
+    at(4300,()=>go(t2));
+    at(5000,()=>{tap();t2.innerHTML='5 × 5';pop(t2);cap.textContent='② 5 fits this term too — it splits by itself!';dot(2);});
+    at(7000,()=>{t1.innerHTML='<i class="fa-g">5</i> × 6x';t2.innerHTML='<i class="fa-g">5</i> × 5';cap.textContent='③ The same factor in every term turns green';dot(3);});
+    at(8600,()=>go(t1.querySelector('.fa-g'),-2));
+    at(9300,()=>{tap();l2.innerHTML='= <b>5</b>(6x + 5)';l2.classList.add('on');pop(l2);cap.textContent='④ Tap the green factor — factorised!';dot(4);});
+    at(13000,run);
+  }
+  q('farp').onclick=run;
+  q('fatx').onclick=()=>{const h=q('fahow');h.hidden=!h.hidden;};
+  setTimeout(()=>{if(!stopped)run();},50);
+  return()=>{stopped=true;tm.forEach(clearTimeout);};
+}
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',
  desc:'Factorise expressions like 30x + 25. Tap a number or letter and break it into factors (30x → 5 × 6x → 5 × 2 × 3x…). When the same factor shows up in every term, press Factorise. Repeat until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','prime factors'],
  levels:LV.map(l=>l.n),
  how:'Tap a part of a term and enter one of its factors on the number pad — a number, a letter, or both together (for 9n² you can enter 9, n, n² or 9n). It splits into factor × something, e.g. 30x → 5 × 6x. If the next term you tap has that same factor, it splits automatically; otherwise you enter its factor yourself. Tap any part again to split it further (6x → 2 × 3x). Tap a × to join two parts back together. A split only lasts about 30 seconds. When the same factor appears in EVERY term, the common factor turns green — tap it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
- art:'<div class="minibal">6(2x+3)</div>',
+ art:'<div class="minibal">6(2x+3)</div>',anim:factAnim,
  mount(root,lv,ctx){
   const spec=LV[lv-1];let terms,orig,L,CF,chains,tok,selI,selJ,buf,steps,ended,lastBlk,lastI;const timers=[];
   root.innerHTML=`<div class="fx" id="fxr"><div class="fx-top" id="fxt"></div><div class="fx-stage" id="fxs"></div><div class="msg" id="fxm">&nbsp;</div>
