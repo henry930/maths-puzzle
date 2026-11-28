@@ -377,4 +377,5 @@ a.card.news{text-decoration:none;color:inherit}
 .card.game .art .miniriver{font-size:34px;letter-spacing:0;white-space:nowrap}
 .card.game .art .mini24{transform:scale(.85)}
 
-.qts{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:5px}.qt{font-size:11.5px;font-weight:700;border-radius:20px;padding:2px 9px;background:#ece8ff;color:#4c3fb0}.qt-op{background:#e7f5ff;color:#1864ab}.qt-steps{background:#f1f3f5;color:#495057}.qt-shape{background:#fff3bf;color:#7a5a00}.qt-num{background:#ffe8cc;color:#a14b00}.qd{font-size:12px;letter-spacing:1px;color:var(--mut);margin-right:4px}.qd b{color:var(--c,#6741d9)}
+.qts{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:5px}.qt{font-size:11.5px;font-weight:700;border-radius:20px;padding:2px 9px;background:#ece8ff;color:#4c3fb0}.qt-op{background:#e7f5ff;color:#1864ab}.qt-steps{background:#f1f3f5;color:#495057}.qt-shape{background:#fff3bf;color:#7a5a00}.qt-num{background:#ffe8cc;color:#a14b00}.qdiff{font-size:12px;letter-spacing:1px;color:var(--mut);margin-right:4px}.qdiff b{color:var(--c,#6741d9)}
+.qt-skill{background:#e6fcf5;color:#087f5b}.qt-some{background:#f8f9fa;color:#868e96;border:1px dashed #ced4da}

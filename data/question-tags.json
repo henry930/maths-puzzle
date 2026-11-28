@@ -109,6 +109,676 @@
    "g": "num",
    "en": "bigger numbers",
    "zh": "數字較大"
+  },
+  "simplest-form": {
+   "g": "num",
+   "en": "must simplify",
+   "zh": "要化到最簡"
+  },
+  "bk-terms-2": {
+   "g": "skill",
+   "en": "2 terms inside",
+   "zh": "括號內 2 項"
+  },
+  "bk-terms-3": {
+   "g": "skill",
+   "en": "3 terms inside",
+   "zh": "括號內 3 項"
+  },
+  "bk-terms-4": {
+   "g": "skill",
+   "en": "4 terms inside",
+   "zh": "括號內 4 項"
+  },
+  "bk-num-outside": {
+   "g": "skill",
+   "en": "number outside",
+   "zh": "括號外係數字"
+  },
+  "bk-var-outside": {
+   "g": "skill",
+   "en": "letter outside",
+   "zh": "括號外有字母"
+  },
+  "bk-neg-outside": {
+   "g": "skill",
+   "en": "negative outside",
+   "zh": "括號外係負數"
+  },
+  "bk-neg-inside": {
+   "g": "skill",
+   "en": "negative inside",
+   "zh": "括號內有負數"
+  },
+  "bk-neg-times-neg": {
+   "g": "skill",
+   "en": "− × −",
+   "zh": "負負得正"
+  },
+  "bk-letters-1": {
+   "g": "skill",
+   "en": "1 letter",
+   "zh": "1 個字母"
+  },
+  "bk-letters-2": {
+   "g": "skill",
+   "en": "2 letters",
+   "zh": "2 個字母"
+  },
+  "bk-letters-3": {
+   "g": "skill",
+   "en": "3 letters",
+   "zh": "3 個字母"
+  },
+  "bk-gives-square": {
+   "g": "skill",
+   "en": "x² in answer",
+   "zh": "答案有平方"
+  },
+  "bk-sq-inside": {
+   "g": "skill",
+   "en": "x² inside",
+   "zh": "括號內有平方項"
+  },
+  "bk-coef-inside": {
+   "g": "skill",
+   "en": "coefficients inside",
+   "zh": "括號內有係數"
+  },
+  "bk-multi-outside": {
+   "g": "skill",
+   "en": "xy outside",
+   "zh": "括號外有多個字母"
+  },
+  "fc-terms-2": {
+   "g": "skill",
+   "en": "2 terms",
+   "zh": "2 項"
+  },
+  "fc-terms-3": {
+   "g": "skill",
+   "en": "3 terms",
+   "zh": "3 項"
+  },
+  "fc-terms-4": {
+   "g": "skill",
+   "en": "4 terms",
+   "zh": "4 項"
+  },
+  "fc-number-only": {
+   "g": "skill",
+   "en": "number only",
+   "zh": "只提數字"
+  },
+  "fc-letter-only": {
+   "g": "skill",
+   "en": "letter only",
+   "zh": "只提字母"
+  },
+  "fc-number-and-letter": {
+   "g": "skill",
+   "en": "number and letter",
+   "zh": "數字同字母"
+  },
+  "fc-squared-letter": {
+   "g": "skill",
+   "en": "squared letter",
+   "zh": "提平方字母"
+  },
+  "fc-two-letters": {
+   "g": "skill",
+   "en": "two letters",
+   "zh": "兩個字母"
+  },
+  "fc-neg-terms": {
+   "g": "skill",
+   "en": "negative terms",
+   "zh": "有負項"
+  },
+  "qd-monic": {
+   "g": "skill",
+   "en": "x² (no number in front)",
+   "zh": "x² 前面冇數字"
+  },
+  "qd-lead-coef": {
+   "g": "skill",
+   "en": "number in front of x²",
+   "zh": "x² 前面有數字"
+  },
+  "qd-all-positive": {
+   "g": "skill",
+   "en": "all positive",
+   "zh": "全部正數"
+  },
+  "qd-neg-middle": {
+   "g": "skill",
+   "en": "minus in the middle",
+   "zh": "中間係負數"
+  },
+  "qd-neg-last": {
+   "g": "skill",
+   "en": "minus at the end",
+   "zh": "最後一項係負數"
+  },
+  "qd-dos": {
+   "g": "skill",
+   "en": "difference of two squares",
+   "zh": "平方差"
+  },
+  "ln-gradient-only": {
+   "g": "skill",
+   "en": "gradient only",
+   "zh": "只調 m"
+  },
+  "ln-intercept-only": {
+   "g": "skill",
+   "en": "intercept only",
+   "zh": "只調 c"
+  },
+  "ln-both": {
+   "g": "skill",
+   "en": "gradient and intercept",
+   "zh": "m 同 c"
+  },
+  "ln-neg-gradient": {
+   "g": "skill",
+   "en": "negative gradient",
+   "zh": "負斜率"
+  },
+  "ln-frac-gradient": {
+   "g": "skill",
+   "en": "fractional gradient",
+   "zh": "分數斜率"
+  },
+  "ln-flat": {
+   "g": "skill",
+   "en": "horizontal line",
+   "zh": "水平線"
+  },
+  "ln-steep": {
+   "g": "skill",
+   "en": "steep line",
+   "zh": "斜率大"
+  },
+  "ln-neg-intercept": {
+   "g": "skill",
+   "en": "negative intercept",
+   "zh": "負截距"
+  },
+  "fa-prime": {
+   "g": "skill",
+   "en": "prime",
+   "zh": "質數"
+  },
+  "fa-composite": {
+   "g": "skill",
+   "en": "composite",
+   "zh": "合成數"
+  },
+  "fa-square": {
+   "g": "skill",
+   "en": "square number",
+   "zh": "平方數"
+  },
+  "fa-few-factors": {
+   "g": "skill",
+   "en": "few factors",
+   "zh": "因數少"
+  },
+  "fa-many-factors": {
+   "g": "skill",
+   "en": "many factors",
+   "zh": "因數多"
+  },
+  "fa-small-n": {
+   "g": "skill",
+   "en": "small number",
+   "zh": "數字細"
+  },
+  "fa-mid-n": {
+   "g": "skill",
+   "en": "medium number",
+   "zh": "數字中等"
+  },
+  "fa-big-n": {
+   "g": "skill",
+   "en": "big number",
+   "zh": "數字大"
+  },
+  "fr-name-picture": {
+   "g": "skill",
+   "en": "name from picture",
+   "zh": "睇圖寫分數"
+  },
+  "fr-equivalent": {
+   "g": "skill",
+   "en": "equivalent fractions",
+   "zh": "等值分數"
+  },
+  "fr-simplify": {
+   "g": "skill",
+   "en": "simplify",
+   "zh": "約簡"
+  },
+  "fr-of-amount": {
+   "g": "skill",
+   "en": "fraction of an amount",
+   "zh": "分數乘數量"
+  },
+  "fr-add": {
+   "g": "skill",
+   "en": "add",
+   "zh": "加"
+  },
+  "fr-sub": {
+   "g": "skill",
+   "en": "subtract",
+   "zh": "減"
+  },
+  "fr-same-denom": {
+   "g": "skill",
+   "en": "same denominator",
+   "zh": "分母相同"
+  },
+  "fr-diff-denom": {
+   "g": "skill",
+   "en": "different denominators",
+   "zh": "分母唔同"
+  },
+  "fr-mixed": {
+   "g": "skill",
+   "en": "mixed numbers",
+   "zh": "帶分數"
+  },
+  "fr-mixed-improper": {
+   "g": "skill",
+   "en": "mixed ↔ improper",
+   "zh": "帶分數轉假分數"
+  },
+  "fr-mul": {
+   "g": "skill",
+   "en": "multiply",
+   "zh": "乘"
+  },
+  "fr-div": {
+   "g": "skill",
+   "en": "divide",
+   "zh": "除"
+  },
+  "fr-reverse": {
+   "g": "skill",
+   "en": "find the whole",
+   "zh": "倒推原數"
+  },
+  "pc-read-grid": {
+   "g": "skill",
+   "en": "percent of a grid",
+   "zh": "睇格仔寫百分比"
+  },
+  "pc-of-amount": {
+   "g": "skill",
+   "en": "percent of an amount",
+   "zh": "求某數嘅百分之幾"
+  },
+  "pc-easy": {
+   "g": "skill",
+   "en": "10% / 25% / 50%",
+   "zh": "簡單百分比"
+  },
+  "pc-any": {
+   "g": "skill",
+   "en": "any percentage",
+   "zh": "任何百分比"
+  },
+  "pc-convert": {
+   "g": "skill",
+   "en": "convert",
+   "zh": "互換"
+  },
+  "pc-from-fraction": {
+   "g": "skill",
+   "en": "from a fraction",
+   "zh": "分數轉百分比"
+  },
+  "pc-from-decimal": {
+   "g": "skill",
+   "en": "from a decimal",
+   "zh": "小數轉百分比"
+  },
+  "pc-sale": {
+   "g": "skill",
+   "en": "sale price",
+   "zh": "減價"
+  },
+  "pc-increase": {
+   "g": "skill",
+   "en": "percentage increase",
+   "zh": "加幅"
+  },
+  "pc-decrease": {
+   "g": "skill",
+   "en": "percentage decrease",
+   "zh": "減幅"
+  },
+  "pc-vat": {
+   "g": "skill",
+   "en": "VAT",
+   "zh": "VAT"
+  },
+  "pc-as-percent": {
+   "g": "skill",
+   "en": "score as a percentage",
+   "zh": "分數轉百分比"
+  },
+  "pc-change": {
+   "g": "skill",
+   "en": "percentage change",
+   "zh": "百分比變化"
+  },
+  "pc-reverse": {
+   "g": "skill",
+   "en": "reverse percentage",
+   "zh": "逆向百分比"
+  },
+  "pc-interest": {
+   "g": "skill",
+   "en": "interest",
+   "zh": "利息"
+  },
+  "pc-simple-interest": {
+   "g": "skill",
+   "en": "simple interest",
+   "zh": "單利息"
+  },
+  "pc-compound-interest": {
+   "g": "skill",
+   "en": "compound interest",
+   "zh": "複利息"
+  },
+  "pr-bag": {
+   "g": "skill",
+   "en": "bag of balls",
+   "zh": "袋入面揀波"
+  },
+  "pr-not": {
+   "g": "skill",
+   "en": "not event",
+   "zh": "「唔係」事件"
+  },
+  "pr-or": {
+   "g": "skill",
+   "en": "or event",
+   "zh": "「或者」事件"
+  },
+  "pr-and": {
+   "g": "skill",
+   "en": "and event",
+   "zh": "「而且」事件"
+  },
+  "pr-spinner": {
+   "g": "skill",
+   "en": "spinner",
+   "zh": "轉盤"
+  },
+  "pr-two-dice": {
+   "g": "skill",
+   "en": "two dice",
+   "zh": "兩粒骰"
+  },
+  "pr-sample-space": {
+   "g": "skill",
+   "en": "sample space",
+   "zh": "樣本空間"
+  },
+  "pr-at-least": {
+   "g": "skill",
+   "en": "at least / less than",
+   "zh": "至少／少於"
+  },
+  "pr-with-replacement": {
+   "g": "skill",
+   "en": "with replacement",
+   "zh": "放回"
+  },
+  "pr-without-replacement": {
+   "g": "skill",
+   "en": "without replacement",
+   "zh": "唔放回"
+  },
+  "pr-independent": {
+   "g": "skill",
+   "en": "independent events",
+   "zh": "獨立事件"
+  },
+  "pr-mutually-exclusive": {
+   "g": "skill",
+   "en": "mutually exclusive",
+   "zh": "互斥事件"
+  },
+  "pr-expected": {
+   "g": "skill",
+   "en": "expected number",
+   "zh": "期望次數"
+  },
+  "pr-relative-freq": {
+   "g": "skill",
+   "en": "relative frequency",
+   "zh": "相對頻率"
+  },
+  "pr-ratio": {
+   "g": "skill",
+   "en": "from a ratio",
+   "zh": "由比例"
+  },
+  "an-estimate": {
+   "g": "skill",
+   "en": "estimate an angle",
+   "zh": "估計角度"
+  },
+  "an-straight-line": {
+   "g": "skill",
+   "en": "angles on a line",
+   "zh": "直線上嘅角"
+  },
+  "an-around-point": {
+   "g": "skill",
+   "en": "angles around a point",
+   "zh": "一點周圍嘅角"
+  },
+  "an-triangle": {
+   "g": "skill",
+   "en": "triangle",
+   "zh": "三角形"
+  },
+  "an-isosceles": {
+   "g": "skill",
+   "en": "isosceles triangle",
+   "zh": "等腰三角形"
+  },
+  "an-quadrilateral": {
+   "g": "skill",
+   "en": "quadrilateral",
+   "zh": "四邊形"
+  },
+  "an-crossing-lines": {
+   "g": "skill",
+   "en": "crossing lines",
+   "zh": "相交直線"
+  },
+  "an-vertically-opposite": {
+   "g": "skill",
+   "en": "vertically opposite",
+   "zh": "對頂角"
+  },
+  "an-parallel": {
+   "g": "skill",
+   "en": "parallel lines",
+   "zh": "平行線"
+  },
+  "an-corresponding": {
+   "g": "skill",
+   "en": "corresponding angles",
+   "zh": "同位角"
+  },
+  "an-alternate": {
+   "g": "skill",
+   "en": "alternate angles",
+   "zh": "內錯角"
+  },
+  "an-co-interior": {
+   "g": "skill",
+   "en": "co-interior angles",
+   "zh": "同旁內角"
+  },
+  "an-exterior": {
+   "g": "skill",
+   "en": "exterior angle",
+   "zh": "外角"
+  },
+  "an-polygon-sum": {
+   "g": "skill",
+   "en": "polygon: angle sum",
+   "zh": "多邊形內角和"
+  },
+  "an-polygon-exterior": {
+   "g": "skill",
+   "en": "polygon: exterior angle",
+   "zh": "多邊形外角"
+  },
+  "an-polygon-interior": {
+   "g": "skill",
+   "en": "polygon: interior angle",
+   "zh": "多邊形內角"
+  },
+  "an-algebra": {
+   "g": "skill",
+   "en": "angles with algebra",
+   "zh": "角度加代數"
+  },
+  "tf-translation": {
+   "g": "skill",
+   "en": "translation",
+   "zh": "平移"
+  },
+  "tf-neg-vector": {
+   "g": "skill",
+   "en": "negative vector",
+   "zh": "負向量"
+  },
+  "tf-reflection": {
+   "g": "skill",
+   "en": "reflection",
+   "zh": "反射"
+  },
+  "tf-reflect-axis": {
+   "g": "skill",
+   "en": "in an axis",
+   "zh": "喺 x 或 y 軸"
+  },
+  "tf-reflect-line": {
+   "g": "skill",
+   "en": "in x = k / y = k",
+   "zh": "喺 x=k 或 y=k"
+  },
+  "tf-reflect-diagonal": {
+   "g": "skill",
+   "en": "in y = ±x",
+   "zh": "喺 y=±x"
+  },
+  "tf-rotation": {
+   "g": "skill",
+   "en": "rotation",
+   "zh": "旋轉"
+  },
+  "tf-rot-90": {
+   "g": "skill",
+   "en": "90°",
+   "zh": "90°"
+  },
+  "tf-rot-180": {
+   "g": "skill",
+   "en": "180°",
+   "zh": "180°"
+  },
+  "tf-clockwise": {
+   "g": "skill",
+   "en": "clockwise",
+   "zh": "順時針"
+  },
+  "tf-anticlockwise": {
+   "g": "skill",
+   "en": "anticlockwise",
+   "zh": "逆時針"
+  },
+  "tf-enlargement": {
+   "g": "skill",
+   "en": "enlargement",
+   "zh": "放大"
+  },
+  "tf-sf-2": {
+   "g": "skill",
+   "en": "scale factor 2",
+   "zh": "比例 2"
+  },
+  "tf-sf-3": {
+   "g": "skill",
+   "en": "scale factor 3",
+   "zh": "比例 3"
+  },
+  "tf-shape-3": {
+   "g": "skill",
+   "en": "triangle",
+   "zh": "三角形"
+  },
+  "tf-shape-4": {
+   "g": "skill",
+   "en": "quadrilateral",
+   "zh": "四邊形"
+  },
+  "dd-1-die": {
+   "g": "skill",
+   "en": "one die",
+   "zh": "1 粒骰"
+  },
+  "dd-2-dice": {
+   "g": "skill",
+   "en": "two dice",
+   "zh": "2 粒骰"
+  },
+  "dd-3-dice": {
+   "g": "skill",
+   "en": "three dice",
+   "zh": "3 粒骰"
+  },
+  "dd-d4": {
+   "g": "skill",
+   "en": "4-sided dice",
+   "zh": "四面骰"
+  },
+  "dd-d6": {
+   "g": "skill",
+   "en": "6-sided dice",
+   "zh": "六面骰"
+  },
+  "dd-d8": {
+   "g": "skill",
+   "en": "8-sided dice",
+   "zh": "八面骰"
+  },
+  "dd-mixed-dice": {
+   "g": "skill",
+   "en": "mixed dice",
+   "zh": "唔同面數嘅骰"
+  },
+  "dd-few-races": {
+   "g": "skill",
+   "en": "fewer races",
+   "zh": "場數少"
+  },
+  "dd-high-goal": {
+   "g": "skill",
+   "en": "high goal",
+   "zh": "目標高"
   }
  },
  "games": {
@@ -130,7 +800,7 @@
      ],
      "steps": 1,
      "diff": 1,
-     "score": 1.5
+     "score": 1.4
     },
     {
      "level": 2,
@@ -315,7 +985,7 @@
      ],
      "steps": 2,
      "diff": 3,
-     "score": 2.8
+     "score": 2.7
     },
     {
      "level": 12,
@@ -355,7 +1025,7 @@
      ],
      "steps": 2,
      "diff": 3,
-     "score": 3.2
+     "score": 3.1
     },
     {
      "level": 14,
@@ -375,7 +1045,7 @@
      ],
      "steps": 2,
      "diff": 3,
-     "score": 3.3
+     "score": 3.4
     },
     {
      "level": 15,
@@ -394,8 +1064,8 @@
       "sub"
      ],
      "steps": 2,
-     "diff": 4,
-     "score": 3.5
+     "diff": 3,
+     "score": 3.4
     },
     {
      "level": 16,
@@ -435,7 +1105,7 @@
      ],
      "steps": 2,
      "diff": 4,
-     "score": 3.6
+     "score": 3.5
     },
     {
      "level": 18,
@@ -455,7 +1125,7 @@
      ],
      "steps": 2,
      "diff": 4,
-     "score": 3.7
+     "score": 3.6
     },
     {
      "level": 19,
@@ -567,7 +1237,7 @@
      ],
      "steps": 1,
      "diff": 2,
-     "score": 2.4
+     "score": 2.5
     },
     {
      "level": 25,
@@ -604,7 +1274,7 @@
      ],
      "steps": 2,
      "diff": 4,
-     "score": 3.7
+     "score": 3.6
     },
     {
      "level": 27,
@@ -666,7 +1336,7 @@
       "div"
      ],
      "steps": 2,
-     "diff": 4,
+     "diff": 5,
      "score": 4.5
     },
     {
@@ -688,7 +1358,7 @@
      ],
      "steps": 2,
      "diff": 5,
-     "score": 4.5
+     "score": 4.6
     },
     {
      "level": 31,
@@ -707,7 +1377,7 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 4.5
+     "score": 4.6
     },
     {
      "level": 32,
@@ -727,7 +1397,7 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 5.1
+     "score": 5.2
     },
     {
      "level": 33,
@@ -771,20 +1441,21 @@
      "level": 35,
      "name": "x on both sides (easy) · tough",
      "tags": [
+      "op-div",
       "op-sub",
+      "steps-3",
       "x-both-sides"
      ],
      "sometimes": [
-      "big-numbers",
-      "op-div",
-      "steps-3"
+      "big-numbers"
      ],
      "ops": [
+      "div",
       "sub"
      ],
      "steps": 3,
      "diff": 6,
-     "score": 6
+     "score": 6.1
     },
     {
      "level": 36,
@@ -803,7 +1474,7 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 4.7
+     "score": 4.8
     },
     {
      "level": 37,
@@ -823,11 +1494,30 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 5
+     "score": 5.2
     },
     {
      "level": 38,
      "name": "x on both sides · medium",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 5,
+     "score": 5.5
+    },
+    {
+     "level": 39,
+     "name": "x on both sides · hard",
      "tags": [
       "op-sub",
       "x-both-sides"
@@ -842,27 +1532,8 @@
       "sub"
      ],
      "steps": 3,
-     "diff": 5,
-     "score": 5.4
-    },
-    {
-     "level": 39,
-     "name": "x on both sides · hard",
-     "tags": [
-      "op-sub",
-      "x-both-sides"
-     ],
-     "sometimes": [
-      "big-numbers",
-      "op-div",
-      "steps-3"
-     ],
-     "ops": [
-      "sub"
-     ],
-     "steps": 3,
      "diff": 6,
-     "score": 5.9
+     "score": 5.6
     },
     {
      "level": 40,
@@ -903,7 +1574,7 @@
      ],
      "steps": 3,
      "diff": 5,
-     "score": 5.4
+     "score": 5.3
     },
     {
      "level": 42,
@@ -917,7 +1588,6 @@
      "sometimes": [
       "big-numbers",
       "op-div",
-      "steps-2",
       "steps-3"
      ],
      "ops": [
@@ -926,7 +1596,7 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 5.7
+     "score": 5.9
     },
     {
      "level": 43,
@@ -970,7 +1640,7 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 6.3
+     "score": 6.5
     },
     {
      "level": 45,
@@ -991,7 +1661,7 @@
       "sub"
      ],
      "steps": 3,
-     "diff": 6,
+     "diff": 7,
      "score": 6.5
     },
     {
@@ -1068,7 +1738,7 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 5.8
+     "score": 6
     },
     {
      "level": 50,
@@ -1087,7 +1757,7 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 6.1
+     "score": 6
     },
     {
      "level": 51,
@@ -1109,7 +1779,7 @@
      ],
      "steps": 2,
      "diff": 5,
-     "score": 4.9
+     "score": 5.1
     },
     {
      "level": 52,
@@ -1154,7 +1824,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 5.8
+     "score": 5.9
     },
     {
      "level": 54,
@@ -1175,33 +1845,32 @@
      "ops": [
       "sub"
      ],
-     "steps": 2,
+     "steps": 3,
      "diff": 6,
-     "score": 5.9
+     "score": 6.2
     },
     {
      "level": 55,
      "name": "Negative answers · tough",
      "tags": [
       "neg-answer",
-      "op-div",
       "op-sub"
      ],
      "sometimes": [
       "big-numbers",
       "neg-const",
+      "op-div",
       "steps-2",
       "steps-3",
       "x-both-sides",
       "x-one-side"
      ],
      "ops": [
-      "div",
       "sub"
      ],
      "steps": 2,
      "diff": 6,
-     "score": 6.4
+     "score": 6.2
     },
     {
      "level": 56,
@@ -1220,9 +1889,9 @@
      "ops": [
       "sub"
      ],
-     "steps": 2,
+     "steps": 3,
      "diff": 5,
-     "score": 4.6
+     "score": 4.7
     },
     {
      "level": 57,
@@ -1244,32 +1913,11 @@
      ],
      "steps": 3,
      "diff": 6,
-     "score": 5.6
+     "score": 5.5
     },
     {
      "level": 58,
      "name": "Boss equations · medium",
-     "tags": [
-      "op-sub",
-      "x-both-sides"
-     ],
-     "sometimes": [
-      "big-numbers",
-      "neg-const",
-      "op-add",
-      "op-div",
-      "steps-3"
-     ],
-     "ops": [
-      "sub"
-     ],
-     "steps": 3,
-     "diff": 6,
-     "score": 5.8
-    },
-    {
-     "level": 59,
-     "name": "Boss equations · hard",
      "tags": [
       "op-sub",
       "x-both-sides"
@@ -1290,6 +1938,27 @@
      "score": 5.9
     },
     {
+     "level": 59,
+     "name": "Boss equations · hard",
+     "tags": [
+      "op-sub",
+      "x-both-sides"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "neg-const",
+      "op-add",
+      "op-div",
+      "steps-3"
+     ],
+     "ops": [
+      "sub"
+     ],
+     "steps": 3,
+     "diff": 6,
+     "score": 6.3
+    },
+    {
      "level": 60,
      "name": "Boss equations · tough",
      "tags": [
@@ -1307,8 +1976,8 @@
       "sub"
      ],
      "steps": 3,
-     "diff": 7,
-     "score": 6.6
+     "diff": 6,
+     "score": 6.4
     },
     {
      "level": 61,
@@ -1390,7 +2059,7 @@
      ],
      "steps": 1,
      "diff": 4,
-     "score": 4.1
+     "score": 4
     },
     {
      "level": 65,
@@ -1432,7 +2101,7 @@
      ],
      "steps": 1,
      "diff": 4,
-     "score": 4
+     "score": 3.9
     },
     {
      "level": 67,
@@ -1453,7 +2122,7 @@
      ],
      "steps": 1,
      "diff": 4,
-     "score": 3.9
+     "score": 4.1
     },
     {
      "level": 68,
@@ -1536,7 +2205,7 @@
      ],
      "steps": 2,
      "diff": 4,
-     "score": 4.5
+     "score": 4.4
     },
     {
      "level": 72,
@@ -1558,7 +2227,7 @@
      ],
      "steps": 2,
      "diff": 5,
-     "score": 4.8
+     "score": 4.9
     },
     {
      "level": 73,
@@ -1580,7 +2249,7 @@
      ],
      "steps": 2,
      "diff": 5,
-     "score": 5.1
+     "score": 5
     },
     {
      "level": 74,
@@ -1624,7 +2293,7 @@
      ],
      "steps": 2,
      "diff": 5,
-     "score": 5.2
+     "score": 5.3
     },
     {
      "level": 76,
@@ -1670,7 +2339,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 6
+     "score": 6.1
     },
     {
      "level": 78,
@@ -1693,7 +2362,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 6.3
+     "score": 6.2
     },
     {
      "level": 79,
@@ -1716,7 +2385,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 6.4
+     "score": 6.3
     },
     {
      "level": 80,
@@ -1739,7 +2408,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 6.3
+     "score": 6.4
     },
     {
      "level": 81,
@@ -1823,7 +2492,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 5.8
+     "score": 5.9
     },
     {
      "level": 85,
@@ -1845,7 +2514,7 @@
      ],
      "steps": 2,
      "diff": 6,
-     "score": 5.9
+     "score": 6
     },
     {
      "level": 86,
@@ -1866,7 +2535,7 @@
       "sub"
      ],
      "steps": 3,
-     "diff": 7,
+     "diff": 6,
      "score": 6.5
     },
     {
@@ -1939,7 +2608,7 @@
      ],
      "steps": 3,
      "diff": 7,
-     "score": 7
+     "score": 7.2
     },
     {
      "level": 90,
@@ -1963,7 +2632,7 @@
      ],
      "steps": 3,
      "diff": 7,
-     "score": 7.2
+     "score": 7.3
     },
     {
      "level": 91,
@@ -1987,7 +2656,7 @@
      ],
      "steps": 4,
      "diff": 8,
-     "score": 8
+     "score": 7.6
     },
     {
      "level": 92,
@@ -2011,7 +2680,7 @@
      ],
      "steps": 4,
      "diff": 8,
-     "score": 8.1
+     "score": 8
     },
     {
      "level": 93,
@@ -2021,14 +2690,14 @@
       "fractions",
       "op-mul",
       "op-sub",
-      "steps-3",
       "x-both-sides"
      ],
      "sometimes": [
       "big-numbers",
       "neg-const",
       "op-add",
-      "op-div"
+      "op-div",
+      "steps-3"
      ],
      "ops": [
       "mul",
@@ -2036,7 +2705,7 @@
      ],
      "steps": 4,
      "diff": 8,
-     "score": 8.2
+     "score": 8
     },
     {
      "level": 94,
@@ -2061,7 +2730,7 @@
      ],
      "steps": 4,
      "diff": 8,
-     "score": 8.3
+     "score": 8.2
     },
     {
      "level": 95,
@@ -2071,22 +2740,22 @@
       "fractions",
       "op-mul",
       "op-sub",
+      "steps-3",
       "x-both-sides"
      ],
      "sometimes": [
       "big-numbers",
       "neg-const",
       "op-add",
-      "op-div",
-      "steps-3"
+      "op-div"
      ],
      "ops": [
       "mul",
       "sub"
      ],
      "steps": 4,
-     "diff": 9,
-     "score": 8.6
+     "diff": 8,
+     "score": 8.3
     },
     {
      "level": 96,
@@ -2109,7 +2778,7 @@
      ],
      "steps": 3,
      "diff": 8,
-     "score": 7.6
+     "score": 7.8
     },
     {
      "level": 97,
@@ -2124,7 +2793,8 @@
      "sometimes": [
       "big-numbers",
       "frac-both",
-      "frac-nonunit"
+      "frac-nonunit",
+      "frac-unit"
      ],
      "ops": [
       "mul",
@@ -2132,7 +2802,7 @@
      ],
      "steps": 3,
      "diff": 8,
-     "score": 8
+     "score": 7.9
     },
     {
      "level": 98,
@@ -2155,7 +2825,7 @@
      ],
      "steps": 3,
      "diff": 8,
-     "score": 8
+     "score": 8.3
     },
     {
      "level": 99,
@@ -2178,7 +2848,7 @@
      ],
      "steps": 3,
      "diff": 8,
-     "score": 8.4
+     "score": 8.3
     },
     {
      "level": 100,
@@ -2200,8 +2870,3921 @@
       "sub"
      ],
      "steps": 3,
+     "diff": 9,
+     "score": 8.5
+    }
+   ]
+  },
+  "expand": {
+   "name": "Arrow Expander",
+   "levels": [
+    {
+     "level": 1,
+     "name": "a(x + b)",
+     "tags": [
+      "bk-letters-1",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-coef-inside"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 2.6
+    },
+    {
+     "level": 2,
+     "name": "a(x − b)",
+     "tags": [
+      "bk-letters-1",
+      "bk-neg-inside",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-coef-inside"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 3,
+     "name": "a(bx + c)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-1",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 2.6
+    },
+    {
+     "level": 4,
+     "name": "a(bx − c)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-1",
+      "bk-neg-inside",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 3.1
+    },
+    {
+     "level": 5,
+     "name": "Bigger numbers",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-1",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 3.2
+    },
+    {
+     "level": 6,
+     "name": "Negative outside: −a(x + b)",
+     "tags": [
+      "bk-letters-1",
+      "bk-neg-outside",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-coef-inside"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 7,
+     "name": "Negative outside: −a(x − b)",
+     "tags": [
+      "bk-letters-1",
+      "bk-neg-inside",
+      "bk-neg-outside",
+      "bk-neg-times-neg",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-coef-inside"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.8
+    },
+    {
+     "level": 8,
+     "name": "Negative outside · mixed",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-1",
+      "bk-neg-outside",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.5
+    },
+    {
+     "level": 9,
+     "name": "Variable outside: x(x + b)",
+     "tags": [
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "bk-coef-inside"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 3.7
+    },
+    {
+     "level": 10,
+     "name": "Variable outside: x(x − b)",
+     "tags": [
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-neg-inside",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "bk-coef-inside"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.3
+    },
+    {
+     "level": 11,
+     "name": "ax(x + b)",
+     "tags": [
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-coef-inside",
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.2
+    },
+    {
+     "level": 12,
+     "name": "−x(bx + c)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-neg-outside",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "bk-neg-inside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 5.4
+    },
+    {
+     "level": 13,
+     "name": "Three terms: a(x² + bx + c)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-num-outside",
+      "bk-sq-inside",
+      "bk-terms-3"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.4
+    },
+    {
+     "level": 14,
+     "name": "Three terms · mixed signs",
+     "tags": [
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-num-outside",
+      "bk-sq-inside",
+      "bk-terms-3"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-coef-inside",
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 15,
+     "name": "Three terms · negative outside",
+     "tags": [
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-neg-outside",
+      "bk-num-outside",
+      "bk-sq-inside",
+      "bk-terms-3"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-coef-inside",
+      "bk-neg-inside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 6.3
+    },
+    {
+     "level": 16,
+     "name": "a(bx² + cx + d)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-num-outside",
+      "bk-sq-inside",
+      "bk-terms-3"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 17,
+     "name": "−a(bx² ± cx ± d)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-neg-outside",
+      "bk-num-outside",
+      "bk-sq-inside",
+      "bk-terms-3"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 6.3
+    },
+    {
+     "level": 18,
+     "name": "ax(bx + c)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.2
+    },
+    {
+     "level": 19,
+     "name": "−ax(bx − c)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-neg-outside",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 5.6
+    },
+    {
+     "level": 20,
+     "name": "Boss: anything goes!",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-1"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-gives-square",
+      "bk-neg-inside",
+      "bk-neg-outside",
+      "bk-neg-times-neg",
+      "bk-num-outside",
+      "bk-sq-inside",
+      "bk-terms-2",
+      "bk-terms-3",
+      "bk-var-outside"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.8
+    },
+    {
+     "level": 21,
+     "name": "Two letters: a(x + y)",
+     "tags": [
+      "bk-letters-2",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 2.7
+    },
+    {
+     "level": 22,
+     "name": "Two letters: a(x − y)",
+     "tags": [
+      "bk-letters-2",
+      "bk-neg-inside",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3.2
+    },
+    {
+     "level": 23,
+     "name": "Two letters: a(bx + cy)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-2",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 3.3
+    },
+    {
+     "level": 24,
+     "name": "Two letters · mixed signs",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-2",
+      "bk-num-outside",
+      "bk-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside",
+      "bk-neg-outside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.2
+    },
+    {
+     "level": 25,
+     "name": "Letter outside: x(x + y)",
+     "tags": [
+      "bk-gives-square",
+      "bk-letters-2",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4.1
+    },
+    {
+     "level": 26,
+     "name": "Letter outside: x(y ± b)",
+     "tags": [
+      "bk-letters-2",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "bk-coef-inside",
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 27,
+     "name": "Letter outside: y(x − y)",
+     "tags": [
+      "bk-gives-square",
+      "bk-letters-2",
+      "bk-neg-inside",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 4.6
+    },
+    {
+     "level": 28,
+     "name": "Negative letter outside",
+     "tags": [
+      "bk-neg-outside",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "bk-coef-inside",
+      "bk-gives-square",
+      "bk-letters-1",
+      "bk-letters-2",
+      "bk-neg-inside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 5.9
+    },
+    {
+     "level": 29,
+     "name": "ax(y + b)",
+     "tags": [
+      "bk-letters-2",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-coef-inside",
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 5.1
+    },
+    {
+     "level": 30,
+     "name": "xy outside: xy(x + y)",
+     "tags": [
+      "bk-gives-square",
+      "bk-letters-2",
+      "bk-multi-outside",
+      "bk-terms-2",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 5.4
+    },
+    {
+     "level": 31,
+     "name": "Three terms: a(x + y + b)",
+     "tags": [
+      "bk-letters-2",
+      "bk-num-outside",
+      "bk-terms-3"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-coef-inside"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.2
+    },
+    {
+     "level": 32,
+     "name": "Three terms: a(bx ± cy ± d)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-2",
+      "bk-num-outside",
+      "bk-terms-3"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 33,
+     "name": "Three terms · negative outside",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-2",
+      "bk-neg-outside",
+      "bk-num-outside",
+      "bk-terms-3"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 6.4
+    },
+    {
+     "level": 34,
+     "name": "x(x + y + b)",
+     "tags": [
+      "bk-gives-square",
+      "bk-letters-2",
+      "bk-terms-3",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "bk-coef-inside",
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 5.8
+    },
+    {
+     "level": 35,
+     "name": "y(bx + cy + d)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-gives-square",
+      "bk-letters-2",
+      "bk-terms-3",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "bk-neg-inside",
+      "bk-neg-outside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
+     "diff": 7,
+     "score": 6.7
+    },
+    {
+     "level": 36,
+     "name": "−x(bx − cy + d)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-gives-square",
+      "bk-letters-2",
+      "bk-neg-outside",
+      "bk-terms-3",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "bk-neg-inside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
+     "diff": 7,
+     "score": 7.5
+    },
+    {
+     "level": 37,
+     "name": "ax(bx + cy + d)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-gives-square",
+      "bk-letters-2",
+      "bk-terms-3",
+      "bk-var-outside"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 38,
+     "name": "Three letters: a(x + y + z)",
+     "tags": [
+      "bk-letters-3",
+      "bk-num-outside",
+      "bk-terms-3"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4.4
+    },
+    {
+     "level": 39,
+     "name": "Four terms: a(bx ± cy ± dz ± e)",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-3",
+      "bk-num-outside",
+      "bk-terms-4"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "bk-neg-inside",
+      "bk-neg-outside",
+      "bk-neg-times-neg"
+     ],
+     "ops": [],
      "diff": 8,
-     "score": 8.3
+     "score": 7.5
+    },
+    {
+     "level": 40,
+     "name": "Boss: four terms, anything goes!",
+     "tags": [
+      "bk-coef-inside",
+      "bk-letters-3",
+      "bk-terms-4"
+     ],
+     "sometimes": [
+      "bk-gives-square",
+      "bk-multi-outside",
+      "bk-neg-inside",
+      "bk-neg-outside",
+      "bk-neg-times-neg",
+      "bk-num-outside",
+      "bk-var-outside"
+     ],
+     "ops": [],
+     "diff": 8,
+     "score": 8.4
+    }
+   ]
+  },
+  "factorise": {
+   "name": "Factorise It!",
+   "levels": [
+    {
+     "level": 1,
+     "name": "Numbers only: 6x + 9",
+     "tags": [
+      "fc-number-only",
+      "fc-terms-2"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 1,
+     "score": 1
+    },
+    {
+     "level": 2,
+     "name": "Numbers only · with minus",
+     "tags": [
+      "fc-number-only",
+      "fc-terms-2"
+     ],
+     "sometimes": [
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 1,
+     "score": 1.3
+    },
+    {
+     "level": 3,
+     "name": "Numbers only · bigger numbers",
+     "tags": [
+      "fc-number-only",
+      "fc-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 2,
+     "score": 1.7
+    },
+    {
+     "level": 4,
+     "name": "Numbers only · two letters",
+     "tags": [
+      "fc-number-only",
+      "fc-terms-2",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 2.6
+    },
+    {
+     "level": 5,
+     "name": "Take out the letter: x² + 3x",
+     "tags": [
+      "fc-letter-only",
+      "fc-terms-2"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 6,
+     "name": "Number AND letter: 4x² + 6x",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-2"
+     ],
+     "sometimes": [
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 3.3
+    },
+    {
+     "level": 7,
+     "name": "Two letters: 6xy + 9x",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-2",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 8,
+     "name": "Three terms · numbers only",
+     "tags": [
+      "fc-number-only",
+      "fc-terms-3"
+     ],
+     "sometimes": [
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 2.7
+    },
+    {
+     "level": 9,
+     "name": "Three terms · with a letter",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-3"
+     ],
+     "sometimes": [
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 10,
+     "name": "A squared letter: x²",
+     "tags": [
+      "fc-squared-letter",
+      "fc-terms-2"
+     ],
+     "sometimes": [
+      "fc-neg-terms",
+      "fc-number-and-letter",
+      "fc-two-letters"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.9
+    },
+    {
+     "level": 11,
+     "name": "Either letter can be taken out",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-2"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-neg-terms",
+      "fc-two-letters"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.4
+    },
+    {
+     "level": 12,
+     "name": "Take out xy",
+     "tags": [
+      "fc-terms-2",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-neg-terms",
+      "fc-number-and-letter"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 13,
+     "name": "Three terms · two letters",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-3",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 5.9
+    },
+    {
+     "level": 14,
+     "name": "Bigger numbers · up to 12",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-3"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-neg-terms",
+      "fc-two-letters"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 6.3
+    },
+    {
+     "level": 15,
+     "name": "Four terms",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-4",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 7,
+     "score": 7.2
+    },
+    {
+     "level": 16,
+     "name": "Four terms · two letters",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-4",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 7,
+     "score": 7.3
+    },
+    {
+     "level": 17,
+     "name": "Squares and products",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-3",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-neg-terms",
+      "fc-squared-letter"
+     ],
+     "ops": [],
+     "diff": 7,
+     "score": 6.7
+    },
+    {
+     "level": 18,
+     "name": "Boss: anything goes!",
+     "tags": [
+      "fc-number-and-letter",
+      "fc-terms-4",
+      "fc-two-letters"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "fc-neg-terms"
+     ],
+     "ops": [],
+     "diff": 8,
+     "score": 7.6
+    }
+   ]
+  },
+  "quad": {
+   "name": "Quadratic Factoriser",
+   "levels": [
+    {
+     "level": 1,
+     "name": "x² + 5x + 6 · all positive",
+     "tags": [
+      "qd-all-positive",
+      "qd-monic"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 2,
+     "name": "All positive · up to 6",
+     "tags": [
+      "qd-all-positive",
+      "qd-monic"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 3,
+     "name": "All positive · up to 9",
+     "tags": [
+      "qd-all-positive",
+      "qd-monic"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2.1
+    },
+    {
+     "level": 4,
+     "name": "All positive · up to 12",
+     "tags": [
+      "qd-all-positive",
+      "qd-monic"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 2,
+     "score": 2.4
+    },
+    {
+     "level": 5,
+     "name": "Minus in the middle: x² − 5x + 6",
+     "tags": [
+      "qd-monic",
+      "qd-neg-middle"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 6,
+     "name": "Minus in the middle · up to 8",
+     "tags": [
+      "qd-monic",
+      "qd-neg-middle"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 7,
+     "name": "Minus in the middle · up to 10",
+     "tags": [
+      "qd-monic",
+      "qd-neg-middle"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 3.4
+    },
+    {
+     "level": 8,
+     "name": "Minus in the middle · up to 12",
+     "tags": [
+      "qd-monic",
+      "qd-neg-middle"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 9,
+     "name": "Minus at the end: x² + x − 6",
+     "tags": [
+      "qd-monic",
+      "qd-neg-last"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 10,
+     "name": "Minus at the end · up to 8",
+     "tags": [
+      "qd-monic",
+      "qd-neg-last"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 11,
+     "name": "Minus at the end · up to 10",
+     "tags": [
+      "qd-monic",
+      "qd-neg-last"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 3.8
+    },
+    {
+     "level": 12,
+     "name": "Minus at the end · up to 12",
+     "tags": [
+      "qd-monic",
+      "qd-neg-last"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 13,
+     "name": "Difference of two squares: x² − 9",
+     "tags": [
+      "qd-dos",
+      "qd-monic"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 2.8
+    },
+    {
+     "level": 14,
+     "name": "Difference of two squares · up to 12",
+     "tags": [
+      "qd-dos",
+      "qd-monic"
+     ],
+     "sometimes": [
+      "big-numbers"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 15,
+     "name": "Mixed signs · all kinds",
+     "tags": [
+      "qd-monic"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "qd-all-positive",
+      "qd-neg-last",
+      "qd-neg-middle"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 3.5
+    },
+    {
+     "level": 16,
+     "name": "Mixed · harder numbers",
+     "tags": [
+      "qd-monic"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "qd-all-positive",
+      "qd-neg-last",
+      "qd-neg-middle"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 3.7
+    },
+    {
+     "level": 17,
+     "name": "Number in front: 2x² + 7x + 6",
+     "tags": [
+      "qd-all-positive",
+      "qd-lead-coef"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 18,
+     "name": "Number in front · up to 3x²",
+     "tags": [
+      "qd-all-positive",
+      "qd-lead-coef"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5.3
+    },
+    {
+     "level": 19,
+     "name": "Number in front · minus in the middle",
+     "tags": [
+      "qd-lead-coef",
+      "qd-neg-middle"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6.4
+    },
+    {
+     "level": 20,
+     "name": "Number in front · mixed signs",
+     "tags": [
+      "qd-lead-coef",
+      "qd-neg-last"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 6.8
+    },
+    {
+     "level": 21,
+     "name": "Up to 4x² · any signs",
+     "tags": [
+      "qd-lead-coef"
+     ],
+     "sometimes": [
+      "qd-all-positive",
+      "qd-neg-last",
+      "qd-neg-middle"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 6.4
+    },
+    {
+     "level": 22,
+     "name": "Number in front: 4x² − 9",
+     "tags": [
+      "qd-dos",
+      "qd-lead-coef"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 5.7
+    },
+    {
+     "level": 23,
+     "name": "Boss: anything goes!",
+     "tags": [
+      "qd-lead-coef"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "qd-all-positive",
+      "qd-neg-last"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 6.5
+    },
+    {
+     "level": 24,
+     "name": "Boss 2: the hardest",
+     "tags": [
+      "qd-lead-coef"
+     ],
+     "sometimes": [
+      "big-numbers",
+      "qd-all-positive",
+      "qd-neg-last",
+      "qd-neg-middle"
+     ],
+     "ops": [],
+     "diff": 7,
+     "score": 6.8
+    }
+   ]
+  },
+  "lines": {
+   "name": "Line Hunter",
+   "levels": [
+    {
+     "level": 1,
+     "name": "Gradient only (1 star)",
+     "tags": [
+      "ln-gradient-only"
+     ],
+     "sometimes": [
+      "ln-neg-gradient"
+     ],
+     "ops": [],
+     "diff": 2,
+     "score": 2.2
+    },
+    {
+     "level": 2,
+     "name": "Gradient only (2 stars)",
+     "tags": [
+      "ln-gradient-only"
+     ],
+     "sometimes": [
+      "ln-steep"
+     ],
+     "ops": [],
+     "diff": 2,
+     "score": 2.4
+    },
+    {
+     "level": 3,
+     "name": "Negative gradients",
+     "tags": [
+      "ln-gradient-only"
+     ],
+     "sometimes": [
+      "ln-neg-gradient",
+      "ln-steep"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 2.8
+    },
+    {
+     "level": 4,
+     "name": "Intercept only",
+     "tags": [
+      "ln-intercept-only"
+     ],
+     "sometimes": [
+      "ln-neg-gradient",
+      "ln-neg-intercept"
+     ],
+     "ops": [],
+     "diff": 2,
+     "score": 2.4
+    },
+    {
+     "level": 5,
+     "name": "Intercept only · steeper",
+     "tags": [
+      "ln-intercept-only"
+     ],
+     "sometimes": [
+      "ln-neg-gradient",
+      "ln-neg-intercept",
+      "ln-steep"
+     ],
+     "ops": [],
+     "diff": 3,
+     "score": 2.9
+    },
+    {
+     "level": 6,
+     "name": "Both m and c",
+     "tags": [
+      "ln-both"
+     ],
+     "sometimes": [
+      "ln-neg-gradient",
+      "ln-neg-intercept"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.2
+    },
+    {
+     "level": 7,
+     "name": "Both · steeper & negative",
+     "tags": [
+      "ln-both"
+     ],
+     "sometimes": [
+      "ln-neg-gradient",
+      "ln-neg-intercept",
+      "ln-steep"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 4.3
+    },
+    {
+     "level": 8,
+     "name": "Fractional gradients",
+     "tags": [
+      "ln-both",
+      "ln-frac-gradient"
+     ],
+     "sometimes": [
+      "ln-neg-gradient",
+      "ln-neg-intercept"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 5.5
+    },
+    {
+     "level": 9,
+     "name": "Three stars",
+     "tags": [
+      "ln-both"
+     ],
+     "sometimes": [
+      "ln-frac-gradient",
+      "ln-neg-gradient",
+      "ln-neg-intercept"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 10,
+     "name": "Three stars · tricky",
+     "tags": [
+      "ln-both",
+      "ln-frac-gradient"
+     ],
+     "sometimes": [
+      "ln-neg-gradient",
+      "ln-neg-intercept"
+     ],
+     "ops": [],
+     "diff": 6,
+     "score": 5.6
+    },
+    {
+     "level": 11,
+     "name": "Horizontal lines",
+     "tags": [
+      "ln-both",
+      "ln-flat"
+     ],
+     "sometimes": [
+      "ln-neg-intercept"
+     ],
+     "ops": [],
+     "diff": 4,
+     "score": 3.7
+    },
+    {
+     "level": 12,
+     "name": "Boss line",
+     "tags": [
+      "ln-both"
+     ],
+     "sometimes": [
+      "ln-frac-gradient",
+      "ln-neg-gradient",
+      "ln-neg-intercept"
+     ],
+     "ops": [],
+     "diff": 7,
+     "score": 7.2
+    }
+   ]
+  },
+  "factors": {
+   "name": "Ball Factory",
+   "levels": [
+    {
+     "level": 1,
+     "name": "Factors of 7",
+     "tags": [
+      "fa-few-factors",
+      "fa-prime",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 2,
+     "name": "Factors of 9",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n",
+      "fa-square"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 2.5
+    },
+    {
+     "level": 3,
+     "name": "Factors of 8",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 4,
+     "name": "Factors of 6",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 5,
+     "name": "Factors of 13",
+     "tags": [
+      "fa-few-factors",
+      "fa-prime",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 6,
+     "name": "Factors of 11",
+     "tags": [
+      "fa-few-factors",
+      "fa-prime",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 7,
+     "name": "Factors of 12",
+     "tags": [
+      "fa-composite",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 8,
+     "name": "Factors of 10",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 9,
+     "name": "Factors of 14",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 10,
+     "name": "Factors of 17",
+     "tags": [
+      "fa-few-factors",
+      "fa-prime",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 11,
+     "name": "Factors of 16",
+     "tags": [
+      "fa-composite",
+      "fa-small-n",
+      "fa-square"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 12,
+     "name": "Factors of 15",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 13,
+     "name": "Factors of 18",
+     "tags": [
+      "fa-composite",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 14,
+     "name": "Factors of 19",
+     "tags": [
+      "fa-few-factors",
+      "fa-prime",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 15,
+     "name": "Factors of 21",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 16,
+     "name": "Factors of 20",
+     "tags": [
+      "fa-composite",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 17,
+     "name": "Factors of 23",
+     "tags": [
+      "fa-few-factors",
+      "fa-prime",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 18,
+     "name": "Factors of 24",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 19,
+     "name": "Factors of 22",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 20,
+     "name": "Factors of 25",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n",
+      "fa-square"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 2.5
+    },
+    {
+     "level": 21,
+     "name": "Factors of 27",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 22,
+     "name": "Factors of 26",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 23,
+     "name": "Factors of 29",
+     "tags": [
+      "fa-few-factors",
+      "fa-prime",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 24,
+     "name": "Factors of 28",
+     "tags": [
+      "fa-composite",
+      "fa-small-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 25,
+     "name": "Factors of 30",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 26,
+     "name": "Factors of 33",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 27,
+     "name": "Factors of 31",
+     "tags": [
+      "fa-few-factors",
+      "fa-mid-n",
+      "fa-prime"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 28,
+     "name": "Factors of 32",
+     "tags": [
+      "fa-composite",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 29,
+     "name": "Factors of 36",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n",
+      "fa-square"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 30,
+     "name": "Factors of 35",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 31,
+     "name": "Factors of 34",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 32,
+     "name": "Factors of 37",
+     "tags": [
+      "fa-few-factors",
+      "fa-mid-n",
+      "fa-prime"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 33,
+     "name": "Factors of 38",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 34,
+     "name": "Factors of 39",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 35,
+     "name": "Factors of 40",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 36,
+     "name": "Factors of 41",
+     "tags": [
+      "fa-few-factors",
+      "fa-mid-n",
+      "fa-prime"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 37,
+     "name": "Factors of 42",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 38,
+     "name": "Factors of 43",
+     "tags": [
+      "fa-few-factors",
+      "fa-mid-n",
+      "fa-prime"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 39,
+     "name": "Factors of 45",
+     "tags": [
+      "fa-composite",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 40,
+     "name": "Factors of 44",
+     "tags": [
+      "fa-composite",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 41,
+     "name": "Factors of 46",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 42,
+     "name": "Factors of 48",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 43,
+     "name": "Factors of 49",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n",
+      "fa-square"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 44,
+     "name": "Factors of 47",
+     "tags": [
+      "fa-few-factors",
+      "fa-mid-n",
+      "fa-prime"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 45,
+     "name": "Factors of 53",
+     "tags": [
+      "fa-few-factors",
+      "fa-mid-n",
+      "fa-prime"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 46,
+     "name": "Factors of 52",
+     "tags": [
+      "fa-composite",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 47,
+     "name": "Factors of 50",
+     "tags": [
+      "fa-composite",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 48,
+     "name": "Factors of 51",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 49,
+     "name": "Factors of 56",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 50,
+     "name": "Factors of 57",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 51,
+     "name": "Factors of 54",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 52,
+     "name": "Factors of 55",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 53,
+     "name": "Factors of 58",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 54,
+     "name": "Factors of 60",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 55,
+     "name": "Factors of 63",
+     "tags": [
+      "fa-composite",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 56,
+     "name": "Factors of 62",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 57,
+     "name": "Factors of 66",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 58,
+     "name": "Factors of 65",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 59,
+     "name": "Factors of 68",
+     "tags": [
+      "fa-composite",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 60,
+     "name": "Factors of 64",
+     "tags": [
+      "fa-composite",
+      "fa-mid-n",
+      "fa-square"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 5.5
+    },
+    {
+     "level": 61,
+     "name": "Factors of 72",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 62,
+     "name": "Factors of 69",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 63,
+     "name": "Factors of 70",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 64,
+     "name": "Factors of 71",
+     "tags": [
+      "fa-few-factors",
+      "fa-mid-n",
+      "fa-prime"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 65,
+     "name": "Factors of 75",
+     "tags": [
+      "fa-composite",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 66,
+     "name": "Factors of 76",
+     "tags": [
+      "fa-composite",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 67,
+     "name": "Factors of 74",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 68,
+     "name": "Factors of 77",
+     "tags": [
+      "fa-composite",
+      "fa-few-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 69,
+     "name": "Factors of 78",
+     "tags": [
+      "fa-composite",
+      "fa-many-factors",
+      "fa-mid-n"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 70,
+     "name": "Factors of 81",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-square"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 5.5
+    },
+    {
+     "level": 71,
+     "name": "Factors of 82",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 72,
+     "name": "Factors of 80",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 73,
+     "name": "Factors of 85",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 74,
+     "name": "Factors of 87",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 75,
+     "name": "Factors of 84",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 76,
+     "name": "Factors of 86",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 77,
+     "name": "Factors of 91",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 78,
+     "name": "Factors of 88",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 79,
+     "name": "Factors of 92",
+     "tags": [
+      "fa-big-n",
+      "fa-composite"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 80,
+     "name": "Factors of 90",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 81,
+     "name": "Factors of 93",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 82,
+     "name": "Factors of 95",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 83,
+     "name": "Factors of 96",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 84,
+     "name": "Factors of 94",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 85,
+     "name": "Factors of 98",
+     "tags": [
+      "fa-big-n",
+      "fa-composite"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 86,
+     "name": "Factors of 100",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors",
+      "fa-square"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 87,
+     "name": "Factors of 99",
+     "tags": [
+      "fa-big-n",
+      "fa-composite"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 88,
+     "name": "Factors of 97",
+     "tags": [
+      "fa-big-n",
+      "fa-few-factors",
+      "fa-prime"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 89,
+     "name": "Factors of 102",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 90,
+     "name": "Factors of 105",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 91,
+     "name": "Factors of 104",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 92,
+     "name": "Factors of 106",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 93,
+     "name": "Factors of 108",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 94,
+     "name": "Factors of 112",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 95,
+     "name": "Factors of 110",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 96,
+     "name": "Factors of 111",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 97,
+     "name": "Factors of 113",
+     "tags": [
+      "fa-big-n",
+      "fa-few-factors",
+      "fa-prime"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 98,
+     "name": "Factors of 115",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-few-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 99,
+     "name": "Factors of 114",
+     "tags": [
+      "fa-big-n",
+      "fa-composite",
+      "fa-many-factors"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 7
+    },
+    {
+     "level": 100,
+     "name": "Factors of 116",
+     "tags": [
+      "fa-big-n",
+      "fa-composite"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 6
+    }
+   ]
+  },
+  "fraction": {
+   "name": "Fraction Factory",
+   "levels": [
+    {
+     "level": 1,
+     "name": "Name the fraction",
+     "tags": [
+      "fr-name-picture"
+     ],
+     "sometimes": [],
+     "types": [
+      "A1"
+     ],
+     "diff": 1,
+     "score": 1
+    },
+    {
+     "level": 2,
+     "name": "Equivalent fractions",
+     "tags": [],
+     "sometimes": [
+      "fr-equivalent",
+      "fr-name-picture"
+     ],
+     "types": [
+      "A1",
+      "A2"
+     ],
+     "diff": 2,
+     "score": 1.5
+    },
+    {
+     "level": 3,
+     "name": "Simplify",
+     "tags": [],
+     "sometimes": [
+      "fr-equivalent",
+      "fr-simplify"
+     ],
+     "types": [
+      "A2",
+      "A3"
+     ],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 4,
+     "name": "Fraction of an amount",
+     "tags": [],
+     "sometimes": [
+      "fr-of-amount",
+      "fr-simplify"
+     ],
+     "types": [
+      "A3",
+      "A4"
+     ],
+     "diff": 3,
+     "score": 2.5
+    },
+    {
+     "level": 5,
+     "name": "Add · same denominator",
+     "tags": [
+      "fr-add",
+      "fr-same-denom"
+     ],
+     "sometimes": [],
+     "types": [
+      "A5"
+     ],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 6,
+     "name": "Add · different denominators",
+     "tags": [
+      "fr-add",
+      "fr-diff-denom"
+     ],
+     "sometimes": [],
+     "types": [
+      "A6"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 7,
+     "name": "Add & subtract",
+     "tags": [
+      "fr-diff-denom"
+     ],
+     "sometimes": [
+      "fr-add",
+      "fr-sub"
+     ],
+     "types": [
+      "A6",
+      "A7"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 8,
+     "name": "Mixed → improper",
+     "tags": [],
+     "sometimes": [
+      "fr-mixed",
+      "fr-mixed-improper",
+      "fr-of-amount"
+     ],
+     "types": [
+      "A8",
+      "A4"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 9,
+     "name": "Multiply fractions",
+     "tags": [
+      "fr-mul"
+     ],
+     "sometimes": [],
+     "types": [
+      "A9"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 10,
+     "name": "Multiply & divide",
+     "tags": [],
+     "sometimes": [
+      "fr-div",
+      "fr-mul"
+     ],
+     "types": [
+      "A9",
+      "A10"
+     ],
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 11,
+     "name": "Reverse fractions",
+     "tags": [
+      "fr-of-amount"
+     ],
+     "sometimes": [
+      "fr-reverse"
+     ],
+     "types": [
+      "A11",
+      "A4"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 12,
+     "name": "Boss mix",
+     "tags": [],
+     "sometimes": [
+      "fr-add",
+      "fr-diff-denom",
+      "fr-div",
+      "fr-mixed",
+      "fr-mul",
+      "fr-of-amount",
+      "fr-reverse",
+      "fr-sub"
+     ],
+     "types": [
+      "A7",
+      "A10",
+      "A11",
+      "A12",
+      "A9"
+     ],
+     "diff": 5,
+     "score": 4.8
+    }
+   ]
+  },
+  "percent": {
+   "name": "Percent Shop",
+   "levels": [
+    {
+     "level": 1,
+     "name": "Percent of a grid",
+     "tags": [
+      "pc-read-grid"
+     ],
+     "sometimes": [],
+     "types": [
+      "P1"
+     ],
+     "diff": 1,
+     "score": 1
+    },
+    {
+     "level": 2,
+     "name": "10%, 25%, 50%…",
+     "tags": [],
+     "sometimes": [
+      "pc-easy",
+      "pc-of-amount",
+      "pc-read-grid"
+     ],
+     "types": [
+      "P1",
+      "P2"
+     ],
+     "diff": 2,
+     "score": 1.5
+    },
+    {
+     "level": 3,
+     "name": "Convert fractions & decimals",
+     "tags": [],
+     "sometimes": [
+      "pc-convert",
+      "pc-easy",
+      "pc-from-decimal",
+      "pc-from-fraction",
+      "pc-of-amount"
+     ],
+     "types": [
+      "P2",
+      "P3"
+     ],
+     "diff": 3,
+     "score": 2.5
+    },
+    {
+     "level": 4,
+     "name": "Any percentage of an amount",
+     "tags": [],
+     "sometimes": [
+      "pc-any",
+      "pc-convert",
+      "pc-from-decimal",
+      "pc-from-fraction",
+      "pc-of-amount"
+     ],
+     "types": [
+      "P3",
+      "P4"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 5,
+     "name": "Sale prices",
+     "tags": [],
+     "sometimes": [
+      "pc-any",
+      "pc-decrease",
+      "pc-of-amount",
+      "pc-sale"
+     ],
+     "types": [
+      "P4",
+      "P5"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 6,
+     "name": "Increase (VAT, pay rises)",
+     "tags": [],
+     "sometimes": [
+      "pc-decrease",
+      "pc-increase",
+      "pc-sale",
+      "pc-vat"
+     ],
+     "types": [
+      "P5",
+      "P6"
+     ],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 7,
+     "name": "Test scores as %",
+     "tags": [],
+     "sometimes": [
+      "pc-as-percent",
+      "pc-increase",
+      "pc-vat"
+     ],
+     "types": [
+      "P6",
+      "P7"
+     ],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 8,
+     "name": "Percentage change",
+     "tags": [],
+     "sometimes": [
+      "pc-as-percent",
+      "pc-change"
+     ],
+     "types": [
+      "P7",
+      "P8"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 9,
+     "name": "Reverse percentages",
+     "tags": [
+      "pc-increase",
+      "pc-reverse"
+     ],
+     "sometimes": [],
+     "types": [
+      "P9"
+     ],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 10,
+     "name": "Reverse · sales",
+     "tags": [
+      "pc-reverse"
+     ],
+     "sometimes": [
+      "pc-decrease",
+      "pc-increase"
+     ],
+     "types": [
+      "P9",
+      "P10"
+     ],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 11,
+     "name": "Interest",
+     "tags": [
+      "pc-interest"
+     ],
+     "sometimes": [
+      "pc-compound-interest",
+      "pc-simple-interest"
+     ],
+     "types": [
+      "P11"
+     ],
+     "diff": 6,
+     "score": 6
+    },
+    {
+     "level": 12,
+     "name": "Boss mix",
+     "tags": [],
+     "sometimes": [
+      "pc-as-percent",
+      "pc-change",
+      "pc-compound-interest",
+      "pc-decrease",
+      "pc-increase",
+      "pc-interest",
+      "pc-reverse",
+      "pc-simple-interest",
+      "pc-vat"
+     ],
+     "types": [
+      "P6",
+      "P8",
+      "P9",
+      "P10",
+      "P11",
+      "P7"
+     ],
+     "diff": 5,
+     "score": 5
+    }
+   ]
+  },
+  "chance": {
+   "name": "Chance Lab",
+   "levels": [
+    {
+     "level": 1,
+     "name": "Bags · one colour",
+     "tags": [
+      "pr-bag"
+     ],
+     "sometimes": [],
+     "types": [
+      "T1"
+     ],
+     "diff": 1,
+     "score": 1
+    },
+    {
+     "level": 2,
+     "name": "Bags · “not” events",
+     "tags": [
+      "pr-bag"
+     ],
+     "sometimes": [
+      "pr-not"
+     ],
+     "types": [
+      "T1",
+      "T2"
+     ],
+     "diff": 2,
+     "score": 1.5
+    },
+    {
+     "level": 3,
+     "name": "Bags · “or” events",
+     "tags": [
+      "pr-bag"
+     ],
+     "sometimes": [
+      "pr-not",
+      "pr-or"
+     ],
+     "types": [
+      "T1",
+      "T2",
+      "T3"
+     ],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 4,
+     "name": "Spinners",
+     "tags": [
+      "pr-spinner"
+     ],
+     "sometimes": [],
+     "types": [
+      "T4"
+     ],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 5,
+     "name": "Two dice · sums",
+     "tags": [
+      "pr-sample-space",
+      "pr-two-dice"
+     ],
+     "sometimes": [],
+     "types": [
+      "T5"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 6,
+     "name": "Two dice · at least / less than",
+     "tags": [
+      "pr-sample-space",
+      "pr-two-dice"
+     ],
+     "sometimes": [
+      "pr-at-least"
+     ],
+     "types": [
+      "T5",
+      "T6"
+     ],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 7,
+     "name": "Two dice · tricky events",
+     "tags": [
+      "pr-sample-space",
+      "pr-two-dice"
+     ],
+     "sometimes": [
+      "pr-at-least"
+     ],
+     "types": [
+      "T6",
+      "T7"
+     ],
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 8,
+     "name": "Two picks · with replacement",
+     "tags": [
+      "pr-and",
+      "pr-bag",
+      "pr-independent",
+      "pr-with-replacement"
+     ],
+     "sometimes": [],
+     "types": [
+      "T8"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 9,
+     "name": "Two picks · without replacement",
+     "tags": [
+      "pr-and",
+      "pr-bag"
+     ],
+     "sometimes": [
+      "pr-independent",
+      "pr-with-replacement",
+      "pr-without-replacement"
+     ],
+     "types": [
+      "T8",
+      "T9"
+     ],
+     "diff": 6,
+     "score": 5.5
+    },
+    {
+     "level": 10,
+     "name": "Expected & relative frequency",
+     "tags": [],
+     "sometimes": [
+      "pr-expected",
+      "pr-relative-freq"
+     ],
+     "types": [
+      "T10",
+      "T11"
+     ],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 11,
+     "name": "Probability rules",
+     "tags": [],
+     "sometimes": [
+      "pr-and",
+      "pr-independent",
+      "pr-mutually-exclusive",
+      "pr-not",
+      "pr-or",
+      "pr-ratio"
+     ],
+     "types": [
+      "T12"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 12,
+     "name": "Boss mix",
+     "tags": [],
+     "sometimes": [
+      "pr-and",
+      "pr-at-least",
+      "pr-bag",
+      "pr-expected",
+      "pr-independent",
+      "pr-mutually-exclusive",
+      "pr-not",
+      "pr-or",
+      "pr-ratio",
+      "pr-relative-freq",
+      "pr-sample-space",
+      "pr-spinner",
+      "pr-two-dice",
+      "pr-without-replacement"
+     ],
+     "types": [
+      "T3",
+      "T4",
+      "T6",
+      "T7",
+      "T9",
+      "T10",
+      "T11",
+      "T12"
+     ],
+     "diff": 4,
+     "score": 4
+    }
+   ]
+  },
+  "angles": {
+   "name": "Angle Hunter",
+   "levels": [
+    {
+     "level": 1,
+     "name": "Estimate angles",
+     "tags": [
+      "an-estimate"
+     ],
+     "sometimes": [],
+     "types": [
+      "A1"
+     ],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 2,
+     "name": "Angles on a straight line",
+     "tags": [
+      "an-straight-line"
+     ],
+     "sometimes": [],
+     "types": [
+      "A2"
+     ],
+     "diff": 1,
+     "score": 1
+    },
+    {
+     "level": 3,
+     "name": "Straight line & around a point",
+     "tags": [],
+     "sometimes": [
+      "an-around-point",
+      "an-straight-line"
+     ],
+     "types": [
+      "A2",
+      "A3"
+     ],
+     "diff": 2,
+     "score": 1.5
+    },
+    {
+     "level": 4,
+     "name": "Angles in a triangle",
+     "tags": [
+      "an-triangle"
+     ],
+     "sometimes": [],
+     "types": [
+      "A4"
+     ],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 5,
+     "name": "Isosceles triangles",
+     "tags": [
+      "an-triangle"
+     ],
+     "sometimes": [
+      "an-isosceles"
+     ],
+     "types": [
+      "A4",
+      "A5"
+     ],
+     "diff": 3,
+     "score": 2.5
+    },
+    {
+     "level": 6,
+     "name": "Quadrilaterals",
+     "tags": [
+      "an-quadrilateral"
+     ],
+     "sometimes": [],
+     "types": [
+      "A6"
+     ],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 7,
+     "name": "Crossing lines & exterior angles",
+     "tags": [],
+     "sometimes": [
+      "an-crossing-lines",
+      "an-exterior",
+      "an-straight-line",
+      "an-triangle",
+      "an-vertically-opposite"
+     ],
+     "types": [
+      "A7",
+      "A9"
+     ],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 8,
+     "name": "Parallel lines",
+     "tags": [
+      "an-parallel"
+     ],
+     "sometimes": [
+      "an-alternate",
+      "an-co-interior",
+      "an-corresponding"
+     ],
+     "types": [
+      "A8"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 9,
+     "name": "Polygons",
+     "tags": [],
+     "sometimes": [
+      "an-polygon-exterior",
+      "an-polygon-interior",
+      "an-polygon-sum"
+     ],
+     "types": [
+      "A10"
+     ],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 10,
+     "name": "Mixed angle rules",
+     "tags": [],
+     "sometimes": [
+      "an-alternate",
+      "an-co-interior",
+      "an-corresponding",
+      "an-exterior",
+      "an-parallel",
+      "an-polygon-exterior",
+      "an-polygon-interior",
+      "an-polygon-sum",
+      "an-triangle"
+     ],
+     "types": [
+      "A8",
+      "A9",
+      "A10"
+     ],
+     "diff": 5,
+     "score": 4.7
+    },
+    {
+     "level": 11,
+     "name": "Angles with algebra",
+     "tags": [
+      "an-algebra"
+     ],
+     "sometimes": [
+      "an-straight-line",
+      "an-triangle"
+     ],
+     "types": [
+      "A11",
+      "A12"
+     ],
+     "diff": 7,
+     "score": 6.5
+    },
+    {
+     "level": 12,
+     "name": "Boss mix",
+     "tags": [],
+     "sometimes": [
+      "an-algebra",
+      "an-alternate",
+      "an-around-point",
+      "an-co-interior",
+      "an-corresponding",
+      "an-crossing-lines",
+      "an-exterior",
+      "an-isosceles",
+      "an-parallel",
+      "an-polygon-exterior",
+      "an-polygon-interior",
+      "an-polygon-sum",
+      "an-quadrilateral",
+      "an-straight-line",
+      "an-triangle",
+      "an-vertically-opposite"
+     ],
+     "types": [
+      "A3",
+      "A5",
+      "A6",
+      "A7",
+      "A8",
+      "A9",
+      "A10",
+      "A11",
+      "A12"
+     ],
+     "diff": 4,
+     "score": 4.2
+    }
+   ]
+  },
+  "transform": {
+   "name": "Transform Quest",
+   "levels": [
+    {
+     "level": 1,
+     "name": "Translations · positive vectors",
+     "tags": [
+      "tf-shape-3",
+      "tf-translation"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 1.5
+    },
+    {
+     "level": 2,
+     "name": "Translations · negative vectors",
+     "tags": [
+      "tf-shape-3",
+      "tf-translation"
+     ],
+     "sometimes": [
+      "tf-neg-vector"
+     ],
+     "ops": [],
+     "diff": 2,
+     "score": 2.4
+    },
+    {
+     "level": 3,
+     "name": "Reflect in the x-axis",
+     "tags": [
+      "tf-reflect-axis",
+      "tf-reflection",
+      "tf-shape-3"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 4,
+     "name": "Reflect in the y-axis",
+     "tags": [
+      "tf-reflect-axis",
+      "tf-reflection",
+      "tf-shape-3"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 5,
+     "name": "Reflect in either axis",
+     "tags": [
+      "tf-reflect-axis",
+      "tf-reflection",
+      "tf-shape-3"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 3,
+     "score": 3
+    },
+    {
+     "level": 6,
+     "name": "Reflect in x = k or y = k",
+     "tags": [
+      "tf-reflect-line",
+      "tf-reflection",
+      "tf-shape-3"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 7,
+     "name": "Reflect in y = x or y = −x",
+     "tags": [
+      "tf-reflect-diagonal",
+      "tf-reflection",
+      "tf-shape-3"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 5.5
+    },
+    {
+     "level": 8,
+     "name": "Rotate 90° about the origin",
+     "tags": [
+      "tf-rot-90",
+      "tf-rotation",
+      "tf-shape-3"
+     ],
+     "sometimes": [
+      "tf-anticlockwise",
+      "tf-clockwise"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 9,
+     "name": "Rotate 90° or 180°",
+     "tags": [
+      "tf-rotation",
+      "tf-shape-4"
+     ],
+     "sometimes": [
+      "tf-anticlockwise",
+      "tf-clockwise",
+      "tf-rot-180",
+      "tf-rot-90"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 5.2
+    },
+    {
+     "level": 10,
+     "name": "Enlarge · scale factor 2",
+     "tags": [
+      "tf-enlargement",
+      "tf-sf-2",
+      "tf-shape-3"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 11,
+     "name": "Enlarge · scale factor 2 or 3",
+     "tags": [
+      "tf-enlargement",
+      "tf-shape-4"
+     ],
+     "sometimes": [
+      "tf-sf-2",
+      "tf-sf-3"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 12,
+     "name": "Boss: any transformation",
+     "tags": [
+      "tf-shape-4"
+     ],
+     "sometimes": [
+      "tf-reflection",
+      "tf-rot-90",
+      "tf-rotation"
+     ],
+     "ops": [],
+     "diff": 5,
+     "score": 4.8
+    }
+   ]
+  },
+  "derby": {
+   "name": "Dice Derby",
+   "levels": [
+    {
+     "level": 1,
+     "name": "One die · all horses equal",
+     "tags": [
+      "dd-1-die",
+      "dd-d6"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 2,
+     "score": 2
+    },
+    {
+     "level": 2,
+     "name": "Two 4-sided dice",
+     "tags": [
+      "dd-2-dice",
+      "dd-d4"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 3,
+     "name": "Two dice (the classic)",
+     "tags": [
+      "dd-2-dice",
+      "dd-d6"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 3.5
+    },
+    {
+     "level": 4,
+     "name": "Two dice · bigger target",
+     "tags": [
+      "dd-2-dice",
+      "dd-d6",
+      "dd-high-goal"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 5,
+     "name": "6-sided + 4-sided die",
+     "tags": [
+      "dd-2-dice",
+      "dd-d4",
+      "dd-d6",
+      "dd-mixed-dice"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 4,
+     "score": 4
+    },
+    {
+     "level": 6,
+     "name": "Three 4-sided dice",
+     "tags": [
+      "dd-3-dice",
+      "dd-d4"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 5
+    },
+    {
+     "level": 7,
+     "name": "Two 8-sided dice",
+     "tags": [
+      "dd-2-dice",
+      "dd-d8"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 5,
+     "score": 4.5
+    },
+    {
+     "level": 8,
+     "name": "Three 6-sided dice",
+     "tags": [
+      "dd-3-dice",
+      "dd-d6",
+      "dd-high-goal"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 7,
+     "score": 6.5
+    },
+    {
+     "level": 9,
+     "name": "Two dice · fewer races",
+     "tags": [
+      "dd-2-dice",
+      "dd-d6",
+      "dd-few-races",
+      "dd-high-goal"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 6,
+     "score": 5.5
+    },
+    {
+     "level": 10,
+     "name": "Boss: three dice, tough goal",
+     "tags": [
+      "dd-3-dice",
+      "dd-d6",
+      "dd-few-races",
+      "dd-high-goal"
+     ],
+     "sometimes": [],
+     "ops": [],
+     "diff": 9,
+     "score": 8.5
     }
    ]
   }

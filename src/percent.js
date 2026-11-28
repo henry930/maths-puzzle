@@ -19,7 +19,7 @@ const QT={
   if(t===1){const r=pick([10,20]),Pp=r===10?pick([100,200,300,500,1000]):pick([25,50,100,200,250]);return{vis:'<div class="ch-big">🏦</div>',q:`${P(Pp)} is invested at <b>${r}% compound interest</b> per year. How much is in the account after <b>2 years</b> (£)?`,ans:Pp*(1+r/100)**2,ex:`Multiplier ${1+r/100}. ${Pp} × ${1+r/100} × ${1+r/100} = ${Pp*(1+r/100)**2}`};}
   const Pp=pick([400,800,1200]);return{vis:'<div class="ch-big">🏦</div>',q:`${P(Pp)} is invested at <b>5% compound interest</b> per year. How much is in the account after <b>2 years</b> (£)?`,ans:Pp*1.1025,ex:`${Pp} × 1.05 × 1.05 = ${Pp*1.1025}`};},
 };
-QT.P12=()=>QT[pick(['P6','P8','P9','P10','P11','P7'])]();
+QT.P12=()=>{const k=pick(['P6','P8','P9','P10','P11','P7']),r=QT[k]();r.k=k;return r;};
 const POOL=[['P1'],['P1','P2'],['P2','P3'],['P3','P4'],['P4','P5'],['P5','P6'],['P6','P7'],['P7','P8'],['P9'],['P9','P10'],['P11'],['P12']];
 const num=s=>{const v=parseFloat(s);return isNaN(v)?null:{v,n:null,d:1};};
 window.__pc={QT,POOL};
@@ -28,5 +28,5 @@ REG.push({id:'percent',name:'Percent Shop',emoji:'🏷️',color:'#2b8a3e',cat:'
  levels:['Percent of a grid','10%, 25%, 50%…','Convert fractions & decimals','Any percentage of an amount','Sale prices','Increase (VAT, pay rises)','Test scores as %','Percentage change','Reverse percentages','Reverse · sales','Interest','Boss mix'],
  how:'Type your answer as a number (no % or £ needed). Tip: find 10% first (÷10), then build any other percentage from it. For reverse percentages, work out 1% first.',
  art:'<div class="minibal">🏷️</div>',
- mount(root,lv,ctx){mountQuiz(root,ctx,{QT,pool:POOL[lv-1],parse:num,slash:false,winTitle:'Percentage pro!'});}});
+ mount(root,lv,ctx){mountQuiz(root,ctx,{game:'percent',QT,pool:POOL[lv-1],parse:num,slash:false,winTitle:'Percentage pro!'});}});
 })();

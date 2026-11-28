@@ -49,7 +49,7 @@ REG.push({id:'transform',name:'Transform Quest',emoji:'🪞',color:'#087f5b',cat
   function ok(pts){return pts.every(p=>Math.abs(p[0])<=6&&Math.abs(p[1])<=6);}
   function newTask(){
     for(;;){task=L.g();shape=shapeFor(L.shape,L.small);img=shape.map(task.f);if(ok(img)&&!shape.every((p,i)=>same(p,img[i])))break;}
-    placed=[];over=false;hintOn=false;wrong=false;draw();
+    ctx.q=tagTransform(task,L.shape);placed=[];over=false;hintOn=false;wrong=false;draw();
   }
   const X=x=>x,Y=y=>-y;
   function poly(pts,cls){return`<polygon points="${pts.map(p=>p[0]+','+(-p[1])).join(' ')}" class="${cls}"/>`;}
@@ -84,7 +84,7 @@ REG.push({id:'transform',name:'Transform Quest',emoji:'🪞',color:'#087f5b',cat
     if(placed.length===shape.length){
       const a=placed.map(String).sort().join('|'),b=img.map(String).sort().join('|');
       if(a===b){over=true;draw('✅ Perfect!');ctx.win('Transformation complete!','Every corner is in exactly the right place.',newTask,'Another task');return;}
-      wrong=true;draw(`❌ Not quite. The orange outline shows the correct image: ${img.map(p=>`(${p[0]}, ${p[1]})`).join(' ')}. Press Undo to try again.`);return;
+      wrong=true;ctx.log('wrong',{placed:placed.map(p=>p.slice()),expect:img});draw(`❌ Not quite. The orange outline shows the correct image: ${img.map(p=>`(${p[0]}, ${p[1]})`).join(' ')}. Press Undo to try again.`);return;
     }
     draw();
   }

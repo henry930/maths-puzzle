@@ -65,16 +65,16 @@ const QT={
   return{svg:svg(sv),q:`The angles of this triangle are ${k[0]}x°, ${k[1]}x° and ${k[2]}x°. Find <b>x</b>.`,ans:xx,ex:`${s}x = 180 → x = ${xx}`};}
 };
 const POOL=[['A1'],['A2'],['A2','A3'],['A4'],['A4','A5'],['A6'],['A7','A9'],['A8'],['A10'],['A8','A9','A10'],['A11','A12'],['A3','A5','A6','A7','A8','A9','A10','A11','A12']];
-window.__an={QT};
+window.__an={QT,POOL};
 REG.push({id:'angles',name:'Angle Hunter',emoji:'📐',color:'#0b7285',cat:'Geometry',
  desc:'Estimate and calculate angles in lines, triangles, polygons and parallel lines. Diagrams are drawn for you — find the missing angle!',skills:['angle rules','parallel lines','polygons','forming equations'],
  levels:['Estimate angles','Angles on a straight line','Straight line & around a point','Angles in a triangle','Isosceles triangles','Quadrilaterals','Crossing lines & exterior angles','Parallel lines','Polygons','Mixed angle rules','Angles with algebra','Boss mix'],
  how:'Look at the diagram, work out the angle marked ?, and type the answer in degrees. Get 4 out of 5 right to pass the level. Diagrams are not always drawn to scale!',
  art:'<svg viewBox="0 0 120 80" width="130" height="90" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M10 70H110M10 70L80 15"/><path d="M45 70A35 35 0 0 0 33 46" /></svg>',
  mount(root,lv,ctx){
-  const pool=POOL[lv-1];let qs,qi,right,cur,buf,answered;
-  function start(){qs=Array.from({length:5},()=>pick(pool));qi=0;right=0;next();}
-  function next(){cur=QT[qs[qi]]();buf='';answered=false;draw();}
+  const pool=POOL[lv-1];let qs,qi,right,cur,buf,answered,res;
+  function start(){qs=Array.from({length:5},()=>pick(pool));qi=0;right=0;res=[];next();}
+  function next(){cur=QT[qs[qi]]();buf='';answered=false;ctx.q=quizQ('angles',qs[qi],cur);draw();}
   function draw(msg,ok){
     root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.svg}</div><div class="ch-q">${cur.q}</div>
@@ -88,13 +88,14 @@ REG.push({id:'angles',name:'Angle Hunter',emoji:'📐',color:'#0b7285',cat:'Geom
   }
   function submit(){
     if(!buf){draw('Type your answer first.');return;}
-    const v=+buf;answered=true;const ok=Math.abs(v-cur.ans)<=(cur.tol||0);if(ok)right++;
+    const v=+buf;answered=true;const ok=Math.abs(v-cur.ans)<=(cur.tol||0);if(ok)right++;res.push({qt:qs[qi],ok});ctx.log(ok?'right':'wrong',ok?{}:{typed:buf,expect:cur.ans,err:'wrong_value'});
     draw((ok?'✅ Correct! ':'❌ Not quite. ')+cur.ex,ok);
   }
   function advance(){
     if(qi<4){qi++;next();return;}
+    {ctx.q=levelQ(ctx.id,ctx.lv);ctx.perf={right,of:5,wrong:res.filter(r=>!r.ok).map(r=>r.qt)};}
     if(right>=4)ctx.win('Angle ace!',`You got ${right}/5 right.`,start,'Play again');
-    else{root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — try again!</div><div class="toolrow"><button class="btn" id="rt">Try again ⟲</button></div></div>`;$('#rt').onclick=start;}
+    else{ctx.log('fail',ctx.perf);root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — try again!</div><div class="toolrow"><button class="btn" id="rt">Try again ⟲</button></div></div>`;$('#rt').onclick=start;}
   }
   ctx.keys=e=>{if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter')press('ok');};
   start();

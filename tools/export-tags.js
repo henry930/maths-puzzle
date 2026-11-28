@@ -2,9 +2,9 @@
 // (runs the same src/*.js the site uses, with a few browser globals stubbed)
 const fs=require('fs'),vm=require('vm'),path=require('path');
 const root=path.join(__dirname,'..');
-const games=['balance'];                       // add a game id here once it has qmeta()
-const src=['tags.js',...games.map(g=>g+'.js')].map(f=>fs.readFileSync(path.join(root,'src',f),'utf8')).join('\n');
-const pre=`const REG=[];const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));const pick=a=>a[R(0,a.length-1)];const esc=String;`;
+const games=['balance','expand','factorise','quad','lines','factors','fraction','percent','chance','angles','transform','derby'];   // add a game id here once it has qmeta()
+const src=['tags.js',...games.map(g=>g+'.js'),'qtags.js'].map(f=>fs.readFileSync(path.join(root,'src',f),'utf8')).join('\n');
+const pre=`const window={};const REG=[];const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));const pick=a=>a[R(0,a.length-1)];const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=R(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);const esc=String;`;
 const out=vm.runInNewContext(pre+src+';({REG,TAXO,TAXO_GROUPS})',{Math,String,Array,Object,Set});
 const {REG,TAXO}=out;
 
@@ -36,7 +36,7 @@ const data={version:1,taxonomy:TAXO,games:{}};
 for(const G of REG.filter(g=>g.qmeta)){
   const rows=G.levels.map((name,i)=>Object.assign({level:i+1,name},G.qmeta(i+1)));
   data.games[G.id]={name:G.name,levels:rows};
-  const csv=['level,name,difficulty,score,steps,ops,tags,sometimes'].concat(rows.map(r=>[r.level,'"'+r.name+'"',r.diff,r.score,r.steps,r.ops.join('+'),r.tags.join(' '),r.sometimes.join(' ')].join(','))).join('\n');
+  const csv=['level,name,difficulty,score,steps,ops,tags,sometimes'].concat(rows.map(r=>[r.level,'"'+r.name+'"',r.diff,r.score,(r.steps??''),(r.ops||[]).join('+'),r.tags.join(' '),r.sometimes.join(' ')].join(','))).join('\n');
   fs.mkdirSync(path.join(root,'data'),{recursive:true});
   fs.writeFileSync(path.join(root,'data','question-tags-'+G.id+'.csv'),csv+'\n');
 }

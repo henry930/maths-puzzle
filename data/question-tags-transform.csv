@@ -1,0 +1,13 @@
+level,name,difficulty,score,steps,ops,tags,sometimes
+1,"Translations · positive vectors",2,1.5,,,tf-shape-3 tf-translation,
+2,"Translations · negative vectors",2,2.4,,,tf-shape-3 tf-translation,tf-neg-vector
+3,"Reflect in the x-axis",3,3,,,tf-reflect-axis tf-reflection tf-shape-3,
+4,"Reflect in the y-axis",3,3,,,tf-reflect-axis tf-reflection tf-shape-3,
+5,"Reflect in either axis",3,3,,,tf-reflect-axis tf-reflection tf-shape-3,
+6,"Reflect in x = k or y = k",5,4.5,,,tf-reflect-line tf-reflection tf-shape-3,
+7,"Reflect in y = x or y = −x",6,5.5,,,tf-reflect-diagonal tf-reflection tf-shape-3,
+8,"Rotate 90° about the origin",5,5,,,tf-rot-90 tf-rotation tf-shape-3,tf-anticlockwise tf-clockwise
+9,"Rotate 90° or 180°",5,5.2,,,tf-rotation tf-shape-4,tf-anticlockwise tf-clockwise tf-rot-180 tf-rot-90
+10,"Enlarge · scale factor 2",4,4,,,tf-enlargement tf-sf-2 tf-shape-3,
+11,"Enlarge · scale factor 2 or 3",5,5,,,tf-enlargement tf-shape-4,tf-sf-2 tf-sf-3
+12,"Boss: any transformation",5,4.8,,,tf-shape-4,tf-reflection tf-rot-90 tf-rotation

@@ -379,7 +379,8 @@ a.card.news{text-decoration:none;color:inherit}
 .card.game .art .miniriver{font-size:34px;letter-spacing:0;white-space:nowrap}
 .card.game .art .mini24{transform:scale(.85)}
 
-.qts{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:5px}.qt{font-size:11.5px;font-weight:700;border-radius:20px;padding:2px 9px;background:#ece8ff;color:#4c3fb0}.qt-op{background:#e7f5ff;color:#1864ab}.qt-steps{background:#f1f3f5;color:#495057}.qt-shape{background:#fff3bf;color:#7a5a00}.qt-num{background:#ffe8cc;color:#a14b00}.qd{font-size:12px;letter-spacing:1px;color:var(--mut);margin-right:4px}.qd b{color:var(--c,#6741d9)}
+.qts{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:5px}.qt{font-size:11.5px;font-weight:700;border-radius:20px;padding:2px 9px;background:#ece8ff;color:#4c3fb0}.qt-op{background:#e7f5ff;color:#1864ab}.qt-steps{background:#f1f3f5;color:#495057}.qt-shape{background:#fff3bf;color:#7a5a00}.qt-num{background:#ffe8cc;color:#a14b00}.qdiff{font-size:12px;letter-spacing:1px;color:var(--mut);margin-right:4px}.qdiff b{color:var(--c,#6741d9)}
+.qt-skill{background:#e6fcf5;color:#087f5b}.qt-some{background:#f8f9fa;color:#868e96;border:1px dashed #ced4da}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><button class="back" id="lvbtn">Levels ▾</button><div class="pills" id="glevels"></div></div>
@@ -474,7 +475,7 @@ function openGame(id,lv,fromRoute){
   const pills=$('#glevels');pills.innerHTML='';pills.classList.toggle('long',N>24);pills.classList.remove('open');{const lb=$('#lvbtn');lb.textContent='Levels '+lv+'/'+N+' ▾';lb.onclick=()=>{pills.classList.toggle('open');if(N>24&&pills.classList.contains('open')){const c=pills.children[lv-1];if(c)pills.scrollLeft=c.offsetLeft-pills.clientWidth/2+c.offsetWidth/2;}};}
   g.levels.forEach((n,i)=>{const b=el('button','pill'+(i+1===lv?' on':'')+(isDone(id,i+1)?' dn':''),String(i+1));b.title=n;b.onclick=()=>openGame(id,i+1);pills.appendChild(b);});
   if(N>24){const cur=pills.children[lv-1];if(cur)setTimeout(()=>{try{pills.scrollLeft=cur.offsetLeft-pills.clientWidth/2+cur.offsetWidth/2}catch(e){}},0);}
-  {const lm=levelMeta(g,lv);$('#glvname').innerHTML=`<b>Level ${lv}/${N}</b> · ${g.levels[lv-1]}`+(lm?`<div class="qts">${diffBar(lm.diff)}${tagChips(lm.tags)}</div>`:'');}
+  {const lm=levelMeta(g,lv);$('#glvname').innerHTML=`<b>Level ${lv}/${N}</b> · ${g.levels[lv-1]}`+(lm?`<div class="qts">${diffBar(lm.diff)}${tagChips(lm.tags)}${lm.tags.length?'':tagChipsSome(lm.sometimes)}</div>`:'');}
   const root=$('#groot');root.innerHTML='';
   ctx={id,lv,N,t0:Date.now(),cleanups:[],keys:null,q:null,perf:null,
     log(kind,detail){logEvent(id,lv,kind,this.q?Object.assign({q:this.q},detail):detail);},
@@ -616,7 +617,8 @@ const TAXO={
 const TAXO_GROUPS={op:'Operation',steps:'Length',shape:'Shape',num:'Numbers'};
 const tagLabel=t=>(TAXO[t]||{en:t}).en;
 const tagChips=tags=>(tags||[]).filter(t=>TAXO[t]&&!TAXO[t].hide).map(t=>`<span class="qt qt-${TAXO[t].g}">${esc(TAXO[t].en)}</span>`).join('');
-const diffBar=d=>`<span class="qd" title="Difficulty ${d}/10"><b>${'●'.repeat(Math.round(d/2))}</b>${'○'.repeat(5-Math.round(d/2))}</span>`;
+const tagChipsSome=tags=>(tags||[]).filter(t=>TAXO[t]&&!TAXO[t].hide).slice(0,8).map(t=>`<span class="qt qt-some">${esc(TAXO[t].en)}</span>`).join('');
+const diffBar=d=>`<span class="qdiff" title="Difficulty ${d}/10"><b>${'●'.repeat(Math.round(d/2))}</b>${'○'.repeat(5-Math.round(d/2))}</span>`;
 const _lmCache={};
 /* level-level meta, cached; null when a game has not been tagged yet */
 function levelMeta(G,lv){const k=G.id+'#'+lv;if(!(k in _lmCache)){try{_lmCache[k]=G.qmeta?G.qmeta(lv):null;}catch(e){_lmCache[k]=null;}}return _lmCache[k];}
@@ -624,11 +626,13 @@ function levelMeta(G,lv){const k=G.id+'#'+lv;if(!(k in _lmCache)){try{_lmCache[k
    tags present only sometimes go to `sometimes`. gen() must return a question meta (see above). */
 function levelFromSamples(gen,n=80){
   const cnt={};let steps=[],diff=0;
-  for(let i=0;i<n;i++){const m=gen();m.tags.forEach(t=>cnt[t]=(cnt[t]||0)+1);steps.push(m.steps);diff+=m.score||m.diff;}
+  for(let i=0;i<n;i++){const m=gen();m.tags.forEach(t=>cnt[t]=(cnt[t]||0)+1);if(m.steps!=null)steps.push(m.steps);diff+=m.score||m.diff;}
   const all=Object.keys(cnt),tags=all.filter(t=>cnt[t]===n).sort(),sometimes=all.filter(t=>cnt[t]<n&&cnt[t]>=n*.2).sort();
   steps.sort((a,b)=>a-b);
-  return{tags,sometimes,ops:tags.filter(t=>/^op-/.test(t)).map(t=>t.slice(3)),steps:steps[n>>1],diff:Math.max(1,Math.min(10,Math.round(diff/n))),score:Math.round(diff/n*10)/10};
+  return{tags,sometimes,ops:tags.filter(t=>/^op-/.test(t)).map(t=>t.slice(3)),steps:steps.length?steps[steps.length>>1]:undefined,diff:Math.max(1,Math.min(10,Math.round(diff/n))),score:Math.round(diff/n*10)/10};
 }
+/* what a finished quiz-style level logs: every skill the level can ask about */
+function levelQ(id,lv){const m=levelMeta(REG.find(x=>x.id===id),lv);return m?{v:1,level:true,tags:[...new Set([...m.tags,...(m.sometimes||[])])].sort(),diff:m.diff,score:m.score,types:m.types}:null;}
 
 /* ---------- accounts, cloud sync, event log ---------- */
 const PZC=window.PZ_CFG||{url:'',key:''};
@@ -870,9 +874,9 @@ async function bootAccount(){
 
 // shared 5-question quiz engine (pass 4/5)
 function mountQuiz(root,ctx,o){
-  let qs,qi,right,cur,buf,answered;
-  const start=()=>{qs=Array.from({length:5},()=>pick(o.pool));qi=0;right=0;next();};
-  const next=()=>{cur=o.QT[qs[qi]]();buf='';answered=false;draw();};
+  let qs,qi,right,cur,buf,answered,res;
+  const start=()=>{qs=Array.from({length:5},()=>pick(o.pool));qi=0;right=0;res=[];next();};
+  const next=()=>{cur=o.QT[qs[qi]]();buf='';answered=false;ctx.q=o.game?quizQ(o.game,qs[qi],cur):null;draw();};
   function draw(msg,ok){
     root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.vis||''}</div><div class="ch-q">${cur.q}</div>
@@ -890,15 +894,17 @@ function mountQuiz(root,ctx,o){
   function submit(){
     const p=o.parse(buf);if(!p){draw(o.slash?'Type an answer first, e.g. 3/10':'Type an answer first');return;}
     answered=true;
-    let ok=Math.abs(p.v-cur.ans)<1e-6;
+    const val=Math.abs(p.v-cur.ans)<1e-6;let ok=val;
     if(ok&&cur.simplest&&p.n!=null&&gcd(p.n,p.d)!==1)ok=false,cur.ex='Right value, but the answer must be in its simplest form. '+cur.ex;
     if(ok)right++;
+    res.push({qt:cur.k||qs[qi],ok});ctx.log(ok?'right':'wrong',ok?{}:{typed:buf,expect:cur.ans,err:val?'not_simplified':'wrong_value'});
     draw((ok?'✅ Correct! ':'❌ Not quite. ')+cur.ex,ok);
   }
   function advance(){
     if(qi<4){qi++;next();return;}
+    {ctx.q=levelQ(ctx.id,ctx.lv);ctx.perf={right,of:5,wrong:res.filter(r=>!r.ok).map(r=>r.qt)};}
     if(right>=4)ctx.win(o.winTitle||'Well done!',`You got ${right}/5 right.`,start,'Play again');
-    else{root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — have another go!</div><div class="toolrow"><button class="btn" id="rt">Try again</button></div></div>`;$('#rt').onclick=start;}
+    else{ctx.log('fail',ctx.perf);root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — have another go!</div><div class="toolrow"><button class="btn" id="rt">Try again</button></div></div>`;$('#rt').onclick=start;}
   }
   ctx.keys=e=>{if(/^[0-9.]$/.test(e.key)||(o.slash&&e.key==='/'))press(e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter')press('ok');};
   start();
@@ -1730,16 +1736,16 @@ const QT={
 };
 const POOL=[['T1'],['T1','T2'],['T1','T2','T3'],['T4'],['T5'],['T5','T6'],['T6','T7'],['T8'],['T8','T9'],['T10','T11'],['T12'],['T3','T4','T6','T7','T9','T10','T11','T12']];
 function parseAns(s){s=s.trim();if(!s)return NaN;if(s.endsWith('%'))return parseFloat(s)/100;if(s.includes('/')){const[a,b]=s.split('/');return parseFloat(a)/parseFloat(b);}return parseFloat(s);}
-window.__ch={QT,parseAns};
+window.__ch={QT,parseAns,POOL};
 REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probability',
  desc:'Probability puzzles with bags of balls, spinners and two-dice grids. Answer 5 questions per level — get 4 right to pass!',skills:['probability','fractions','sample space'],
  levels:['Bags · one colour','Bags · “not” events','Bags · “or” events','Spinners','Two dice · sums','Two dice · at least / less than','Two dice · tricky events','Two picks · with replacement','Two picks · without replacement','Expected & relative frequency','Probability rules','Boss mix'],
  how:'Read the picture, then type your answer as a fraction like 3/10 (any equivalent fraction is accepted) or a decimal. You can use the keypad or your keyboard.',
  art:'<div class="minich">🎲🎲</div>',
  mount(root,lv,ctx){
-  const pool=POOL[lv-1];let qs,qi,right,cur,buf,answered;
-  function start(){qs=Array.from({length:5},()=>pick(pool));qi=0;right=0;next();}
-  function next(){cur=QT[qs[qi]]();buf='';answered=false;draw();}
+  const pool=POOL[lv-1];let qs,qi,right,cur,buf,answered,res;
+  function start(){qs=Array.from({length:5},()=>pick(pool));qi=0;right=0;res=[];next();}
+  function next(){cur=QT[qs[qi]]();buf='';answered=false;ctx.q=quizQ('chance',qs[qi],cur);draw();}
   function draw(msg,ok){
     root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.vis}</div><div class="ch-q">${cur.q}</div>
@@ -1758,14 +1764,15 @@ REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probab
   }
   function submit(){
     const v=parseAns(buf);if(isNaN(v)){draw('Type an answer first, e.g. 3/10');return;}
-    answered=true;const ok=Math.abs(v-cur.ans)<1e-6;if(ok)right++;
+    answered=true;const ok=Math.abs(v-cur.ans)<1e-6;if(ok)right++;res.push({qt:qs[qi],ok});ctx.log(ok?'right':'wrong',ok?{}:{typed:buf,expect:cur.ans,err:'wrong_value'});
     if(cur.vis.includes('ch-grid')||cur.hl){const hl=cur.hl;if(hl)cur.vis=grid(hl);}
     draw((ok?'✅ Correct! ':'❌ Not quite. ')+cur.ex,ok);
   }
   function advance(){
     if(qi<4){qi++;next();return;}
+    {ctx.q=levelQ(ctx.id,ctx.lv);ctx.perf={right,of:5,wrong:res.filter(r=>!r.ok).map(r=>r.qt)};}
     if(right>=4){ctx.win('Probability pro!',`You got ${right}/5 right.`,start,'Play again');}
-    else{root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — have another go!</div><div class="toolrow"><button class="btn" id="rt">Try again ⟲</button></div></div>`;$('#rt').onclick=start;}
+    else{ctx.log('fail',ctx.perf);root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — have another go!</div><div class="toolrow"><button class="btn" id="rt">Try again ⟲</button></div></div>`;$('#rt').onclick=start;}
   }
   ctx.keys=e=>{if(/^[0-9./%]$/.test(e.key))press(e.key==='%'?'%':e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter')press('ok');};
   start();
@@ -1786,7 +1793,7 @@ const LV=[
  {n:'Boss: three dice, tough goal',dice:[6,6,6],goal:250,races:8,track:4}
 ];
 function dist(dice){let d={0:1};dice.forEach(s=>{const n={};Object.keys(d).forEach(k=>{for(let f=1;f<=s;f++){n[+k+f]=(n[+k+f]||0)+d[k];}});d=n;});return d;}
-window.__dd2={dist};
+window.__dd2={dist,LV};
 const FACE=['','⚀','⚁','⚂','⚃','⚄','⚅'];
 REG.push({id:'derby',name:'Dice Derby',emoji:'🏇',color:'#e67700',cat:'Probability',
  desc:'Bet on horses numbered by dice totals. Each roll moves the horse with that number. Which horse should you back? Discover why some totals win more often!',skills:['probability','sample space','expected outcomes'],
@@ -1794,7 +1801,7 @@ REG.push({id:'derby',name:'Dice Derby',emoji:'🏇',color:'#e67700',cat:'Probabi
  how:'Tap horse numbers to bet 10 coins on each (up to 3 horses). Press Start: every dice roll moves the horse whose number matches the total. First to the finish wins and pays 40 coins per winning bet. Reach the goal before the races run out!',
  art:'<div class="minich">🎲🏇</div>',
  mount(root,lv,ctx){
-  const L=LV[lv-1],D=dist(L.dice),tot=Math.pow(L.dice.reduce((a,b)=>a*b,1),1),keys=Object.keys(D).map(Number).sort((a,b)=>a-b);
+  const L=LV[lv-1];ctx.q=tagDerby(L);const D=dist(L.dice),tot=Math.pow(L.dice.reduce((a,b)=>a*b,1),1),keys=Object.keys(D).map(Number).sort((a,b)=>a-b);
   let coins,races,bets,wins,pos,running,showP,over,last;
   const total=L.dice.reduce((a,b)=>a*b,1);
   function reset(){coins=100;races=0;bets=new Set();wins={};pos={};keys.forEach(k=>pos[k]=0);running=false;showP=false;over=false;last='';draw();}
@@ -1903,16 +1910,16 @@ const QT={
   return{svg:svg(sv),q:`The angles of this triangle are ${k[0]}x°, ${k[1]}x° and ${k[2]}x°. Find <b>x</b>.`,ans:xx,ex:`${s}x = 180 → x = ${xx}`};}
 };
 const POOL=[['A1'],['A2'],['A2','A3'],['A4'],['A4','A5'],['A6'],['A7','A9'],['A8'],['A10'],['A8','A9','A10'],['A11','A12'],['A3','A5','A6','A7','A8','A9','A10','A11','A12']];
-window.__an={QT};
+window.__an={QT,POOL};
 REG.push({id:'angles',name:'Angle Hunter',emoji:'📐',color:'#0b7285',cat:'Geometry',
  desc:'Estimate and calculate angles in lines, triangles, polygons and parallel lines. Diagrams are drawn for you — find the missing angle!',skills:['angle rules','parallel lines','polygons','forming equations'],
  levels:['Estimate angles','Angles on a straight line','Straight line & around a point','Angles in a triangle','Isosceles triangles','Quadrilaterals','Crossing lines & exterior angles','Parallel lines','Polygons','Mixed angle rules','Angles with algebra','Boss mix'],
  how:'Look at the diagram, work out the angle marked ?, and type the answer in degrees. Get 4 out of 5 right to pass the level. Diagrams are not always drawn to scale!',
  art:'<svg viewBox="0 0 120 80" width="130" height="90" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M10 70H110M10 70L80 15"/><path d="M45 70A35 35 0 0 0 33 46" /></svg>',
  mount(root,lv,ctx){
-  const pool=POOL[lv-1];let qs,qi,right,cur,buf,answered;
-  function start(){qs=Array.from({length:5},()=>pick(pool));qi=0;right=0;next();}
-  function next(){cur=QT[qs[qi]]();buf='';answered=false;draw();}
+  const pool=POOL[lv-1];let qs,qi,right,cur,buf,answered,res;
+  function start(){qs=Array.from({length:5},()=>pick(pool));qi=0;right=0;res=[];next();}
+  function next(){cur=QT[qs[qi]]();buf='';answered=false;ctx.q=quizQ('angles',qs[qi],cur);draw();}
   function draw(msg,ok){
     root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.svg}</div><div class="ch-q">${cur.q}</div>
@@ -1926,13 +1933,14 @@ REG.push({id:'angles',name:'Angle Hunter',emoji:'📐',color:'#0b7285',cat:'Geom
   }
   function submit(){
     if(!buf){draw('Type your answer first.');return;}
-    const v=+buf;answered=true;const ok=Math.abs(v-cur.ans)<=(cur.tol||0);if(ok)right++;
+    const v=+buf;answered=true;const ok=Math.abs(v-cur.ans)<=(cur.tol||0);if(ok)right++;res.push({qt:qs[qi],ok});ctx.log(ok?'right':'wrong',ok?{}:{typed:buf,expect:cur.ans,err:'wrong_value'});
     draw((ok?'✅ Correct! ':'❌ Not quite. ')+cur.ex,ok);
   }
   function advance(){
     if(qi<4){qi++;next();return;}
+    {ctx.q=levelQ(ctx.id,ctx.lv);ctx.perf={right,of:5,wrong:res.filter(r=>!r.ok).map(r=>r.qt)};}
     if(right>=4)ctx.win('Angle ace!',`You got ${right}/5 right.`,start,'Play again');
-    else{root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — try again!</div><div class="toolrow"><button class="btn" id="rt">Try again ⟲</button></div></div>`;$('#rt').onclick=start;}
+    else{ctx.log('fail',ctx.perf);root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — try again!</div><div class="toolrow"><button class="btn" id="rt">Try again ⟲</button></div></div>`;$('#rt').onclick=start;}
   }
   ctx.keys=e=>{if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter')press('ok');};
   start();
@@ -1990,7 +1998,7 @@ REG.push({id:'transform',name:'Transform Quest',emoji:'🪞',color:'#087f5b',cat
   function ok(pts){return pts.every(p=>Math.abs(p[0])<=6&&Math.abs(p[1])<=6);}
   function newTask(){
     for(;;){task=L.g();shape=shapeFor(L.shape,L.small);img=shape.map(task.f);if(ok(img)&&!shape.every((p,i)=>same(p,img[i])))break;}
-    placed=[];over=false;hintOn=false;wrong=false;draw();
+    ctx.q=tagTransform(task,L.shape);placed=[];over=false;hintOn=false;wrong=false;draw();
   }
   const X=x=>x,Y=y=>-y;
   function poly(pts,cls){return`<polygon points="${pts.map(p=>p[0]+','+(-p[1])).join(' ')}" class="${cls}"/>`;}
@@ -2025,7 +2033,7 @@ REG.push({id:'transform',name:'Transform Quest',emoji:'🪞',color:'#087f5b',cat
     if(placed.length===shape.length){
       const a=placed.map(String).sort().join('|'),b=img.map(String).sort().join('|');
       if(a===b){over=true;draw('✅ Perfect!');ctx.win('Transformation complete!','Every corner is in exactly the right place.',newTask,'Another task');return;}
-      wrong=true;draw(`❌ Not quite. The orange outline shows the correct image: ${img.map(p=>`(${p[0]}, ${p[1]})`).join(' ')}. Press Undo to try again.`);return;
+      wrong=true;ctx.log('wrong',{placed:placed.map(p=>p.slice()),expect:img});draw(`❌ Not quite. The orange outline shows the correct image: ${img.map(p=>`(${p[0]}, ${p[1]})`).join(' ')}. Press Undo to try again.`);return;
     }
     draw();
   }
@@ -2315,7 +2323,7 @@ REG.push({id:'lines',name:'Line Hunter',emoji:'📈',color:'#0c8599',cat:'Algebr
  mount(root,lv,ctx){
   let P,m,c,done;
   const S=34,O=7*S+10;
-  function newQ(){P=gen(lv);const s=P.s;m=s.fixM?P.m:0;c=s.fixC?P.c:0;if(s.fixM)m=P.m;done=false;draw();}
+  function newQ(){P=gen(lv);ctx.q=tagLine(P);const s=P.s;m=s.fixM?P.m:0;c=s.fixC?P.c:0;if(s.fixM)m=P.m;done=false;draw();}
   function ys(x){return m*x+c}
   function ok(){return P.st.every(p=>Math.abs(ys(p[0])-p[1])<1e-9);}
   function draw(msg){
@@ -2551,7 +2559,7 @@ REG.push({id:'fraction',name:'Fraction Factory',emoji:'🍕',color:'#e8590c',cat
  levels:['Name the fraction','Equivalent fractions','Simplify','Fraction of an amount','Add · same denominator','Add · different denominators','Add & subtract','Mixed → improper','Multiply fractions','Multiply & divide','Reverse fractions','Boss mix'],
  how:'Look at the picture, then type your answer as a fraction like 3/4 (use the / key) or a whole number. When it says “simplest form”, divide the top and bottom by the same number until you can’t any more.',
  art:'<div class="minibal">🍕</div>',
- mount(root,lv,ctx){mountQuiz(root,ctx,{QT,pool:POOL[lv-1],parse:num,slash:true,winTitle:'Fraction master!'});}});
+ mount(root,lv,ctx){mountQuiz(root,ctx,{game:'fraction',QT,pool:POOL[lv-1],parse:num,slash:true,winTitle:'Fraction master!'});}});
 })();
 
 (function(){
@@ -2575,7 +2583,7 @@ const QT={
   if(t===1){const r=pick([10,20]),Pp=r===10?pick([100,200,300,500,1000]):pick([25,50,100,200,250]);return{vis:'<div class="ch-big">🏦</div>',q:`${P(Pp)} is invested at <b>${r}% compound interest</b> per year. How much is in the account after <b>2 years</b> (£)?`,ans:Pp*(1+r/100)**2,ex:`Multiplier ${1+r/100}. ${Pp} × ${1+r/100} × ${1+r/100} = ${Pp*(1+r/100)**2}`};}
   const Pp=pick([400,800,1200]);return{vis:'<div class="ch-big">🏦</div>',q:`${P(Pp)} is invested at <b>5% compound interest</b> per year. How much is in the account after <b>2 years</b> (£)?`,ans:Pp*1.1025,ex:`${Pp} × 1.05 × 1.05 = ${Pp*1.1025}`};},
 };
-QT.P12=()=>QT[pick(['P6','P8','P9','P10','P11','P7'])]();
+QT.P12=()=>{const k=pick(['P6','P8','P9','P10','P11','P7']),r=QT[k]();r.k=k;return r;};
 const POOL=[['P1'],['P1','P2'],['P2','P3'],['P3','P4'],['P4','P5'],['P5','P6'],['P6','P7'],['P7','P8'],['P9'],['P9','P10'],['P11'],['P12']];
 const num=s=>{const v=parseFloat(s);return isNaN(v)?null:{v,n:null,d:1};};
 window.__pc={QT,POOL};
@@ -2584,7 +2592,7 @@ REG.push({id:'percent',name:'Percent Shop',emoji:'🏷️',color:'#2b8a3e',cat:'
  levels:['Percent of a grid','10%, 25%, 50%…','Convert fractions & decimals','Any percentage of an amount','Sale prices','Increase (VAT, pay rises)','Test scores as %','Percentage change','Reverse percentages','Reverse · sales','Interest','Boss mix'],
  how:'Type your answer as a number (no % or £ needed). Tip: find 10% first (÷10), then build any other percentage from it. For reverse percentages, work out 1% first.',
  art:'<div class="minibal">🏷️</div>',
- mount(root,lv,ctx){mountQuiz(root,ctx,{QT,pool:POOL[lv-1],parse:num,slash:false,winTitle:'Percentage pro!'});}});
+ mount(root,lv,ctx){mountQuiz(root,ctx,{game:'percent',QT,pool:POOL[lv-1],parse:num,slash:false,winTitle:'Percentage pro!'});}});
 })();
 
 (function(){
@@ -2603,7 +2611,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
  how:'Type how many rows to use, then press Arrange. If the balls fill every row perfectly, you have found two factors (rows and columns)! Orange balls are left over — then that row count is NOT a factor. 1 and the number itself are given. Find ALL the other factors, then press “That’s all”.',
  art:'<div class="minibal">🔵🔵🔵<br>🔵🔵🔵</div>',
  mount(root,lv,ctx){
-  const N=NS[lv-1],F=facs(N),found=new Set([1,N]),pairs=[[1,N]];let r=1;
+  const N=NS[lv-1];ctx.q=tagFactors(N);const F=facs(N),found=new Set([1,N]),pairs=[[1,N]];let r=1;
   root.innerHTML=`<div class="fc"><div class="fc-top"><div class="fc-ttl">✅ Factor pairs you found</div><div class="fc-pairs" id="fcpr"></div></div><div class="fc-tip">${TIPS[N]||'Find every number that divides '+N+' exactly. (1 and '+N+' are free!)'}</div>
    <div class="fc-n">🔵 <b>${N}</b> balls</div>
    <div class="fc-board" id="fcb"></div>
@@ -2759,7 +2767,7 @@ REG.push({id:'expand',name:'Arrow Expander',emoji:'🏹',color:'#e8590c',cat:'Al
     L=set.slice(0,Math.max(nl,lv>20?nl:1));if(lv>20&&nl===2)L=set.slice(0,2);
     const mp={p:L[0],q:L[1]||L[0],r:L[2]||L[0]};
     Q={m:rename(q.m,mp),t:q.t.map(t=>rename(t,mp))};
-    Q.prod=Q.t.map(t=>mul(Q.m,t));buf='';act=0;done=Q.t.map(()=>false);
+    Q.prod=Q.t.map(t=>mul(Q.m,t));ctx.q=tagExpand(Q);ctx.q.eq=exprStr();buf='';act=0;done=Q.t.map(()=>false);
     $('#exe').innerHTML=`<span class="ex-m" id="exm">${fmt(Q.m,true)}</span><span class="ex-p">(</span>`+Q.t.map((t,i)=>`<span class="ex-t">${i?`<i class="sg">${t.c<0?' − ':' + '}</i>`:(t.c<0?'<i class="sg">−</i>':'')}<b id="ext${i}">${fmt({c:Math.abs(t.c),p:t.p},true)}</b></span>`).join('')+`<span class="ex-p">)</span>`;
     $('#exres').innerHTML='';$('#exmsg').innerHTML='&nbsp;';buildPad();
     stage.querySelectorAll('.ex-chip').forEach(c=>c.remove());chips.length=0;
@@ -3123,7 +3131,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     const set=spec.L===1?[pick(SETS1)]:pick(SETS2),mp={x:set[0],y:set[1]||set[0]};
     terms=q.terms.map(t=>{const p={};for(const k in t.p){const nk=mp[k]||k;p[nk]=(p[nk]||0)+t.p[k];}return{c:t.c,p};});
     L=[...new Set(terms.flatMap(t=>Object.keys(t.p)))].sort();
-    orig=cp(terms);CF={c:1,p:{}};steps=[];ended=false;selI=-1;selJ=-1;msg('');startRound();
+    orig=cp(terms);ctx.q=tagFactorise(q);ctx.q.eq=fmtExpr(terms);CF={c:1,p:{}};steps=[];ended=false;selI=-1;selJ=-1;msg('');startRound();
   }
   function startRound(){lastBlk=null;lastI=-1;clearTimers();chains=terms.map(t=>[absT(t)]);tok=terms.map(()=>0);selI=-1;selJ=-1;buf='';render();closePad();}
   const shownBuf=()=>buf.replace(/\^2/g,'²').replace(/\^3/g,'³');
@@ -3293,7 +3301,7 @@ REG.push({id:'quad',name:'Quadratic Factoriser',emoji:'🔷',color:'#d6336c',cat
   const sp=LV[lv-1];let Q,stage,sl,sel,buf,pair,cfg;
   root.innerHTML=`<div class="qd"><div class="qd-top" id="qt"></div><div class="qd-title" id="qti"></div><div class="qd-row" id="qr"></div><div class="qd-split" id="qs"></div><div class="msg" id="qm">&nbsp;</div><div class="ex-pad" id="qpad"></div><div class="toolrow"><button class="btn alt" id="qh">💡 Hint</button><button class="btn alt" id="qn">New question ⏭</button></div></div>`;
   const msg=h=>{$('#qm').innerHTML=h||'&nbsp;';};
-  function build(){Q=gen(sp);stage=1;pair=null;msg('');setStage();}
+  function build(){Q=gen(sp);ctx.q=tagQuad(Q);ctx.q.eq=poly(Q.a,Q.b,Q.c);stage=1;pair=null;msg('');setStage();}
   function setStage(){
     if(stage===1){cfg={n:2};}else cfg={n:Q.m===1&&Q.n===1&&sp.a1?2:4};
     sl=Array(cfg.n).fill(null);sel=0;buf='';render();
@@ -3364,6 +3372,281 @@ REG.push({id:'quad',name:'Quadratic Factoriser',emoji:'🔷',color:'#d6336c',cat
   window.__qq=()=>({get Q(){return Q},get stage(){return stage},press,commit,select:i=>{sel=i;buf='';render();}});
   build();
  }});
+})();
+
+/* ---------- question tags for the GCSE games (everything except Balance Scale, which tags itself) ----------
+   Loaded AFTER every game file. Each analyser turns a generated question into
+   {v,tags,diff,score[,eq,qt]} (see tags.js) and each game gets a qmeta(lv) for its level header + export.
+   Tag ids are stored online: never rename an id, only its label. */
+(function(){
+/* 'id|English|中文' — group (chip colour) comes from the id prefix */
+const L=`simplest-form|must simplify|要化到最簡
+bk-terms-2|2 terms inside|括號內 2 項
+bk-terms-3|3 terms inside|括號內 3 項
+bk-terms-4|4 terms inside|括號內 4 項
+bk-num-outside|number outside|括號外係數字
+bk-var-outside|letter outside|括號外有字母
+bk-neg-outside|negative outside|括號外係負數
+bk-neg-inside|negative inside|括號內有負數
+bk-neg-times-neg|− × −|負負得正
+bk-letters-1|1 letter|1 個字母
+bk-letters-2|2 letters|2 個字母
+bk-letters-3|3 letters|3 個字母
+bk-gives-square|x² in answer|答案有平方
+bk-sq-inside|x² inside|括號內有平方項
+bk-coef-inside|coefficients inside|括號內有係數
+bk-multi-outside|xy outside|括號外有多個字母
+fc-terms-2|2 terms|2 項
+fc-terms-3|3 terms|3 項
+fc-terms-4|4 terms|4 項
+fc-number-only|number only|只提數字
+fc-letter-only|letter only|只提字母
+fc-number-and-letter|number and letter|數字同字母
+fc-squared-letter|squared letter|提平方字母
+fc-two-letters|two letters|兩個字母
+fc-neg-terms|negative terms|有負項
+qd-monic|x² (no number in front)|x² 前面冇數字
+qd-lead-coef|number in front of x²|x² 前面有數字
+qd-all-positive|all positive|全部正數
+qd-neg-middle|minus in the middle|中間係負數
+qd-neg-last|minus at the end|最後一項係負數
+qd-dos|difference of two squares|平方差
+ln-gradient-only|gradient only|只調 m
+ln-intercept-only|intercept only|只調 c
+ln-both|gradient and intercept|m 同 c
+ln-neg-gradient|negative gradient|負斜率
+ln-frac-gradient|fractional gradient|分數斜率
+ln-flat|horizontal line|水平線
+ln-steep|steep line|斜率大
+ln-neg-intercept|negative intercept|負截距
+fa-prime|prime|質數
+fa-composite|composite|合成數
+fa-square|square number|平方數
+fa-few-factors|few factors|因數少
+fa-many-factors|many factors|因數多
+fa-small-n|small number|數字細
+fa-mid-n|medium number|數字中等
+fa-big-n|big number|數字大
+fr-name-picture|name from picture|睇圖寫分數
+fr-equivalent|equivalent fractions|等值分數
+fr-simplify|simplify|約簡
+fr-of-amount|fraction of an amount|分數乘數量
+fr-add|add|加
+fr-sub|subtract|減
+fr-same-denom|same denominator|分母相同
+fr-diff-denom|different denominators|分母唔同
+fr-mixed|mixed numbers|帶分數
+fr-mixed-improper|mixed ↔ improper|帶分數轉假分數
+fr-mul|multiply|乘
+fr-div|divide|除
+fr-reverse|find the whole|倒推原數
+pc-read-grid|percent of a grid|睇格仔寫百分比
+pc-of-amount|percent of an amount|求某數嘅百分之幾
+pc-easy|10% / 25% / 50%|簡單百分比
+pc-any|any percentage|任何百分比
+pc-convert|convert|互換
+pc-from-fraction|from a fraction|分數轉百分比
+pc-from-decimal|from a decimal|小數轉百分比
+pc-sale|sale price|減價
+pc-increase|percentage increase|加幅
+pc-decrease|percentage decrease|減幅
+pc-vat|VAT|VAT
+pc-as-percent|score as a percentage|分數轉百分比
+pc-change|percentage change|百分比變化
+pc-reverse|reverse percentage|逆向百分比
+pc-interest|interest|利息
+pc-simple-interest|simple interest|單利息
+pc-compound-interest|compound interest|複利息
+pr-bag|bag of balls|袋入面揀波
+pr-not|not event|「唔係」事件
+pr-or|or event|「或者」事件
+pr-and|and event|「而且」事件
+pr-spinner|spinner|轉盤
+pr-two-dice|two dice|兩粒骰
+pr-sample-space|sample space|樣本空間
+pr-at-least|at least / less than|至少／少於
+pr-with-replacement|with replacement|放回
+pr-without-replacement|without replacement|唔放回
+pr-independent|independent events|獨立事件
+pr-mutually-exclusive|mutually exclusive|互斥事件
+pr-expected|expected number|期望次數
+pr-relative-freq|relative frequency|相對頻率
+pr-ratio|from a ratio|由比例
+an-estimate|estimate an angle|估計角度
+an-straight-line|angles on a line|直線上嘅角
+an-around-point|angles around a point|一點周圍嘅角
+an-triangle|triangle|三角形
+an-isosceles|isosceles triangle|等腰三角形
+an-quadrilateral|quadrilateral|四邊形
+an-crossing-lines|crossing lines|相交直線
+an-vertically-opposite|vertically opposite|對頂角
+an-parallel|parallel lines|平行線
+an-corresponding|corresponding angles|同位角
+an-alternate|alternate angles|內錯角
+an-co-interior|co-interior angles|同旁內角
+an-exterior|exterior angle|外角
+an-polygon-sum|polygon: angle sum|多邊形內角和
+an-polygon-exterior|polygon: exterior angle|多邊形外角
+an-polygon-interior|polygon: interior angle|多邊形內角
+an-algebra|angles with algebra|角度加代數
+tf-translation|translation|平移
+tf-neg-vector|negative vector|負向量
+tf-reflection|reflection|反射
+tf-reflect-axis|in an axis|喺 x 或 y 軸
+tf-reflect-line|in x = k / y = k|喺 x=k 或 y=k
+tf-reflect-diagonal|in y = ±x|喺 y=±x
+tf-rotation|rotation|旋轉
+tf-rot-90|90°|90°
+tf-rot-180|180°|180°
+tf-clockwise|clockwise|順時針
+tf-anticlockwise|anticlockwise|逆時針
+tf-enlargement|enlargement|放大
+tf-sf-2|scale factor 2|比例 2
+tf-sf-3|scale factor 3|比例 3
+tf-shape-3|triangle|三角形
+tf-shape-4|quadrilateral|四邊形
+dd-1-die|one die|1 粒骰
+dd-2-dice|two dice|2 粒骰
+dd-3-dice|three dice|3 粒骰
+dd-d4|4-sided dice|四面骰
+dd-d6|6-sided dice|六面骰
+dd-d8|8-sided dice|八面骰
+dd-mixed-dice|mixed dice|唔同面數嘅骰
+dd-few-races|fewer races|場數少
+dd-high-goal|high goal|目標高`;
+const GRP={bk:'skill',fc:'skill',qd:'skill',ln:'skill',fa:'skill',fr:'skill',pc:'skill',pr:'skill',an:'skill',tf:'skill',dd:'skill'};
+L.split('\n').forEach(l=>{const[id,en,zh]=l.split('|');TAXO[id]={g:GRP[id.split('-')[0]]||'num',en,zh};});
+TAXO_GROUPS.skill='Skill';
+
+const clamp=(d,lo=1,hi=10)=>Math.max(lo,Math.min(hi,d));
+const fin=(tags,d,extra)=>Object.assign({v:1,tags:[...new Set(tags)].sort(),diff:Math.round(clamp(d)),score:Math.round(clamp(d)*10)/10},extra);
+const maxExp=t=>Math.max(0,...Object.values(t.p));
+const letters=ts=>new Set(ts.flatMap(t=>Object.keys(t.p)));
+
+/* ---------- Arrow Expander: q = {m:outside term, t:[inside terms]} ---------- */
+function tagExpand(q){
+  const prod=q.t.map(t=>window.__ex.mul(q.m,t)),tags=[],nt=q.t.length,vo=Object.keys(q.m.p).length>0;
+  tags.push('bk-terms-'+Math.min(4,nt),vo?'bk-var-outside':'bk-num-outside');
+  const no=q.m.c<0,ni=q.t.some(t=>t.c<0),L=Math.min(3,letters([q.m,...q.t]).size),sq=q.t.some(t=>maxExp(t)>=2),
+        coef=q.t.some(t=>Math.abs(t.c)>1),mo=Object.keys(q.m.p).length>=2||maxExp(q.m)>=2,big=prod.some(t=>Math.abs(t.c)>=20);
+  if(no)tags.push('bk-neg-outside');if(ni)tags.push('bk-neg-inside');if(no&&ni)tags.push('bk-neg-times-neg');
+  tags.push('bk-letters-'+L);if(prod.some(t=>maxExp(t)>=2))tags.push('bk-gives-square');
+  if(sq)tags.push('bk-sq-inside');if(coef)tags.push('bk-coef-inside');if(mo)tags.push('bk-multi-outside');if(big)tags.push('big-numbers');
+  const d=1+.9*(nt-1)+(vo?1.4:0)+(no?1:0)+(ni?.5:0)+(no&&ni?.8:0)+(L-1)*.8+(sq?.8:0)+(coef?.5:0)+(mo?1:0)+(big?.5:0);
+  return fin(tags,d);
+}
+/* ---------- Factorise It!: q = {terms,H,cv} ---------- */
+function tagFactorise(q){
+  const nt=q.terms.length,cvL=Object.keys(q.cv).length,tags=['fc-terms-'+Math.min(4,nt)];
+  const num=q.H>1;
+  tags.push(!cvL?'fc-number-only':num?'fc-number-and-letter':'fc-letter-only');
+  const sqL=Object.values(q.cv).some(e=>e>=2),two=letters(q.terms).size>=2,neg=q.terms.some(t=>t.c<0),big=q.H>=7||q.terms.some(t=>Math.abs(t.c)>=40);
+  if(sqL)tags.push('fc-squared-letter');if(two)tags.push('fc-two-letters');if(neg)tags.push('fc-neg-terms');if(big)tags.push('big-numbers');
+  const d=1+(nt-2)*1.2+(!cvL?0:num?2:1)+(sqL?1:0)+(two?1.2:0)+(neg?.6:0)+(big?.5:0);
+  return fin(tags,d);
+}
+/* ---------- Quadratic Factoriser: q = {a,b,c,m,p,n,q} ---------- */
+function tagQuad(q){
+  const tags=[q.a===1?'qd-monic':'qd-lead-coef'],dos=q.b===0&&q.c<0;
+  if(dos)tags.push('qd-dos');else{if(q.b>0&&q.c>0)tags.push('qd-all-positive');if(q.b<0&&q.c>0)tags.push('qd-neg-middle');if(q.c<0)tags.push('qd-neg-last');}
+  const big=Math.max(Math.abs(q.p),Math.abs(q.q))>=10||Math.abs(q.c)>=50;if(big)tags.push('big-numbers');
+  const d=(q.a>1?4.5:2)+(!dos&&q.b<0&&q.c>0?1:0)+(!dos&&q.c<0?1.5:0)+(dos?.5:0)+(big?1:0)+(q.a>1&&Math.max(q.m,q.n)>=3?1:0);
+  return fin(tags,d);
+}
+/* ---------- Line Hunter: P = {m,c,st,s} ---------- */
+function tagLine(P){
+  const s=P.s,tags=[s.fixC?'ln-gradient-only':s.fixM?'ln-intercept-only':'ln-both'];
+  if(P.m<0)tags.push('ln-neg-gradient');if(P.m%1!==0)tags.push('ln-frac-gradient');if(P.m===0)tags.push('ln-flat');if(Math.abs(P.m)>=3)tags.push('ln-steep');
+  if(P.c<0)tags.push('ln-neg-intercept');
+  const d=(s.fixC||s.fixM?2:3.5)+(P.m<0?.8:0)+(P.m%1!==0?1.5:0)+(Math.abs(P.m)>=3?.7:0)+(P.c<0?.5:0)+(s.boss?2:0);
+  return fin(tags,d,{eq:'y = '+(P.m===0?'':P.m+'x + ')+P.c});
+}
+/* ---------- Ball Factory: N ---------- */
+function tagFactors(N){
+  const nf=window.__fac.facs(N).length,tags=[nf===2?'fa-prime':'fa-composite'];
+  if(Number.isInteger(Math.sqrt(N)))tags.push('fa-square');
+  if(nf<=4)tags.push('fa-few-factors');else if(nf>=8)tags.push('fa-many-factors');
+  tags.push(N<30?'fa-small-n':N<80?'fa-mid-n':'fa-big-n');
+  return fin(tags,1+Math.min(4,nf/2)+(N>=80?2:N>=30?1:0),{eq:'factors of '+N});
+}
+/* ---------- Transform Quest: task = {t:instruction}, shape n ---------- */
+function tagTransform(task,n){
+  const t=task.t,tags=[];
+  if(/^Translate/.test(t)){tags.push('tf-translation');const v=/\((-?\d+), (-?\d+)\)/.exec(t);if(v&&(+v[1]<0||+v[2]<0))tags.push('tf-neg-vector');}
+  else if(/^Reflect/.test(t)){tags.push('tf-reflection');tags.push(/line y = (−)?x/.test(t)?'tf-reflect-diagonal':/line [xy] = /.test(t)?'tf-reflect-line':'tf-reflect-axis');}
+  else if(/^Rotate/.test(t)){tags.push('tf-rotation',/180/.test(t)?'tf-rot-180':'tf-rot-90');if(/anticlockwise/.test(t))tags.push('tf-anticlockwise');else if(/clockwise/.test(t))tags.push('tf-clockwise');}
+  else if(/^Enlarge/.test(t)){tags.push('tf-enlargement');const k=/factor (\d+)/.exec(t);if(k)tags.push('tf-sf-'+k[1]);}
+  tags.push(n===3?'tf-shape-3':'tf-shape-4');
+  const has=x=>tags.includes(x);
+  const d=(has('tf-translation')?(has('tf-neg-vector')?2.5:1.5):has('tf-reflect-axis')?3:has('tf-reflect-line')?4.5:has('tf-reflect-diagonal')?5.5:has('tf-rotation')?(has('tf-rot-180')?4:5):has('tf-sf-3')?5:4)+(n===4?.5:0);
+  return fin(tags,d,{eq:t});
+}
+/* ---------- Dice Derby (level only): dice sides, goal, races ---------- */
+function tagDerby(L){
+  const s=L.dice,tags=['dd-'+(s.length===1?'1-die':s.length+'-dice')];
+  [...new Set(s)].forEach(x=>tags.push('dd-d'+x));if(new Set(s).size>1)tags.push('dd-mixed-dice');
+  if(L.races<10)tags.push('dd-few-races');if(L.goal>=200)tags.push('dd-high-goal');
+  const d=2+(s.length-1)*1.5+(new Set(s).size>1?.5:0)+(s.includes(8)?1:0)+(L.goal>=200?1:0)+(L.races<10?1:0)+(L.track===4?.5:0)+(L.goal>=250?1:0);
+  return fin(tags,d);
+}
+
+/* ---------- quiz-style games: one table row per question type ---------- */
+const Q=(t,d,v)=>({t,d,v:v||[]});   // t = always, v = variants that show up only sometimes inside this type
+const QTAGS={
+ fraction:{A1:Q(['fr-name-picture'],1),A2:Q(['fr-equivalent'],2),A3:Q(['fr-simplify'],2),A4:Q(['fr-of-amount'],3),A5:Q(['fr-add','fr-same-denom'],2),
+  A6:Q(['fr-add','fr-diff-denom'],4),A7:Q(['fr-sub','fr-diff-denom'],4),A8:Q(['fr-mixed','fr-mixed-improper'],3),A9:Q(['fr-mul'],4),A10:Q(['fr-div'],5),
+  A11:Q(['fr-reverse','fr-of-amount'],5),A12:Q(['fr-add','fr-mixed','fr-diff-denom'],6)},
+ percent:{P1:Q(['pc-read-grid'],1),P2:Q(['pc-of-amount','pc-easy'],2),P3:Q(['pc-convert'],3,['pc-from-fraction','pc-from-decimal']),P4:Q(['pc-of-amount','pc-any'],3),P5:Q(['pc-sale','pc-decrease'],3),
+  P6:Q(['pc-increase'],4,['pc-vat']),P7:Q(['pc-as-percent'],3),P8:Q(['pc-change'],5),P9:Q(['pc-reverse','pc-increase'],6),P10:Q(['pc-reverse','pc-decrease'],6),P11:Q(['pc-interest'],6,['pc-simple-interest','pc-compound-interest'])},
+ chance:{T1:Q(['pr-bag'],1),T2:Q(['pr-bag','pr-not'],2),T3:Q(['pr-bag','pr-or'],3),T4:Q(['pr-spinner'],2),T5:Q(['pr-two-dice','pr-sample-space'],4),
+  T6:Q(['pr-two-dice','pr-sample-space','pr-at-least'],4),T7:Q(['pr-two-dice','pr-sample-space'],5),T8:Q(['pr-bag','pr-and','pr-independent','pr-with-replacement'],5),
+  T9:Q(['pr-bag','pr-and','pr-without-replacement'],6),T10:Q(['pr-expected'],4),T11:Q(['pr-relative-freq'],3),T12:Q([],5,['pr-not','pr-or','pr-mutually-exclusive','pr-and','pr-independent','pr-ratio'])},
+ angles:{A1:Q(['an-estimate'],2),A2:Q(['an-straight-line'],1),A3:Q(['an-around-point'],2),A4:Q(['an-triangle'],2),A5:Q(['an-triangle','an-isosceles'],3),
+  A6:Q(['an-quadrilateral'],3),A7:Q(['an-crossing-lines'],3,['an-vertically-opposite','an-straight-line']),A8:Q(['an-parallel'],5,['an-corresponding','an-alternate','an-co-interior']),A9:Q(['an-triangle','an-exterior'],4),A10:Q([],5,['an-polygon-sum','an-polygon-exterior','an-polygon-interior']),
+  A11:Q(['an-straight-line','an-algebra'],7),A12:Q(['an-triangle','an-algebra'],6)}
+};
+const plain=h=>String(h).replace(/<\/i><i>/g,'/').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+/* things only the generated text knows (which variant of a question type came up) */
+const RULE={
+ percent:(k,c)=>{const q=c.q,o=[];
+  if(k==='P3')o.push(/Write 0\./.test(plain(q))?'pc-from-decimal':'pc-from-fraction');
+  if(k==='P6'&&/VAT/.test(q))o.push('pc-vat');
+  if(k==='P11')o.push(/compound/.test(q)?'pc-compound-interest':'pc-simple-interest');return o;},
+ chance:(k,c)=>{const q=c.q,o=[];
+  if(k==='T12'){if(/does <b>not<\/b>/.test(q))o.push('pr-not');else if(/mutually exclusive/.test(q))o.push('pr-or','pr-mutually-exclusive');
+    else if(/independent/.test(q))o.push('pr-and','pr-independent');else if(/ratio/.test(q))o.push('pr-ratio','pr-bag');}return o;},
+ angles:(k,c)=>{const o=[];
+  if(k==='A7')o.push(/Vertically/.test(c.ex)?'an-vertically-opposite':'an-straight-line');
+  if(k==='A8')o.push(/Corresponding/.test(c.ex)?'an-corresponding':/Alternate/.test(c.ex)?'an-alternate':'an-co-interior');
+  if(k==='A10')o.push(/sum of the interior/.test(c.q)?'an-polygon-sum':/exterior angle/.test(c.q)?'an-polygon-exterior':'an-polygon-interior');return o;}
+};
+/* per-question meta for quiz games (called when each question is shown) */
+window.quizQ=function(game,key,cur){
+  const k=cur.k||key,m=(QTAGS[game]||{})[k];if(!m)return null;
+  const tags=[...m.t],r=RULE[game]&&RULE[game](k,cur);if(r)tags.push(...r);if(cur.simplest)tags.push('simplest-form');
+  return fin(tags,m.d,{qt:k,eq:plain(cur.q)});
+};
+/* level meta for a pool of question types: tags in every type = tags; in some types = sometimes */
+function fromPool(game,pool){
+  const ALIAS={percent:{P12:['P6','P8','P9','P10','P11','P7']}};
+  pool=pool.flatMap(k=>(ALIAS[game]&&ALIAS[game][k])||[k]);
+  const ms=[...new Set(pool)].map(k=>QTAGS[game][k]),all=new Set(ms.flatMap(m=>m.t)),tags=[...all].filter(t=>ms.every(m=>m.t.includes(t))).sort();
+  const sometimes=[...new Set([...all,...ms.flatMap(m=>m.v)])].filter(t=>!tags.includes(t)).sort(),d=ms.reduce((a,m)=>a+m.d,0)/ms.length;
+  return{tags,sometimes,types:[...new Set(pool)],diff:Math.round(clamp(d)),score:Math.round(clamp(d)*10)/10};
+}
+
+/* ---------- hook everything onto the registered games ---------- */
+const GM=id=>REG.find(g=>g.id===id);
+const samp=(f,n=60)=>levelFromSamples(f,n);
+window.tagExpand=tagExpand;window.tagFactorise=tagFactorise;window.tagQuad=tagQuad;window.tagLine=tagLine;window.tagFactors=tagFactors;window.tagTransform=tagTransform;window.tagDerby=tagDerby;
+GM('expand').qmeta=lv=>samp(()=>tagExpand(window.__ex.SPECS[lv-1].g()));
+GM('factorise').qmeta=lv=>samp(()=>{let q;do{q=window.__fx.gen(window.__fx.LV[lv-1]);}while(!q);return tagFactorise(q);});
+GM('quad').qmeta=lv=>samp(()=>tagQuad(window.__qd.gen(window.__qd.LV[lv-1])));
+GM('lines').qmeta=lv=>samp(()=>tagLine(window.__ln.gen(lv)));
+GM('factors').qmeta=lv=>samp(()=>tagFactors(window.__fac.NS[lv-1]),1);
+GM('transform').qmeta=lv=>{const L=window.__tf.LV[lv-1];return samp(()=>tagTransform(L.g(),L.shape));};
+GM('derby').qmeta=lv=>samp(()=>tagDerby(window.__dd2.LV[lv-1]),1);
+['fraction','percent','chance','angles'].forEach(g=>{GM(g).qmeta=lv=>fromPool(g,window['__'+({fraction:'fr',percent:'pc',chance:'ch',angles:'an'})[g]].POOL[lv-1]);});
 })();
 
 

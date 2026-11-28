@@ -95,7 +95,7 @@ REG.push({id:'expand',name:'Arrow Expander',emoji:'🏹',color:'#e8590c',cat:'Al
     L=set.slice(0,Math.max(nl,lv>20?nl:1));if(lv>20&&nl===2)L=set.slice(0,2);
     const mp={p:L[0],q:L[1]||L[0],r:L[2]||L[0]};
     Q={m:rename(q.m,mp),t:q.t.map(t=>rename(t,mp))};
-    Q.prod=Q.t.map(t=>mul(Q.m,t));buf='';act=0;done=Q.t.map(()=>false);
+    Q.prod=Q.t.map(t=>mul(Q.m,t));ctx.q=tagExpand(Q);ctx.q.eq=exprStr();buf='';act=0;done=Q.t.map(()=>false);
     $('#exe').innerHTML=`<span class="ex-m" id="exm">${fmt(Q.m,true)}</span><span class="ex-p">(</span>`+Q.t.map((t,i)=>`<span class="ex-t">${i?`<i class="sg">${t.c<0?' − ':' + '}</i>`:(t.c<0?'<i class="sg">−</i>':'')}<b id="ext${i}">${fmt({c:Math.abs(t.c),p:t.p},true)}</b></span>`).join('')+`<span class="ex-p">)</span>`;
     $('#exres').innerHTML='';$('#exmsg').innerHTML='&nbsp;';buildPad();
     stage.querySelectorAll('.ex-chip').forEach(c=>c.remove());chips.length=0;

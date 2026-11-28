@@ -146,7 +146,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
     const set=spec.L===1?[pick(SETS1)]:pick(SETS2),mp={x:set[0],y:set[1]||set[0]};
     terms=q.terms.map(t=>{const p={};for(const k in t.p){const nk=mp[k]||k;p[nk]=(p[nk]||0)+t.p[k];}return{c:t.c,p};});
     L=[...new Set(terms.flatMap(t=>Object.keys(t.p)))].sort();
-    orig=cp(terms);CF={c:1,p:{}};steps=[];ended=false;selI=-1;selJ=-1;msg('');startRound();
+    orig=cp(terms);ctx.q=tagFactorise(q);ctx.q.eq=fmtExpr(terms);CF={c:1,p:{}};steps=[];ended=false;selI=-1;selJ=-1;msg('');startRound();
   }
   function startRound(){lastBlk=null;lastI=-1;clearTimers();chains=terms.map(t=>[absT(t)]);tok=terms.map(()=>0);selI=-1;selJ=-1;buf='';render();closePad();}
   const shownBuf=()=>buf.replace(/\^2/g,'²').replace(/\^3/g,'³');

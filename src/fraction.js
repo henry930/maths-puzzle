@@ -40,5 +40,5 @@ REG.push({id:'fraction',name:'Fraction Factory',emoji:'🍕',color:'#e8590c',cat
  levels:['Name the fraction','Equivalent fractions','Simplify','Fraction of an amount','Add · same denominator','Add · different denominators','Add & subtract','Mixed → improper','Multiply fractions','Multiply & divide','Reverse fractions','Boss mix'],
  how:'Look at the picture, then type your answer as a fraction like 3/4 (use the / key) or a whole number. When it says “simplest form”, divide the top and bottom by the same number until you can’t any more.',
  art:'<div class="minibal">🍕</div>',
- mount(root,lv,ctx){mountQuiz(root,ctx,{QT,pool:POOL[lv-1],parse:num,slash:true,winTitle:'Fraction master!'});}});
+ mount(root,lv,ctx){mountQuiz(root,ctx,{game:'fraction',QT,pool:POOL[lv-1],parse:num,slash:true,winTitle:'Fraction master!'});}});
 })();

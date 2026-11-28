@@ -1,0 +1,13 @@
+level,name,difficulty,score,steps,ops,tags,sometimes
+1,"Name the fraction",1,1,,,fr-name-picture,
+2,"Equivalent fractions",2,1.5,,,,fr-equivalent fr-name-picture
+3,"Simplify",2,2,,,,fr-equivalent fr-simplify
+4,"Fraction of an amount",3,2.5,,,,fr-of-amount fr-simplify
+5,"Add · same denominator",2,2,,,fr-add fr-same-denom,
+6,"Add · different denominators",4,4,,,fr-add fr-diff-denom,
+7,"Add & subtract",4,4,,,fr-diff-denom,fr-add fr-sub
+8,"Mixed → improper",3,3,,,,fr-mixed fr-mixed-improper fr-of-amount
+9,"Multiply fractions",4,4,,,fr-mul,
+10,"Multiply & divide",5,4.5,,,,fr-div fr-mul
+11,"Reverse fractions",4,4,,,fr-of-amount,fr-reverse
+12,"Boss mix",5,4.8,,,,fr-add fr-diff-denom fr-div fr-mixed fr-mul fr-of-amount fr-reverse fr-sub

@@ -12,7 +12,7 @@ const LV=[
  {n:'Boss: three dice, tough goal',dice:[6,6,6],goal:250,races:8,track:4}
 ];
 function dist(dice){let d={0:1};dice.forEach(s=>{const n={};Object.keys(d).forEach(k=>{for(let f=1;f<=s;f++){n[+k+f]=(n[+k+f]||0)+d[k];}});d=n;});return d;}
-window.__dd2={dist};
+window.__dd2={dist,LV};
 const FACE=['','⚀','⚁','⚂','⚃','⚄','⚅'];
 REG.push({id:'derby',name:'Dice Derby',emoji:'🏇',color:'#e67700',cat:'Probability',
  desc:'Bet on horses numbered by dice totals. Each roll moves the horse with that number. Which horse should you back? Discover why some totals win more often!',skills:['probability','sample space','expected outcomes'],
@@ -20,7 +20,7 @@ REG.push({id:'derby',name:'Dice Derby',emoji:'🏇',color:'#e67700',cat:'Probabi
  how:'Tap horse numbers to bet 10 coins on each (up to 3 horses). Press Start: every dice roll moves the horse whose number matches the total. First to the finish wins and pays 40 coins per winning bet. Reach the goal before the races run out!',
  art:'<div class="minich">🎲🏇</div>',
  mount(root,lv,ctx){
-  const L=LV[lv-1],D=dist(L.dice),tot=Math.pow(L.dice.reduce((a,b)=>a*b,1),1),keys=Object.keys(D).map(Number).sort((a,b)=>a-b);
+  const L=LV[lv-1];ctx.q=tagDerby(L);const D=dist(L.dice),tot=Math.pow(L.dice.reduce((a,b)=>a*b,1),1),keys=Object.keys(D).map(Number).sort((a,b)=>a-b);
   let coins,races,bets,wins,pos,running,showP,over,last;
   const total=L.dice.reduce((a,b)=>a*b,1);
   function reset(){coins=100;races=0;bets=new Set();wins={};pos={};keys.forEach(k=>pos[k]=0);running=false;showP=false;over=false;last='';draw();}

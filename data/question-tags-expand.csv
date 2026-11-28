@@ -1,0 +1,41 @@
+level,name,difficulty,score,steps,ops,tags,sometimes
+1,"a(x + b)",3,2.6,,,bk-letters-1 bk-num-outside bk-terms-2,big-numbers bk-coef-inside
+2,"a(x − b)",3,3,,,bk-letters-1 bk-neg-inside bk-num-outside bk-terms-2,big-numbers bk-coef-inside
+3,"a(bx + c)",3,2.6,,,bk-coef-inside bk-letters-1 bk-num-outside bk-terms-2,big-numbers
+4,"a(bx − c)",3,3.1,,,bk-coef-inside bk-letters-1 bk-neg-inside bk-num-outside bk-terms-2,big-numbers
+5,"Bigger numbers",3,3.2,,,bk-coef-inside bk-letters-1 bk-num-outside bk-terms-2,big-numbers bk-neg-inside
+6,"Negative outside: −a(x + b)",4,3.5,,,bk-letters-1 bk-neg-outside bk-num-outside bk-terms-2,big-numbers bk-coef-inside
+7,"Negative outside: −a(x − b)",5,4.8,,,bk-letters-1 bk-neg-inside bk-neg-outside bk-neg-times-neg bk-num-outside bk-terms-2,big-numbers bk-coef-inside
+8,"Negative outside · mixed",4,4.5,,,bk-coef-inside bk-letters-1 bk-neg-outside bk-num-outside bk-terms-2,big-numbers bk-neg-inside bk-neg-times-neg
+9,"Variable outside: x(x + b)",4,3.7,,,bk-gives-square bk-letters-1 bk-terms-2 bk-var-outside,bk-coef-inside
+10,"Variable outside: x(x − b)",4,4.3,,,bk-gives-square bk-letters-1 bk-neg-inside bk-terms-2 bk-var-outside,bk-coef-inside
+11,"ax(x + b)",4,4.2,,,bk-gives-square bk-letters-1 bk-terms-2 bk-var-outside,big-numbers bk-coef-inside bk-neg-inside
+12,"−x(bx + c)",5,5.4,,,bk-coef-inside bk-gives-square bk-letters-1 bk-neg-outside bk-terms-2 bk-var-outside,bk-neg-inside bk-neg-times-neg
+13,"Three terms: a(x² + bx + c)",4,4.4,,,bk-coef-inside bk-gives-square bk-letters-1 bk-num-outside bk-sq-inside bk-terms-3,big-numbers
+14,"Three terms · mixed signs",5,4.7,,,bk-gives-square bk-letters-1 bk-num-outside bk-sq-inside bk-terms-3,big-numbers bk-coef-inside bk-neg-inside
+15,"Three terms · negative outside",6,6.3,,,bk-gives-square bk-letters-1 bk-neg-outside bk-num-outside bk-sq-inside bk-terms-3,big-numbers bk-coef-inside bk-neg-inside bk-neg-times-neg
+16,"a(bx² + cx + d)",5,4.7,,,bk-coef-inside bk-gives-square bk-letters-1 bk-num-outside bk-sq-inside bk-terms-3,big-numbers bk-neg-inside
+17,"−a(bx² ± cx ± d)",6,6.3,,,bk-coef-inside bk-gives-square bk-letters-1 bk-neg-outside bk-num-outside bk-sq-inside bk-terms-3,big-numbers bk-neg-inside bk-neg-times-neg
+18,"ax(bx + c)",4,4.2,,,bk-coef-inside bk-gives-square bk-letters-1 bk-terms-2 bk-var-outside,big-numbers bk-neg-inside
+19,"−ax(bx − c)",6,5.6,,,bk-coef-inside bk-gives-square bk-letters-1 bk-neg-outside bk-terms-2 bk-var-outside,big-numbers bk-neg-inside bk-neg-times-neg
+20,"Boss: anything goes!",5,4.8,,,bk-coef-inside bk-letters-1,big-numbers bk-gives-square bk-neg-inside bk-neg-outside bk-neg-times-neg bk-num-outside bk-sq-inside bk-terms-2 bk-terms-3 bk-var-outside
+21,"Two letters: a(x + y)",3,2.7,,,bk-letters-2 bk-num-outside bk-terms-2,
+22,"Two letters: a(x − y)",3,3.2,,,bk-letters-2 bk-neg-inside bk-num-outside bk-terms-2,
+23,"Two letters: a(bx + cy)",3,3.3,,,bk-coef-inside bk-letters-2 bk-num-outside bk-terms-2,big-numbers
+24,"Two letters · mixed signs",4,4.2,,,bk-coef-inside bk-letters-2 bk-num-outside bk-terms-2,big-numbers bk-neg-inside bk-neg-outside bk-neg-times-neg
+25,"Letter outside: x(x + y)",4,4.1,,,bk-gives-square bk-letters-2 bk-terms-2 bk-var-outside,
+26,"Letter outside: x(y ± b)",5,4.7,,,bk-letters-2 bk-terms-2 bk-var-outside,bk-coef-inside bk-neg-inside
+27,"Letter outside: y(x − y)",5,4.6,,,bk-gives-square bk-letters-2 bk-neg-inside bk-terms-2 bk-var-outside,
+28,"Negative letter outside",6,5.9,,,bk-neg-outside bk-terms-2 bk-var-outside,bk-coef-inside bk-gives-square bk-letters-1 bk-letters-2 bk-neg-inside bk-neg-times-neg
+29,"ax(y + b)",5,5.1,,,bk-letters-2 bk-terms-2 bk-var-outside,big-numbers bk-coef-inside bk-neg-inside
+30,"xy outside: xy(x + y)",5,5.4,,,bk-gives-square bk-letters-2 bk-multi-outside bk-terms-2 bk-var-outside,bk-neg-inside
+31,"Three terms: a(x + y + b)",4,4.2,,,bk-letters-2 bk-num-outside bk-terms-3,big-numbers bk-coef-inside
+32,"Three terms: a(bx ± cy ± d)",5,4.7,,,bk-coef-inside bk-letters-2 bk-num-outside bk-terms-3,big-numbers bk-neg-inside
+33,"Three terms · negative outside",6,6.4,,,bk-coef-inside bk-letters-2 bk-neg-outside bk-num-outside bk-terms-3,big-numbers bk-neg-inside bk-neg-times-neg
+34,"x(x + y + b)",6,5.8,,,bk-gives-square bk-letters-2 bk-terms-3 bk-var-outside,bk-coef-inside bk-neg-inside
+35,"y(bx + cy + d)",7,6.7,,,bk-coef-inside bk-gives-square bk-letters-2 bk-terms-3 bk-var-outside,bk-neg-inside bk-neg-outside bk-neg-times-neg
+36,"−x(bx − cy + d)",7,7.5,,,bk-coef-inside bk-gives-square bk-letters-2 bk-neg-outside bk-terms-3 bk-var-outside,bk-neg-inside bk-neg-times-neg
+37,"ax(bx + cy + d)",6,6,,,bk-coef-inside bk-gives-square bk-letters-2 bk-terms-3 bk-var-outside,big-numbers bk-neg-inside
+38,"Three letters: a(x + y + z)",4,4.4,,,bk-letters-3 bk-num-outside bk-terms-3,
+39,"Four terms: a(bx ± cy ± dz ± e)",8,7.5,,,bk-coef-inside bk-letters-3 bk-num-outside bk-terms-4,big-numbers bk-neg-inside bk-neg-outside bk-neg-times-neg
+40,"Boss: four terms, anything goes!",8,8.4,,,bk-coef-inside bk-letters-3 bk-terms-4,bk-gives-square bk-multi-outside bk-neg-inside bk-neg-outside bk-neg-times-neg bk-num-outside bk-var-outside

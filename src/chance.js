@@ -54,16 +54,16 @@ const QT={
 };
 const POOL=[['T1'],['T1','T2'],['T1','T2','T3'],['T4'],['T5'],['T5','T6'],['T6','T7'],['T8'],['T8','T9'],['T10','T11'],['T12'],['T3','T4','T6','T7','T9','T10','T11','T12']];
 function parseAns(s){s=s.trim();if(!s)return NaN;if(s.endsWith('%'))return parseFloat(s)/100;if(s.includes('/')){const[a,b]=s.split('/');return parseFloat(a)/parseFloat(b);}return parseFloat(s);}
-window.__ch={QT,parseAns};
+window.__ch={QT,parseAns,POOL};
 REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probability',
  desc:'Probability puzzles with bags of balls, spinners and two-dice grids. Answer 5 questions per level — get 4 right to pass!',skills:['probability','fractions','sample space'],
  levels:['Bags · one colour','Bags · “not” events','Bags · “or” events','Spinners','Two dice · sums','Two dice · at least / less than','Two dice · tricky events','Two picks · with replacement','Two picks · without replacement','Expected & relative frequency','Probability rules','Boss mix'],
  how:'Read the picture, then type your answer as a fraction like 3/10 (any equivalent fraction is accepted) or a decimal. You can use the keypad or your keyboard.',
  art:'<div class="minich">🎲🎲</div>',
  mount(root,lv,ctx){
-  const pool=POOL[lv-1];let qs,qi,right,cur,buf,answered;
-  function start(){qs=Array.from({length:5},()=>pick(pool));qi=0;right=0;next();}
-  function next(){cur=QT[qs[qi]]();buf='';answered=false;draw();}
+  const pool=POOL[lv-1];let qs,qi,right,cur,buf,answered,res;
+  function start(){qs=Array.from({length:5},()=>pick(pool));qi=0;right=0;res=[];next();}
+  function next(){cur=QT[qs[qi]]();buf='';answered=false;ctx.q=quizQ('chance',qs[qi],cur);draw();}
   function draw(msg,ok){
     root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.vis}</div><div class="ch-q">${cur.q}</div>
@@ -82,14 +82,15 @@ REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probab
   }
   function submit(){
     const v=parseAns(buf);if(isNaN(v)){draw('Type an answer first, e.g. 3/10');return;}
-    answered=true;const ok=Math.abs(v-cur.ans)<1e-6;if(ok)right++;
+    answered=true;const ok=Math.abs(v-cur.ans)<1e-6;if(ok)right++;res.push({qt:qs[qi],ok});ctx.log(ok?'right':'wrong',ok?{}:{typed:buf,expect:cur.ans,err:'wrong_value'});
     if(cur.vis.includes('ch-grid')||cur.hl){const hl=cur.hl;if(hl)cur.vis=grid(hl);}
     draw((ok?'✅ Correct! ':'❌ Not quite. ')+cur.ex,ok);
   }
   function advance(){
     if(qi<4){qi++;next();return;}
+    {ctx.q=levelQ(ctx.id,ctx.lv);ctx.perf={right,of:5,wrong:res.filter(r=>!r.ok).map(r=>r.qt)};}
     if(right>=4){ctx.win('Probability pro!',`You got ${right}/5 right.`,start,'Play again');}
-    else{root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — have another go!</div><div class="toolrow"><button class="btn" id="rt">Try again ⟲</button></div></div>`;$('#rt').onclick=start;}
+    else{ctx.log('fail',ctx.perf);root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — have another go!</div><div class="toolrow"><button class="btn" id="rt">Try again ⟲</button></div></div>`;$('#rt').onclick=start;}
   }
   ctx.keys=e=>{if(/^[0-9./%]$/.test(e.key))press(e.key==='%'?'%':e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter')press('ok');};
   start();

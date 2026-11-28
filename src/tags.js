@@ -38,7 +38,8 @@ const TAXO={
 const TAXO_GROUPS={op:'Operation',steps:'Length',shape:'Shape',num:'Numbers'};
 const tagLabel=t=>(TAXO[t]||{en:t}).en;
 const tagChips=tags=>(tags||[]).filter(t=>TAXO[t]&&!TAXO[t].hide).map(t=>`<span class="qt qt-${TAXO[t].g}">${esc(TAXO[t].en)}</span>`).join('');
-const diffBar=d=>`<span class="qd" title="Difficulty ${d}/10"><b>${'●'.repeat(Math.round(d/2))}</b>${'○'.repeat(5-Math.round(d/2))}</span>`;
+const tagChipsSome=tags=>(tags||[]).filter(t=>TAXO[t]&&!TAXO[t].hide).slice(0,8).map(t=>`<span class="qt qt-some">${esc(TAXO[t].en)}</span>`).join('');
+const diffBar=d=>`<span class="qdiff" title="Difficulty ${d}/10"><b>${'●'.repeat(Math.round(d/2))}</b>${'○'.repeat(5-Math.round(d/2))}</span>`;
 const _lmCache={};
 /* level-level meta, cached; null when a game has not been tagged yet */
 function levelMeta(G,lv){const k=G.id+'#'+lv;if(!(k in _lmCache)){try{_lmCache[k]=G.qmeta?G.qmeta(lv):null;}catch(e){_lmCache[k]=null;}}return _lmCache[k];}
@@ -46,8 +47,10 @@ function levelMeta(G,lv){const k=G.id+'#'+lv;if(!(k in _lmCache)){try{_lmCache[k
    tags present only sometimes go to `sometimes`. gen() must return a question meta (see above). */
 function levelFromSamples(gen,n=80){
   const cnt={};let steps=[],diff=0;
-  for(let i=0;i<n;i++){const m=gen();m.tags.forEach(t=>cnt[t]=(cnt[t]||0)+1);steps.push(m.steps);diff+=m.score||m.diff;}
+  for(let i=0;i<n;i++){const m=gen();m.tags.forEach(t=>cnt[t]=(cnt[t]||0)+1);if(m.steps!=null)steps.push(m.steps);diff+=m.score||m.diff;}
   const all=Object.keys(cnt),tags=all.filter(t=>cnt[t]===n).sort(),sometimes=all.filter(t=>cnt[t]<n&&cnt[t]>=n*.2).sort();
   steps.sort((a,b)=>a-b);
-  return{tags,sometimes,ops:tags.filter(t=>/^op-/.test(t)).map(t=>t.slice(3)),steps:steps[n>>1],diff:Math.max(1,Math.min(10,Math.round(diff/n))),score:Math.round(diff/n*10)/10};
+  return{tags,sometimes,ops:tags.filter(t=>/^op-/.test(t)).map(t=>t.slice(3)),steps:steps.length?steps[steps.length>>1]:undefined,diff:Math.max(1,Math.min(10,Math.round(diff/n))),score:Math.round(diff/n*10)/10};
 }
+/* what a finished quiz-style level logs: every skill the level can ask about */
+function levelQ(id,lv){const m=levelMeta(REG.find(x=>x.id===id),lv);return m?{v:1,level:true,tags:[...new Set([...m.tags,...(m.sometimes||[])])].sort(),diff:m.diff,score:m.score,types:m.types}:null;}

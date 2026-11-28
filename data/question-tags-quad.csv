@@ -1,0 +1,25 @@
+level,name,difficulty,score,steps,ops,tags,sometimes
+1,"x² + 5x + 6 · all positive",2,2,,,qd-all-positive qd-monic,
+2,"All positive · up to 6",2,2,,,qd-all-positive qd-monic,
+3,"All positive · up to 9",2,2.1,,,qd-all-positive qd-monic,
+4,"All positive · up to 12",2,2.4,,,qd-all-positive qd-monic,big-numbers
+5,"Minus in the middle: x² − 5x + 6",3,3,,,qd-monic qd-neg-middle,
+6,"Minus in the middle · up to 8",3,3,,,qd-monic qd-neg-middle,
+7,"Minus in the middle · up to 10",3,3.4,,,qd-monic qd-neg-middle,big-numbers
+8,"Minus in the middle · up to 12",4,3.5,,,qd-monic qd-neg-middle,big-numbers
+9,"Minus at the end: x² + x − 6",4,3.5,,,qd-monic qd-neg-last,
+10,"Minus at the end · up to 8",4,3.5,,,qd-monic qd-neg-last,
+11,"Minus at the end · up to 10",4,3.8,,,qd-monic qd-neg-last,big-numbers
+12,"Minus at the end · up to 12",4,4,,,qd-monic qd-neg-last,big-numbers
+13,"Difference of two squares: x² − 9",3,2.8,,,qd-dos qd-monic,big-numbers
+14,"Difference of two squares · up to 12",3,3,,,qd-dos qd-monic,big-numbers
+15,"Mixed signs · all kinds",3,3.5,,,qd-monic,big-numbers qd-all-positive qd-neg-last qd-neg-middle
+16,"Mixed · harder numbers",4,3.7,,,qd-monic,big-numbers qd-all-positive qd-neg-last qd-neg-middle
+17,"Number in front: 2x² + 7x + 6",5,4.5,,,qd-all-positive qd-lead-coef,
+18,"Number in front · up to 3x²",5,5.3,,,qd-all-positive qd-lead-coef,
+19,"Number in front · minus in the middle",6,6.4,,,qd-lead-coef qd-neg-middle,
+20,"Number in front · mixed signs",7,6.8,,,qd-lead-coef qd-neg-last,
+21,"Up to 4x² · any signs",6,6.4,,,qd-lead-coef,qd-all-positive qd-neg-last qd-neg-middle
+22,"Number in front: 4x² − 9",6,5.7,,,qd-dos qd-lead-coef,
+23,"Boss: anything goes!",6,6.5,,,qd-lead-coef,big-numbers qd-all-positive qd-neg-last
+24,"Boss 2: the hardest",7,6.8,,,qd-lead-coef,big-numbers qd-all-positive qd-neg-last qd-neg-middle

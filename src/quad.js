@@ -64,7 +64,7 @@ REG.push({id:'quad',name:'Quadratic Factoriser',emoji:'🔷',color:'#d6336c',cat
   const sp=LV[lv-1];let Q,stage,sl,sel,buf,pair,cfg;
   root.innerHTML=`<div class="qd"><div class="qd-top" id="qt"></div><div class="qd-title" id="qti"></div><div class="qd-row" id="qr"></div><div class="qd-split" id="qs"></div><div class="msg" id="qm">&nbsp;</div><div class="ex-pad" id="qpad"></div><div class="toolrow"><button class="btn alt" id="qh">💡 Hint</button><button class="btn alt" id="qn">New question ⏭</button></div></div>`;
   const msg=h=>{$('#qm').innerHTML=h||'&nbsp;';};
-  function build(){Q=gen(sp);stage=1;pair=null;msg('');setStage();}
+  function build(){Q=gen(sp);ctx.q=tagQuad(Q);ctx.q.eq=poly(Q.a,Q.b,Q.c);stage=1;pair=null;msg('');setStage();}
   function setStage(){
     if(stage===1){cfg={n:2};}else cfg={n:Q.m===1&&Q.n===1&&sp.a1?2:4};
     sl=Array(cfg.n).fill(null);sel=0;buf='';render();

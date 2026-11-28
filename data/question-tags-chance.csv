@@ -1,0 +1,13 @@
+level,name,difficulty,score,steps,ops,tags,sometimes
+1,"Bags · one colour",1,1,,,pr-bag,
+2,"Bags · “not” events",2,1.5,,,pr-bag,pr-not
+3,"Bags · “or” events",2,2,,,pr-bag,pr-not pr-or
+4,"Spinners",2,2,,,pr-spinner,
+5,"Two dice · sums",4,4,,,pr-sample-space pr-two-dice,
+6,"Two dice · at least / less than",4,4,,,pr-sample-space pr-two-dice,pr-at-least
+7,"Two dice · tricky events",5,4.5,,,pr-sample-space pr-two-dice,pr-at-least
+8,"Two picks · with replacement",5,5,,,pr-and pr-bag pr-independent pr-with-replacement,
+9,"Two picks · without replacement",6,5.5,,,pr-and pr-bag,pr-independent pr-with-replacement pr-without-replacement
+10,"Expected & relative frequency",4,3.5,,,,pr-expected pr-relative-freq
+11,"Probability rules",5,5,,,,pr-and pr-independent pr-mutually-exclusive pr-not pr-or pr-ratio
+12,"Boss mix",4,4,,,,pr-and pr-at-least pr-bag pr-expected pr-independent pr-mutually-exclusive pr-not pr-or pr-ratio pr-relative-freq pr-sample-space pr-spinner pr-two-dice pr-without-replacement

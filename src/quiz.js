@@ -1,8 +1,8 @@
 // shared 5-question quiz engine (pass 4/5)
 function mountQuiz(root,ctx,o){
-  let qs,qi,right,cur,buf,answered;
-  const start=()=>{qs=Array.from({length:5},()=>pick(o.pool));qi=0;right=0;next();};
-  const next=()=>{cur=o.QT[qs[qi]]();buf='';answered=false;draw();};
+  let qs,qi,right,cur,buf,answered,res;
+  const start=()=>{qs=Array.from({length:5},()=>pick(o.pool));qi=0;right=0;res=[];next();};
+  const next=()=>{cur=o.QT[qs[qi]]();buf='';answered=false;ctx.q=o.game?quizQ(o.game,qs[qi],cur):null;draw();};
   function draw(msg,ok){
     root.innerHTML=`<div class="ch"><div class="statrow"><span>Question ${qi+1}/5</span><span>✅ ${right} correct (need 4)</span></div>
      <div class="ch-vis">${cur.vis||''}</div><div class="ch-q">${cur.q}</div>
@@ -20,15 +20,17 @@ function mountQuiz(root,ctx,o){
   function submit(){
     const p=o.parse(buf);if(!p){draw(o.slash?'Type an answer first, e.g. 3/10':'Type an answer first');return;}
     answered=true;
-    let ok=Math.abs(p.v-cur.ans)<1e-6;
+    const val=Math.abs(p.v-cur.ans)<1e-6;let ok=val;
     if(ok&&cur.simplest&&p.n!=null&&gcd(p.n,p.d)!==1)ok=false,cur.ex='Right value, but the answer must be in its simplest form. '+cur.ex;
     if(ok)right++;
+    res.push({qt:cur.k||qs[qi],ok});ctx.log(ok?'right':'wrong',ok?{}:{typed:buf,expect:cur.ans,err:val?'not_simplified':'wrong_value'});
     draw((ok?'✅ Correct! ':'❌ Not quite. ')+cur.ex,ok);
   }
   function advance(){
     if(qi<4){qi++;next();return;}
+    {ctx.q=levelQ(ctx.id,ctx.lv);ctx.perf={right,of:5,wrong:res.filter(r=>!r.ok).map(r=>r.qt)};}
     if(right>=4)ctx.win(o.winTitle||'Well done!',`You got ${right}/5 right.`,start,'Play again');
-    else{root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — have another go!</div><div class="toolrow"><button class="btn" id="rt">Try again</button></div></div>`;$('#rt').onclick=start;}
+    else{ctx.log('fail',ctx.perf);root.innerHTML=`<div class="ch"><div class="big-emo" style="text-align:center">💪</div><div class="ch-q" style="text-align:center">You got ${right}/5. You need 4 to pass — have another go!</div><div class="toolrow"><button class="btn" id="rt">Try again</button></div></div>`;$('#rt').onclick=start;}
   }
   ctx.keys=e=>{if(/^[0-9.]$/.test(e.key)||(o.slash&&e.key==='/'))press(e.key);else if(e.key==='Backspace'){e.preventDefault();press('del');}else if(e.key==='Enter')press('ok');};
   start();

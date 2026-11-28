@@ -1,0 +1,13 @@
+level,name,difficulty,score,steps,ops,tags,sometimes
+1,"Gradient only (1 star)",2,2.2,,,ln-gradient-only,ln-neg-gradient
+2,"Gradient only (2 stars)",2,2.4,,,ln-gradient-only,ln-steep
+3,"Negative gradients",3,2.8,,,ln-gradient-only,ln-neg-gradient ln-steep
+4,"Intercept only",2,2.4,,,ln-intercept-only,ln-neg-gradient ln-neg-intercept
+5,"Intercept only · steeper",3,2.9,,,ln-intercept-only,ln-neg-gradient ln-neg-intercept ln-steep
+6,"Both m and c",4,4.2,,,ln-both,ln-neg-gradient ln-neg-intercept
+7,"Both · steeper & negative",4,4.3,,,ln-both,ln-neg-gradient ln-neg-intercept ln-steep
+8,"Fractional gradients",6,5.5,,,ln-both ln-frac-gradient,ln-neg-gradient ln-neg-intercept
+9,"Three stars",5,4.7,,,ln-both,ln-frac-gradient ln-neg-gradient ln-neg-intercept
+10,"Three stars · tricky",6,5.6,,,ln-both ln-frac-gradient,ln-neg-gradient ln-neg-intercept
+11,"Horizontal lines",4,3.7,,,ln-both ln-flat,ln-neg-intercept
+12,"Boss line",7,7.2,,,ln-both,ln-frac-gradient ln-neg-gradient ln-neg-intercept

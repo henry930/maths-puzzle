@@ -1,0 +1,19 @@
+level,name,difficulty,score,steps,ops,tags,sometimes
+1,"Numbers only: 6x + 9",1,1,,,fc-number-only fc-terms-2,
+2,"Numbers only · with minus",1,1.3,,,fc-number-only fc-terms-2,fc-neg-terms
+3,"Numbers only · bigger numbers",2,1.7,,,fc-number-only fc-terms-2,big-numbers fc-neg-terms
+4,"Numbers only · two letters",3,2.6,,,fc-number-only fc-terms-2 fc-two-letters,big-numbers fc-neg-terms
+5,"Take out the letter: x² + 3x",2,2,,,fc-letter-only fc-terms-2,
+6,"Number AND letter: 4x² + 6x",3,3.3,,,fc-number-and-letter fc-terms-2,fc-neg-terms
+7,"Two letters: 6xy + 9x",5,4.5,,,fc-number-and-letter fc-terms-2 fc-two-letters,fc-neg-terms
+8,"Three terms · numbers only",3,2.7,,,fc-number-only fc-terms-3,fc-neg-terms
+9,"Three terms · with a letter",5,4.7,,,fc-number-and-letter fc-terms-3,fc-neg-terms
+10,"A squared letter: x²",5,4.9,,,fc-squared-letter fc-terms-2,fc-neg-terms fc-number-and-letter fc-two-letters
+11,"Either letter can be taken out",4,4.4,,,fc-number-and-letter fc-terms-2,big-numbers fc-neg-terms fc-two-letters
+12,"Take out xy",5,4.5,,,fc-terms-2 fc-two-letters,big-numbers fc-neg-terms fc-number-and-letter
+13,"Three terms · two letters",6,5.9,,,fc-number-and-letter fc-terms-3 fc-two-letters,fc-neg-terms
+14,"Bigger numbers · up to 12",6,6.3,,,fc-number-and-letter fc-terms-3,big-numbers fc-neg-terms fc-two-letters
+15,"Four terms",7,7.2,,,fc-number-and-letter fc-terms-4 fc-two-letters,fc-neg-terms
+16,"Four terms · two letters",7,7.3,,,fc-number-and-letter fc-terms-4 fc-two-letters,big-numbers fc-neg-terms
+17,"Squares and products",7,6.7,,,fc-number-and-letter fc-terms-3 fc-two-letters,big-numbers fc-neg-terms fc-squared-letter
+18,"Boss: anything goes!",8,7.6,,,fc-number-and-letter fc-terms-4 fc-two-letters,big-numbers fc-neg-terms

@@ -34,7 +34,7 @@ REG.push({id:'lines',name:'Line Hunter',emoji:'📈',color:'#0c8599',cat:'Algebr
  mount(root,lv,ctx){
   let P,m,c,done;
   const S=34,O=7*S+10;
-  function newQ(){P=gen(lv);const s=P.s;m=s.fixM?P.m:0;c=s.fixC?P.c:0;if(s.fixM)m=P.m;done=false;draw();}
+  function newQ(){P=gen(lv);ctx.q=tagLine(P);const s=P.s;m=s.fixM?P.m:0;c=s.fixC?P.c:0;if(s.fixM)m=P.m;done=false;draw();}
   function ys(x){return m*x+c}
   function ok(){return P.st.every(p=>Math.abs(ys(p[0])-p[1])<1e-9);}
   function draw(msg){

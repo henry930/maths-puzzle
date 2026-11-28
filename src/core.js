@@ -80,7 +80,7 @@ function openGame(id,lv,fromRoute){
   const pills=$('#glevels');pills.innerHTML='';pills.classList.toggle('long',N>24);pills.classList.remove('open');{const lb=$('#lvbtn');lb.textContent='Levels '+lv+'/'+N+' ▾';lb.onclick=()=>{pills.classList.toggle('open');if(N>24&&pills.classList.contains('open')){const c=pills.children[lv-1];if(c)pills.scrollLeft=c.offsetLeft-pills.clientWidth/2+c.offsetWidth/2;}};}
   g.levels.forEach((n,i)=>{const b=el('button','pill'+(i+1===lv?' on':'')+(isDone(id,i+1)?' dn':''),String(i+1));b.title=n;b.onclick=()=>openGame(id,i+1);pills.appendChild(b);});
   if(N>24){const cur=pills.children[lv-1];if(cur)setTimeout(()=>{try{pills.scrollLeft=cur.offsetLeft-pills.clientWidth/2+cur.offsetWidth/2}catch(e){}},0);}
-  {const lm=levelMeta(g,lv);$('#glvname').innerHTML=`<b>Level ${lv}/${N}</b> · ${g.levels[lv-1]}`+(lm?`<div class="qts">${diffBar(lm.diff)}${tagChips(lm.tags)}</div>`:'');}
+  {const lm=levelMeta(g,lv);$('#glvname').innerHTML=`<b>Level ${lv}/${N}</b> · ${g.levels[lv-1]}`+(lm?`<div class="qts">${diffBar(lm.diff)}${tagChips(lm.tags)}${lm.tags.length?'':tagChipsSome(lm.sometimes)}</div>`:'');}
   const root=$('#groot');root.innerHTML='';
   ctx={id,lv,N,t0:Date.now(),cleanups:[],keys:null,q:null,perf:null,
     log(kind,detail){logEvent(id,lv,kind,this.q?Object.assign({q:this.q},detail):detail);},

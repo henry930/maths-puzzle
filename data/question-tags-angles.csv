@@ -1,0 +1,13 @@
+level,name,difficulty,score,steps,ops,tags,sometimes
+1,"Estimate angles",2,2,,,an-estimate,
+2,"Angles on a straight line",1,1,,,an-straight-line,
+3,"Straight line & around a point",2,1.5,,,,an-around-point an-straight-line
+4,"Angles in a triangle",2,2,,,an-triangle,
+5,"Isosceles triangles",3,2.5,,,an-triangle,an-isosceles
+6,"Quadrilaterals",3,3,,,an-quadrilateral,
+7,"Crossing lines & exterior angles",4,3.5,,,,an-crossing-lines an-exterior an-straight-line an-triangle an-vertically-opposite
+8,"Parallel lines",5,5,,,an-parallel,an-alternate an-co-interior an-corresponding
+9,"Polygons",5,5,,,,an-polygon-exterior an-polygon-interior an-polygon-sum
+10,"Mixed angle rules",5,4.7,,,,an-alternate an-co-interior an-corresponding an-exterior an-parallel an-polygon-exterior an-polygon-interior an-polygon-sum an-triangle
+11,"Angles with algebra",7,6.5,,,an-algebra,an-straight-line an-triangle
+12,"Boss mix",4,4.2,,,,an-algebra an-alternate an-around-point an-co-interior an-corresponding an-crossing-lines an-exterior an-isosceles an-parallel an-polygon-exterior an-polygon-interior an-polygon-sum an-quadrilateral an-straight-line an-triangle an-vertically-opposite

@@ -1,0 +1,13 @@
+level,name,difficulty,score,steps,ops,tags,sometimes
+1,"Percent of a grid",1,1,,,pc-read-grid,
+2,"10%, 25%, 50%…",2,1.5,,,,pc-easy pc-of-amount pc-read-grid
+3,"Convert fractions & decimals",3,2.5,,,,pc-convert pc-easy pc-from-decimal pc-from-fraction pc-of-amount
+4,"Any percentage of an amount",3,3,,,,pc-any pc-convert pc-from-decimal pc-from-fraction pc-of-amount
+5,"Sale prices",3,3,,,,pc-any pc-decrease pc-of-amount pc-sale
+6,"Increase (VAT, pay rises)",4,3.5,,,,pc-decrease pc-increase pc-sale pc-vat
+7,"Test scores as %",4,3.5,,,,pc-as-percent pc-increase pc-vat
+8,"Percentage change",4,4,,,,pc-as-percent pc-change
+9,"Reverse percentages",6,6,,,pc-increase pc-reverse,
+10,"Reverse · sales",6,6,,,pc-reverse,pc-decrease pc-increase
+11,"Interest",6,6,,,pc-interest,pc-compound-interest pc-simple-interest
+12,"Boss mix",5,5,,,,pc-as-percent pc-change pc-compound-interest pc-decrease pc-increase pc-interest pc-reverse pc-simple-interest pc-vat
