@@ -23,7 +23,7 @@ const H=v=>frH(fmtV(v));
 const pw=(b,e)=>`${b}<sup>${e}</sup>`;
 const lg=(b,x)=>`log<sub>${b}</sub> ${x}`;
 const log2=x=>Math.log(x)/Math.LN2;
-const tiles=(b,n)=>Array.from({length:n},()=>`<b class="tile">${b}</b>`).join('<span class="tx">×</span>');
+const tiles=(b,n)=>Array.from({length:n},()=>`<b class="tile">${b}</b>`).join('<span class="tmul">×</span>');
 const par=s=>`(${s})`;
 function parseT(buf){const s=String(buf).trim().replace('−','-');if(!s||s==='-')return null;const m=/^(-?)(\d*\.?\d+)(?:\/(\d*\.?\d+))?$/.exec(s);if(!m)return null;
   const a=parseFloat(m[2]),d=m[3]!=null?parseFloat(m[3]):1;if(!d)return null;return(m[1]?-1:1)*a/d;}
@@ -35,57 +35,63 @@ const num=s=>{const v=parseT(s);return v==null?null:{v,n:null,d:1};};
    tl(v) = left − right in "steps" for a typed value v, and is 0 exactly when the balance is level. */
 function Q(o){
   const q={k:o.k,q:o.q,ans:o.ans,ex:o.ex,forms:o.forms,form:0,start:o.start,build:o.build,hist:[],nopad:!!o.build};
-  const bs=o.build,eT=e=>e<0?'−'+(-e):String(e),eh=e=>e===0?'1':e===1?bs:pw(bs,eT(e));
+  const bs=o.build,eh=e=>e===0?'1':e===1?bs:pw(bs,eT(e));
+  /* the scene uses the Balance Scale game's own classes: .sc-top / .sc-box / .sc-wts / .wt (weights), .sc-eq / .el / .otg (working lines),
+     .sc-scene / .sc-beam / .sc-pan / .sc-tiles / .t (tiles) / .sc-dish / .sc-post / .sc-base (+ .lv.go buttons) */
   q.visf=function(buf,answered,ok){
     const f=q.forms[q.form||0];
     let v=answered?q.ans:parseT(buf);if(v==null&&q.start!=null&&!answered)v=q.start;
     const T=answered?H(q.ans):(q.start!=null&&v!=null?H(v):typedH(buf));
     const tl=v==null?0:f.tl(v),level=v!=null&&Math.abs(tl)<1e-7;
-    const ang=v==null?0:-Math.max(-16,Math.min(16,tl*7));
-    q._a2=ang;
+    const ang=v==null?0:Math.max(-16,Math.min(16,tl*7));   /* same sign as Balance Scale: positive = left pan lower */
     const prev=q._a==null?0:q._a;q._a=ang;
-    const gl=v==null&&String(f.L(T,v)).includes('?'),gr=v==null&&String(f.R(T,v)).includes('?');   /* dashed outline on the pan that still holds the “?” */
-    const tile=(x,g,c)=>`<div class="bw-t ${g?'q':''} ${c||''}">${c==='blk'?x:`<span>${x}</span>`}</div>`;
-    const buildBits=o.build?`<div class="bk-log" id="bklog">${q.hist.length?q.hist.map(x=>`<div class="el"><span class="otg ${x.d>0?'ml':'dv'}">${x.d>0?'×':'÷'}${bs}</span> ${eh(x.from)} ${x.d>0?'×':'÷'} ${bs} = <b>${eh(x.to)}</b></div>`).join(''):`<div class="el old">${eh(q.start)} — add or take away a block to start</div>`}</div>
-      <div class="bk-tray"><button class="bk src" data-d="1" ${answered?'disabled':''}>${bs}</button>${o.neg?`<button class="bk src inv" data-d="-1" ${answered?'disabled':''}>÷${bs}</button>`:''}
-       ${answered?'':`<button class="btn alt bk-un" id="bkun">↶</button><button class="btn bk-ck" id="chk">Check ✓</button>`}
-       <div class="bk-hint">Drag or tap a block to add it · tap a block on the pan to remove it</div></div>`:'';
-    return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}
-     <div class="bw ${level?'lv':''}" data-a="${ang}" data-p="${prev}"><svg class="bw-svg"></svg><div class="bw-post"></div><div class="bw-beam"></div>
-       <div class="bw-pan" data-s="L">${tile(f.L(T,v),gl)}<div class="bw-dish"></div></div>
-       <div class="bw-pan" data-s="R">${tile(f.R(T,v),gr,f.blocks?'blk':'')}<div class="bw-dish"></div></div><div class="bw-base"></div></div>
-     ${o.build?buildBits:`<div class="pw-eq">${f.L(T,v)} <b>=</b> ${f.R(T,v)}${level?' <span class="pw-ok">level ✓</span>':''}</div>
-     ${q.forms.length>1?`<button class="btn alt pw-tg" id="ftg">↔ ${f.btn}</button>`:''}`}`;
+    const Lh=String(f.L(T,v)),Rh=String(f.R(T,v));
+    const gl=v==null&&Lh.includes('?'),gr=v==null&&Rh.includes('?');   /* dashed outline on the pan that still holds the “?” */
+    const chip=(x,g,c)=>`<div class="t chip ${g?'q':c||'tn'} big">${`<span>${x}</span>`}</div>`;
+    const left=chip(Lh,gl,o.build?bcls(bs):'tn'),right=f.blocks?Rh:chip(Rh,gr,'tn');
+    let top;
+    if(o.build){
+      const lines=q.hist.map((x,i)=>`<div class="el ${i===q.hist.length-1&&!level?'last':'old'}"><span class="otg ${x.d>0?'ml':'dv'}">${x.d>0?'×':'÷'}${bs}</span>${eh(x.from)} ${x.d>0?'×':'÷'} ${bs} <b>=</b> ${eh(x.to)}</div>`).join('');
+      top=`<div class="sc-top"><div class="sc-box"><div class="sc-lab">Blocks</div><div class="sc-wts"><div class="wt ${bcls(bs)==='tx'?'xw':'uw'} src" data-d="1">${bs}</div>${o.neg?`<div class="wt ng src" data-d="-1">÷${bs}</div>`:''}</div></div>
+        <div class="sc-eq" id="bklog"><div class="el orig">${Lh} <b class="eqn">≠</b> ${eh(q.start)}</div>${lines}${level?`<div class="el fin">✅ ${Lh} = ${eh(v)}</div>`:''}</div></div>`;
+    }else top=`<div class="sc-top"><div class="sc-eq one"><div class="el orig">${Lh} <b class="${level?'eqb':'eqn'}">=</b> ${Rh}</div>${level?'<div class="el fin">✅ level</div>':''}</div></div>`;
+    let ctl;
+    if(o.build)ctl=answered?'':`<button class="lv go ml" id="bkmul">×${bs}</button>${o.neg?`<button class="lv go dv" id="bkdiv">÷${bs}</button>`:''}<button class="lv go" id="bkun" style="background:#868e96">↶</button><button class="lv go" id="chk" style="background:#2f9e44">Check ✓</button>`;
+    else ctl=q.forms.length>1?`<button class="lv go dv" id="ftg">↔ ${f.btn}</button>`:'';
+    return `${o.ladder?`<div class="pw-ladder">${o.ladder}</div>`:''}<div class="px ${level?'lv':''}">${top}
+     <div class="sc-scene" data-a="${ang}" data-p="${prev}"><svg class="sc-svg"></svg><div class="sc-beam"><i></i></div>
+      <div class="sc-pan" data-p="L"><div class="sc-tiles">${left}</div><div class="sc-dish"></div></div><div class="sc-pan" data-p="R"><div class="sc-tiles">${right}</div><div class="sc-dish"></div></div>
+      <div class="sc-post"></div><div class="sc-base">${ctl}</div></div></div>`;
   };
-  /* same geometry as the Balance Scale game: the beam turns about the pin, each pan hangs from its end by two strings and stays upright */
-  q.after=(root,api)=>{const sc=root.querySelector('.bw');if(!sc)return;cancelAnimationFrame(q._raf);
-    const beam=sc.querySelector('.bw-beam'),svg=sc.querySelector('.bw-svg'),pans=[...sc.querySelectorAll('.bw-pan')];
+  q.after=(root,api)=>{const sc=root.querySelector('.sc-scene');if(!sc)return;cancelAnimationFrame(q._raf);
+    const beam=sc.querySelector('.sc-beam'),svg=sc.querySelector('.sc-svg'),pans=[...sc.querySelectorAll('.sc-pan')];
     const tgt=+sc.dataset.a;let ang=+sc.dataset.p,vel=0;
-    const place=()=>{const w=sc.clientWidth||320,pw=Math.max(100,Math.round(w*.40)),h=(w-pw)/2,cx=w/2,fy=24,r=ang*Math.PI/180,c=Math.cos(r),sn=Math.sin(r);
-      const ex=[[cx-h*c,fy-h*sn],[cx+h*c,fy+h*sn]];
-      beam.style.width=(2*h+22)+'px';beam.style.left=(cx-h-11)+'px';beam.style.top=(fy-6)+'px';beam.style.transform=`rotate(${ang}deg)`;
-      let sv='';pans.forEach((p,i)=>{const px=ex[i][0]-pw/2,py=ex[i][1]+24,ph=p.offsetHeight||42;p.style.width=pw+'px';p.style.left=px+'px';p.style.top=py+'px';
-        sv+=`<line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+6}" y2="${py+ph-4}" class="sc-str"/><line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+pw-6}" y2="${py+ph-4}" class="sc-str"/><circle cx="${ex[i][0]}" cy="${ex[i][1]}" r="4" class="sc-pin"/>`;});
-      svg.setAttribute('viewBox',`0 0 ${w} ${sc.clientHeight||200}`);svg.innerHTML=sv+`<circle cx="${cx}" cy="${fy}" r="9" class="sc-pin big"/>`;};
+    const place=()=>{const w=sc.clientWidth||320,pw=Math.round(w*.42),h=(w-pw)/2,cx=w/2,fy=34,r=ang*Math.PI/180,c=Math.cos(r),sn=Math.sin(r);
+      const ex=[[cx-h*c,fy+h*sn],[cx+h*c,fy-h*sn]];
+      beam.style.width=(2*h+24)+'px';beam.style.left=(cx-h-12)+'px';beam.style.top=(fy-6)+'px';beam.style.transform=`rotate(${-ang}deg)`;
+      let sv='';pans.forEach((p,i)=>{const px=ex[i][0]-pw/2,py=ex[i][1]+30,ph=p.offsetHeight||70;p.style.width=pw+'px';p.style.left=px+'px';p.style.top=py+'px';
+        sv+=`<line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+10}" y2="${py+ph-5}" class="sc-str"/><line x1="${ex[i][0]}" y1="${ex[i][1]}" x2="${px+pw-10}" y2="${py+ph-5}" class="sc-str"/><circle cx="${ex[i][0]}" cy="${ex[i][1]}" r="4" class="sc-pin"/>`;});
+      svg.setAttribute('viewBox',`0 0 ${w} ${sc.clientHeight||260}`);svg.innerHTML=sv+`<circle cx="${cx}" cy="${fy}" r="9" class="sc-pin big"/>`;};
     const step=()=>{vel+=(tgt-ang)*.11;vel*=.84;ang+=vel;place();if(Math.abs(vel)>.01||Math.abs(tgt-ang)>.04)q._raf=requestAnimationFrame(step);else{ang=tgt;place();}};
     place();q._raf=requestAnimationFrame(step);
-    if(q.build&&api)bindBuild(root,api,sc,pans[1]);};
-  /* build mode: drag blocks onto the right pan (or tap) to multiply / divide; every operation adds a line to the log */
-  function bindBuild(root,api,sc,pan){
+    if(q.build&&api)bindBuild(root,api,pans[1]);};
+  /* build mode: drag a block onto the right pan (or tap it / press ×a or ÷a) to multiply or divide; each operation adds a line to the working */
+  function bindBuild(root,api,pan){
     const lg=root.querySelector('#bklog');if(lg)lg.scrollTop=1e5;
-    if(root.querySelector('.bk.src[disabled]'))return;
+    if(!root.querySelector('#chk'))return;
     const now=()=>{const v=parseT(api.buf());return v==null?q.start:v;};
     const op=d=>{const e=now();q.hist.push({d,from:e,to:e+d});api.set(String(e+d));};
-    const over=(x,y)=>{const p=pan.getBoundingClientRect();return x>p.left-30&&x<p.right+30&&y>p.top-40&&y<p.bottom+30;};
+    const over=(x,y)=>{const p=pan.getBoundingClientRect();return x>p.left-30&&x<p.right+30&&y>p.top-50&&y<p.bottom+30;};
     const drag=(el,onDrop,onTap)=>el.addEventListener('pointerdown',ev=>{ev.preventDefault();const sx=ev.clientX,sy=ev.clientY;let g=null,moved=false;
-      const mv=e=>{if(!moved&&Math.hypot(e.clientX-sx,e.clientY-sy)>8){moved=true;g=document.createElement('div');g.className='bk gh'+(el.classList.contains('inv')?' inv':'');g.textContent=el.textContent;document.body.appendChild(g);}
+      const mv=e=>{if(!moved&&Math.hypot(e.clientX-sx,e.clientY-sy)>8){moved=true;g=document.createElement('div');g.className='ghost '+(el.classList.contains('ng')?'ng ':'')+bcls(bs);g.textContent=el.textContent;document.body.appendChild(g);el.classList.add('lifted');}
         if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';pan.classList.toggle('hot',over(e.clientX,e.clientY));}};
-      const up=e=>{window.removeEventListener('pointermove',mv);window.removeEventListener('pointercancel',up);if(g)g.remove();pan.classList.remove('hot');if(!moved)onTap();else onDrop(over(e.clientX,e.clientY));};
+      const up=e=>{window.removeEventListener('pointermove',mv);if(g)g.remove();el.classList.remove('lifted');pan.classList.remove('hot');if(!moved)onTap();else onDrop(over(e.clientX,e.clientY));};
       window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up,{once:true});window.addEventListener('pointercancel',up,{once:true});});
-    root.querySelectorAll('.bk.src').forEach(el=>{const d=+el.dataset.d;drag(el,hit=>{if(hit)op(d);},()=>op(d));});
-    pan.querySelectorAll('.bk:not(.one)').forEach(el=>{const rm=()=>{const e=now();op(e>0?-1:1);};drag(el,hit=>{if(!hit)rm();},rm);});
+    root.querySelectorAll('.wt.src').forEach(el=>{const d=+el.dataset.d;drag(el,hit=>{if(hit)op(d);},()=>op(d));});
+    pan.querySelectorAll('.t.pb').forEach(el=>{const rm=()=>{const e=now();op(e>0?-1:1);};drag(el,hit=>{if(!hit)rm();},rm);});
+    const m=root.querySelector('#bkmul'),dv=root.querySelector('#bkdiv');if(m)m.onclick=()=>op(1);if(dv)dv.onclick=()=>op(-1);
     const un=root.querySelector('#bkun');if(un)un.onclick=()=>{const h=q.hist.pop();if(h)api.set(String(h.from));};
-    const ck=root.querySelector('#chk');if(ck)ck.onclick=()=>{if(api.buf()==='')api.set(String(q.start));api.submit();};
+    root.querySelector('#chk').onclick=()=>{if(api.buf()==='')api.set(String(q.start));api.submit();};
   }
   return q;
 }
@@ -102,8 +108,9 @@ const ladder=(b,from,to,last)=>{const a=[];for(let e=from;e>=to;e--){const v=Mat
 
 /* ---- build mode: blocks on the right pan.  e = net index (a-block = ×a, ÷a-block = ÷a); 0 blocks = 1 ---- */
 const eT=e=>e<0?'−'+(-e):String(e);
-const blk=(b,n)=>Array.from({length:n},()=>`<b class="bk">${b}</b>`).join('');
-const blocksH=(b,e,s)=>{if(e==null)e=s;return e===0?'<b class="bk one">1</b>':e>0?blk(b,e):`<span class="fr"><i>1</i><i>${blk(b,-e)}</i></span>`;};
+const bcls=b=>/^\d/.test(String(b))?'tn':'tx';              /* Balance Scale weights: purple italic for letters, yellow for numbers */
+const blk=(b,n)=>Array.from({length:n},()=>`<div class="t chip ${bcls(b)} pb">${b}</div>`).join('');
+const blocksH=(b,e,s)=>{if(e==null)e=s;return e===0?'<div class="t chip tn one">1</div>':e>0?blk(b,e):`<span class="fr"><i>1</i><i class="bi">${blk(b,-e)}</i></span>`;};
 const bq=(k,b,t,s,qt,ex,o)=>Q(Object.assign({k,q:qt,ans:t,start:s,build:b,ex,forms:[{L:()=>(o&&o.L)||pw(b,eT(t)),R:(T,v)=>blocksH(b,v,s),tl:v=>t-v,blocks:true}]},o||{}));
 const BK=()=>pick(['a','x','y','m','n','2','3','5']);
 
@@ -145,13 +152,13 @@ B7(){const b=BK(),p=R(1,4),q=p+R(1,3);return bq('B7',b,p-q,0,`Build ${pw(b,p)} �
 /* ---- fractional index ---- */
  F1(){const r=R(2,13),N=r*r;return Q({k:'F1',q:`What is ${pw(N,frH('1/2'))}? (It is the number that multiplies by itself to make ${N}.)`,ans:r,forms:[
    {L:()=>pw(N,frH('1/2')),R:T=>T,tl:v=>v>0?log2(r/v):8,btn:'Show what it means: ? × ?'},
-   {L:T=>`${T}<span class="tx">×</span>${T}`,R:()=>N,tl:v=>v>0?2*log2(v/r):-8,btn:'Show as a power'}],ex:`${r} × ${r} = ${N}, so ${pw(N,frH('1/2'))} = √${N} = ${r}.`});},
+   {L:T=>`${T}<span class="tmul">×</span>${T}`,R:()=>N,tl:v=>v>0?2*log2(v/r):-8,btn:'Show as a power'}],ex:`${r} × ${r} = ${N}, so ${pw(N,frH('1/2'))} = √${N} = ${r}.`});},
  F2(){const r=R(2,10),N=r*r*r;return Q({k:'F2',q:`What is ${pw(N,frH('1/3'))}? (The number that multiplies three times to make ${N}.)`,ans:r,forms:[
    {L:()=>pw(N,frH('1/3')),R:T=>T,tl:v=>v>0?log2(r/v):8,btn:'Show what it means: ? × ? × ?'},
-   {L:T=>`${T}<span class="tx">×</span>${T}<span class="tx">×</span>${T}`,R:()=>N,tl:v=>v>0?3*log2(v/r):-8,btn:'Show as a power'}],ex:`${r} × ${r} × ${r} = ${N}, so ${pw(N,frH('1/3'))} = ∛${N} = ${r}.`});},
+   {L:T=>`${T}<span class="tmul">×</span>${T}<span class="tmul">×</span>${T}`,R:()=>N,tl:v=>v>0?3*log2(v/r):-8,btn:'Show as a power'}],ex:`${r} × ${r} × ${r} = ${N}, so ${pw(N,frH('1/3'))} = ∛${N} = ${r}.`});},
  F3(){const c=pick([[16,4,2],[81,4,3],[625,4,5],[32,5,2],[243,5,3],[10000,4,10]]),[N,k,r]=c;return Q({k:'F3',q:`What is ${pw(N,frH('1/'+k))}?`,ans:r,forms:[
    {L:()=>pw(N,frH('1/'+k)),R:T=>T,tl:v=>v>0?log2(r/v):8,btn:`Show what it means`},
-   {L:T=>Array(k).fill(T).join('<span class="tx">×</span>'),R:()=>N,tl:v=>v>0?k*log2(v/r):-8,btn:'Show as a power'}],ex:`${Array(k).fill(r).join(' × ')} = ${N}, so ${pw(N,frH('1/'+k))} = ${r}.`});},
+   {L:T=>Array(k).fill(T).join('<span class="tmul">×</span>'),R:()=>N,tl:v=>v>0?k*log2(v/r):-8,btn:'Show as a power'}],ex:`${Array(k).fill(r).join(' × ')} = ${N}, so ${pw(N,frH('1/'+k))} = ${r}.`});},
  F4(){const c=pick([[4,3,2,2],[9,3,2,3],[25,3,2,5],[16,3,4,2],[8,2,3,2],[27,2,3,3],[16,3,4,2],[4,5,2,2],[64,2,3,4],[125,2,3,5],[32,3,5,2],[81,3,4,3]]),[N,p,q,r]=c,X=Math.pow(r,p);
   return valQ(X,pw(N,frH(p+'/'+q)),{k:'F4',q:`What is ${pw(N,frH(p+'/'+q))}?`,ans:X,ex:`Root first, then power: the ${q===2?'square':q===3?'cube':q+'th'} root of ${N} is ${r}, and ${r}<sup>${p}</sup> = ${X}.`});},
  F5(){const c=pick([[4,1,2,2],[9,1,2,3],[25,1,2,5],[8,1,3,2],[27,1,3,3],[27,2,3,3],[16,3,4,2],[4,3,2,2],[8,2,3,2],[9,3,2,3]]),[N,p,q,r]=c,X=1/Math.pow(r,p);

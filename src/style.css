@@ -423,35 +423,34 @@ details.pg>summary{list-style:none;cursor:pointer}details.pg>summary::-webkit-de
 .tf-lb{font-size:.55px;font-weight:800;fill:#1971c2}.tf-lb.im{fill:#e8590c}.tf-mid{fill:none;stroke:#7048e8;stroke-width:.1;stroke-dasharray:.25 .2}
 .tf-opts{display:grid;gap:8px;margin:8px 0}.tf-opt{text-align:left;font-size:15px;line-height:1.3;padding:10px 12px}.tf-opt.bad{background:#ffe3e3;color:#c92a2a;text-decoration:line-through}
 
-/* Power Balance: indices and logs on a balance */
-.bw{position:relative;width:100%;max-width:380px;height:150px;margin:0 auto}.bw-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.bw-post{position:absolute;left:50%;top:26px;bottom:6px;width:10px;margin-left:-5px;background:linear-gradient(90deg,#9775fa,#5f3dc4);border-radius:6px}
-.bw-base{position:absolute;left:50%;bottom:0;width:96px;height:10px;margin-left:-48px;background:linear-gradient(#6741d9,#4c2fb3);border-radius:10px 10px 6px 6px;box-shadow:0 3px 0 #0003}
-.bw-beam{position:absolute;height:12px;background:linear-gradient(#845ef7,#5f3dc4);border-radius:8px;box-shadow:0 2px 4px #0003;z-index:2}
-.bw-pan{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:center}
-.bw-t{min-width:48px;min-height:32px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;max-width:100%;padding:3px 8px;margin-bottom:1px;background:#ffd43b;color:#2b2160;border-radius:10px;box-shadow:0 2px 0 #0003;text-align:center;font-size:17px;font-weight:900;line-height:1.15;white-space:nowrap}
-.bw-t.q{background:#e5dbff;color:#845ef7;box-shadow:none;border:2px dashed #845ef7}
-.bw-dish{width:100%;height:8px;background:linear-gradient(#ced4da,#868e96);border-radius:0 0 40px 40px/0 0 14px 14px}
-.bw.lv .bw-t{background:#69db7c}.bw.lv .bw-beam{background:linear-gradient(#51cf66,#2b8a3e)}
-.bw .fr,.bw-t .fr{font-size:.8em;margin:0 1px}
 .pw sup,.pw-eq sup,.pw-ladder sup,.ch-q sup{font-size:.68em;line-height:0}.pw sub,.ch-q sub,.pw-eq sub,.pw-ladder sub{font-size:.68em}
 .pw sup .fr,.ch-q sup .fr,.pw-eq sup .fr{font-size:.7em;margin:0}.pw-sub{font-size:13px;margin-top:3px;font-weight:700}
-.tile{display:inline-block;min-width:22px;padding:1px 5px;margin:1px;background:#e5dbff;border-radius:6px;color:#4c2fb5}.tx{margin:0 2px;color:#868e96}
+.tile{display:inline-block;min-width:22px;padding:1px 5px;margin:1px;background:#e5dbff;border-radius:6px;color:#4c2fb5}.tmul{margin:0 2px;color:#868e96}
 .pw-eq{text-align:center;font-size:18px;font-weight:800;margin:2px 0 0;color:#2b2160}.pw-ok{font-size:13px;color:#2b8a3e;margin-left:6px}
 .pw-tg{margin:4px auto;display:block;font-size:13px;padding:5px 12px}
 .pw-ladder{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center;margin:2px 0 6px;font-size:14px;font-weight:800}.lp{background:#e7f5ff;border-radius:8px;padding:2px 7px;color:#1864ab}.lp.d{background:#fff3bf;color:#e67700}
-@media(max-width:380px){.bw-t{font-size:16px;padding:5px 7px}}
 
 /* compact number pad (Power Balance): two short rows */
 .npad.cp{grid-template-columns:repeat(7,1fr);gap:5px;max-width:340px;margin:4px auto}.npad.cp .key{border-radius:10px;font-size:19px;padding:7px 0;box-shadow:0 2px 0 #d8d3f5}.npad.cp .key.ok{background:#d3f9d8;box-shadow:0 2px 0 #8ce99a}
 @media(max-width:480px){.npad.cp .key{padding:8px 0}}
-/* Power Balance: build a power out of blocks */
-.bk{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:24px;margin:1px;padding:0 5px;border-radius:6px;background:#ffd43b;color:#2b2160;font-size:14px;font-weight:900;box-shadow:0 2px 0 #0003;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
-.bk.one{background:#e5dbff;color:#5f3dc4;cursor:default}.bw.lv .bk:not(.one){background:#69db7c}
-.bw-t.blk{background:none;box-shadow:none;flex-wrap:wrap;gap:0;padding:2px 4px;white-space:normal;line-height:1}.bw.lv .bw-t.blk{background:none}.bw-t.blk .fr{font-size:1em}.bw-t.blk .fr i{padding:1px 2px}
-.bk-tray{display:flex;align-items:center;justify-content:center;gap:8px;margin:2px 0 4px;flex-wrap:wrap}.bk-tray .bk.src{height:34px;min-width:40px;font-size:18px;box-shadow:0 3px 0 #0003}.bk-tray .bk.inv{background:#ffa8a8}
-.bk-hint{font-size:12px;color:#6b5fb5;text-align:center;flex:1 1 100%}.bw-pan.hot{filter:drop-shadow(0 0 8px #fab005)}.bk.gh{position:fixed;z-index:99999;pointer-events:none;transform:translate(-50%,-50%) scale(1.2);opacity:.95;height:34px;min-width:34px;font-size:18px}
-.bw-chk{display:block;margin:4px auto}
-.bk-log{max-height:84px;overflow-y:auto;background:#fff;border-radius:10px;padding:3px 8px;margin:2px 0;-webkit-overflow-scrolling:touch}.bk-log .el{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;padding:1px 0;border-bottom:1px solid #f1edff}.bk-log .el.old{color:#868e96;font-weight:600;font-size:13px}
-.bk-tray .btn{padding:6px 12px;font-size:14px}.bk-tray .bk-ck{background:#2f9e44;color:#fff}.bk.src:disabled{opacity:.4;cursor:default}
-.bw sup,.bk-log sup{font-size:.68em;line-height:0}.bk-log b{font-size:inherit;margin:0}.bk-log{margin-top:8px;max-height:92px}.bk-hint{font-size:11px}
+
+
+
+
+/* Power Balance uses the Balance Scale scene; this just makes it shorter and lets pans hold several tiles */
+.px .sc-top{margin-bottom:2px}.px .sc-eq{max-height:92px;font-size:17px}.px .sc-eq.one{min-height:40px}.px .sc-eq .el.orig{font-size:19px}.px .el.fin{color:#2b8a3e;font-weight:900}
+.px .sc-box{padding:4px 8px}.px .wt{min-width:44px;height:38px;font-size:18px}.wt.ng{background:#e03131}.wt.ng.src,.wt.src{cursor:grab}.px .wt.lifted{opacity:.3}
+.px .sc-scene{height:236px;margin-top:2px}.px .sc-post{top:40px;height:160px}.px .sc-base{height:60px;padding:4px 6px;gap:6px}
+.px .sc-pan{height:auto}.px .sc-tiles{flex-wrap:wrap;align-items:flex-end;align-content:flex-end;justify-content:center;gap:3px;padding:3px 4px 3px;min-height:44px;max-height:none;overflow:visible}
+.px .t.chip{min-width:30px;height:30px;font-size:16px;padding:0 6px;border-radius:9px}.px .t.chip.tn{border-radius:9px}.px .t.chip.big{height:auto;min-height:34px;font-size:18px;padding:3px 10px}.px .t.one{background:#e5dbff;color:#5f3dc4}
+.px .t.q{background:#e5dbff;color:#7048e8;border:2px dashed #7048e8;box-shadow:none;font-style:normal}
+.px .fr{font-size:.95em}.px .fr .bi{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;border-top:2px solid #5f3dc4;font-style:normal}.px .fr i:first-child{font-style:normal}
+.px.lv .t:not(.q):not(.one){background:#2f9e44;color:#fff}.px.lv .sc-beam{background:linear-gradient(#51cf66,#2b8a3e)}
+.px .t sup,.px .el sup,.px .sc-eq sup{font-size:.68em;line-height:0}.px .t.chip span{display:inline-block}
+.px .lv.go{flex:1;padding:8px 4px;font-size:15px}.px .otg{min-width:32px}
+@media(max-width:400px){.px .sc-scene{height:236px}}
+.px .sc-eq .el{font-size:15px;gap:4px}.px .sc-eq .el.orig{font-size:18px}.px .sc-eq .el.last{font-size:16px}.px .sc-eq .el b{margin:0 2px;font-size:16px}
+.px{width:100%}.px .sc-eq .el{white-space:normal;flex-wrap:wrap}.px .sc-eq.one{text-align:center;justify-content:center}.px .sc-eq.one .el{justify-content:center}
+.px{overflow:hidden}.px .sc-scene{max-width:100%}.px .t.chip.big{white-space:normal;max-width:100%;text-align:center;flex-wrap:wrap}.px .sc-tiles{max-width:100%}
+.px .sc-base:empty{height:26px;padding:0}
+.px .sc-eq{flex-wrap:nowrap}
