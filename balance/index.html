@@ -457,7 +457,7 @@ function showIntro(g){
   o.innerHTML='<div class="in-top"><button class="in-v" id="inv"></button><button class="in-x" id="inx">Skip ✕</button></div><div class="in-body" id="inb"></div>';
   document.body.appendChild(o);document.body.style.overflow='hidden';
   $('#inx').onclick=closeIntro;
-  introStop=g.anim(o.querySelector('#inb'),{close:closeIntro,voiceBtn:o.querySelector('#inv')});
+  const au=new Audio();au.preload='auto';introStop=g.anim(o.querySelector('#inb'),{close:closeIntro,voiceBtn:o.querySelector('#inv'),audio:au});
 }
 function cleanup(){closeIntro();if(!ctx)return;ctx.cleanups.forEach(f=>{try{f()}catch(e){}});ctx=null;document.querySelectorAll('.overlay').forEach(o=>o.remove());}
 const ROOT=(()=>{let p=location.pathname.replace(/index\.html$/,'');const sg=p.split('/').filter(Boolean);if(sg.length&&/^[a-z0-9_-]+$/.test(sg[sg.length-1])&&window.__GAME_PAGE){sg.pop();}return '/'+sg.join('/')+(sg.length?'/':'');})();
@@ -2965,7 +2965,10 @@ function factAnim(box,api){
   let tm=[],stopped=false,gen=0;
   const SS=window.speechSynthesis,CAN=!!(SS&&window.SpeechSynthesisUtterance);
   let voiceOn=CAN;try{if(localStorage.getItem('pz-voice')==='0')voiceOn=false;}catch(e){}
-  let blocked=false;
+  const AU=api.audio,dbg=m=>{try{api.onDebug&&api.onDebug(m);}catch(e){}};
+  const SILENT='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=';
+  const unlock=()=>{try{AU.src=SILENT;const p=AU.play();if(p&&p.catch)p.catch(()=>{});}catch(e){}};
+  let blocked=false,curA=null;
   dots.innerHTML='<i></i><i></i><i></i><i></i><i></i><i></i><i></i>';
   const dot=n=>[...dots.children].forEach((d,i)=>d.classList.toggle('on',i<=n));
   const pop=e=>{e.classList.remove('pop');void e.offsetWidth;e.classList.add('pop');};
@@ -2981,19 +2984,30 @@ function factAnim(box,api){
     return vs.slice().sort((a,b)=>score(b)-score(a))[0];}
   const at=(ms,fn)=>tm.push(setTimeout(()=>{if(!stopped)fn();},ms));
   const STEPS=[
-   {say:"Hi! Let's learn how to factorise. We'll factorise thirty x plus twenty five.",cap:'Factorise 30x + 25',min:4200,d:0,do(){end.hidden=true;st.hidden=true;t1.className='fi-t';t2.className='fi-t';t1.innerHTML='30x';t2.innerHTML='25';l2.className='fi-l2';l2.innerHTML='';pad.className='fi-padw';ty.textContent='';hand.style.left='62%';hand.style.top='58%';hand.style.opacity=0;}},
+   {say:"Hi there! Today, we're going to learn something super cool... how to factorise! Let's try thirty x plus twenty five.",cap:'Factorise 30x + 25',min:4200,d:0,do(){end.hidden=true;st.hidden=true;t1.className='fi-t';t2.className='fi-t';t1.innerHTML='30x';t2.innerHTML='25';l2.className='fi-l2';l2.innerHTML='';pad.className='fi-padw';ty.textContent='';hand.style.left='62%';hand.style.top='58%';hand.style.opacity=0;}},
    {say:"First, tap a term.",cap:'① Tap a term',min:3600,d:1,do(){hand.style.opacity=1;at(500,()=>go(t1));at(1800,()=>{tap();t1.classList.add('sel');});}},
-   {say:"A number pad pops up. Type one of its factors. Five divides thirty, so tap five.",cap:'② Type a factor: 5',min:6000,d:2,do(){at(300,()=>pad.classList.add('on'));at(2600,()=>go(q('fip').querySelectorAll('.fi-pad i')[4]));at(4000,()=>{tap();q('fip').querySelectorAll('.fi-pad i')[4].classList.add('hit');ty.textContent='5';});}},
-   {say:"Then tap the tick. Now thirty x becomes five times six x.",cap:'30x = 5 × 6x',min:5000,d:3,do(){at(900,()=>go(q('fip').querySelectorAll('.fi-pad i')[11]));at(2000,()=>{tap();pad.className='fi-padw';t1.classList.remove('sel');t1.innerHTML='5 × 6x';pop(t1);hand.style.opacity=0;});}},
-   {say:"Now tap the other term.",cap:'③ Tap the other term',min:3400,d:3,do(){hand.style.opacity=1;at(400,()=>go(t2));at(1700,()=>tap());}},
-   {say:"Five divides twenty five too, so it splits by itself. You don't even need the number pad!",cap:'5 fits here too — it splits by itself!',min:5600,d:4,do(){t2.innerHTML='5 × 5';pop(t2);}},
-   {say:"When every term has the same factor, that factor glows green.",cap:'④ The same factor in every term turns green',min:5000,d:5,do(){t1.innerHTML='<i class="fi-g">5</i> × 6x';t2.innerHTML='<i class="fi-g">5</i> × 5';}},
+   {say:"A number pad pops up! Now type one of its factors. Five divides thirty, so tap five.",cap:'② Type a factor: 5',min:6000,d:2,do(){at(300,()=>pad.classList.add('on'));at(2600,()=>go(q('fip').querySelectorAll('.fi-pad i')[4]));at(4000,()=>{tap();q('fip').querySelectorAll('.fi-pad i')[4].classList.add('hit');ty.textContent='5';});}},
+   {say:"Then tap the tick... and look! Thirty x turns into five times six x! Wow!",cap:'30x = 5 × 6x',min:5000,d:3,do(){at(900,()=>go(q('fip').querySelectorAll('.fi-pad i')[11]));at(2000,()=>{tap();pad.className='fi-padw';t1.classList.remove('sel');t1.innerHTML='5 × 6x';pop(t1);hand.style.opacity=0;});}},
+   {say:"Now, tap the other term.",cap:'③ Tap the other term',min:3400,d:3,do(){hand.style.opacity=1;at(400,()=>go(t2));at(1700,()=>tap());}},
+   {say:"Five divides twenty five too, so it splits all by itself! You don't even need the number pad!",cap:'5 fits here too — it splits by itself!',min:5600,d:4,do(){t2.innerHTML='5 × 5';pop(t2);}},
+   {say:"When every term has the same factor... that factor glows green!",cap:'④ The same factor in every term turns green',min:5000,d:5,do(){t1.innerHTML='<i class="fi-g">5</i> × 6x';t2.innerHTML='<i class="fi-g">5</i> × 5';}},
    {say:"Tap a green factor.",cap:'⑤ Tap the green factor',min:3600,d:5,do(){at(500,()=>go(t1.querySelector('.fi-g')));at(1900,()=>tap());}},
-   {say:"And the expression is factorised: five times, six x plus five.",cap:'30x + 25 = 5(6x + 5)',min:5000,d:6,do(){l2.innerHTML='= <b>5</b>(6x + 5)';l2.classList.add('on');pop(l2);hand.style.opacity=0;}},
-   {say:"That's it! Keep going until nothing more can be taken out. Good luck!",cap:'Keep going until nothing more can be taken out',min:4200,d:6,do(){end.hidden=false;}}
+   {say:"And ta-da! The expression is factorised! Five times, six x plus five.",cap:'30x + 25 = 5(6x + 5)',min:5000,d:6,do(){l2.innerHTML='= <b>5</b>(6x + 5)';l2.classList.add('on');pop(l2);hand.style.opacity=0;}},
+   {say:"That's it! Keep going until nothing more can be taken out. You can do it! Good luck!",cap:'Keep going until nothing more can be taken out',min:4200,d:6,do(){end.hidden=false;}}
   ];
-  function speak(text,onDone){
+  const stopAudio=()=>{if(curA){try{curA.onended=null;curA.onerror=null;curA.pause();}catch(e){}curA=null;}};
+  function speak(text,onDone,idx){
     let done=false;const fin=()=>{if(!done){done=true;onDone();}};
+    if(idx!=null&&AU){ // recorded (pre-generated) voice first, through ONE shared audio element (unlocked by a tap)
+      try{const a=AU;curA=a;
+        const fallback=why=>{if(done)return;dbg('clip '+idx+' failed ('+why+') -> browser voice');stopAudio();speak(text,onDone,null);};
+        a.onended=()=>{dbg('clip '+idx+' ended');fin();};a.onerror=()=>fallback('load error');
+        a.src=(window.PZ_AUDIO&&window.PZ_AUDIO[idx])||(ROOT+'audio/factorise/'+idx+'.mp3');a.currentTime=0;a.volume=1;a.muted=false;
+        const pr=a.play();dbg('clip '+idx+' play()');
+        if(pr&&pr.catch)pr.catch(err=>{dbg('play blocked: '+(err&&err.name));if(err&&err.name==='NotAllowedError'){blocked=true;fin();}else fallback(err&&err.name);});
+        at(Math.max(9000,text.length*200),fin);return;
+      }catch(e){dbg('audio exception '+e);}
+    }
     try{SS.cancel();const u=new SpeechSynthesisUtterance(text);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang;}else u.lang='en-GB';u.rate=.95;u.pitch=1.02;u.volume=1;
       let started=false;u.onstart=()=>{started=true;};u.onend=fin;u.onerror=()=>{if(!started){blocked=true;}fin();};
       SS.speak(u);
@@ -3007,15 +3021,15 @@ function factAnim(box,api){
     const s=STEPS[i];s.do();cap.textContent=s.cap;dot(s.d);
     let proceed=false;const useV=voiceOn&&CAN&&!blocked;
     const next=()=>{if(proceed||myGen!==gen)return;proceed=true;at(useV?900:0,()=>runFrom(i+1,myGen));};
-    if(useV)speak(s.say,()=>{if(blocked){st.hidden=false;gen++;tm.forEach(clearTimeout);tm=[];return;}next();});else at(s.min,next);
+    if(useV)speak(s.say,()=>{if(blocked){st.hidden=false;gen++;tm.forEach(clearTimeout);tm=[];return;}next();},i);else at(s.min,next);
   }
-  function run(){gen++;tm.forEach(clearTimeout);tm=[];if(CAN){try{SS.cancel();}catch(e){}}vbLabel();q('fis').querySelectorAll('.fi-pad i').forEach(k=>k.classList.remove('hit'));runFrom(0,gen);}
-  vb.onclick=()=>{voiceOn=!voiceOn;blocked=false;try{localStorage.setItem('pz-voice',voiceOn?'1':'0');}catch(e){}vbLabel();run();};
-  q('fisb').onclick=()=>{blocked=false;st.hidden=true;voiceOn=true;vbLabel();run();};
+  function run(){gen++;tm.forEach(clearTimeout);tm=[];stopAudio();if(CAN){try{SS.cancel();}catch(e){}}vbLabel();q('fis').querySelectorAll('.fi-pad i').forEach(k=>k.classList.remove('hit'));runFrom(0,gen);}
+  vb.onclick=()=>{unlock();voiceOn=!voiceOn;blocked=false;try{localStorage.setItem('pz-voice',voiceOn?'1':'0');}catch(e){}vbLabel();run();};
+  q('fisb').onclick=()=>{unlock();blocked=false;st.hidden=true;voiceOn=true;vbLabel();run();};
   q('figo').onclick=()=>api.close();
-  q('firp').onclick=()=>{blocked=false;run();};
-  vbLabel();setTimeout(()=>{if(!stopped)run();},300);
-  return()=>{stopped=true;gen++;tm.forEach(clearTimeout);if(CAN){try{SS.cancel();}catch(e){}}};
+  q('firp').onclick=()=>{unlock();blocked=false;run();};
+  vbLabel();unlock();setTimeout(()=>{if(!stopped)run();},300);
+  return()=>{stopped=true;gen++;tm.forEach(clearTimeout);stopAudio();if(CAN){try{SS.cancel();}catch(e){}}};
 }
 REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'Algebra',
  desc:'Factorise expressions like 30x + 25. Tap a number or letter and break it into factors (30x → 5 × 6x → 5 × 2 × 3x…). When the same factor shows up in every term, press Factorise. Repeat until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','prime factors'],
