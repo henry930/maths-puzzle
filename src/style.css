@@ -116,12 +116,6 @@ body{font-family:system-ui,-apple-system,"Segoe UI","PingFang TC","Microsoft Jhe
 .ch-frac{display:flex;flex-direction:column;align-items:center;gap:6px;margin:8px auto}.fbox{min-width:130px;min-height:72px;border:3px solid #d8d3f5;border-radius:12px;background:#fff;font-family:inherit;font-weight:900;font-size:44px;line-height:1.1;color:#c2255c;text-align:center;padding:2px 10px}.fbox.act{border-color:#c2255c;box-shadow:0 0 0 3px #c2255c33}.fbar{width:130px;height:5px;border-radius:3px;background:#c2255c}.ch-frac.good .fbox{border-color:#2eaa5e}.ch-frac.bad .fbox{border-color:#e5484d}
 .ch-in{min-height:56px;border-bottom:4px solid #d8d3f5;text-align:center;font-size:36px;font-weight:900;margin:6px 40px;color:#c2255c}.ch-in.good{border-color:#2eaa5e}.ch-in.bad{border-color:#e5484d}
 .ch-grid{border-collapse:collapse;margin:0 auto}.ch-grid th,.ch-grid td{width:34px;height:28px;text-align:center;font-size:14px;border:1px solid #e0dcf5}.ch-grid th{background:#f2efff}.ch-grid td.hl{background:#ffd23f;font-weight:900}.ch-cap{font-size:12px;color:var(--mut);text-align:center;margin-top:3px}
-/* derby */
-.dy-lanes{display:flex;flex-direction:column;gap:5px;margin:8px 0}.dy-lane{display:flex;align-items:center;gap:6px;background:#fff;border-radius:10px;padding:3px 6px;border:3px solid transparent;cursor:pointer}.dy-lane.bet{border-color:#f59f00;background:#fff4d6}
-.dy-n{width:30px;height:30px;border-radius:50%;background:#e67700;color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;flex:none}
-.dy-track{position:relative;flex:1;height:30px;display:flex;gap:2px;align-items:center}.dy-track i{flex:1;height:8px;background:#e6e2fa;border-radius:4px}.dy-track i.on{background:#e67700}
-.dy-h{position:absolute;top:2px;font-size:22px;transition:left .15s;transform:translateX(-30%)}.dy-fin{position:absolute;right:-4px;top:2px;font-size:18px}.dy-p{width:50px;font-size:12.5px;text-align:right}
-.dy-dice{text-align:center;font-size:30px;min-height:44px;font-weight:700}
 /* ---- batch 2 ---- */
 .minibal{font-size:46px;text-align:center}
 .bs-key,.bs .key,.ln .key,.pm .key{border:0;border-radius:12px;background:#fff;font-size:22px;font-weight:800;min-width:44px;padding:8px 12px;cursor:pointer;box-shadow:0 3px 0 #d8d3f5}
@@ -404,3 +398,13 @@ a.card.news{text-decoration:none;color:inherit}
 .intro.live .fi-dots{margin:2px 0 0}.dm-hand{position:fixed;z-index:6}
 .dm-end{position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:7;background:rgba(60,30,140,.92);padding:12px;border-radius:20px}
 .dm-hl{outline:4px solid #ffd43b!important;outline-offset:3px;border-radius:10px;animation:dmhl 1s infinite}@keyframes dmhl{50%{outline-color:#fff}}
+
+/* bigger menu icons */
+.card.game .art .minibal{font-size:68px;line-height:1.05}
+.card.game .art .minibal.tx{font-size:30px;white-space:nowrap}
+.card.game .art .minibal.fx{font-size:38px;letter-spacing:-3px;line-height:1.1}
+.card.game .art .minich{font-size:62px;white-space:nowrap}
+.card.game .art svg{width:80%;height:auto;max-height:88%}
+.card.game .art .minibal.sm{font-size:46px}
+.card.game .art .miniriver{font-size:46px}
+.card.game .art .mininim{transform:scale(1.3)}

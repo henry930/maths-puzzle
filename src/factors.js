@@ -12,7 +12,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
  desc:'Arrange a pile of balls into neat rows. If every row is full, the number of rows and columns are factors. Find them all!',skills:['factors','multiplication tables','division','prime numbers'],
  levels:NS.map(n=>'Factors of '+n),
  how:'Type how many rows to use, then press Arrange. If the balls fill every row perfectly, you have found two factors (rows and columns)! Orange balls are left over — then that row count is NOT a factor. 1 and the number itself are given. Find ALL the other factors, then press “That’s all”.',
- art:'<div class="minibal">🔵🔵🔵<br>🔵🔵🔵</div>',
+ art:'<div class="minibal fx">🔵🔵🔵<br>🔵🔵🔵</div>',
  mount(root,lv,ctx){
   const N=NS[lv-1];ctx.q=tagFactors(N);const F=facs(N),found=new Set([1,N]),pairs=[[1,N]];let r=1;
   root.innerHTML=`<div class="fc"><div class="fc-top"><div class="fc-ttl">✅ Factor pairs you found</div><div class="fc-pairs" id="fcpr"></div></div><div class="fc-tip">${TIPS[N]||'Find every number that divides '+N+' exactly. (1 and '+N+' are free!)'}</div>

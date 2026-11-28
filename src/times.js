@@ -20,7 +20,7 @@ REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',ca
  desc:'Learn the clever patterns behind every times table with a short animation, then fill in the whole row yourself. Build the full 9 × 9 table one row at a time!',skills:['times tables','patterns','multiplication facts','mental maths'],
  levels:NAMES,
  how:'Watch the trick animation first, then type the 9 answers of the row. Tap a box to choose it, use the keypad, and the answer is checked automatically. Tap 🎬 any time to watch the trick again.',
- art:'<div class="minibal">✖️<br>9×9</div>',
+ art:'<div class="minibal sm">✖️<br>9×9</div>',
  mount(root,lv,ctx){
   const K=ORDER[lv-1],val=c=>K*c;let token=0;
   root.innerHTML=`<div class="tt">

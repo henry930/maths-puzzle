@@ -118,12 +118,6 @@ body{font-family:system-ui,-apple-system,"Segoe UI","PingFang TC","Microsoft Jhe
 .ch-frac{display:flex;flex-direction:column;align-items:center;gap:6px;margin:8px auto}.fbox{min-width:130px;min-height:72px;border:3px solid #d8d3f5;border-radius:12px;background:#fff;font-family:inherit;font-weight:900;font-size:44px;line-height:1.1;color:#c2255c;text-align:center;padding:2px 10px}.fbox.act{border-color:#c2255c;box-shadow:0 0 0 3px #c2255c33}.fbar{width:130px;height:5px;border-radius:3px;background:#c2255c}.ch-frac.good .fbox{border-color:#2eaa5e}.ch-frac.bad .fbox{border-color:#e5484d}
 .ch-in{min-height:56px;border-bottom:4px solid #d8d3f5;text-align:center;font-size:36px;font-weight:900;margin:6px 40px;color:#c2255c}.ch-in.good{border-color:#2eaa5e}.ch-in.bad{border-color:#e5484d}
 .ch-grid{border-collapse:collapse;margin:0 auto}.ch-grid th,.ch-grid td{width:34px;height:28px;text-align:center;font-size:14px;border:1px solid #e0dcf5}.ch-grid th{background:#f2efff}.ch-grid td.hl{background:#ffd23f;font-weight:900}.ch-cap{font-size:12px;color:var(--mut);text-align:center;margin-top:3px}
-/* derby */
-.dy-lanes{display:flex;flex-direction:column;gap:5px;margin:8px 0}.dy-lane{display:flex;align-items:center;gap:6px;background:#fff;border-radius:10px;padding:3px 6px;border:3px solid transparent;cursor:pointer}.dy-lane.bet{border-color:#f59f00;background:#fff4d6}
-.dy-n{width:30px;height:30px;border-radius:50%;background:#e67700;color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;flex:none}
-.dy-track{position:relative;flex:1;height:30px;display:flex;gap:2px;align-items:center}.dy-track i{flex:1;height:8px;background:#e6e2fa;border-radius:4px}.dy-track i.on{background:#e67700}
-.dy-h{position:absolute;top:2px;font-size:22px;transition:left .15s;transform:translateX(-30%)}.dy-fin{position:absolute;right:-4px;top:2px;font-size:18px}.dy-p{width:50px;font-size:12.5px;text-align:right}
-.dy-dice{text-align:center;font-size:30px;min-height:44px;font-weight:700}
 /* ---- batch 2 ---- */
 .minibal{font-size:46px;text-align:center}
 .bs-key,.bs .key,.ln .key,.pm .key{border:0;border-radius:12px;background:#fff;font-size:22px;font-weight:800;min-width:44px;padding:8px 12px;cursor:pointer;box-shadow:0 3px 0 #d8d3f5}
@@ -406,6 +400,16 @@ a.card.news{text-decoration:none;color:inherit}
 .intro.live .fi-dots{margin:2px 0 0}.dm-hand{position:fixed;z-index:6}
 .dm-end{position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:7;background:rgba(60,30,140,.92);padding:12px;border-radius:20px}
 .dm-hl{outline:4px solid #ffd43b!important;outline-offset:3px;border-radius:10px;animation:dmhl 1s infinite}@keyframes dmhl{50%{outline-color:#fff}}
+
+/* bigger menu icons */
+.card.game .art .minibal{font-size:68px;line-height:1.05}
+.card.game .art .minibal.tx{font-size:30px;white-space:nowrap}
+.card.game .art .minibal.fx{font-size:38px;letter-spacing:-3px;line-height:1.1}
+.card.game .art .minich{font-size:62px;white-space:nowrap}
+.card.game .art svg{width:80%;height:auto;max-height:88%}
+.card.game .art .minibal.sm{font-size:46px}
+.card.game .art .miniriver{font-size:46px}
+.card.game .art .mininim{transform:scale(1.3)}
 </style></head><body><div class="wrap">
 <section id="menu"><div class="hero"><h1>🧠 Maths Puzzle Arcade</h1><p>Real puzzles that secretly train your maths. Pick a game!</p></div><div class="overall" id="overall"></div><div class="cats" id="cats"></div><div class="tagbar" id="tagbar"></div><div class="grid" id="cards"></div></section>
 <section id="game" hidden><div class="gbar" id="gbar"><button class="back" id="back">← Menu</button><button class="back" id="hbtn" hidden>▶ How to play</button><h2 id="gtitle"></h2><button class="back" id="lvbtn">Levels ▾</button><div class="pills" id="glevels"></div></div>
@@ -447,11 +451,11 @@ function markDone(id,lv){
 }
 const REG=[];
 /* Games hidden from students (menu, totals and direct URLs). Teachers can still open them with ?preview=all */
-const STUDENT_HIDDEN=['derby','angles','lines','fraction','quad'];
+const STUDENT_HIDDEN=['angles','lines','fraction','quad'];
 const SHOW_ALL=/[?&]preview=all\b/.test(location.search);
 const visibleGame=G=>SHOW_ALL||!STUDENT_HIDDEN.includes(G.id);
 let ctx=null;
-const CATS=['All','GCSE Maths','General Puzzles','Basic Skills Practice','News and Video'];let curCat='All',curTag='All';
+const CATS=['All','GCSE Maths','General Puzzles','Basic Skills Practice','News and Video'];let curCat='GCSE Maths',curTag='All';
 const TAGS=['Algebra','Geometry','Number and Arithmetic','Probability / Statistics','Strategies and planning','Calculus'];
 const CAT_EMO={'GCSE Maths':'🎓','General Puzzles':'🧩','Basic Skills Practice':'✏️','News and Video':'📰'};
 /* every game belongs to ONE category and can carry several tags */
@@ -459,7 +463,7 @@ const CATALOG={
  balance:['GCSE Maths',['Algebra']],expand:['GCSE Maths',['Algebra']],lines:['GCSE Maths',['Algebra','Geometry']],
  angles:['GCSE Maths',['Geometry']],transform:['GCSE Maths',['Geometry']],
  fraction:['GCSE Maths',['Number and Arithmetic']],percent:['GCSE Maths',['Number and Arithmetic']],factors:['GCSE Maths',['Number and Arithmetic']],
- chance:['GCSE Maths',['Probability / Statistics']],derby:['GCSE Maths',['Probability / Statistics']],
+ chance:['GCSE Maths',['Probability / Statistics']],
  factorise:['GCSE Maths',['Algebra','Number and Arithmetic']],quad:['GCSE Maths',['Algebra']],times:['Basic Skills Practice',['Number and Arithmetic']],digits:['Basic Skills Practice',['Number and Arithmetic']],grid:['Basic Skills Practice',['Number and Arithmetic']],
  g24:['General Puzzles',['Number and Arithmetic','Strategies and planning']],
  match:['General Puzzles',['Number and Arithmetic']],p2048:['General Puzzles',['Number and Arithmetic','Strategies and planning']],
@@ -515,6 +519,7 @@ function pushUrl(path,rep){try{if(location.pathname!==path){history[rep?'replace
 function goMenu(nopush){cleanup();if(nopush!==true)pushUrl(ROOT);$('#game').hidden=true;$('#menu').hidden=false;renderMenu();window.scrollTo(0,0);}
 const curLv={};
 function openGame(id,lv,fromRoute){
+  {const u=me();if(u&&!(ctx&&ctx.id===id)){u.plays=u.plays||{};u.plays[id]=(u.plays[id]||0)+1;persist();}}
   cleanup();const g=REG.find(x=>x.id===id);lv=lv||curLv[id]||1;curLv[id]=lv;const N=g.levels.length;
   $('#menu').hidden=true;$('#game').hidden=false;
   $('#gtitle').innerHTML=`<span class="gemo">${g.emoji}</span> ${g.name}`;
@@ -575,10 +580,11 @@ function renderMenu(){
   const inCat=VIS.filter(G=>curCat==='All'||catOf(G)===curCat);
   const mk=(t,n)=>{const b=el('button','tagc'+(t===curTag?' on':''),`${t==='All'?'All topics':t} <small>${n}</small>`);b.onclick=()=>{curTag=t;renderMenu()};tb.appendChild(b);};
   mk('All',inCat.length);TAGS.forEach(t=>mk(t,inCat.filter(G=>tagsOf(G).includes(t)).length));
-  const list=inCat.filter(G=>curTag==='All'||tagsOf(G).includes(curTag));
+  const pl=(me()||{}).plays||{};const often=Object.keys(pl).filter(k=>pl[k]>=3).sort((a,b)=>pl[b]-pl[a]).slice(0,3);
+  const list=inCat.filter(G=>curTag==='All'||tagsOf(G).includes(curTag)).map((G,i)=>({G,i})).sort((a,b)=>((pl[b.G.id]||0)-(pl[a.G.id]||0))||a.i-b.i).map(x=>x.G);
   if(!list.length){g.innerHTML=`<div class="empty">🚧<b>No games here yet</b><span>${curTag==='Calculus'?'Calculus games are coming soon!':'Pick another topic.'}</span></div>`;return;}
   const mkCard=G=>{const c=el('button','card game');c.style.setProperty('--c',G.color);const d=doneCount(G.id);
-    c.innerHTML=`<div class="art">${G.art}</div><h3>${G.name}</h3>`;
+    c.innerHTML=`<div class="art">${G.art}${often.includes(G.id)?'<span class="tag">⭐ Often played</span>':''}</div><h3>${G.name}</h3>`;
     c.onclick=()=>openGame(G.id,Math.min(G.levels.length,d+1));return c;};
   if(window.__menuIO){window.__menuIO.disconnect();window.__menuIO=null;}
   const BATCH=6;let shown=0;const sent=el('div','sentinel');g.appendChild(sent);
@@ -719,7 +725,7 @@ async function rpc(fn,args){
 
 /* ---------- merge two progress blobs ---------- */
 function mergeData(a,b){
-  const out={done:{},rv:{}};
+  const out={done:{},rv:{},plays:{}};
   [a,b].forEach(src=>{if(!src)return;
     for(const id in (src.done||{}))for(const l in src.done[id]){
       const r=src.done[id][l],cur=((out.done[id]=out.done[id]||{})[l]);
@@ -728,10 +734,11 @@ function mergeData(a,b){
         const t=[cur.t,r.t].filter(x=>x!=null);out.done[id][l]=Object.assign({},best,{t:t.length?Math.min(...t):null});}
     }
     for(const k in (src.rv||{}))if(out.rv[k]==null)out.rv[k]=src.rv[k];
+    for(const k in (src.plays||{}))out.plays[k]=Math.max(out.plays[k]||0,src.plays[k]||0);
   });
   return out;
 }
-const dataOf=u=>({v:2,done:u.done,rv:u.rv||{}});
+const dataOf=u=>({v:2,done:u.done,rv:u.rv||{},plays:u.plays||{}});
 
 /* ---------- session ---------- */
 const getSess=()=>LS.get('pz-sess',null);
@@ -740,8 +747,8 @@ const setSess=s=>{if(s)LS.set('pz-sess',s);else try{localStorage.removeItem('pz-
 function adoptUser(name,remoteData,h,legacyMerge){
   let u=DB.users[name];
   if(!u)u=DB.users[name]={created:Date.now(),done:{},rv:{},ev:[]};
-  const m=mergeData(u,remoteData);u.done=m.done;u.rv=m.rv;u.h=CLOUD?undefined:h;if(!u.ev)u.ev=[];
-  if(legacyMerge){const g=DB.users.Guest;if(g){const m2=mergeData(u,g);u.done=m2.done;u.rv=m2.rv;delete DB.users.Guest;}}
+  const m=mergeData(u,remoteData);u.done=m.done;u.rv=m.rv;u.plays=m.plays;u.h=CLOUD?undefined:h;if(!u.ev)u.ev=[];
+  if(legacyMerge){const g=DB.users.Guest;if(g){const m2=mergeData(u,g);u.done=m2.done;u.rv=m2.rv;u.plays=m2.plays;delete DB.users.Guest;}}
   DB.cur=name;done=u.done;
   setSess({name,h});LS.set('pz-last',name);persist();
 }
@@ -910,7 +917,7 @@ async function bootAccount(){
   if(s&&DB.users[s.name]){DB.cur=s.name;loadUser();
     if(CLOUD){
       const r=await rpc('pz_login',{p_name:s.name,p_hash:s.h});
-      if(r&&r.ok){const u=me(),m=mergeData(u,r.data);u.done=m.done;u.rv=m.rv;done=u.done;LS.set('pz-v3',DB);dirty=true;pushNow();renderMenu();flushEvents();}
+      if(r&&r.ok){const u=me(),m=mergeData(u,r.data);u.done=m.done;u.rv=m.rv;u.plays=m.plays;done=u.done;LS.set('pz-v3',DB);dirty=true;pushNow();renderMenu();flushEvents();}
       else if(r&&(r.error==='bad_pin'||r.error==='no_user')){setSess(null);DB.cur=null;done={};showLogin(true);}
     }
   }else if(s&&CLOUD){ // session but no local cache: pull from the cloud
@@ -1835,70 +1842,6 @@ REG.push({id:'chance',name:'Chance Lab',emoji:'🎰',color:'#c2255c',cat:'Probab
 })();
 
 (function(){
-const LV=[
- {n:'One die · all horses equal',dice:[6],goal:150,races:10,track:5},
- {n:'Two 4-sided dice',dice:[4,4],goal:150,races:10,track:5},
- {n:'Two dice (the classic)',dice:[6,6],goal:150,races:10,track:5},
- {n:'Two dice · bigger target',dice:[6,6],goal:200,races:10,track:5},
- {n:'6-sided + 4-sided die',dice:[6,4],goal:150,races:10,track:5},
- {n:'Three 4-sided dice',dice:[4,4,4],goal:150,races:10,track:5},
- {n:'Two 8-sided dice',dice:[8,8],goal:150,races:10,track:5},
- {n:'Three 6-sided dice',dice:[6,6,6],goal:200,races:10,track:4},
- {n:'Two dice · fewer races',dice:[6,6],goal:200,races:7,track:5},
- {n:'Boss: three dice, tough goal',dice:[6,6,6],goal:250,races:8,track:4}
-];
-function dist(dice){let d={0:1};dice.forEach(s=>{const n={};Object.keys(d).forEach(k=>{for(let f=1;f<=s;f++){n[+k+f]=(n[+k+f]||0)+d[k];}});d=n;});return d;}
-window.__dd2={dist,LV};
-const FACE=['','⚀','⚁','⚂','⚃','⚄','⚅'];
-REG.push({id:'derby',name:'Dice Derby',emoji:'🏇',color:'#e67700',cat:'Probability',
- desc:'Bet on horses numbered by dice totals. Each roll moves the horse with that number. Which horse should you back? Discover why some totals win more often!',skills:['probability','sample space','expected outcomes'],
- levels:LV.map(l=>l.n),
- how:'Tap horse numbers to bet 10 coins on each (up to 3 horses). Press Start: every dice roll moves the horse whose number matches the total. First to the finish wins and pays 40 coins per winning bet. Reach the goal before the races run out!',
- art:'<div class="minich">🎲🏇</div>',
- mount(root,lv,ctx){
-  const L=LV[lv-1];ctx.q=tagDerby(L);const D=dist(L.dice),tot=Math.pow(L.dice.reduce((a,b)=>a*b,1),1),keys=Object.keys(D).map(Number).sort((a,b)=>a-b);
-  let coins,races,bets,wins,pos,running,showP,over,last;
-  const total=L.dice.reduce((a,b)=>a*b,1);
-  function reset(){coins=100;races=0;bets=new Set();wins={};pos={};keys.forEach(k=>pos[k]=0);running=false;showP=false;over=false;last='';draw();}
-  function draw(msg){
-    const lanes=keys.map(k=>{
-      const p=D[k]/total;
-      return `<div class="dy-lane${bets.has(k)?' bet':''}" data-k="${k}"><span class="dy-n">${k}</span><div class="dy-track">${Array.from({length:L.track},(_,i)=>`<i class="${pos[k]>i?'on':''}"></i>`).join('')}<span class="dy-h" style="left:${pos[k]/L.track*100}%">🏇</span><span class="dy-fin">🏁</span></div>
-       <span class="dy-p">${showP?`<b>${D[k]}/${total}</b>`:(wins[k]?`🏆${wins[k]}`:'')}</span></div>`;}).join('');
-    root.innerHTML=`<div class="dy"><div class="statrow"><span>🪙 <b>${coins}</b> / goal ${L.goal}</span><span>Race ${Math.min(races+1,L.races)}/${L.races}</span></div>
-     <div class="dy-dice" id="dice">${L.dice.map(()=>'🎲').join(' ')}</div>
-     <div class="dy-lanes">${lanes}</div><div class="msg">${msg||last||'Tap numbers to place bets (10 🪙 each, max 3).'}</div>
-     <div class="toolrow"><button class="btn go" id="st" ${running||over||!bets.size?'disabled':''}>Start race! 🏁</button><button class="btn alt" id="pp">${showP?'Hide':'Show'} chances</button><button class="btn alt" id="rs">⟲ Restart</button></div></div>`;
-    root.querySelectorAll('.dy-lane').forEach(e=>e.onclick=()=>{if(running||over)return;const k=+e.dataset.k;if(bets.has(k))bets.delete(k);else if(bets.size<3&&coins>=10*(bets.size+1))bets.add(k);else toast('Max 3 bets (10 coins each)');draw();});
-    $('#st').onclick=race;$('#pp').onclick=()=>{showP=!showP;draw(msg)};$('#rs').onclick=reset;
-  }
-  function roll(){return L.dice.map(s=>R(1,s));}
-  function race(){
-    if(running||over||!bets.size)return;running=true;coins-=10*bets.size;keys.forEach(k=>pos[k]=0);last='';
-    let rolls=0;
-    const step=()=>{
-      const r=roll(),s=r.reduce((a,b)=>a+b,0);pos[s]++;rolls++;
-      const d=$('#dice');if(d)d.innerHTML=r.map(x=>L.dice.every(v=>v===6)?FACE[x]:x).join(' + ')+' = <b>'+s+'</b>';
-      const lane=root.querySelector(`.dy-lane[data-k="${s}"]`);
-      if(lane){lane.querySelectorAll('.dy-track i').forEach((e,i)=>e.className=pos[s]>i?'on':'');lane.querySelector('.dy-h').style.left=pos[s]/L.track*100+'%';}
-      if(pos[s]>=L.track){running=false;h&&clearInterval(h);finish(s,rolls);}
-    };
-    let h=setInterval(step,170);ctx.cleanups.push(()=>clearInterval(h));
-  }
-  function finish(w,rolls){
-    races++;wins[w]=(wins[w]||0)+1;
-    const won=bets.has(w);if(won)coins+=40*1;
-    last=`🏁 Horse <b>${w}</b> won in ${rolls} rolls! ${won?'You backed it: +40 🪙':'You didn’t back it.'}`;
-    bets=new Set();keys.forEach(k=>pos[k]=pos[k]);
-    if(coins>=L.goal){over=true;draw();ctx.win('Derby champion!',`You reached ${coins} coins in ${races} races. Notice which horses keep winning — why?`,reset,'Play again');return;}
-    if(races>=L.races||coins<10){over=true;showP=true;draw(last+`<br>${coins<10?'You ran out of coins.':'Out of races.'} Check the chances and try again!`);return;}
-    draw();
-  }
-  ctx.keys=null;reset();
- }});
-})();
-
-(function(){
 const rad=d=>d*Math.PI/180;
 const P=(cx,cy,r,d)=>[cx+r*Math.cos(rad(d)),cy-r*Math.sin(rad(d))];
 const f=n=>+n.toFixed(1);
@@ -2664,7 +2607,7 @@ REG.push({id:'factors',name:'Ball Factory',emoji:'🔵',color:'#0b7285',cat:'Ari
  desc:'Arrange a pile of balls into neat rows. If every row is full, the number of rows and columns are factors. Find them all!',skills:['factors','multiplication tables','division','prime numbers'],
  levels:NS.map(n=>'Factors of '+n),
  how:'Type how many rows to use, then press Arrange. If the balls fill every row perfectly, you have found two factors (rows and columns)! Orange balls are left over — then that row count is NOT a factor. 1 and the number itself are given. Find ALL the other factors, then press “That’s all”.',
- art:'<div class="minibal">🔵🔵🔵<br>🔵🔵🔵</div>',
+ art:'<div class="minibal fx">🔵🔵🔵<br>🔵🔵🔵</div>',
  mount(root,lv,ctx){
   const N=NS[lv-1];ctx.q=tagFactors(N);const F=facs(N),found=new Set([1,N]),pairs=[[1,N]];let r=1;
   root.innerHTML=`<div class="fc"><div class="fc-top"><div class="fc-ttl">✅ Factor pairs you found</div><div class="fc-pairs" id="fcpr"></div></div><div class="fc-tip">${TIPS[N]||'Find every number that divides '+N+' exactly. (1 and '+N+' are free!)'}</div>
@@ -2798,7 +2741,7 @@ function parse(s,L){
 }
 const same=(a,b)=>{if(!a||a.c!==b.c)return false;const ka=Object.keys(a.p),kb=Object.keys(b.p);return ka.length===kb.length&&ka.every(k=>a.p[k]===b.p[k]);};
 window.__ex={SPECS,fmt,parse,mul};
-REG.push({id:'expand',name:'Arrow Expander',emoji:'🏹',color:'#e8590c',cat:'Algebra',
+REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Algebra',
  desc:'Expand brackets like 2(x + 5) step by step. Follow each arrow: multiply the outside term by every term inside, and type each answer.',skills:['expanding brackets','multiplying negatives','algebra terms','powers of x'],
  levels:SPECS.map(s=>s.n),
  how:'The number (or term) outside the bracket must multiply EVERY term inside. Tap an arrow’s box, type the answer using the keypad, then press ✓. Watch the signs: − × − = +, and x × x = x²!',
@@ -2930,7 +2873,7 @@ REG.push({id:'times',name:'Times Table Tricks',emoji:'✖️',color:'#d6336c',ca
  desc:'Learn the clever patterns behind every times table with a short animation, then fill in the whole row yourself. Build the full 9 × 9 table one row at a time!',skills:['times tables','patterns','multiplication facts','mental maths'],
  levels:NAMES,
  how:'Watch the trick animation first, then type the 9 answers of the row. Tap a box to choose it, use the keypad, and the answer is checked automatically. Tap 🎬 any time to watch the trick again.',
- art:'<div class="minibal">✖️<br>9×9</div>',
+ art:'<div class="minibal sm">✖️<br>9×9</div>',
  mount(root,lv,ctx){
   const K=ORDER[lv-1],val=c=>K*c;let token=0;
   root.innerHTML=`<div class="tt">
@@ -3187,7 +3130,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
  desc:'Factorise expressions like 30x + 25. Tap a number or letter and break it into factors (30x → 5 × 6x → 5 × 2 × 3x…). When the same factor shows up in every term, press Factorise. Repeat until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','prime factors'],
  levels:LV.map(l=>l.n),
  how:'Tap a part of a term and enter one of its factors on the number pad — a number, a letter, or both together (for 9n² you can enter 9, n, n² or 9n). It splits into factor × something, e.g. 30x → 5 × 6x. If the next term you tap has that same factor, it splits automatically; otherwise you enter its factor yourself. Tap any part again to split it further (6x → 2 × 3x). Tap a × to join two parts back together. A split only lasts about 30 seconds. When the same factor appears in EVERY term, the common factor turns green — tap it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
- art:'<div class="minibal">6(2x+3)</div>',anim:factAnim,
+ art:'<div class="minibal tx">6(2x+3)</div>',anim:factAnim,
  mount(root,lv,ctx){
   const spec=LV[lv-1];let terms,orig,L,CF,chains,tok,selI,selJ,buf,steps,ended,lastBlk,lastI;const timers=[];
   root.innerHTML=`<div class="fx" id="fxr"><div class="fx-top" id="fxt"></div><div class="fx-stage" id="fxs"></div><div class="msg" id="fxm">&nbsp;</div>
@@ -3366,7 +3309,7 @@ REG.push({id:'quad',name:'Quadratic Factoriser',emoji:'🔷',color:'#d6336c',cat
  desc:'Factorise quadratics like x² + 7x + 12 and 2x² + 7x + 6. Find the two numbers that multiply to the last number and add to the middle one, then write the brackets.',skills:['factorising quadratics','products and sums','negative numbers','brackets'],
  levels:LV.map(l=>l.n),
  how:'Step 1: find two numbers that MULTIPLY to the number shown and ADD to the middle number (for 2x² + 7x + 6 the multiply number is 2 × 6 = 12). Step 2: write the brackets. Watch the signs!',
- art:'<div class="minibal">(x+3)(x+4)</div>',
+ art:'<div class="minibal tx">(x+3)(x+4)</div>',
  mount(root,lv,ctx){
   const sp=LV[lv-1];let Q,stage,sl,sel,buf,pair,cfg;
   root.innerHTML=`<div class="qd"><div class="qd-top" id="qt"></div><div class="qd-title" id="qti"></div><div class="qd-row" id="qr"></div><div class="qd-split" id="qs"></div><div class="msg" id="qm">&nbsp;</div><div class="ex-pad" id="qpad"></div><div class="toolrow"><button class="btn alt" id="qh">💡 Hint</button><button class="btn alt" id="qn">New question ⏭</button></div></div>`;
@@ -3593,7 +3536,7 @@ const fin=(tags,d,extra)=>Object.assign({v:1,tags:[...new Set(tags)].sort(),diff
 const maxExp=t=>Math.max(0,...Object.values(t.p));
 const letters=ts=>new Set(ts.flatMap(t=>Object.keys(t.p)));
 
-/* ---------- Arrow Expander: q = {m:outside term, t:[inside terms]} ---------- */
+/* ---------- Break Bracket: q = {m:outside term, t:[inside terms]} ---------- */
 function tagExpand(q){
   const prod=q.t.map(t=>window.__ex.mul(q.m,t)),tags=[],nt=q.t.length,vo=Object.keys(q.m.p).length>0;
   tags.push('bk-terms-'+Math.min(4,nt),vo?'bk-var-outside':'bk-num-outside');
@@ -3651,15 +3594,6 @@ function tagTransform(task,n){
   const d=(has('tf-translation')?(has('tf-neg-vector')?2.5:1.5):has('tf-reflect-axis')?3:has('tf-reflect-line')?4.5:has('tf-reflect-diagonal')?5.5:has('tf-rotation')?(has('tf-rot-180')?4:5):has('tf-sf-3')?5:4)+(n===4?.5:0);
   return fin(tags,d,{eq:t});
 }
-/* ---------- Dice Derby (level only): dice sides, goal, races ---------- */
-function tagDerby(L){
-  const s=L.dice,tags=['dd-'+(s.length===1?'1-die':s.length+'-dice')];
-  [...new Set(s)].forEach(x=>tags.push('dd-d'+x));if(new Set(s).size>1)tags.push('dd-mixed-dice');
-  if(L.races<10)tags.push('dd-few-races');if(L.goal>=200)tags.push('dd-high-goal');
-  const d=2+(s.length-1)*1.5+(new Set(s).size>1?.5:0)+(s.includes(8)?1:0)+(L.goal>=200?1:0)+(L.races<10?1:0)+(L.track===4?.5:0)+(L.goal>=250?1:0);
-  return fin(tags,d);
-}
-
 /* ---------- quiz-style games: one table row per question type ---------- */
 const Q=(t,d,v)=>({t,d,v:v||[]});   // t = always, v = variants that show up only sometimes inside this type
 const QTAGS={
@@ -3708,14 +3642,13 @@ function fromPool(game,pool){
 /* ---------- hook everything onto the registered games ---------- */
 const GM=id=>REG.find(g=>g.id===id);
 const samp=(f,n=60)=>levelFromSamples(f,n);
-window.tagExpand=tagExpand;window.tagFactorise=tagFactorise;window.tagQuad=tagQuad;window.tagLine=tagLine;window.tagFactors=tagFactors;window.tagTransform=tagTransform;window.tagDerby=tagDerby;
+window.tagExpand=tagExpand;window.tagFactorise=tagFactorise;window.tagQuad=tagQuad;window.tagLine=tagLine;window.tagFactors=tagFactors;window.tagTransform=tagTransform;
 GM('expand').qmeta=lv=>samp(()=>tagExpand(window.__ex.SPECS[lv-1].g()));
 GM('factorise').qmeta=lv=>samp(()=>{let q;do{q=window.__fx.gen(window.__fx.LV[lv-1]);}while(!q);return tagFactorise(q);});
 GM('quad').qmeta=lv=>samp(()=>tagQuad(window.__qd.gen(window.__qd.LV[lv-1])));
 GM('lines').qmeta=lv=>samp(()=>tagLine(window.__ln.gen(lv)));
 GM('factors').qmeta=lv=>samp(()=>tagFactors(window.__fac.NS[lv-1]),1);
 GM('transform').qmeta=lv=>{const L=window.__tf.LV[lv-1];return samp(()=>tagTransform(L.g(),L.shape));};
-GM('derby').qmeta=lv=>samp(()=>tagDerby(window.__dd2.LV[lv-1]),1);
 ['fraction','percent','chance','angles'].forEach(g=>{GM(g).qmeta=lv=>fromPool(g,window['__'+({fraction:'fr',percent:'pc',chance:'ch',angles:'an'})[g]].POOL[lv-1]);});
 })();
 
@@ -3819,7 +3752,7 @@ D.balance={seed:13,steps:[
 ]};
 
 const hl=(h,sel)=>{h.unhl();h.hl(sel);};
-// ---------- Arrow Expander  (seed 14 → 3(x + 4))
+// ---------- Break Bracket  (seed 14 → 3(x + 4))
 D.expand={seed:14,steps:[
  {say:"Hi there! Let's learn how to expand brackets. The number outside the bracket must multiply everything inside!",cap:'Outside number × EVERY term inside',async do(h){hl(h,'#exe');await h.wait(2500);},min:3000},
  {say:"Follow the arrows! Arrow one: three times x. Tap the box on the arrow, and type the answer with the keypad.",cap:'Tap the arrow box · type the answer',async do(h){h.unhl();await h.tap('.ex-chip');await h.key('3');await h.key('x');await h.key('✓');},min:3000},
@@ -3877,14 +3810,6 @@ D.chance={seed:12,steps:[
  {say:"We want blue. Count the blue balls: four. Then count all the balls: ten.",cap:'Blue: 4 · Total: 10',async do(h){await h.wait(2500);},min:3500},
  {say:"Probability is the wanted number over the total, so four tenths. Type four on top, tap the bottom box, then type ten.",cap:'4 over 10',async do(h){h.unhl();await h.tap('#fn');await h.type('4');await h.tap('#fd');await h.type('10');},min:4500},
  {say:"Press the tick! Any equivalent fraction works too, and so does a decimal. Good luck!",cap:'4/10 = 2/5 = 0.4 — all accepted',async do(h){await h.key('✓');},last:1,min:4000}
-]};
-// ---------- Dice Derby  (level 3: two dice)
-D.derby={seed:5,lv:3,steps:[
- {say:"Hi there! Welcome to the Dice Derby! Every horse has a number, and they're about to race.",cap:'Horses numbered by dice totals',async do(h){hl(h,'.dy-lanes');await h.wait(2500);},min:3000},
- {say:"Tap a horse number to bet ten coins on it. You can back up to three horses.",cap:'Tap numbers to bet (max 3)',async do(h){h.unhl();await h.tap('.dy-lane[data-k="7"]');await h.tap('.dy-lane[data-k="6"]');},min:4000},
- {say:"Now press Start! Every time the dice are rolled, the horse matching the total moves forward.",cap:'Press Start race!',async do(h){await h.tap('#st');await h.wait(5000);},min:6000},
- {say:"The first horse to reach the finish line wins, and pays forty coins for each winning bet!",cap:'First to the finish wins 40 🪙',async do(h){h.hide();await h.wait(2500);},min:4000},
- {say:"But which numbers win most often? Tap, Show chances, to find out. Think carefully before you bet. Good luck!",cap:'Show chances: why do some win more?',async do(h){await h.tap('#pp');},last:1,min:4500}
 ]};
 // ---------- Quadratic Factoriser  (seed 13 → x² + 5x + 6)
 D.quad={seed:13,steps:[

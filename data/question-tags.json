@@ -2876,7 +2876,7 @@
    ]
   },
   "expand": {
-   "name": "Arrow Expander",
+   "name": "Break Bracket",
    "levels": [
     {
      "level": 1,
@@ -6652,139 +6652,6 @@
      "ops": [],
      "diff": 5,
      "score": 4.8
-    }
-   ]
-  },
-  "derby": {
-   "name": "Dice Derby",
-   "levels": [
-    {
-     "level": 1,
-     "name": "One die · all horses equal",
-     "tags": [
-      "dd-1-die",
-      "dd-d6"
-     ],
-     "sometimes": [],
-     "ops": [],
-     "diff": 2,
-     "score": 2
-    },
-    {
-     "level": 2,
-     "name": "Two 4-sided dice",
-     "tags": [
-      "dd-2-dice",
-      "dd-d4"
-     ],
-     "sometimes": [],
-     "ops": [],
-     "diff": 4,
-     "score": 3.5
-    },
-    {
-     "level": 3,
-     "name": "Two dice (the classic)",
-     "tags": [
-      "dd-2-dice",
-      "dd-d6"
-     ],
-     "sometimes": [],
-     "ops": [],
-     "diff": 4,
-     "score": 3.5
-    },
-    {
-     "level": 4,
-     "name": "Two dice · bigger target",
-     "tags": [
-      "dd-2-dice",
-      "dd-d6",
-      "dd-high-goal"
-     ],
-     "sometimes": [],
-     "ops": [],
-     "diff": 5,
-     "score": 4.5
-    },
-    {
-     "level": 5,
-     "name": "6-sided + 4-sided die",
-     "tags": [
-      "dd-2-dice",
-      "dd-d4",
-      "dd-d6",
-      "dd-mixed-dice"
-     ],
-     "sometimes": [],
-     "ops": [],
-     "diff": 4,
-     "score": 4
-    },
-    {
-     "level": 6,
-     "name": "Three 4-sided dice",
-     "tags": [
-      "dd-3-dice",
-      "dd-d4"
-     ],
-     "sometimes": [],
-     "ops": [],
-     "diff": 5,
-     "score": 5
-    },
-    {
-     "level": 7,
-     "name": "Two 8-sided dice",
-     "tags": [
-      "dd-2-dice",
-      "dd-d8"
-     ],
-     "sometimes": [],
-     "ops": [],
-     "diff": 5,
-     "score": 4.5
-    },
-    {
-     "level": 8,
-     "name": "Three 6-sided dice",
-     "tags": [
-      "dd-3-dice",
-      "dd-d6",
-      "dd-high-goal"
-     ],
-     "sometimes": [],
-     "ops": [],
-     "diff": 7,
-     "score": 6.5
-    },
-    {
-     "level": 9,
-     "name": "Two dice · fewer races",
-     "tags": [
-      "dd-2-dice",
-      "dd-d6",
-      "dd-few-races",
-      "dd-high-goal"
-     ],
-     "sometimes": [],
-     "ops": [],
-     "diff": 6,
-     "score": 5.5
-    },
-    {
-     "level": 10,
-     "name": "Boss: three dice, tough goal",
-     "tags": [
-      "dd-3-dice",
-      "dd-d6",
-      "dd-few-races",
-      "dd-high-goal"
-     ],
-     "sometimes": [],
-     "ops": [],
-     "diff": 9,
-     "score": 8.5
     }
    ]
   }

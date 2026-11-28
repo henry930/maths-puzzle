@@ -4,7 +4,7 @@ Fun, visual maths games for GCSE students — 19 games, ~12–20 levels each, pl
 
 **Play:** open `index.html` (or the GitHub Pages link once enabled).
 
-Games: Make 24 · Number Grid · Digit Detective · KenKen · Sudoku · River Crossing · Klotski · One-Stroke · Nim & Chomp · Chance Lab · Dice Derby · Angle Hunter · Transform Quest · Balance Scale · Line Hunter · Number Match · Power Merge · Fraction Factory · Percent Shop.
+Games: Make 24 · Number Grid · Digit Detective · KenKen · Sudoku · River Crossing · Klotski · One-Stroke · Nim & Chomp · Chance Lab · Angle Hunter · Transform Quest · Balance Scale · Line Hunter · Number Match · Power Merge · Fraction Factory · Percent Shop.
 
 Progress is stored in each browser (localStorage). Students can tap *Share my progress* to copy a code; teachers paste codes into the *Class board*.
 
@@ -31,7 +31,7 @@ Stored online: players (name + hashed PIN), progress, and an event log (`pz_even
 Every generated question can carry tags, so later we can match questions to what each student has mastered.
 - `src/tags.js` holds the shared vocabulary (`TAXO`, English + Chinese labels). Tag ids are stored in the online event log, so **never rename an id** – only its label.
 - A game opts in with `qmeta(lv)` (level-level tags, shown as chips under the level name) and sets `ctx.q = {tags, ops, steps, diff, score, eq}` for each question it generates. `ctx.q` is attached to every `wrong` and `complete` event; `ctx.perf` (moves vs best, undos, hints, restarts) is attached to `complete`.
-- All 12 GCSE Maths games are tagged: Balance Scale, Arrow Expander, Factorise It!, Quadratic Factoriser, Line Hunter, Ball Factory, Fraction Factory, Percent Shop, Chance Lab, Angle Hunter, Transform Quest, Dice Derby. Balance tags itself (`src/balance.js`); the others are in `src/qtags.js` (loaded last), with one `ctx.q = tagX(...)` line in each game where the question is created.
+- All 12 GCSE Maths games are tagged: Balance Scale, Break Bracket, Factorise It!, Quadratic Factoriser, Line Hunter, Ball Factory, Fraction Factory, Percent Shop, Chance Lab, Angle Hunter, Transform Quest. Balance tags itself (`src/balance.js`); the others are in `src/qtags.js` (loaded last), with one `ctx.q = tagX(...)` line in each game where the question is created.
 - Quiz-style games (fraction, percent, chance, angles) now also log a `right` / `wrong` event for every question (with `typed`, `expect`, `err`), and a `fail` event when a level is not passed, so per-tag success rates can be worked out later.
 - Level-level tags: `tags` = true for every question in the level, `sometimes` = only some questions (shown as grey dashed chips when a level has no common tag).
 - Balance Scale is tagged in detail: operations needed (`op-add/sub/mul/div`, `only-*`), length (`steps-1/2/3`), `x-one-side` / `x-both-sides`, `neg-const`, `neg-answer`, `fractions` (+ `frac-unit`, `frac-nonunit`, `frac-both`), `big-numbers`; difficulty 1–10 (`score` = same on a finer scale).

@@ -146,7 +146,7 @@ REG.push({id:'factorise',name:'Factorise It!',emoji:'🧩',color:'#7048e8',cat:'
  desc:'Factorise expressions like 30x + 25. Tap a number or letter and break it into factors (30x → 5 × 6x → 5 × 2 × 3x…). When the same factor shows up in every term, press Factorise. Repeat until it cannot be simplified any more.',skills:['factorising','highest common factor','algebra','prime factors'],
  levels:LV.map(l=>l.n),
  how:'Tap a part of a term and enter one of its factors on the number pad — a number, a letter, or both together (for 9n² you can enter 9, n, n² or 9n). It splits into factor × something, e.g. 30x → 5 × 6x. If the next term you tap has that same factor, it splits automatically; otherwise you enter its factor yourself. Tap any part again to split it further (6x → 2 × 3x). Tap a × to join two parts back together. A split only lasts about 30 seconds. When the same factor appears in EVERY term, the common factor turns green — tap it and the factorised expression appears on the next line. Keep going until nothing more can be taken out.',
- art:'<div class="minibal">6(2x+3)</div>',anim:factAnim,
+ art:'<div class="minibal tx">6(2x+3)</div>',anim:factAnim,
  mount(root,lv,ctx){
   const spec=LV[lv-1];let terms,orig,L,CF,chains,tok,selI,selJ,buf,steps,ended,lastBlk,lastI;const timers=[];
   root.innerHTML=`<div class="fx" id="fxr"><div class="fx-top" id="fxt"></div><div class="fx-stage" id="fxs"></div><div class="msg" id="fxm">&nbsp;</div>

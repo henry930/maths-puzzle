@@ -70,7 +70,7 @@ function parse(s,L){
 }
 const same=(a,b)=>{if(!a||a.c!==b.c)return false;const ka=Object.keys(a.p),kb=Object.keys(b.p);return ka.length===kb.length&&ka.every(k=>a.p[k]===b.p[k]);};
 window.__ex={SPECS,fmt,parse,mul};
-REG.push({id:'expand',name:'Arrow Expander',emoji:'🏹',color:'#e8590c',cat:'Algebra',
+REG.push({id:'expand',name:'Break Bracket',emoji:'🏹',color:'#e8590c',cat:'Algebra',
  desc:'Expand brackets like 2(x + 5) step by step. Follow each arrow: multiply the outside term by every term inside, and type each answer.',skills:['expanding brackets','multiplying negatives','algebra terms','powers of x'],
  levels:SPECS.map(s=>s.n),
  how:'The number (or term) outside the bracket must multiply EVERY term inside. Tap an arrow’s box, type the answer using the keypad, then press ✓. Watch the signs: − × − = +, and x × x = x²!',

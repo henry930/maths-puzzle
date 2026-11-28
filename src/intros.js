@@ -11,7 +11,7 @@ D.balance={seed:13,steps:[
 ]};
 
 const hl=(h,sel)=>{h.unhl();h.hl(sel);};
-// ---------- Arrow Expander  (seed 14 → 3(x + 4))
+// ---------- Break Bracket  (seed 14 → 3(x + 4))
 D.expand={seed:14,steps:[
  {say:"Hi there! Let's learn how to expand brackets. The number outside the bracket must multiply everything inside!",cap:'Outside number × EVERY term inside',async do(h){hl(h,'#exe');await h.wait(2500);},min:3000},
  {say:"Follow the arrows! Arrow one: three times x. Tap the box on the arrow, and type the answer with the keypad.",cap:'Tap the arrow box · type the answer',async do(h){h.unhl();await h.tap('.ex-chip');await h.key('3');await h.key('x');await h.key('✓');},min:3000},
@@ -69,14 +69,6 @@ D.chance={seed:12,steps:[
  {say:"We want blue. Count the blue balls: four. Then count all the balls: ten.",cap:'Blue: 4 · Total: 10',async do(h){await h.wait(2500);},min:3500},
  {say:"Probability is the wanted number over the total, so four tenths. Type four on top, tap the bottom box, then type ten.",cap:'4 over 10',async do(h){h.unhl();await h.tap('#fn');await h.type('4');await h.tap('#fd');await h.type('10');},min:4500},
  {say:"Press the tick! Any equivalent fraction works too, and so does a decimal. Good luck!",cap:'4/10 = 2/5 = 0.4 — all accepted',async do(h){await h.key('✓');},last:1,min:4000}
-]};
-// ---------- Dice Derby  (level 3: two dice)
-D.derby={seed:5,lv:3,steps:[
- {say:"Hi there! Welcome to the Dice Derby! Every horse has a number, and they're about to race.",cap:'Horses numbered by dice totals',async do(h){hl(h,'.dy-lanes');await h.wait(2500);},min:3000},
- {say:"Tap a horse number to bet ten coins on it. You can back up to three horses.",cap:'Tap numbers to bet (max 3)',async do(h){h.unhl();await h.tap('.dy-lane[data-k="7"]');await h.tap('.dy-lane[data-k="6"]');},min:4000},
- {say:"Now press Start! Every time the dice are rolled, the horse matching the total moves forward.",cap:'Press Start race!',async do(h){await h.tap('#st');await h.wait(5000);},min:6000},
- {say:"The first horse to reach the finish line wins, and pays forty coins for each winning bet!",cap:'First to the finish wins 40 🪙',async do(h){h.hide();await h.wait(2500);},min:4000},
- {say:"But which numbers win most often? Tap, Show chances, to find out. Think carefully before you bet. Good luck!",cap:'Show chances: why do some win more?',async do(h){await h.tap('#pp');},last:1,min:4500}
 ]};
 // ---------- Quadratic Factoriser  (seed 13 → x² + 5x + 6)
 D.quad={seed:13,steps:[

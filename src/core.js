@@ -27,11 +27,11 @@ function markDone(id,lv){
 }
 const REG=[];
 /* Games hidden from students (menu, totals and direct URLs). Teachers can still open them with ?preview=all */
-const STUDENT_HIDDEN=['derby','angles','lines','fraction','quad'];
+const STUDENT_HIDDEN=['angles','lines','fraction','quad'];
 const SHOW_ALL=/[?&]preview=all\b/.test(location.search);
 const visibleGame=G=>SHOW_ALL||!STUDENT_HIDDEN.includes(G.id);
 let ctx=null;
-const CATS=['All','GCSE Maths','General Puzzles','Basic Skills Practice','News and Video'];let curCat='All',curTag='All';
+const CATS=['All','GCSE Maths','General Puzzles','Basic Skills Practice','News and Video'];let curCat='GCSE Maths',curTag='All';
 const TAGS=['Algebra','Geometry','Number and Arithmetic','Probability / Statistics','Strategies and planning','Calculus'];
 const CAT_EMO={'GCSE Maths':'🎓','General Puzzles':'🧩','Basic Skills Practice':'✏️','News and Video':'📰'};
 /* every game belongs to ONE category and can carry several tags */
@@ -39,7 +39,7 @@ const CATALOG={
  balance:['GCSE Maths',['Algebra']],expand:['GCSE Maths',['Algebra']],lines:['GCSE Maths',['Algebra','Geometry']],
  angles:['GCSE Maths',['Geometry']],transform:['GCSE Maths',['Geometry']],
  fraction:['GCSE Maths',['Number and Arithmetic']],percent:['GCSE Maths',['Number and Arithmetic']],factors:['GCSE Maths',['Number and Arithmetic']],
- chance:['GCSE Maths',['Probability / Statistics']],derby:['GCSE Maths',['Probability / Statistics']],
+ chance:['GCSE Maths',['Probability / Statistics']],
  factorise:['GCSE Maths',['Algebra','Number and Arithmetic']],quad:['GCSE Maths',['Algebra']],times:['Basic Skills Practice',['Number and Arithmetic']],digits:['Basic Skills Practice',['Number and Arithmetic']],grid:['Basic Skills Practice',['Number and Arithmetic']],
  g24:['General Puzzles',['Number and Arithmetic','Strategies and planning']],
  match:['General Puzzles',['Number and Arithmetic']],p2048:['General Puzzles',['Number and Arithmetic','Strategies and planning']],
@@ -95,6 +95,7 @@ function pushUrl(path,rep){try{if(location.pathname!==path){history[rep?'replace
 function goMenu(nopush){cleanup();if(nopush!==true)pushUrl(ROOT);$('#game').hidden=true;$('#menu').hidden=false;renderMenu();window.scrollTo(0,0);}
 const curLv={};
 function openGame(id,lv,fromRoute){
+  {const u=me();if(u&&!(ctx&&ctx.id===id)){u.plays=u.plays||{};u.plays[id]=(u.plays[id]||0)+1;persist();}}
   cleanup();const g=REG.find(x=>x.id===id);lv=lv||curLv[id]||1;curLv[id]=lv;const N=g.levels.length;
   $('#menu').hidden=true;$('#game').hidden=false;
   $('#gtitle').innerHTML=`<span class="gemo">${g.emoji}</span> ${g.name}`;
@@ -155,10 +156,11 @@ function renderMenu(){
   const inCat=VIS.filter(G=>curCat==='All'||catOf(G)===curCat);
   const mk=(t,n)=>{const b=el('button','tagc'+(t===curTag?' on':''),`${t==='All'?'All topics':t} <small>${n}</small>`);b.onclick=()=>{curTag=t;renderMenu()};tb.appendChild(b);};
   mk('All',inCat.length);TAGS.forEach(t=>mk(t,inCat.filter(G=>tagsOf(G).includes(t)).length));
-  const list=inCat.filter(G=>curTag==='All'||tagsOf(G).includes(curTag));
+  const pl=(me()||{}).plays||{};const often=Object.keys(pl).filter(k=>pl[k]>=3).sort((a,b)=>pl[b]-pl[a]).slice(0,3);
+  const list=inCat.filter(G=>curTag==='All'||tagsOf(G).includes(curTag)).map((G,i)=>({G,i})).sort((a,b)=>((pl[b.G.id]||0)-(pl[a.G.id]||0))||a.i-b.i).map(x=>x.G);
   if(!list.length){g.innerHTML=`<div class="empty">🚧<b>No games here yet</b><span>${curTag==='Calculus'?'Calculus games are coming soon!':'Pick another topic.'}</span></div>`;return;}
   const mkCard=G=>{const c=el('button','card game');c.style.setProperty('--c',G.color);const d=doneCount(G.id);
-    c.innerHTML=`<div class="art">${G.art}</div><h3>${G.name}</h3>`;
+    c.innerHTML=`<div class="art">${G.art}${often.includes(G.id)?'<span class="tag">⭐ Often played</span>':''}</div><h3>${G.name}</h3>`;
     c.onclick=()=>openGame(G.id,Math.min(G.levels.length,d+1));return c;};
   if(window.__menuIO){window.__menuIO.disconnect();window.__menuIO=null;}
   const BATCH=6;let shown=0;const sent=el('div','sentinel');g.appendChild(sent);

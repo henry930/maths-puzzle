@@ -147,7 +147,7 @@ const fin=(tags,d,extra)=>Object.assign({v:1,tags:[...new Set(tags)].sort(),diff
 const maxExp=t=>Math.max(0,...Object.values(t.p));
 const letters=ts=>new Set(ts.flatMap(t=>Object.keys(t.p)));
 
-/* ---------- Arrow Expander: q = {m:outside term, t:[inside terms]} ---------- */
+/* ---------- Break Bracket: q = {m:outside term, t:[inside terms]} ---------- */
 function tagExpand(q){
   const prod=q.t.map(t=>window.__ex.mul(q.m,t)),tags=[],nt=q.t.length,vo=Object.keys(q.m.p).length>0;
   tags.push('bk-terms-'+Math.min(4,nt),vo?'bk-var-outside':'bk-num-outside');
@@ -205,15 +205,6 @@ function tagTransform(task,n){
   const d=(has('tf-translation')?(has('tf-neg-vector')?2.5:1.5):has('tf-reflect-axis')?3:has('tf-reflect-line')?4.5:has('tf-reflect-diagonal')?5.5:has('tf-rotation')?(has('tf-rot-180')?4:5):has('tf-sf-3')?5:4)+(n===4?.5:0);
   return fin(tags,d,{eq:t});
 }
-/* ---------- Dice Derby (level only): dice sides, goal, races ---------- */
-function tagDerby(L){
-  const s=L.dice,tags=['dd-'+(s.length===1?'1-die':s.length+'-dice')];
-  [...new Set(s)].forEach(x=>tags.push('dd-d'+x));if(new Set(s).size>1)tags.push('dd-mixed-dice');
-  if(L.races<10)tags.push('dd-few-races');if(L.goal>=200)tags.push('dd-high-goal');
-  const d=2+(s.length-1)*1.5+(new Set(s).size>1?.5:0)+(s.includes(8)?1:0)+(L.goal>=200?1:0)+(L.races<10?1:0)+(L.track===4?.5:0)+(L.goal>=250?1:0);
-  return fin(tags,d);
-}
-
 /* ---------- quiz-style games: one table row per question type ---------- */
 const Q=(t,d,v)=>({t,d,v:v||[]});   // t = always, v = variants that show up only sometimes inside this type
 const QTAGS={
@@ -262,13 +253,12 @@ function fromPool(game,pool){
 /* ---------- hook everything onto the registered games ---------- */
 const GM=id=>REG.find(g=>g.id===id);
 const samp=(f,n=60)=>levelFromSamples(f,n);
-window.tagExpand=tagExpand;window.tagFactorise=tagFactorise;window.tagQuad=tagQuad;window.tagLine=tagLine;window.tagFactors=tagFactors;window.tagTransform=tagTransform;window.tagDerby=tagDerby;
+window.tagExpand=tagExpand;window.tagFactorise=tagFactorise;window.tagQuad=tagQuad;window.tagLine=tagLine;window.tagFactors=tagFactors;window.tagTransform=tagTransform;
 GM('expand').qmeta=lv=>samp(()=>tagExpand(window.__ex.SPECS[lv-1].g()));
 GM('factorise').qmeta=lv=>samp(()=>{let q;do{q=window.__fx.gen(window.__fx.LV[lv-1]);}while(!q);return tagFactorise(q);});
 GM('quad').qmeta=lv=>samp(()=>tagQuad(window.__qd.gen(window.__qd.LV[lv-1])));
 GM('lines').qmeta=lv=>samp(()=>tagLine(window.__ln.gen(lv)));
 GM('factors').qmeta=lv=>samp(()=>tagFactors(window.__fac.NS[lv-1]),1);
 GM('transform').qmeta=lv=>{const L=window.__tf.LV[lv-1];return samp(()=>tagTransform(L.g(),L.shape));};
-GM('derby').qmeta=lv=>samp(()=>tagDerby(window.__dd2.LV[lv-1]),1);
 ['fraction','percent','chance','angles'].forEach(g=>{GM(g).qmeta=lv=>fromPool(g,window['__'+({fraction:'fr',percent:'pc',chance:'ch',angles:'an'})[g]].POOL[lv-1]);});
 })();

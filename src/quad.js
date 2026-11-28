@@ -59,7 +59,7 @@ REG.push({id:'quad',name:'Quadratic Factoriser',emoji:'🔷',color:'#d6336c',cat
  desc:'Factorise quadratics like x² + 7x + 12 and 2x² + 7x + 6. Find the two numbers that multiply to the last number and add to the middle one, then write the brackets.',skills:['factorising quadratics','products and sums','negative numbers','brackets'],
  levels:LV.map(l=>l.n),
  how:'Step 1: find two numbers that MULTIPLY to the number shown and ADD to the middle number (for 2x² + 7x + 6 the multiply number is 2 × 6 = 12). Step 2: write the brackets. Watch the signs!',
- art:'<div class="minibal">(x+3)(x+4)</div>',
+ art:'<div class="minibal tx">(x+3)(x+4)</div>',
  mount(root,lv,ctx){
   const sp=LV[lv-1];let Q,stage,sl,sel,buf,pair,cfg;
   root.innerHTML=`<div class="qd"><div class="qd-top" id="qt"></div><div class="qd-title" id="qti"></div><div class="qd-row" id="qr"></div><div class="qd-split" id="qs"></div><div class="msg" id="qm">&nbsp;</div><div class="ex-pad" id="qpad"></div><div class="toolrow"><button class="btn alt" id="qh">💡 Hint</button><button class="btn alt" id="qn">New question ⏭</button></div></div>`;
