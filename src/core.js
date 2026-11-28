@@ -29,6 +29,7 @@ function markDone(id,lv){
 
 /* ---------- adaptive next question (one place decides what comes after every finished question) ----------
    Only games with level tags (qmeta) are adaptive; the other games keep the old "next level" behaviour.
+   A game can override this with its own `nextRule(info)` (see below); return null to fall back to the default.
    struggle (stored as done[id][lv].s): 0 clean · 1 shaky · 2 struggled (many hints/undos/wrong answers) */
 function struggleOf(p){
   if(!p)return 0;
@@ -40,6 +41,7 @@ let _rep={k:'',n:0};                                                         /* 
 function pickNext(id,lv,again,first){
   const G=REG.find(x=>x.id===id),N=G.levels.length,d=done[id]||{};
   const key=id+'#'+lv;
+  if(G.nextRule){const o=G.nextRule({lv,N,done:d,again:!!again,first,score:l=>{const m=levelMeta(G,l);return m?(m.score||m.diff):5;}});if(o)return o;}   /* a game can set its own rule: return {lv|again|none,label} or null for the default */
   if(!G.qmeta){                                                              /* legacy behaviour */
     if(first&&lv<N)return{lv:lv+1,label:'Next: level '+(lv+1)+' ▶'};
     if(again)return{again:true,label:'Next puzzle ▶'};
