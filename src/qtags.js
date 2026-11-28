@@ -146,6 +146,32 @@ an-polygon-sum|polygon: angle sum|多邊形內角和
 an-polygon-exterior|polygon: exterior angle|多邊形外角
 an-polygon-interior|polygon: interior angle|多邊形內角
 an-algebra|angles with algebra|角度加代數
+an-complement-supplement|complementary / supplementary|餘角／補角
+an-right-angle|angles in a right angle|直角內嘅角
+an-reflex|reflex angle|優角
+an-turns|fractions of a turn|旋轉角度
+an-clock|clock angles|時鐘角度
+an-compass|compass directions|方向
+an-bearing|bearings|方位角
+an-bearing-back|back bearing|回程方位角
+an-facts|angle facts|角度常識
+an-bisector|angle bisector|角平分線
+an-right-triangle|right-angled triangle|直角三角形
+an-parallelogram|parallelogram|平行四邊形
+an-kite|kite|箏形
+an-trapezium|trapezium|梯形
+an-rhombus|rhombus|菱形
+an-cyclic-quad|cyclic quadrilateral|圓內接四邊形
+an-polygon-sides|how many sides|邊數
+an-regular-diagonal|diagonal in a regular polygon|正多邊形對角線
+an-ratio|angles in a ratio|角度比例
+an-circle-centre|angle at the centre|圓心角
+an-semicircle|angle in a semicircle|半圓上嘅角
+an-radius-isosceles|radii make an isosceles triangle|半徑等腰三角形
+an-same-segment|angles in the same segment|同弓形角
+an-tangent|tangent and radius|切線同半徑
+an-tangents-point|tangents from a point|外點切線
+an-alternate-segment|alternate segment theorem|交錯弓形定理
 tf-translation|translation|平移
 tf-neg-vector|negative vector|負向量
 tf-reflection|reflection|反射
@@ -259,7 +285,18 @@ const QTAGS={
   M12:Q([],5,['pr-and','pr-independent','pr-at-least-one','pr-with-replacement']),M13:Q(['pr-forms'],2,['pr-not']),M14:Q(['pr-product-rule'],4,['pr-codes','pr-repeats','pr-no-repeats','pr-listing'])},
  angles:{A1:Q(['an-estimate'],2),A2:Q(['an-straight-line'],1),A3:Q(['an-around-point'],2),A4:Q(['an-triangle'],2),A5:Q(['an-triangle','an-isosceles'],3),
   A6:Q(['an-quadrilateral'],3),A7:Q(['an-crossing-lines'],3,['an-vertically-opposite','an-straight-line']),A8:Q(['an-parallel'],5,['an-corresponding','an-alternate','an-co-interior']),A9:Q(['an-triangle','an-exterior'],4),A10:Q([],5,['an-polygon-sum','an-polygon-exterior','an-polygon-interior']),
-  A11:Q(['an-straight-line','an-algebra'],7),A12:Q(['an-triangle','an-algebra'],6)}
+  A11:Q(['an-straight-line','an-algebra'],7),A12:Q(['an-triangle','an-algebra'],6),
+  Q1:Q(['an-complement-supplement'],1),Q2:Q(['an-right-angle'],1),Q3:Q(['an-reflex','an-around-point'],2),Q4:Q(['an-turns'],1),Q5:Q(['an-clock'],2),Q6:Q(['an-bearing','an-compass'],3),
+  Q7:Q(['an-facts'],1),Q8:Q(['an-polygon-exterior'],2),Q9:Q(['an-bisector'],2),Q10:Q(['an-triangle','an-right-triangle'],2),Q11:Q(['an-triangle','an-isosceles'],3),Q12:Q(['an-triangle','an-exterior'],4),
+  Q13:Q(['an-triangle','an-algebra'],5),Q14:Q(['an-triangle','an-isosceles','an-algebra'],6),Q15:Q(['an-triangle','an-exterior','an-algebra'],7),
+  Q16:Q(['an-quadrilateral','an-parallelogram'],3,['an-algebra']),Q17:Q(['an-quadrilateral','an-kite'],4,['an-algebra']),Q18:Q(['an-quadrilateral','an-trapezium'],4),Q19:Q(['an-quadrilateral','an-rhombus'],5),
+  Q20:Q(['an-quadrilateral','an-algebra'],5),Q21:Q(['an-quadrilateral','an-cyclic-quad'],6,['an-algebra']),Q22:Q(['an-crossing-lines','an-vertically-opposite','an-algebra'],5),
+  Q23:Q(['an-straight-line','an-algebra'],5),Q24:Q(['an-around-point','an-algebra'],5),Q25:Q(['an-parallel','an-algebra'],7,['an-corresponding','an-alternate','an-co-interior']),
+  Q26:Q(['an-parallel','an-triangle'],6),Q27:Q(['an-polygon-sum'],4),Q28:Q(['an-polygon-sides'],5,['an-polygon-exterior','an-polygon-interior','an-polygon-sum']),Q29:Q(['an-polygon-exterior'],4),
+  Q30:Q(['an-regular-diagonal','an-isosceles'],6),Q31:Q(['an-ratio'],5,['an-triangle','an-straight-line','an-quadrilateral','an-around-point']),
+  Q32:Q(['an-circle-centre'],6,['an-algebra']),Q33:Q(['an-semicircle'],5,['an-algebra']),Q34:Q(['an-radius-isosceles'],5),Q35:Q(['an-same-segment'],6,['an-circle-centre']),
+  Q36:Q(['an-tangent'],7),Q37:Q(['an-tangent','an-tangents-point'],8),Q38:Q(['an-alternate-segment'],8),Q39:Q(['an-alternate-segment','an-algebra'],9,['an-circle-centre']),
+  Q40:Q(['an-bearing','an-bearing-back'],5),Q41:Q(['an-bearing'],7)}
 };
 const plain=h=>String(h).replace(/<\/i><i>/g,'/').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 /* things only the generated text knows (which variant of a question type came up) */
