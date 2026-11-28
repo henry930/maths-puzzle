@@ -18,7 +18,7 @@ for(const G of REG){if(!gameFiles.includes(G.id))continue;gname[G.id]=G.name;ski
 const areas=[];let A=null,T=null;const ids=new Set(),errors=[];
 fs.readFileSync(path.join(root,'tools','gcse-map-src.txt'),'utf8').split('\n').forEach((raw,i)=>{
   const line=raw.trim();if(!line)return;
-  if(line.startsWith('#')&&!/^#\s+[A-Za-z]+-[A-Za-z]+\s~/.test(line))return;   /* other # lines are comments */
+  if(line.startsWith('#')&&!/^#\s+[A-Za-z]+(-[A-Za-z0-9]+)+\s~/.test(line))return;   /* other # lines are comments */
   if(line.startsWith('@')){const[id,name]=line.slice(1).split('~').map(x=>x.trim());A={id,name,topics:[]};areas.push(A);return;}
   if(line.startsWith('#')){const[id,name]=line.slice(1).split('~').map(x=>x.trim());T={id,name,points:[]};A.topics.push(T);return;}
   const f=line.split(' ~ ').map(x=>x.trim());
@@ -40,6 +40,10 @@ fs.readFileSync(path.join(root,'tools','gcse-map-src.txt'),'utf8').split('\n').f
 });
 if(errors.length){console.error('PROBLEMS:\n'+errors.join('\n'));process.exit(1);}
 
+/* topic-level status: which games touch the topic and how much of it they cover */
+const topicInfo=t=>{const c=t.points.filter(p=>p.games.length).length,gs=[...new Set(t.points.flatMap(p=>p.games.map(g=>g.game)))];
+  return{covered:c,total:t.points.length,games:gs,status:c===0?'none':c===t.points.length?'full':'partial'};};
+areas.forEach(a=>a.topics.forEach(t=>Object.assign(t,topicInfo(t))));
 /* ---- 3. write JSON ---- */
 const out={version:1,generated:new Date().toISOString().slice(0,10),
   note:'Teaching-level knowledge points grouped under the six content areas of the DfE national GCSE Maths content. Tier: F = Foundation and Higher, H = Higher only (approximate). Point ids are permanent.',
@@ -53,8 +57,14 @@ const used=new Set();all.forEach(p=>p.games.forEach(g=>g.skills.forEach(s=>used.
 let md=`# GCSE Maths map — topics, knowledge points and game coverage\n\n`;
 md+=`${all.length} knowledge points in ${areas.reduce((a,x)=>a+x.topics.length,0)} topics. **${cov.length} covered** by a game, **${gap.length} gaps**.\n\n`;
 md+=`Tier: F = Foundation and Higher, H = Higher only (approximate). Source of truth: \`tools/gcse-map-src.txt\` → \`data/gcse-spec.json\`.\n\n`;
-md+=`## Summary\n\n| Area | Points | Covered | Gaps |\n|---|---|---|---|\n`;
-areas.forEach(a=>{const ps=a.topics.flatMap(t=>t.points),c=ps.filter(p=>p.games.length).length;md+=`| ${a.name} | ${ps.length} | ${c} | ${ps.length-c} |\n`;});
+const nTop=areas.reduce((a,x)=>a+x.topics.length,0),cnt=st=>areas.reduce((a,x)=>a+x.topics.filter(t=>t.status===st).length,0);
+md+=`## Where we are\n\n${nTop} game-sized topics: **${cnt('full')} fully covered**, **${cnt('partial')} partly covered** (a game exists but more can be added), **${cnt('none')} with no game yet**.\n\n`;
+md+=`## Topics and games\n\nEach topic is a block one game could cover. Status: ✅ fully covered · 🟡 partly · ⬜ no game yet.\n`;
+areas.forEach(a=>{
+  md+=`\n### ${a.name}\n\n| | Topic | Points covered | Game(s) |\n|---|---|---|---|\n`;
+  a.topics.forEach(t=>{md+=`| ${t.status==='full'?'✅':t.status==='partial'?'🟡':'⬜'} | ${t.name} | ${t.covered}/${t.total} | ${t.games.map(g=>gname[g]).join(', ')||'—'} |\n`;});
+});
+md+='\n';
 md+=`\n## Games\n\n`+Object.keys(gname).map(g=>`- ${gname[g]}: ${[...used].filter(u=>u.startsWith(g+'|')).length}/${skills[g].length} skills mapped to a knowledge point`).join('\n')+'\n';
 areas.forEach(a=>{
   md+=`\n## ${a.name}\n`;
@@ -68,5 +78,5 @@ md+=`\n## Game skills not linked to any knowledge point\n\nThese are mostly "Bos
 const orphan=Object.keys(skills).flatMap(g=>skills[g].filter(s=>!used.has(g+'|'+s)).map(s=>`${gname[g]}: ${s}`));
 md+=orphan.length?orphan.slice(0,400).map(x=>'- '+x).join('\n')+(orphan.length>400?`\n- … and ${orphan.length-400} more`:''):'None.';
 fs.writeFileSync(path.join(root,'data','gcse-map.md'),md+'\n');
-console.log(`${all.length} points · ${cov.length} covered · ${gap.length} gaps · ${orphan.length} game skills unlinked`);
+console.log(`${nTop} topics (${cnt('full')} full, ${cnt('partial')} partial, ${cnt('none')} none)\n${all.length} points · ${cov.length} covered · ${gap.length} gaps · ${orphan.length} game skills unlinked`);
 areas.forEach(a=>{const ps=a.topics.flatMap(t=>t.points);console.log(a.name.padEnd(42),ps.length,'points,',ps.filter(p=>p.games.length).length,'covered');});
