@@ -1,7 +1,7 @@
 {
  "version": 1,
  "generated": "2026-11-28",
- "note": "Teaching-level knowledge points grouped under the six content areas of the DfE national GCSE Maths content. Tier: F = Foundation and Higher, H = Higher only (approximate). Point ids are permanent.",
+ "note": "Teaching-level knowledge points grouped under the six content areas of the DfE national GCSE Maths content. Tier: F = Foundation and Higher, H = Higher only, X = extension beyond GCSE (approximate). Point ids are permanent.",
  "areas": [
   {
    "id": "N",
@@ -193,7 +193,72 @@
        "id": "n-powers",
        "name": "Powers and index notation",
        "tier": "F",
-       "games": []
+       "games": [
+        {
+         "game": "indices",
+         "skills": [
+          "Repeated multiplication → power",
+          "Repeated multiplication · find the index",
+          "Evaluate powers",
+          "Find the missing base"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-index-laws",
+       "name": "Laws of indices (multiply, divide, power of a power)",
+       "tier": "F",
+       "games": [
+        {
+         "game": "indices",
+         "skills": [
+          "Index law · multiply",
+          "Index law · divide",
+          "Index law · power of a power",
+          "Index laws · all three",
+          "Index laws · negative indices",
+          "Index laws · with letters",
+          "Index laws · missing index"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-index-zeroneg",
+       "name": "Zero and negative indices",
+       "tier": "H",
+       "games": [
+        {
+         "game": "indices",
+         "skills": [
+          "Zero index · the halving ladder",
+          "Zero index",
+          "Zero index · mixed",
+          "Negative index · keep dividing",
+          "Negative index · fractions",
+          "Negative index · decimals",
+          "Powers as negative indices",
+          "Negative index · fraction base"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "n-index-frac",
+       "name": "Fractional indices (roots and p/q)",
+       "tier": "H",
+       "games": [
+        {
+         "game": "indices",
+         "skills": [
+          "Fractional index · square roots",
+          "Fractional index · cube roots and more",
+          "Fractional index · p/q",
+          "Negative fractional index"
+         ]
+        }
+       ]
       },
       {
        "id": "n-recip",
@@ -202,10 +267,12 @@
        "games": []
       }
      ],
-     "covered": 0,
-     "total": 4,
-     "games": [],
-     "status": "none"
+     "covered": 4,
+     "total": 7,
+     "games": [
+      "indices"
+     ],
+     "status": "partial"
     },
     {
      "id": "N-fm",
@@ -2035,6 +2102,63 @@
      "total": 3,
      "games": [],
      "status": "none"
+    },
+    {
+     "id": "X-log",
+     "name": "Logarithms (extension beyond GCSE)",
+     "points": [
+      {
+       "id": "x-log-def",
+       "name": "Index form and log form, log values",
+       "tier": "X",
+       "games": [
+        {
+         "game": "indices",
+         "skills": [
+          "Index → log · 2ˣ = 8",
+          "Log values",
+          "Special logs · log 1 and log a",
+          "Negative and fractional logs"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "x-log-laws",
+       "name": "Laws of logarithms",
+       "tier": "X",
+       "games": [
+        {
+         "game": "indices",
+         "skills": [
+          "Log law · add",
+          "Log law · subtract",
+          "Log law · powers",
+          "Log laws · combine"
+         ]
+        }
+       ]
+      },
+      {
+       "id": "x-log-eq",
+       "name": "Solve index equations using logs",
+       "tier": "X",
+       "games": [
+        {
+         "game": "indices",
+         "skills": [
+          "Index → log · 2ˣ = 8"
+         ]
+        }
+       ]
+      }
+     ],
+     "covered": 3,
+     "total": 3,
+     "games": [
+      "indices"
+     ],
+     "status": "full"
     }
    ]
   },
