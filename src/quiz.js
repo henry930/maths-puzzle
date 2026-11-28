@@ -13,7 +13,7 @@ function mountQuiz(root,ctx,o){
     if(!answered&&!cur.nopad&&(!pop||padOpen)){const pd=$('#chp');if(pop){pd.className='padsheet';pd.innerHTML='<div class="padbar"><span>Type your answer</span><button class="padx" id="padx">✕ Close</button></div>';}pd.appendChild(numpad(press,{slash:!!o.slash,minus:!!o.minus,compact:!!o.compact}));if(pop)$('#padx').onclick=()=>{padOpen=false;draw(msg,ok);};}
     if(pop&&$('#chin'))$('#chin').onclick=()=>{padOpen=!padOpen;draw(msg,ok);};
     {const fb=$('#ftg',root);if(fb)fb.onclick=()=>{cur.form=1-(cur.form||0);draw(msg,ok);};}   /* games can offer a second form of the same equation */
-    if(cur.after)cur.after(root,{open:()=>{if(!answered&&!padOpen){padOpen=true;draw(msg,ok);}},set:s=>{if(!answered){buf=String(s);draw();}},submit,buf:()=>buf});   /* games with their own input (drag-and-drop) set the answer and submit through this */
+    if(cur.after)cur.after(root,{open:()=>{if(!answered&&!padOpen){padOpen=true;draw(msg,ok);}},set:s=>{if(!answered){buf=String(s);draw();}},submit,buf:()=>buf,redraw:()=>draw(msg,ok)});   /* games with their own input (drag-and-drop) set the answer and submit through this */
     if($('#nx'))$('#nx').onclick=advance;
   }
   function press(k){
